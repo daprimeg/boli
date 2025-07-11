@@ -146,12 +146,7 @@
                         <li class="menu-item">
                             <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px;" data-i18n="Menu">Menu </div>
                         </li>
-                        <li class="menu-item {{ request()->is('dashboard*') ? 'active' : '' }}">
-                            <a href="{{URL::to('/dashboard')}}" class="menu-link">
-                                <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
-                                <div data-i18n="Dashboard">Dashboard</div>
-                            </a>
-                        </li>
+                     
                         @include('admin.partial.adminMenu')
                         @include('admin.partial.userMenu')
                     </ul>

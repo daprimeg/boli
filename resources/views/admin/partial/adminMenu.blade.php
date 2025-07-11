@@ -1,5 +1,11 @@
 @if(Auth::user()->user_type == 1)
 
+            <li class="menu-item {{ request()->is('admin/dashboard*') ? 'active' : '' }}">
+                <a href="{{URL::to('/admin/dashboard')}}" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+                    <div data-i18n="Dashboard">Dashboard</div>
+                </a>
+            </li>
             <li class="menu-item {{ request()->is('admin/masters*') ? 'active' : '' }} {{ request()->is('admin/masters*') ? 'open' : '' }} ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-database-import"></i>
@@ -86,6 +92,12 @@
                 <li class="menu-item {{ request()->is('admin/auctions*') ? 'active' : '' }}">
                   <a href="{{ route('admin.auctions.index') }}" class="menu-link">
                     <div data-i18n="Import Data CSV">Import Data CSV</div>
+                  </a>
+                </li>
+
+                <li class="menu-item {{ request()->is('admin/vehicle*') ? 'active' : '' }}">
+                  <a href="{{ URL::to('/admin/vehicles') }}" class="menu-link">
+                    <div data-i18n="Vehicles">Vehicles</div>
                   </a>
                 </li>
 

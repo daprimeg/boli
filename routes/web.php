@@ -20,6 +20,7 @@ use App\Http\Controllers\admin\MembershipController;
 use App\Http\Controllers\admin\TicketsController;
 use App\Http\Controllers\admin\EmailTemplateController;
 use App\Http\Controllers\admin\AuctionController;
+use App\Http\Controllers\Admin\AVehicleController;
 use App\Http\Controllers\admin\BodyTypeController;
 use App\Http\Controllers\admin\CenterController;
 use App\Http\Controllers\admin\ColorController;
@@ -455,6 +456,14 @@ Route::prefix('admin')->group(function () {
         Route::post('/upload-image', [BlogController::class, 'uploadImage'])->name('upload');
 
     });
+
+    //Vehicles
+    Route::get('/vehicles', [AVehicleController::class,'index']);
+    Route::get('/vehicles/create', [AVehicleController::class,'create']);
+    Route::post('/vehicles/store', [AVehicleController::class, 'store']);
+    Route::get('/vehicles/edit/{id}', [AVehicleController::class,'edit']);
+    Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
+    Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
 
     Route::middleware('auth')->prefix('news')->name('admin.news.')->group(function () {
         Route::get('/', [AdminNewscrudController::class, 'index'])->name('index');

@@ -1,6 +1,12 @@
 @if(Auth::user()->user_type == 0)
 
-            <!-- Layouts -->
+            <li class="menu-item {{ request()->is('dashboard*') ? 'active' : '' }}">
+                <a href="{{URL::to('/dashboard')}}" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-layout-dashboard"></i>
+                    <div data-i18n="Dashboard">Dashboard</div>
+                </a>
+            </li>
+
             <li class="menu-item">
               <a href="{{ route('auctionfinder') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>
