@@ -41,7 +41,6 @@ class AVehicleController extends Controller
          ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
          ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
          ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
-         ->leftJoin('years', 'years.id', '=', 'vehicles.year')
          ->leftJoin('color', 'color.id', '=', 'vehicles.color_id')
          ;
 
@@ -53,7 +52,7 @@ class AVehicleController extends Controller
                     ->orWhere('model.name', 'like', "%{$search}%")
                     ->orWhere('model_variant.name', 'like', "%{$search}%")
                     ->orWhere('body_types.name', 'like', "%{$search}%")
-                    ->orWhere('years.name', 'like', "%{$search}%")
+                    ->orWhere('vehicles.year', 'like', "%{$search}%")
                     ->orWhere('auctions.name', 'like', "%{$search}%")
                     ->orWhere('color.name', 'like', "%{$search}%");
                 });
@@ -87,7 +86,7 @@ class AVehicleController extends Controller
                     'model.name AS model_name',
                     'model_variant.name AS model_variant_name',
                     'body_types.name AS body_type_name',
-                    'years.name AS year_name',
+                    'vehicles.year AS year',
                     'color.name AS color_name',
 
             )
@@ -118,7 +117,7 @@ class AVehicleController extends Controller
                       $Vehicle->model_name ?? 'N/A',
                       $Vehicle->model_variant_name ?? 'N/A',
                       $Vehicle->body_type_name,
-                      $Vehicle->year_name,
+                      $Vehicle->year,
                       $Vehicle->color_name,
                     //   $Vehicle->fuel_type,
                     //   $Vehicle->mileage,
@@ -238,7 +237,6 @@ class AVehicleController extends Controller
     $models = DB::table('model')->pluck('name', 'id');
     $variants = DB::table('model_variant')->pluck('name', 'id');
     $bodyTypes = DB::table('body_types')->pluck('name', 'id');
-    $years = DB::table('years')->pluck('name', 'id');
     
     $colors = DB::table('color')->pluck('name', 'id');
 
@@ -254,7 +252,6 @@ class AVehicleController extends Controller
         'models',
         'variants',
         'bodyTypes',
-        'years',
         'colors',
         // 'transmissions',
         // 'fuelTypes',
@@ -312,9 +309,8 @@ public function update(Request $request, $id)
     'number_of_services' => 'nullable|integer',
     'number_of_stamps' => 'nullable|integer',
     'inspection_report' => 'nullable|string|max:255',
-    'other_report_name' => 'nullable|string|max:255',
     'other_report' => 'nullable|string|max:255',
-    'service_note' => 'nullable|string|max:2000',
+    'service_notes' => 'nullable|string|max:2000',
     'vendor' => 'nullable|string|max:255',
     'images' => 'nullable|string|max:1000', // or file|image if uploading
     'vin' => 'nullable|string|max:100',
@@ -333,7 +329,8 @@ public function update(Request $request, $id)
     'additional_information' => 'nullable|string|max:2000',
     'imported' => 'nullable|integer',
     'damage_details' => 'nullable|string|maz:2000',
-    'damage_images' => 'nullable|string|max:2000',
+    'damaged_images' => 'nullable|string|max:2000',
+    'buy_now_price' => 'nullable|string|max:2000',
     'declarations' => 'nullable|string|max:1000',
     ]);
 
@@ -347,7 +344,7 @@ public function update(Request $request, $id)
     $vehicle->model_id = $request->input('model_id');
     $vehicle->variant_id = $request->input('variant_id');
     $vehicle->body_id = $request->input('body_type_id');
-    $vehicle->year = $request->input('year_id');
+    $vehicle->year = $request->input('year');
     $vehicle->doors = $request->input('doors');
     $vehicle->seats = $request->input('seats');
     $vehicle->fuel_type = $request->input('fuel_type');
@@ -383,9 +380,8 @@ $vehicle->service_history = $request->input('service_history');
 $vehicle->number_of_services = $request->input('number_of_services');
 $vehicle->number_of_stamps = $request->input('number_of_stamps');
 $vehicle->inspection_report = $request->input('inspection_report');
-$vehicle->other_report_name = $request->input('other_report_name');
 $vehicle->other_report = $request->input('other_report');
-$vehicle->service_note = $request->input('service_note');
+$vehicle->service_notes = $request->input('service_notes');
 $vehicle->vendor = $request->input('vendor');
 $vehicle->images = $request->input('images'); // handle file upload if needed
 $vehicle->vin = $request->input('vin');
@@ -404,6 +400,8 @@ $vehicle->equipment = $request->input('equipment');
 $vehicle->additional_information = $request->input('additional_information');
 $vehicle->imported = $request->input('imported');
 $vehicle->damage_details = $request->input('damage_details');
+$vehicle->damaged_images = $request->input('damaged_images');
+$vehicle->buy_now_price = $request->input('buy_now_price');
 $vehicle->declarations = $request->input('declarations');
 
     
