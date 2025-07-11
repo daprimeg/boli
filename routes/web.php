@@ -326,6 +326,9 @@ Route::prefix('admin')->group(function () {
     //     Route::post('email_templates/{id}/send', [EmailTemplateController::class, 'sendEmail'])->name('email_templates.send');
     // });
 
+
+    //Profile
+
     Route::view('/importcsv', 'admin/datamanagement/importcsv')->name('importcsv');
     Route::view('/upcomingauction', 'admin/datamanagement/upcomingauction')->name('upcomingauction');
     Route::view('/updatingfields', 'admin/datamanagement/updatingfields')->name('updatingfields');
@@ -424,13 +427,15 @@ Route::prefix('admin')->group(function () {
 
     });
 
-    // Admin Authentication
-    Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+ 
 
     // Admin Dashboard (for logged-in admins)
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/profile', [AdminAuthController::class, 'profile']);
+
+    
+
+
 
     // Blog Categories (CRUD)
     Route::prefix('blogcategories')->group(function () {
@@ -497,6 +502,11 @@ Route::prefix('admin')->group(function () {
     });
 
 
+
+    // Admin Authentication
+    Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
     
     
 });

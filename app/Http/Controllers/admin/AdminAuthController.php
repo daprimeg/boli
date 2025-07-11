@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -46,4 +47,12 @@ class AdminAuthController extends Controller
         Auth::logout();
         return redirect()->route('admin.login.form')->with('message', 'Logged out successfully');
     }
+
+        public function profile()
+    {
+        $alerts = Alert::with('user')->get(); // fetch all alerts for all users
+    
+        return view('user.profile.userprofile', compact('alerts'));
+    }
+    
 }

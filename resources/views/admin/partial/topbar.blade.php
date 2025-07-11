@@ -498,7 +498,7 @@
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item mt-0" href="{{URL::to('/userprofile')}}">
+                      <a class="dropdown-item mt-0" @if(Auth::user()->user_type == 1)  href="{{URL::to('/profile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
                         <div class="d-flex align-items-center">
                           <div class="flex-shrink-0 me-2">
                             <div class="avatar avatar-online">
@@ -516,18 +516,20 @@
                       <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="{{URL::to('/userprofile')}}">
+                      <a class="dropdown-item" @if(Auth::user()->user_type == 1)  href="{{URL::to('/profile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
                         <i class="icon-base ti tabler-user me-3 icon-md"></i
                         ><span class="align-middle">My Profile</span>
                       </a>
                     </li>
+                    @if(Auth::user()->user_type != 1) 
                     <li>
                       <a class="dropdown-item" href="{{URL::to('/profilesetting')}}">
                         <i class="icon-base ti tabler-settings me-3 icon-md"></i
                         ><span class="align-middle">Settings</span>
                       </a>
                     </li>
-                    <li>
+                    @endif
+                    {{-- <li>
                       <a class="dropdown-item" href="pages-account-settings-billing.html">
                         <span class="d-flex align-items-center align-middle">
                           <i class="flex-shrink-0 icon-base ti tabler-file-dollar me-3 icon-md"></i
@@ -537,8 +539,8 @@
                           >
                         </span>
                       </a>
-                    </li>
-                    <li>
+                    </li> --}}
+                    {{-- <li>
                       <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
@@ -552,7 +554,7 @@
                         <i class="icon-base ti tabler-question-mark me-3 icon-md"></i
                         ><span class="align-middle">FAQ</span>
                       </a>
-                    </li>
+                    </li> --}}
                     <li>
                       <div class="d-grid px-2 pt-2 pb-1">
                         <form action="{{ url('/logout') }}" method="POST" class="d-inline">
