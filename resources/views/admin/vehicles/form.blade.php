@@ -68,23 +68,16 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label">Year <span class="text-danger" >*</span></label >
-                                <select name="year_id" class="form-control" required>
-                                    @foreach($years as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('year_id', $vehicle->year_id ?? '') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                     <label class="form-label">yaer</label>
+                                      <input type="text" name="year" class="form-control" value="{{ old('year', $vehicle->year ?? '') }}">
                             </div>
 <div class="col-md-4">
         <label class="form-label">VIN</label>
         <input type="text" name="vin" class="form-control" value="{{ old('vin_no', $vehicle->vin ?? '') }}">
 </div>
-<div class="col-md-4">
+<div class="col-md-12">
      <label class="form-label">Images</label>
-     <input type="text" name="imported" class="form-control" value="{{ old('images', $vehicle->images ?? '') }}">
+     <textarea name="imported" rows="6" class="form-control " >{{ old('images', $vehicle->images ?? '') }}</textarea>
 </div>
 </div>
 <div class="row py-10">
@@ -130,7 +123,7 @@
     </div>
     <div class="col-md-4">
         <label class="form-label">Keys</label>
-        <input type="text" name="euro_status" class="form-control" value="{{ old('euro_status', $vehicle->euro_status ?? '') }}">
+        <input type="text" name="keys" class="form-control" value="{{ old('keys', $vehicle->keys ?? '') }}">
     </div>
     <div class="col-md-4">
         <label class="form-label">Euro Status</label>
@@ -190,7 +183,7 @@
     </div>
     <div class="col-md-4">
         <label class="form-label">No Of Service</label>
-        <input type="text" name="service_history" class="form-control" value="{{ old('service_history', $vehicle->service_history ?? '') }}">
+        <input type="text" name="no_of_services" class="form-control" value="{{ old('no_of_services', $vehicle->no_of_services ?? '') }}">
     </div>
     <div class="col-md-4">
         <label class="form-label">Last Service</label>
@@ -206,7 +199,7 @@
     </div>
     <div class="col-md-12">
         <label class="form-label">Service Note</label>
-        <textarea name="service_note" class="form-control">{{ old('service_note', $vehicle->service_note ?? '') }}</textarea>
+        <textarea name="service_notes" class="form-control">{{ old('service_notes', $vehicle->service_notes ?? '') }}</textarea>
     </div>
 </div>
 <div class="row py-10">
@@ -228,7 +221,7 @@
     </div>
      <div class="col-md-4">
         <label class="form-label">Other Report</label>
-        <input type="text" name="other_report_name" class="form-control" value="{{ old('other_report_name', $vehicle->other_report_name ?? '') }}">
+        <input type="text" name="other_report" class="form-control" value="{{ old('other_report', $vehicle->other_report ?? '') }}">
     </div>   
     <div class="col-md-4">
         <label class="form-label">Inspection Date</label>
@@ -304,7 +297,7 @@
     </div>
     <div class="col-md-4">
         <label class="form-label">Buy Now Price</label>
-        <input type="text" name="autotrader_trade_value" class="form-control" value="{{ old('autotrader_trade_value', $vehicle->autotrader_trade_value ?? '') }}">
+        <input type="text" name="buy_now_price" class="form-control" value="{{ old('buy_now_price', $vehicle->buy_now_price ?? '') }}">
     </div>
 </div>
 <div class="row py-10">
@@ -370,9 +363,9 @@
     <div class="col-12 pt-3">
          <h4 class="card-title ">DAMAGE REPORT </h4>
     </div>
- <div class="col-md-4">
+ <div class="col-md-12">
         <label class="form-label">Damage  Images</label>
-        <textarea name="damage_details" class="form-control">{{ old('damage_details', $vehicle->damage_details ?? '') }}</textarea>
+        <textarea name="damaged_images" class="form-control">{{ old('damaged_images', $vehicle->damaged_images ?? '') }}</textarea>
                            </div>
     <div class="col-md-12">
         <label class="form-label">Damage  Details</label>
