@@ -464,7 +464,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/vehicles/edit/{id}', [AVehicleController::class,'edit']);
     Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
     Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
-
+    Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
+    
     Route::middleware('auth')->prefix('news')->name('admin.news.')->group(function () {
         Route::get('/', [AdminNewscrudController::class, 'index'])->name('index');
         Route::get('/create', [AdminNewscrudController::class, 'create'])->name('create');

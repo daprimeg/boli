@@ -21,7 +21,7 @@
                          </div>
                             <div class="col-md-4">
                                 <label class="form-label">Make <span class="text-danger" >*</span></label>
-                                <select name="make_id" class="form-control" required>
+                                <select name="make_id" class="form-control make" required>
                                     @foreach($makes as $id => $name)
                                         <option value="{{ $id }}"
                                             {{ old('make_id', $vehicle->make_id ?? '') == $id ? 'selected' : '' }}>
@@ -33,7 +33,7 @@
                     
                             <div class="col-md-4">
                                 <label class="form-label">Model <span class="text-danger" >*</span></label>
-                                <select name="model_id" class="form-control" required>
+                                <select name="model_id" class="form-control model" required>
                                     @foreach($models as $id => $name)
                                         <option value="{{ $id }}"
                                             {{ old('model_id', $vehicle->model_id ?? '') == $id ? 'selected' : '' }}>
@@ -113,13 +113,13 @@
         <div class="col-md-4">
                       <label class="form-label">Color</label>
                         <select name="color" class="form-control">
-                         @foreach($colors as $id => $name)
+                             @foreach($colors as $id => $name)
                                         <option value="{{ $id }}"
                                             {{ old('color', $vehicle->color ?? '') == $id ? 'selected' : '' }}>
                                             {{ $name }}
                                         </option>
-                                    @endforeach
-                                </select>
+                              @endforeach
+                         </select>
     </div>
     <div class="col-md-4">
         <label class="form-label">Keys</label>

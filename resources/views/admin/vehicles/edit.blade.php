@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-body">
 
-                       <form method="POST" action="{{ url('/admin/vehicles/update/' . $vehicle->id) }}" enctype="multipart/form-data">
+                       <form method="POST" action="{{ url::to('/admin/vehicles/update/' . $vehicle->id) }}" enctype="multipart/form-data">
                           @csrf @method('PUT')
                            @include('admin.vehicles.form')
                            <div class="text-center pt-5" > 
