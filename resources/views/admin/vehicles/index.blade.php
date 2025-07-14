@@ -27,6 +27,10 @@
       -webkit-overflow-scrolling: touch!important;
    }
 
+   .ellipsis{
+    display: none!important;
+   }
+
 </style>
 @endsection
 @section('content')
