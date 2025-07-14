@@ -38,6 +38,7 @@ class Vehicle extends Model
     }
 
     public function autoAdvance()
+
     {
         return $this->hasOne(AutoAdvance::class, 'auction_id' , 'auction_id');
     }
@@ -56,10 +57,44 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Make::class, 'make_id');
     }
+    public function vehicle_type()
+    {
+        return $this->belongsTo(VehicleType::class, 'vehicle_id');
+    }
+    public function body_types()
+    {
+        return $this->belongsTo(BodyType::class, 'body_id');
+    }
+    public function color()
+    {
+        return $this->belongsTo(Color::class, 'color_id');
+    }
 
     public function model()
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');
+    }
+
+    public function getImage()
+    { 
+        if($this->images){
+            if (is_array(explode(',',$this->images))) {
+
+                return explode(',',$this->images)[0];
+            }
+        }
+        
+        return '';
+    }
+
+     public function getImages()
+    { 
+        if($this->images){
+            if (is_array(explode(',',$this->images))) {
+                return explode(',',$this->images);
+            }
+        }
+        return [];
     }
 
     public function variant()

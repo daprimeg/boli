@@ -10,60 +10,45 @@
     </div>
         <div class="col-md-4">
                             <label class="form-label">Vehicle Type <span class="text-danger" >*</span></label>
-                                <select name="vehicle_type_id" class="form-control vehicleTtypes" required>
-                            @foreach($vehicleTypes as $id => $name)
-                             <option value="{{ $id }}"
-                              {{ old('vehicle_type_id', $vehicle->vehicle_type_id ?? '') == $id ? 'selected' : '' }}>
-                           {{ $name }}
-                           </option>
-                             @endforeach
+                                <select name="vehicle_id" class="form-control vehicleTtypes" required>
+                              @if($vehicle->vehicle_id)
+                                        <option value="{{$vehicle->vehicle_id }}" selected >{{ $vehicle->vehicle_type->name }}</option>
+                                    @endif
                                </select>
                          </div>
                             <div class="col-md-4">
                                 <label class="form-label">Make <span class="text-danger" >*</span></label>
                                 <select name="make_id" class="form-control make" required>
-                                    @foreach($makes as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('make_id', $vehicle->make_id ?? '') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
+                                    @if($vehicle->make_id)
+                                        <option value="{{$vehicle->make_id }}" selected >{{ $vehicle->make->name }}</option>
+                                    @endif
                                 </select>
                             </div>
                     
                             <div class="col-md-4">
                                 <label class="form-label">Model <span class="text-danger" >*</span></label>
                                 <select name="model_id" class="form-control model" required>
-                                    @foreach($models as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('model_id', $vehicle->model_id ?? '') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
+                              @if($vehicle->model_id)
+                                        <option value="{{$vehicle->model_id }}" selected >{{ $vehicle->model->name }}</option>
+                                    @endif
                                 </select>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label">Variant <span class="text-danger" >*</span></label>
                                 <select name="variant_id" class="form-control variants" required>
-                                    @foreach($variants as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('variant_id', $vehicle->variant_id ?? '') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
+                                    @if($vehicle->variant_id)
+                                        <option value="{{$vehicle->variant_id }}" selected >{{ $vehicle->variant->name }}</option>
+                                    @endif
                                 </select>
                             </div>
 
                             <div class="col-md-4">
                                 <label class="form-label">Body Type <span class="text-danger" >*</span></label>
-                                <select name="body_type_id" class="form-control bodyTypes" required>
-                                    @foreach($bodyTypes as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('body_type_id', $vehicle->body_type_id ?? '') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                                    @endforeach
+                                <select name="body_id" class="form-control bodyTypes" required>
+                                    @if($vehicle->body_id)
+                                        <option value="{{$vehicle->body_id }}" selected >{{ $vehicle->body_types->name }}</option>
+                                    @endif
                                 </select>
                             </div>
 
@@ -112,13 +97,10 @@
     </div>
         <div class="col-md-4">
                       <label class="form-label">Color</label>
-                        <select name="color" class="form-control color">
-                             @foreach($colors as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('color', $vehicle->color ?? '') == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
-                              @endforeach
+                        <select name="color_id" class="form-control color">
+                                  @if($vehicle->color_id)
+                                        <option value="{{$vehicle->color_id }}" selected >{{ $vehicle->color->name }}</option>
+                                    @endif
                          </select>
     </div>
     <div class="col-md-4">

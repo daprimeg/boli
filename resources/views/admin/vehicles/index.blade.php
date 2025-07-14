@@ -133,6 +133,7 @@
                                         <th>#</th>
                                         <th>Auction ID</th>
                                         <th>Title</th>
+                                        <th>Images</th>
                                         <th>Vehicle Type </th>
                                         <th>Make </th>
                                         <th>Model </th>

@@ -228,31 +228,31 @@
                 });
                 $('.vehicleTtypes').select2({
                     ajax: {
-                        url: "{{url('/masters/vehicletypes/getVehicleTypes')}}",
+                        url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
                         dataType: 'json'
                     }
                 });
                 $('.variants').select2({
                     ajax: {
-                        url: "{{url('/masters/variants/getVariants')}}",
+                        url: "{{url('/admin/masters/variants/getVariants')}}",
                         dataType: 'json'
                     }
                 });
                 $('.bodyTypes').select2({
                     ajax: {
-                        url: "{{url('/masters/bodytypes/getBodyTypes')}}",
+                        url: "{{url('/admin/masters/bodytypes/getBodyTypes')}}",
                         dataType: 'json'
                     }
                 });
                 $('.color').select2({
                     ajax: {
-                        url: "{{url('/masters/colours/getColours')}}",
+                        url: "{{url('/admin/masters/colours/getColours')}}",
                         dataType: 'json'
                     }
                 });
                 $('.auctions').select2({
                     ajax: {
-                        url: "{{url('auctions/getAuction')}}",
+                        url: "{{url('/admin/auctions/getAuction')}}",
                         dataType: 'json'
                     }
                 });

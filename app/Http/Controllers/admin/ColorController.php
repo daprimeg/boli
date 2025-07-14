@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\URL;
 class ColorController extends Controller
 {
 
-    public function getColor(Request $request)
+    public function getColours(Request $request)
   {
 
         $search = $request->input('q');

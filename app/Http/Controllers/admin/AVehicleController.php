@@ -114,6 +114,7 @@ class AVehicleController extends Controller
                       $Vehicle->id,
                       $Vehicle->auction_name,
                       $Vehicle->title,
+                      '<img style="width:50px;" src="'.$Vehicle->getImage().'" />',
                       $Vehicle->vehicle_name ?? 'N/A',
                       $Vehicle->make_name ?? 'N/A',
                       $Vehicle->model_name ?? 'N/A',
@@ -298,7 +299,7 @@ public function update(Request $request, $id)
         'glass_trade' => 'nullable|integer',
         'autotrader_retail_value' => 'nullable|integer',
         'autotrader_trade_value' => 'nullable|integer',
-        'lot_no' => 'nullable|string|max:100',
+        'lot' => 'nullable|string|max:100',
         'dor' => 'nullable|date',
     'reg' => 'nullable|string|max:100',
     'former_keepers' => 'nullable|integer',
@@ -308,8 +309,7 @@ public function update(Request $request, $id)
     'v5' => 'nullable|string|max:100',
     'vat_status' => 'nullable|string|max:100',
     'service_history' => 'nullable|string|max:255',
-    'number_of_services' => 'nullable|integer',
-    'number_of_stamps' => 'nullable|integer',
+    'no_of_services' => 'nullable|integer',
     'inspection_report' => 'nullable|string|max:255',
     'other_report' => 'nullable|string|max:255',
     'service_notes' => 'nullable|string|max:2000',
@@ -341,11 +341,11 @@ public function update(Request $request, $id)
 
     // Update fields
     $vehicle->title = $request->input('title');
-    $vehicle->vehicle_id = $request->input('vehicle_type_id');
+    $vehicle->vehicle_id = $request->input('vehicle_id');
     $vehicle->make_id = $request->input('make_id');
     $vehicle->model_id = $request->input('model_id');
     $vehicle->variant_id = $request->input('variant_id');
-    $vehicle->body_id = $request->input('body_type_id');
+    $vehicle->body_id = $request->input('body_id');
     $vehicle->year = $request->input('year');
     $vehicle->doors = $request->input('doors');
     $vehicle->seats = $request->input('seats');
@@ -369,7 +369,7 @@ public function update(Request $request, $id)
     $vehicle->glass_trade = $request->input('glass_trade');
     $vehicle->autotrader_retail_value = $request->input('autotrader_retail_value');
     $vehicle->autotrader_trade_value = $request->input('autotrader_trade_value');
-    $vehicle->lot_no = $request->input('lot_no');
+    $vehicle->lot = $request->input('lot');
     $vehicle->dor = $request->input('dor');
 $vehicle->reg = $request->input('reg');
 $vehicle->former_keepers = $request->input('former_keepers');
@@ -379,8 +379,7 @@ $vehicle->mot_due = $request->input('mot_due');
 $vehicle->v5 = $request->input('v5');
 $vehicle->vat_status = $request->input('vat_status');
 $vehicle->service_history = $request->input('service_history');
-$vehicle->number_of_services = $request->input('number_of_services');
-$vehicle->number_of_stamps = $request->input('number_of_stamps');
+$vehicle->no_of_services = $request->input('no_of_services');
 $vehicle->inspection_report = $request->input('inspection_report');
 $vehicle->other_report = $request->input('other_report');
 $vehicle->service_notes = $request->input('service_notes');
@@ -412,7 +411,7 @@ $vehicle->declarations = $request->input('declarations');
     $vehicle->save();
 
     // Redirect back with success message
-    return redirect()->to('/vehicles')->with('success', 'Vehicle updated successfully.');
+    return redirect('/admin/vehicles')->with('success', 'Vehicle updated successfully.');
     // return back()->with('success', 'Vehicle updated successfully.');
 }
 

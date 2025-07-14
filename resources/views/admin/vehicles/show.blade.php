@@ -80,17 +80,22 @@
     @foreach($vehicles as $v)
         <div class="vehicle-card">
             {{-- Toggle Button (Vehicle Title) --}}
-            <button class="btn btn-secondary w-100 dropdown-toggle text-start mb-2"
+         
+               <button class="btn btn-primary w-100 dropdown-toggle text-start mb-2"
                     type="button"
+                    style="justify-content: space-between;"
                     data-bs-toggle="collapse"
                     data-bs-target="#vehicle-{{ $v->id }}"
                     aria-controls="vehicle-{{ $v->id }}">
-                <strong>{{ strtoupper($v->make->name) }}</strong><br>
-                {{ $v->model->name }} {{ $v->year }}
+                    <div class="text-left" > 
+                        <p class="m-0" style="text-align: left">{{ strtoupper($v->make->name) }}</p>
+                        <p class="m-0" style="text-align: left"> {{ $v->model->name }} {{ $v->year }}</p>
+                   </div>
             </button>
 
             {{-- Collapsible Details --}}
-            <div class="collapse" id="vehicle-{{ $v->id }}">
+            <a href="{{$v->id}}" >
+                <div class="collapse" id="vehicle-{{ $v->id }}">
                 <div class="mt-2">
                     {{-- Pickup Info --}}
                     <div class="mb-2">
@@ -99,15 +104,10 @@
                     </div>
 
                     {{-- Image --}}
-              
-                        <img src="{{ asset('public\images\tabs\dashboard.png') }}" alt="Vehicle Image" style=" width: 100%;height: 100%;object-fit: cover;" class="vehicle-image  mb-2">
-
-                    {{-- Optional extra details --}}
-                    
-                    <p class="mb-0"><strong>Color:</strong> {{ $colors->name ?? 'N/A' }} </p>
-                    <p><strong>Plate Number:</strong> {{ $v->plate_number ?? 'N/A' }}</p>
+                        <img src="{{$v->getImage()}}" alt="Vehicle Image" style=" width: 100%;height: 100%;object-fit: cover;" class="vehicle-image  mb-2">           
                 </div>
             </div>
+        </a>
         </div>
     @endforeach
 </div>
@@ -125,7 +125,7 @@
            {{-- Main Image --}}
                         {{-- Main Image --}}
                         <img 
-                            src="{{ asset('public\images\tabs\dashboard.png') }}" 
+                            src="{{ $v->getImages()[0] }}" 
                             id="mainImage" 
                             class="img-fluid rounded border mb-3 w-100" 
                             style="height: 400px;  object-fit: cover; cursor: pointer;" 
@@ -136,42 +136,16 @@
 
                         {{-- Thumbnails --}}
                         <div class="d-flex flex-wrap justify-content-left gap-2">
-                            <img 
-                                src="{{ asset('public\images\tabs\dashboard.png') }}" 
+                            @foreach ($v->getImages() as $item)
+                               <img 
+                                src="{{$item}}" 
                                 class="img-thumbnail" 
                                 style="cursor:pointer; width: 80px; border-radius: 20%; height: 80px; object-fit: cover;" 
                                 onclick="changeMainImage(this.src)"
-                            >
-                            <img 
-                                src="{{ asset('public\images\tabs\dashboard.png') }}" 
-                                class="img-thumbnail" 
-                                style="cursor:pointer; width: 80px; height: 80px; object-fit: cover; border-radius: 20%;" 
-                                onclick="changeMainImage(this.src)"
-                            >
-                            <img 
-                                src="{{ asset('public\images\backgrounds\information.png') }}" 
-                                class="img-thumbnail" 
-                                style="cursor:pointer; width: 80px; height: 80px; object-fit: cover; border-radius: 20%;" 
-                                onclick="changeMainImage(this.src)"
-                            >
-                            <img 
-                                src="{{ asset('public\images\backgrounds\information.png') }}" 
-                                class="img-thumbnail" 
-                                style="cursor:pointer; width: 80px; height: 80px; object-fit: cover; border-radius: 20%;" 
-                                onclick="changeMainImage(this.src)"
-                            >
-                            <img 
-                                src="{{ asset('public\images\backgrounds\information.png') }}" 
-                                class="img-thumbnail" 
-                                style="cursor:pointer; width: 80px; height: 80px; object-fit: cover; border-radius: 20%;" 
-                                onclick="changeMainImage(this.src)"
-                            >
-                            <img 
-                                src="{{ asset('public\images\backgrounds\information.png') }}" 
-                                class="img-thumbnail" 
-                                style="cursor:pointer; width: 80px; height: 80px; object-fit: cover; border-radius: 20%;" 
-                                onclick="changeMainImage(this.src)"
-                            >
+                               > 
+                            @endforeach
+                            
+                           
                         </div>
                         
                         {{-- Modal --}}

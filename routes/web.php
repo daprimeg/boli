@@ -370,7 +370,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/masters/centers/getCenters', [CenterController::class,'getCenters']);
     Route::resource('masters/centers',CenterController::class);
 
-    Route::get('/masters/colours/getColours', [ColorController::class,'getColors']);
+    Route::get('/masters/colours/getColours', [ColorController::class,'getColours']);
     Route::resource('masters/colours',ColorController::class);
 
     Route::get('/masters/bodytypes/getBodyTypes', [BodyTypeController::class,'getBodyTypes']);
