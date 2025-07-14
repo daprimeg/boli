@@ -36,113 +36,111 @@
 
 <div class="container-xxl flex-grow-1 container-p-y">
 
-
-
-   <div class="row">
-      <div class="col-md-3 auction-tabs">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-               <ul class="nav flex-column flex-md-row gap-md-0 gap-2">
-                  <li class="nav-item">
-                     <a data-id="auction" class="display_type nav-link active" href="javascript:void(0);"> Auction Finder</a>
-                  </li>
-                  <li class="nav-item">
-                     <a data-id="car" class="display_type nav-link" href="javascript:void(0);"> Vehicle Valuation</a>
-                  </li>
-               </ul>
-            </div>
-      </div>
-      <div class="col-md-9 text-right">
-         <div class="row">
-            <div class="col-md-6 align-self-center">
-               <span style="padding-right: 5px" >Show Entries</span>
-               <select style="height: 38px;padding: 0px 10px;" name="length">
-                  {{-- <option value="10">10</option> --}}
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                  <option value="500">500</option>
-               </select>
-               <span class="show_pagging" style="padding-left: 5px"></span>
-            </div>
-            <div class="col-md-6">
-               <div class="d-flex justify-content-end">
-                  <div class="invoice_status">
-                     <select id="auction_name" name="auction_name" class="form-select">
-                        <option value="">Select Auction</option>
-                        @foreach ($platforms as $platform)
-                        <option value="{{ $platform->id }}">{{ $platform->name }}</option>
-                        @endforeach
-                     </select>
-                  </div>
-                  <div class="invoice_status">
-                     <select id="date_range" name="date_range" class="form-select">
-                        {{-- <option value="">Select Range</option> --}}
-                        <option value="today">Today</option>
-                        <option value="yesterday">Yesterday</option>
-                        <option value="last_week">Last Week</option>
-                        <option value="last_month">Last Month</option>
-                        <option value="past_3_months">Past 3 Months</option>
-                     </select>
+      <div class="row">
+         <div class="col-md-3 auction-tabs">
+               <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+                  <ul class="nav flex-column flex-md-row gap-md-0 gap-2">
+                     <li class="nav-item">
+                        <a data-id="auction" class="display_type nav-link active" href="javascript:void(0);"> Auction Finder</a>
+                     </li>
+                     <li class="nav-item">
+                        <a data-id="car" class="display_type nav-link" href="javascript:void(0);"> Vehicle Valuation</a>
+                     </li>
+                  </ul>
+               </div>
+         </div>
+         <div class="col-md-9 text-right">
+            <div class="row">
+               <div class="col-md-6 align-self-center">
+                  <span style="padding-right: 5px" >Show Entries</span>
+                  <select style="height: 38px;padding: 0px 10px;" name="length">
+                     {{-- <option value="10">10</option> --}}
+                     <option value="50">50</option>
+                     <option value="100">100</option>
+                     <option value="500">500</option>
+                  </select>
+                  <span class="show_pagging" style="padding-left: 5px"></span>
+               </div>
+               <div class="col-md-6">
+                  <div class="d-flex justify-content-end">
+                     <div class="invoice_status">
+                        <select id="auction_name" name="auction_name" class="form-select auction">
+                           <option value="">Select Auction</option>
+                           @foreach ($platforms as $platform)
+                           <option value="{{ $platform->id }}">{{ $platform->name }}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                     <div class="invoice_status">
+                        <select id="date_range" name="date_range" class="form-select">
+                           {{-- <option value="">Select Range</option> --}}
+                           <option value="today">Today</option>
+                           <option value="yesterday">Yesterday</option>
+                           <option value="last_week">Last Week</option>
+                           <option value="last_month">Last Month</option>
+                           <option selected value="past_3_months">Past 3 Months</option>
+                        </select>
+                     </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
-   </div>
 
+      <div class="row">
+         <div class="col-md-3">
+            <div class="card p-2">
+                  <div class="d-flex justify-content-between align-items-center px-1 pt-1">
+                     <h5 class="mb-0">Filters</h5>
+                     <div>
+                        {{-- <button class="btn btn-sm btn-outline-primary me-1">Hide Filters</button> --}}
 
-   <div class="row">
-      <div class="col-md-3">
-         {{-- <div class="card p-2">
-               <div class="d-flex justify-content-between align-items-center px-1 pt-1">
-                  <h5 class="mb-0">Filters</h5>
-                  <div>
-                     <button class="btn btn-sm btn-outline-primary me-1">Hide Filters</button>
-                     <a href="#" class="text-decoration-none">Clear all</a>
+                        <a href="{{url('/auctionfinder')}}" class="text-decoration-none">Clear all</a>
+                     </div>
                   </div>
-               </div>
-               <hr>
-               <div class="accordion" id="filterAccordion">
-                     @include('user.auctionfinder.sidebar')
-               </div>
-         </div> --}}
-      </div>
-
-      <!-- Right: 9col Table section -->
-      <div class="col-md-9">
-         <div class="card">
-            <div class="table-responsive text-nowrap">
-               <table class="table table-hover" >
-                  <thead>
-                     <tr>
-                        <th>Vehicle</th>
-                        <th>Year</th>
-                        <th>CC</th>
-                        <th>Mileage</th>
-                        <th>Transmission</th>
-                        <th>Auction</th>
-                        <th>Auction Time</th>
-                        <th>Last Bid</th>
-                     </tr>
-                  </thead>
-                  <tbody></tbody>
-               </table>
-            </div>
-
-            <div class=" d-flex align-items-center justify-content-center gap-4 pt-4" >
-                  <div class="dt-paging">
-                        <nav aria-label="pagination">
-                              <ul class="pagination">
-
-                          
-
-                              </ul>
-                        </nav>
+                  <hr>
+                  <div class="accordion" id="filterAccordion">
+                        @include('user.auctionfinder.sidebar')
                   </div>
             </div>
+         </div>
 
+         <!-- Right: 9col Table section -->
+         <div class="col-md-9">
+            <div class="card">
+               <div class="table-responsive text-nowrap">
+                  <table class="table table-hover" >
+                     <thead>
+                        <tr>
+                           <th>Vehicle</th>
+                           <th>Year</th>
+                           <th>CC</th>
+                           <th>Mileage</th>
+                           <th>Transmission</th>
+                           <th>Auction</th>
+                           <th>Auction Time</th>
+                           <th>Last Bid</th>
+                        </tr>
+                     </thead>
+                     <tbody></tbody>
+                  </table>
+               </div>
+
+               <div class=" d-flex align-items-center justify-content-center gap-4 pt-4" >
+                     <div class="dt-paging">
+                           <nav aria-label="pagination">
+                                 <ul class="pagination">
+
+                           
+
+                                 </ul>
+                           </nav>
+                     </div>
+               </div>
+
+            </div>
          </div>
       </div>
-   </div>
 
 
 </div>
@@ -155,13 +153,11 @@
                     let filters = {};
                     filters.length = 50;
                     filters.page=1;
-                    filters.date_range = 'today';
+                    filters.date_range = 'past_3_months';
                     filters.display_type = 'auction';
-
 
                     function showHeadings () {  
 
-                        
                         if(filters.display_type == 'auction'){
                            $('table thead').html(`<tr>
                               <th>Vehicle</th>
@@ -274,28 +270,158 @@
                          searchrecord();
                      });
 
-                     $('select[name=date_range]').change(function (e) { 
-                         filters.date_range = $(this).val();
-                         searchrecord();
-                         
-                     });
-
                      $('.display_type').click(function (e) { 
-
                         $('.display_type').removeClass('active');
                         filters.display_type = $(this).data('id');
                         showHeadings();
                         searchrecord();
                         $(this).addClass('active');
-
                      });
 
                      $('.pagination').on('click', 'li', function() {
                           filters.page = $(this).data('id');
                           searchrecord();
                      });
-                                          
 
+                     $('input[name="vehicle_types[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="vehicle_types[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.vehicle_types = selected.toString();
+                           searchrecord();
+                     });
+
+
+                     $('input[name="makes[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="makes[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.makes = selected.toString();
+                           searchrecord();
+                     });
+
+
+                     $('input[name="models[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="models[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.models = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('input[name="body_types[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="body_types[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.body_types = selected.toString();
+                           searchrecord();
+                     });
+
+
+                     $('input[name="variants[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="variants[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.variants = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('input[name="transmission[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="transmission[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.transmission = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('input[name="fuel_type[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="fuel_type[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.fuel_type = selected.toString();
+                           searchrecord();
+                     });
+
+
+                     $('input[name="colors[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="colors[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.colors = selected.toString();
+                           searchrecord();
+                     });
+
+
+                     $('input[name="doors[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="doors[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.doors = selected.toString();
+                           searchrecord();
+                     });
+
+
+                     $('input[name="grades[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="grades[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.grades = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('input[name="v5[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="v5[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.v5 = selected.toString();
+                           searchrecord();
+                     });
+
+
+                      $('input[name="cc[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="cc[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.cc = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('input[name="former_keepers[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="former_keepers[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.former_keepers = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('input[name="number_of_services[]"]').change(function() {
+                           let selected = [];
+                           $('input[name="number_of_services[]"]:checked').each(function () {
+                              selected.push($(this).val());
+                           });
+                           filters.number_of_services = selected.toString();
+                           searchrecord();
+                     });
+
+                     $('#mileage_from, #mileage_to').change(function () {
+                           filters.mileage = $('#mileage_from').val()+'-'+$('#mileage_to').val();
+                           searchrecord();
+                     });
+
+                  
                      searchrecord();
 
             });

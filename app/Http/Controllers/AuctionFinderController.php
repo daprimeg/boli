@@ -27,7 +27,6 @@ class AuctionFinderController extends Controller
     public function index()
     {
 
-        
         $platforms = AuctionPlatform::all();
         $vehicles = [];
 
@@ -99,6 +98,13 @@ class AuctionFinderController extends Controller
             ->orderByDesc('cc')
             ->get();
 
+        $vehicleyears = Vehicle::select('year', \DB::raw('COUNT(*) as total'))
+        ->whereNotNull('year')
+        ->where('year', '!=', '')
+        ->groupBy('year')
+        ->orderByDesc('year')
+        ->get();
+
         $former_keepers = Vehicle::select('former_keepers', \DB::raw('COUNT(*) as total'))
             ->whereNotNull('former_keepers')
             ->where('former_keepers' , '!=', '')
@@ -114,30 +120,23 @@ class AuctionFinderController extends Controller
         ->orderByDesc('total')
         ->get();
 
-
-        // dd($vehicles);
-
         return view('user.auctionfinder.index', compact(
             'platforms', 'vehicleTypes', 'vehiclemakes', 'vehiclemodels', 'vehiclevariants',
             'vehicleyears', 'transmissions', 'fuel_types', 'vehiclebodys', 'vehiclecolors',
             'doors', 'seats', 'grades', 'v5', 'cc', 'former_keepers', 'number_of_services', 'vehicles'
         ));
+
     }
     
 
     public function data(Request $request)
     {
 
-            $platformId = $request->input('platform_id');
             $dateRange = $request->input('date_range');
 
             $perPage = (int) $request->input('length', 10);
             $page = (int) $request->input('page', 1);
             $offset = ($page - 1) * $perPage;
-
-
-      
-
 
             //Base Query
             $query = Vehicle::join('auctions','auctions.id','=','vehicles.auction_id')
@@ -145,29 +144,104 @@ class AuctionFinderController extends Controller
             ->join('model','model.id','=','vehicles.model_id')
             ->join('model_variant','model_variant.id','=','vehicles.variant_id');
 
-
+            
             if($request->has('plateform_id') && $request->plateform_id != ''){
-                $query->plateform_id = $request->plateform_id;
+                 $query->where('vehicles.plateform_id',explode(',',$request->plateform_id));
             }
 
+            if($request->has('vehicle_types') && $request->vehicle_types != ''){
+                $query->whereIn('vehicles.vehicle_id',explode(',',$request->vehicle_types));
+            }
 
+            if($request->has('makes') && $request->makes != ''){
+                $query->whereIn('vehicles.make_id',explode(',',$request->makes));
+            }
 
-            // if ($request->has('date_range') && $request->date_range != '') {
+            if($request->has('models') && $request->models != ''){
+                $query->whereIn('vehicles.model_id',explode(',',$request->models));
+            }
 
-            $now = \Carbon\Carbon::now();
-            $fromDate = match ($dateRange) {
-                'today' => $now->copy()->startOfDay(),
-                'yesterday' => $now->copy()->subDay()->startOfDay(),
-                'last_week' => $now->copy()->subWeek(),
-                'last_month' => $now->copy()->subMonth(),
-                'past_3_months' => $now->copy()->subMonths(3),
-                default => $now->copy()->subMonths(3),
-            };
+            if($request->has('variants') && $request->variants != ''){
+                $query->whereIn('vehicles.variant_id',explode(',',$request->variants));
+            }
 
-            $toDate = $now->copy()->endOfDay();
-            // $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+            if($request->has('years') && $request->years != ''){
+                $query->whereIn('vehicles.year',explode(',',$request->years));
+            }
 
-            // }
+            if($request->has('transmission') && $request->transmission != ''){
+                $query->whereIn('vehicles.transmission',explode(',',$request->transmission));
+            }
+
+            if($request->has('fuel_type') && $request->fuel_type != ''){
+                $query->whereIn('vehicles.fuel_type',explode(',',$request->fuel_type));
+            }
+
+            if($request->has('body_types') && $request->body_types != ''){
+                $query->whereIn('vehicles.body_id',explode(',',$request->body_types));
+            }
+
+            if($request->has('body_types') && $request->body_types != ''){
+                $query->whereIn('vehicles.body_id',explode(',',$request->body_types));
+            }
+
+            if($request->has('colors') && $request->colors != ''){
+                $query->whereIn('vehicles.color_id',explode(',',$request->colors));
+            }
+
+            if($request->has('doors') && $request->doors != ''){
+                $query->whereIn('vehicles.doors',explode(',',$request->doors));
+            }
+
+            if($request->has('seats') && $request->seats != ''){
+                $query->whereIn('vehicles.seats',explode(',',$request->seats));
+            }
+
+            if($request->has('grades') && $request->grades != ''){
+                $query->whereIn('vehicles.grades',explode(',',$request->grades));
+            }
+
+            if($request->has('v5') && $request->v5 != ''){
+                $query->whereIn('vehicles.v5',explode(',',$request->v5));
+            }
+
+            if($request->has('cc') && $request->cc != ''){
+                $query->whereIn('vehicles.cc',explode(',',$request->cc));
+            }
+
+            if($request->has('former_keepers') && $request->former_keepers != ''){
+                $query->whereIn('vehicles.former_keepers',explode(',',$request->former_keepers));
+            }
+
+            if($request->has('number_of_services') && $request->number_of_services != ''){
+                $query->whereIn('vehicles.no_of_services',explode(',',$request->number_of_services));
+            }
+
+            if($request->has('mileage') && $request->mileage != ''){
+
+                $range = explode('-', $request->mileage);
+                $from = isset($range[0]) && is_numeric($range[0]) ? (int) $range[0] : 0;
+                $to = isset($range[1]) && is_numeric($range[1]) ? (int) $range[1] : 9999999;
+                $query->whereBetween('vehicles.mileage', [$from, $to]);
+            }
+
+        
+            if ($request->has('date_range') && $request->date_range != '') {
+
+                $now = \Carbon\Carbon::now();
+                $fromDate = match ($dateRange) {
+                    'today' => $now->copy()->startOfDay(),
+                    'yesterday' => $now->copy()->subDay()->startOfDay(),
+                    'last_week' => $now->copy()->subWeek(),
+                    'last_month' => $now->copy()->subMonth(),
+                    'past_3_months' => $now->copy()->subMonths(3),
+                    default => $now->copy()->subMonths(3),
+                };
+
+                $toDate = $now->copy()->endOfDay();
+                $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+
+            }
 
 
             // Count total BEFORE limit/offset
@@ -199,8 +273,8 @@ class AuctionFinderController extends Controller
                         'mileage' => $item->mileage,
                         'transmission' => $item->transmission,
                         'auction_name' => $item->name,
-                        'auction_date' => $item->auction_date,
-                        'auction_time' => $item->auction_date,
+                        'auction_date' => date('d-M-Y',strtotime($item->auction_date)),
+                        'auction_time' => date('h:i A',strtotime($item->auction_date)),
                         'last_bid' => $item->last_bid,
                         'cap_clean' => $item->cap_clean ?? '',
                         'cap_average' => $item->cap_average ?? '',
