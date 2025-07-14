@@ -97,12 +97,14 @@ class AVehicleController extends Controller
             ->map(function ($Vehicle) {
                 
 
-
-                     $editUrl = URL::to('admin/vehicles/edit/' . $Vehicle->id);
-                      $deleteUrl = URL::to('/admin/vehicles/destroy/' . $Vehicle->id);
+                     $showUrl = URL::to('/admin/vehicles/show/' . $Vehicle->id);
+                     $editUrl = URL::to('/admin/vehicles/edit/' . $Vehicle->id);
+                     $deleteUrl = URL::to('/admin/vehicles/destroy/' . $Vehicle->id);
+                      
 
                        $html = '
                         <a href="' . $editUrl . '" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="' . $showUrl . '" class="btn btn-sm btn-primary">Show</a>
                         <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;">
                             ' . csrf_field() . method_field('DELETE') . '
                             <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
@@ -421,6 +423,18 @@ $vehicle->declarations = $request->input('declarations');
         // $vehicle->delete();
         return redirect()->to('admin/vehicles')->with('success', 'Vehicle deleted.');
     }
+public function show($id)
+{
+    
+    $vehicle = Vehicle::with(['auction.platform',  ])->findOrFail($id);
+        $auctionsPlatform = AuctionPlatform::all();
+
+    // Get other vehicles (e.g., for sidebar list)
+    $vehicles = Vehicle::with('auction.platform')->latest()->take(10)->get();
+    $colors = DB::table('color')->where('id', $vehicle->color_id)->first();
+
+    return view('admin.vehicles.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform'));
+}
     
     
 }

@@ -59,7 +59,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                          <label class="form-label " for="platform_id">Platform</label>
-                                    <select name="platform_id" id="platform_id" class="form-control" required>
+                                    <select name="platform_id" id="platform_id" class="form-control" select2 required>
                                       <option value="">-- Select Platform --</option>
                                          @foreach($auctionsPlatform as $id => $name)
                                        <option value="{{ $id }}">
@@ -72,7 +72,7 @@
                               <div class="col-md-4">
                                     <div class="form-group">
                                        <label class="form-label" for="platform_id">Center</label>
-                                            <select name="center_id" id="center_id" class="form-control" required>
+                                            <select name="center_id" id="center_id" class="form-control" select2 required>
                                                 <option value="">-- Select Center --</option>
                                             @foreach($auctionCenter as $id => $name)
                                                <option value="{{ $id }}">   {{ $name }}  </option>
@@ -83,7 +83,7 @@
                                 <div class="col-md-4">
                                       <div class="form-group ">
                                             <label class="form-label" for="auction_type">Auction Type</label>
-                                            <select name="auction_type" id="auction_type"class="form-control" required>
+                                            <select name="auction_type" id="auction_type"class="form-control" select2 required>
                                            <option value="">-- Select Auction Type --</option>
                                            <option value="Online Auction" >Online Auction </option>
                                            <option value="Time Auction" > Time Auction </option>
@@ -93,7 +93,7 @@
                                  </div>
                                   <div class="col-md-4 py-3">
                                         <div class="form-group">
-                                        <label class="form-label" for="platform_id">Auction</label>
+                                        <label class="form-label" for="auction_id">Auction</label>
                                                 <select name="auction_id" id="auction_id" class="form-control" required>
                                                     <option value="">-- Select Auctions --</option>
                                                 @foreach($auctions as $id => $name)
@@ -193,7 +193,7 @@
 
                  $('#searchBtn').on('click', function() {
                    table.ajax.reload();
-                });
-            });
+                });   
+    });
     </script>
 @endsection
