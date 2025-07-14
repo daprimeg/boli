@@ -226,6 +226,36 @@
                         dataType: 'json'
                     }
                 });
+                $('.vehicleTtypes').select2({
+                    ajax: {
+                        url: "{{url('/masters/vehicletypes/getVehicleTypes')}}",
+                        dataType: 'json'
+                    }
+                });
+                $('.variants').select2({
+                    ajax: {
+                        url: "{{url('/masters/variants/getVariants')}}",
+                        dataType: 'json'
+                    }
+                });
+                $('.bodyTypes').select2({
+                    ajax: {
+                        url: "{{url('/masters/bodytypes/getBodyTypes')}}",
+                        dataType: 'json'
+                    }
+                });
+                $('.color').select2({
+                    ajax: {
+                        url: "{{url('/masters/colours/getColours')}}",
+                        dataType: 'json'
+                    }
+                });
+                $('.auctions').select2({
+                    ajax: {
+                        url: "{{url('auctions/getAuction')}}",
+                        dataType: 'json'
+                    }
+                });
 
                 $('.center').select2({
                     ajax: {

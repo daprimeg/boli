@@ -382,6 +382,7 @@ Route::prefix('admin')->group(function () {
 
     Route::prefix('auctions')->group(function () {
 
+        Route::get('/getAuction', [AuctionController::class, 'getAuctions']);
         Route::get('/', [AuctionController::class, 'index'])->name('admin.auctions.index');
         Route::get('/viewCsv/{id}', [AuctionController::class,'viewCsv']);
         Route::get('/create', [AuctionController::class, 'create'])->name('admin.auctions.create');

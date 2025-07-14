@@ -27,7 +27,17 @@ use Illuminate\Support\Facades\Storage;
 class AuctionController extends Controller
 {
 
-    
+         public function getAuctions(Request $request)
+  {
+
+        $search = $request->input('q');
+        $auctions = Auctions::where('name', 'like', "%$search%")
+            ->select('id', 'name as text')
+            ->limit(20)
+            ->get();
+
+        return response()->json(['results' => $auctions]);
+  }
     public function index()
     {
         $auctions = Auctions::with(['platform', 'center'])->latest()->get();

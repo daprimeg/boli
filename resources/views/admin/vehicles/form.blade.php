@@ -10,7 +10,7 @@
     </div>
         <div class="col-md-4">
                             <label class="form-label">Vehicle Type <span class="text-danger" >*</span></label>
-                                <select name="vehicle_type_id" class="form-control" required>
+                                <select name="vehicle_type_id" class="form-control vehicleTtypes" required>
                             @foreach($vehicleTypes as $id => $name)
                              <option value="{{ $id }}"
                               {{ old('vehicle_type_id', $vehicle->vehicle_type_id ?? '') == $id ? 'selected' : '' }}>
@@ -45,7 +45,7 @@
 
                             <div class="col-md-4">
                                 <label class="form-label">Variant <span class="text-danger" >*</span></label>
-                                <select name="variant_id" class="form-control" required>
+                                <select name="variant_id" class="form-control variants" required>
                                     @foreach($variants as $id => $name)
                                         <option value="{{ $id }}"
                                             {{ old('variant_id', $vehicle->variant_id ?? '') == $id ? 'selected' : '' }}>
@@ -57,7 +57,7 @@
 
                             <div class="col-md-4">
                                 <label class="form-label">Body Type <span class="text-danger" >*</span></label>
-                                <select name="body_type_id" class="form-control" required>
+                                <select name="body_type_id" class="form-control bodyTypes" required>
                                     @foreach($bodyTypes as $id => $name)
                                         <option value="{{ $id }}"
                                             {{ old('body_type_id', $vehicle->body_type_id ?? '') == $id ? 'selected' : '' }}>
@@ -112,7 +112,7 @@
     </div>
         <div class="col-md-4">
                       <label class="form-label">Color</label>
-                        <select name="color" class="form-control">
+                        <select name="color" class="form-control color">
                              @foreach($colors as $id => $name)
                                         <option value="{{ $id }}"
                                             {{ old('color', $vehicle->color ?? '') == $id ? 'selected' : '' }}>
