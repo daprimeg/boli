@@ -34,7 +34,7 @@
                               @foreach ($vehiclemakes as $type)
                               <div class="form-check d-flex justify-content-between align-items-center">
                                  <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="make_ids[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
+                                    <input class="form-check-input me-1" type="checkbox" name="makes[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
                                     <label class="form-check-label" for="vehicle_type_{{ $type->id }}">
                                     {{ $type->name }}
                                     </label>
@@ -58,7 +58,7 @@
                               @foreach ($vehiclemodels as $type)
                               <div class="form-check d-flex justify-content-between align-items-center">
                                  <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="model_ids[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
+                                    <input class="form-check-input me-1" type="checkbox" name="models[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
                                     <label class="form-check-label" for="vehicle_type_{{ $type->id }}">
                                     {{ $type->name }}
                                     </label>
@@ -82,7 +82,7 @@
                               @foreach ($vehiclevariants as $type)
                               <div class="form-check d-flex justify-content-between align-items-center">
                                  <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="variant_ids[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
+                                    <input class="form-check-input me-1" type="checkbox" name="variants[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
                                     <label class="form-check-label" for="vehicle_type_{{ $type->id }}">
                                     {{ $type->name }}
                                     </label>
@@ -97,8 +97,7 @@
                      <!-- Years Filter -->
                      <div class="accordion-item border-bottom">
                         <h2 class="accordion-header" id="headingVehicleType">
-                           <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehicleyear" aria-expanded="false" aria-controls="collapseVehicleType">
-                           Years
+                           <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehicleyear" aria-expanded="false" aria-controls="collapseVehicleType">Years
                            </button>
                         </h2>
                         <div id="collapseVehicleyear" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
@@ -106,9 +105,9 @@
                               @foreach ($vehicleyears as $type)
                               <div class="form-check d-flex justify-content-between align-items-center">
                                  <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="year_ids[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
+                                    <input class="form-check-input me-1" type="checkbox" name="years[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
                                     <label class="form-check-label" for="vehicle_type_{{ $type->id }}">
-                                    {{ $type->name }}
+                                    {{ $type->year}}
                                     </label>
                                  </div>
                                  <span class="badge bg-light text-muted">{{ number_format($type->total) }}</span>
@@ -179,7 +178,7 @@
                               @foreach ($vehiclebodys as $type)
                               <div class="form-check d-flex justify-content-between align-items-center">
                                  <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="vehicle_types[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
+                                    <input class="form-check-input me-1" type="checkbox" name="body_types[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
                                     <label class="form-check-label" for="vehicle_type_{{ $type->id }}">
                                     {{ $type->name }}
                                     </label>
@@ -203,7 +202,7 @@
                               @foreach ($vehiclecolors as $type)
                               <div class="form-check d-flex justify-content-between align-items-center">
                                  <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="color_ids[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
+                                    <input class="form-check-input me-1" type="checkbox" name="colors[]" value="{{ $type->id }}" id="vehicle_type_{{ $type->id }}">
                                     <label class="form-check-label" for="vehicle_type_{{ $type->id }}">
                                     {{ $type->name }}
                                     </label>
@@ -319,28 +318,28 @@
                      </div>
 
                      <!-- Engine Size/CC Filter -->
-                     <div class="accordion-item border-bottom">
-                        <h2 class="accordion-header" id="headingTransmission">
-                           <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecc" aria-expanded="false" aria-controls="collapsecc">
-                           Engine Size
-                           </button>
-                        </h2>
-                        <div id="collapsecc" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
-                           <div class="accordion-body py-1">
-                              @foreach ($cc as $trans)
-                              <div class="form-check d-flex justify-content-between align-items-center">
-                                 <div>
-                                    <input class="form-check-input me-1" type="checkbox" name="cc[]" value="{{ $trans->cc }}" id="trans_{{ Str::slug($trans->cc) }}">
-                                    <label class="form-check-label" for="trans_{{ Str::slug($trans->cc) }}">
-                                    {{ ucfirst($trans->cc) }}
-                                    </label>
+                        <div class="accordion-item border-bottom">
+                           <h2 class="accordion-header" id="headingTransmission">
+                              <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecc" aria-expanded="false" aria-controls="collapsecc">
+                              Engine Size
+                              </button>
+                           </h2>
+                           <div id="collapsecc" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
+                              <div class="accordion-body py-1">
+                                 @foreach ($cc as $trans)
+                                 <div class="form-check d-flex justify-content-between align-items-center">
+                                    <div>
+                                       <input class="form-check-input me-1" type="checkbox" name="cc[]" value="{{ $trans->cc }}" id="trans_{{ Str::slug($trans->cc) }}">
+                                       <label class="form-check-label" for="trans_{{ Str::slug($trans->cc) }}">
+                                       {{ ucfirst($trans->cc) }}
+                                       </label>
+                                    </div>
+                                    <span class="badge bg-light text-muted">{{ number_format($trans->total) }}</span>
                                  </div>
-                                 <span class="badge bg-light text-muted">{{ number_format($trans->total) }}</span>
+                                 @endforeach
                               </div>
-                              @endforeach
                            </div>
                         </div>
-                     </div>
 
 
                         <!-- Former Keeper Filter -->
@@ -368,8 +367,6 @@
                         </div>
 
 
-
-
                         <!-- No Of services Filter -->
                         <div class="accordion-item border-bottom">
                            <h2 class="accordion-header" id="headingTransmission">
@@ -382,9 +379,9 @@
                                  @foreach ($number_of_services as $trans)
                                  <div class="form-check d-flex justify-content-between align-items-center">
                                     <div>
-                                       <input class="form-check-input me-1" type="checkbox" name="number_of_services[]" value="{{ $trans->number_of_services }}" id="trans_{{ Str::slug($trans->number_of_services) }}">
-                                       <label class="form-check-label" for="trans_{{ Str::slug($trans->number_of_services) }}">
-                                       {{ ucfirst($trans->number_of_services) }}
+                                       <input class="form-check-input me-1" type="checkbox" name="number_of_services[]" value="{{ $trans->no_of_services }}" id="trans_{{ Str::slug($trans->no_of_services) }}">
+                                       <label class="form-check-label" for="trans_{{ Str::slug($trans->no_of_services) }}">
+                                       {{ ucfirst($trans->no_of_services) }}
                                        </label>
                                     </div>
                                     <span class="badge bg-light text-muted">{{ number_format($trans->total) }}</span>
@@ -394,9 +391,7 @@
                            </div>
                         </div>
 
-
-
-                        <div class="accordion-item border-bottom">
+                        <div class="accordion-item ">
                            <h2 class="accordion-header" id="headingMileage">
                               <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMileage" aria-expanded="false" aria-controls="collapseMileage">
                                  Mileage
@@ -445,7 +440,7 @@
 
 
                         <!-- Vehicle Age Filter -->
-                        <div class="accordion-item border-bottom">
+                        {{-- <div class="accordion-item border-bottom">
                            <h2 class="accordion-header" id="headingVehicleAge">
                               <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehicleAge" aria-expanded="false" aria-controls="collapseVehicleAge">
                                  Vehicle Age
@@ -492,54 +487,4 @@
                                  </div>
                               </div>
                            </div>
-                        </div>
-
-
-
-
-
-                        <div class="accordion-item border-bottom">
-                           <h2 class="accordion-header" id="headingCapclean">
-                              <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCapclean" aria-expanded="false" aria-controls="collapseCapclean">
-                                 Mileage
-                              </button>
-                           </h2>
-                           <div id="collapseCapclean" class="accordion-collapse collapse" aria-labelledby="headingCapclean" data-bs-parent="#filterAccordion">
-                              <div class="accordion-body py-1">
-                                 <div class="row">
-                                    <div class="col-6">
-                                       <select class="form-select" id="mileage_from">
-                                          <option value="">From</option>
-                                          <option value="0">0</option>
-                                          <option value="10000">10,000</option>
-                                          <option value="20000">20,000</option>
-                                          <option value="30000">30,000</option>
-                                          <option value="40000">40,000</option>
-                                          <option value="50000">50,000</option>
-                                          <option value="60000">60,000</option>
-                                          <option value="70000">70,000</option>
-                                          <option value="80000">80,000</option>
-                                          <option value="90000">90,000</option>
-                                          <option value="100000">100,000</option>
-                                       </select>
-                                    </div>
-                                    <div class="col-6">
-                                       <select class="form-select" id="mileage_to">
-                                          <option value="">To</option>
-                                          <option value="10000">10,000</option>
-                                          <option value="20000">20,000</option>
-                                          <option value="30000">30,000</option>
-                                          <option value="40000">40,000</option>
-                                          <option value="50000">50,000</option>
-                                          <option value="60000">60,000</option>
-                                          <option value="70000">70,000</option>
-                                          <option value="80000">80,000</option>
-                                          <option value="90000">90,000</option>
-                                          <option value="100000">100,000</option>
-                                          <option value="150000">150,000</option>
-                                       </select>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+                        </div> --}}
