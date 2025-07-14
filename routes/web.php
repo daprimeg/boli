@@ -56,65 +56,17 @@ use Carbon\Carbon;
 Route::get('/', fn () => view('welcome'));
 
 
-Route::get('/uploading', function (Request $request) {
 
+Route::get('/uploading1', function (Request $request) {
 
+        Vehicle::query()->delete();
         BodyType::query()->delete();
         VehicleType::query()->delete();
-        Vehicle::query()->delete();
         Color::query()->delete();
         ModelVariant::query()->delete();
         VehicleModel::query()->delete();
         Make::query()->delete();
-        
 
-        //Path
-        $path = public_path('make.csv');
-        $csv = file($path);
-        $rows = array_map('str_getcsv', $csv);
-        foreach ($rows as $value) {
-            if($value[1]){
-                Make::create([
-                'id' => $value[0],
-                'name' => $value[1],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                ]);
-            }
-        }
-
-
-        //Path
-        $path = public_path('model.csv');
-        $csv = file($path);
-        $rows = array_map('str_getcsv', $csv);
-        foreach ($rows as $value) {
-            if($value[1]){
-                VehicleModel::create([
-                'id' => $value[0],
-                'name' => $value[1],
-                'make_id' => $value[2],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                ]);
-            }
-        }
-
-
-        $path = public_path('variant.csv');
-        $csv = file($path);
-        $rows = array_map('str_getcsv', $csv);
-        foreach ($rows as $value) {
-            if($value[1]){
-                ModelVariant::create([
-                'id' => $value[0],
-                'name' => $value[1],
-                'model_id' => $value[2],
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                ]);
-            }
-        }
 
         $path = public_path('color.csv');
         $csv = file($path);
@@ -158,8 +110,66 @@ Route::get('/uploading', function (Request $request) {
                 ]);
             }
         }
+        
+
+        //Path
+        $path = public_path('make.csv');
+        $csv = file($path);
+        $rows = array_map('str_getcsv', $csv);
+        foreach ($rows as $value) {
+            if($value[1]){
+                Make::create([
+                'id' => $value[0],
+                'name' => $value[1],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                ]);
+            }
+        }
+
+
+        //Path
+        $path = public_path('model.csv');
+        $csv = file($path);
+        $rows = array_map('str_getcsv', $csv);
+        foreach ($rows as $value) {
+            if($value[1]){
+                VehicleModel::create([
+                'id' => $value[0],
+                'name' => $value[1],
+                'make_id' => $value[2],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                ]);
+            }
+        }
+     
+});
+
+
+
+Route::get('/uploading2', function (Request $request) {
+
+
+        $path = public_path('variant.csv');
+        $csv = file($path);
+        $rows = array_map('str_getcsv', $csv);
+        foreach ($rows as $value) {
+            if($value[1]){
+                ModelVariant::create([
+                'id' => $value[0],
+                'name' => $value[1],
+                'model_id' => $value[2],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                ]);
+            }
+        }
 
 });
+
+
+
 
 
 Route::get('/register', function (Request $request) {

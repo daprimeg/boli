@@ -56,7 +56,7 @@
             <div class="col-md-6 align-self-center">
                <span style="padding-right: 5px" >Show Entries</span>
                <select style="height: 38px;padding: 0px 10px;" name="length">
-                  <option value="10">10</option>
+                  {{-- <option value="10">10</option> --}}
                   <option value="50">50</option>
                   <option value="100">100</option>
                   <option value="500">500</option>
@@ -153,7 +153,7 @@
             $(document).ready(function () {
 
                     let filters = {};
-                    filters.length = 10;
+                    filters.length = 50;
                     filters.page=1;
                     filters.date_range = 'today';
                     filters.display_type = 'auction';
