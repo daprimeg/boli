@@ -432,7 +432,7 @@ public function show($id)
     $vehicles = Vehicle::with('auction.platform')->latest()->take(10)->get();
     $colors = DB::table('color')->where('id', $vehicle->color_id)->first();
 
-    return view('admin.vehicles.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform'));
+    return view('admin.vehicles.show.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform'));
 }
     
     

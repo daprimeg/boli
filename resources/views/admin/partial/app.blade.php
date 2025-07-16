@@ -123,6 +123,15 @@
     <link rel="stylesheet" href="{{ asset('public/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/assets/vendor/libs/plyr/plyr.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/assets/vendor/css/pages/app-academy-details.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- In your Blade layout (layouts/app.blade.php or similar) -->
+
+<!-- Head -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<!-- End of body -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
 
     @yield('css')
 
