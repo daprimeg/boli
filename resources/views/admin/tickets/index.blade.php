@@ -26,6 +26,7 @@
         overflow-x: auto!important;
         -webkit-overflow-scrolling: touch!important;
     }
+
 </style>
 @endsection
 @section('content')
@@ -41,11 +42,8 @@
                 <div class="card">
                     <div class="card-header border-bottom">
                         <h5 class="card-title ">All Support Tickets</h5>
-
                     </div>
                     <div class="card-body">
-
-                        
                         <div class="row pt-5">
                            <div class="col-md-8">
                                <select style="max-width:200px;padding:5px;"  name="length" class="">
@@ -70,6 +68,8 @@
                                         <th>Issue Topic</th>
                                         <th>Status</th>
                                         <th>Priority</th>
+                                        <th>Attachment</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -88,19 +88,13 @@
 
     <script>
       $(function() {
-            let table =    $('table').DataTable({
+
+            let table = $('table').DataTable({
+                    ordering:false,
                     processing: true,
                     serverSide: true,
-                    ajax: '{{ route("admin.tickets.data") }}',
-                    columns: [
-                        { data: 'id' },
-                        { data: 'user' },
-                        { data: 'issue_topic' },
-                        { data: 'status' },
-                        { data: 'priority' },
-                        { data: 'action', orderable: false, searchable: false }
-                    ]
-                });
+                    ajax:'{{url("/admin/tickets")}}',
+            });
            
             table.on('draw.dt', function () {
                 var info = table.page.info();

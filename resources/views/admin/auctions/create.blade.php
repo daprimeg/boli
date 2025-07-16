@@ -1,10 +1,7 @@
 @extends('admin.partial.app')
 @push('title') Auctions @endpush 
 @section('css')
-
-
 <style>
-
    .form-label{
          padding-top: 18px;
          padding-bottom: 6px;
@@ -14,9 +11,6 @@
 
 @endsection
 @section('content')
-
-
-
  <div class="container-fluid flex-grow-1 container-p-y">
       <div class="row g-6"> 
          <div class="col-md-12">
@@ -37,7 +31,7 @@
                </div>
                <div class="card-body ">
 
-                  <form class="pt-3" method="POST" action="{{ route('admin.auctions.store') }}" enctype="multipart/form-data">
+                  <form class="pt-3" method="POST" action="{{ url('/admin/auctions') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
@@ -107,7 +101,6 @@
       <script>
          document.addEventListener("DOMContentLoaded", function () {
 
-
                $('select[name=auction_type]').change(function (e) { 
                
                   if($(this).val() == "Online Auction"){
@@ -120,7 +113,6 @@
                   
                }).trigger('change');
 
-            
          });
    </script>
 @endsection

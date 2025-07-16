@@ -64,7 +64,7 @@
 
             </div>
                 <div class="card-footer">
-                <a href="{{ route('blogs.index') }}" class="btn btn-secondary">Back to Blog List</a>
+                <a href="{{ url('/admin/blogs') }}" class="btn btn-secondary">Back to Blog List</a>
             </div>
         </div>
 

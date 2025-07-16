@@ -40,7 +40,7 @@
                                 <h5 class="card-title" >Users</h5>
                            </div>
                             <div class="col-md-6 text-end">
-                               <a href="{{ route('admin.users.create') }}" class="btn btn-primary mb-3">Add New User</a>
+                               <a href="{{ url('/admin/users/create') }}" class="btn btn-primary mb-3">Add New User</a>
                             </div>
                         </div>
                        
@@ -83,9 +83,9 @@
                                             <td>{{$item->businessEmail}}</td>
                                             <td>
                                                 @if($item->status == 1)
-                                                    <a href="{{route('admin.users.status', [$item->id,0]) }}" class="btn btn-success btn-sm">Active</a>
+                                                    <a href="{{url('/admin/users/'.$item->id.'/status/0')}}" class="btn btn-success btn-sm">Active</a>
                                                 @else
-                                                    <a href="{{route('admin.users.status', [$item->id,1]) }}" class="btn btn-danger btn-sm">Deactive</a>
+                                                    <a href="{{url('/admin/users/'.$item->id.'/status/1')}}" class="btn btn-danger btn-sm">Deactive</a>
                                                 @endif
                                             </td>
                                             <td>

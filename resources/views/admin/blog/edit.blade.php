@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form method="POST" action="{{ route('blogs.update', $blog->id) }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ url('/admin/blogs/'.$blog->id)}}" enctype="multipart/form-data">
                             @csrf @method('PUT')
                             @include('admin.blog.form', ['blog' => $blog])
 
@@ -88,7 +88,7 @@
                             data.append('upload', file);
                             data.append('_token', '{{ csrf_token() }}');
 
-                            fetch("{{ route('blogs.upload') }}", {
+                            fetch("{{ url('/admin/blogs/upload-image') }}", {
                                 method: 'POST',
                                 body: data
                             })

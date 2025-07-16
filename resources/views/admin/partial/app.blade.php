@@ -214,6 +214,8 @@
             $(document).ready(function () {
 
                 $('.make').select2({
+                    placeholder: 'Select Make',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/makes/getMakes')}}",
                         dataType: 'json'
@@ -221,53 +223,68 @@
                 });
 
                 $('.model').select2({
+                    placeholder: 'Select Model',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/models/getModels')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.vehicleTtypes').select2({
+                    placeholder: 'Select Vehicle Type',
                     ajax: {
                         url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.variants').select2({
+                    placeholder: 'Select Variant',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/variants/getVariants')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.bodyTypes').select2({
+                    placeholder: 'Body Type',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/bodytypes/getBodyTypes')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.color').select2({
+                    placeholder: 'Select Color',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/colours/getColours')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.auctions').select2({
+                    placeholder: 'Select Auction',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/auctions/getAuction')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
 
                 $('.center').select2({
+                    placeholder: 'Select Center',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/centers/getCenters')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
 
                 $('.platform').select2({
+                    placeholder: 'Select Plateform',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/platforms/getPlatforms')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
 

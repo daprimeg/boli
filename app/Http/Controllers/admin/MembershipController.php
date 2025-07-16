@@ -55,7 +55,7 @@ class MembershipController extends Controller
         
                     
                     $html = '<a href="'.URL::to('/admin/memberships/'.$item->membership_id.'/edit').'" class="btn btn-sm btn-primary">Edit</a>
-                        <form action="'.URL::to('/admin/memberships/'.$item->membership_id).'" method="POST" style="display:inline-block;">
+                        <form action="'.URL::to('/admin/memberships/'.$item->membership_id).'/destroy" method="POST" style="display:inline-block;">
                             '.csrf_field().method_field('POST').'
                             <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
                         </form>';
@@ -105,11 +105,11 @@ class MembershipController extends Controller
 
     public function edit($id)
     {
-    $membership = Membership::with(['user', 'plan'])->findOrFail($id);
-    $plans = Plan::all();
-    $paymentMethods = ['paypal', 'stripe', 'manual'];
+        $membership = Membership::with(['user', 'plan'])->findOrFail($id);
+        $plans = Plan::all();
+        $paymentMethods = ['paypal', 'stripe', 'manual'];
 
-    return view('admin.memberships.edit', compact('membership', 'plans', 'paymentMethods'));
+        return view('admin.memberships.edit', compact('membership', 'plans', 'paymentMethods'));
     }
 
 
@@ -149,8 +149,8 @@ class MembershipController extends Controller
         }
 
         $membership->save();
+        return redirect('/admin/memberships')->with('success', 'Membership updated successfully.');
 
-        return redirect()->route('admin.memberships.index')->with('success', 'Membership updated successfully.');
     }
 
     public function store(Request $request) {
@@ -205,17 +205,16 @@ class MembershipController extends Controller
             'payment_status' => $request->payment_status,
         ]);
 
-        return redirect()->route('admin.memberships.index')->with('success', 'Membership created successfully.');
+        return redirect('/admin/memberships')->with('success', 'Membership created successfully.');
         
     }
 
 
     public function destroy($id)
     {
-    $membership = Membership::findOrFail($id);
-    $membership->delete();
-
-    return redirect()->route('admin.memberships.index')->with('success', 'Membership deleted successfully.');
+        $membership = Membership::findOrFail($id);
+        $membership->delete();
+        return redirect('/admin/memberships')->with('success', 'Membership deleted successfully.');
     }
 
 }

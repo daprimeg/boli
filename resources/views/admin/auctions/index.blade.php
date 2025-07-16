@@ -1,31 +1,30 @@
 @extends('admin.partial.app')
 @push('title') Auctions @endpush 
 @section('css')
-
 <style>
-   .dataTables_length{
-      display:none!important;
-   }
 
-   .dataTables_info{
-      /* display: inline!important; */
-   }
+      .dataTables_length{
+         display:none!important;
+      }
 
-   .datatables-products th {
-      text-align: center;
-   }
-   .datatables-products td {
-      text-align: center;
-   }
+      .dataTables_info{
+         /* display: inline!important; */
+      }
 
-   .table-responsive {
-      overflow-x: auto!important;
-      -webkit-overflow-scrolling: touch!important;
-   }
+      .datatables-products th {
+         text-align: center;
+      }
+
+      .datatables-products td {
+         text-align: center;
+      }
+
+      .table-responsive {
+         overflow-x: auto!important;
+         -webkit-overflow-scrolling: touch!important;
+      }
 
 </style>
-
-
 @endsection
 @section('content')
    <div class="container-fluid container-p-y">
@@ -43,7 +42,7 @@
                                <h5 class="card-title">All Auctions</h5>
                            </div>
                             <div class="col-md-6 text-end">
-                               <a href="{{ route('admin.auctions.create') }}" class="btn btn-primary mb-2">Create Auction</a>
+                               <a href="{{ url('/admin/auctions/create') }}" class="btn btn-primary mb-2">Create Auction</a>
                             </div>
                         </div>
                      </div>
@@ -81,9 +80,9 @@
                                              <td>@if($auction->end_date){{ date('d-M-Y H:i', strtotime($auction->end_date))}}@endif</td>
                                              <td>{{ $auction->platform->name ?? '' }}</td>
                                              <td>
-                                                <a href="{{ route('admin.auctions.edit', $auction->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                                <a href="{{URL::to('/admin/auctions/viewCsv/'.$auction->id)}}" class="btn btn-sm btn-warning">View</a>
-                                                <form action="{{ route('admin.auctions.destroy', $auction->id) }}" method="POST" style="display:inline;">
+                                                <a href="{{ url('/admin/auctions/'.$auction->id.'/edit') }}" class="btn btn-sm btn-warning">Edit</a>
+                                                <a href="{{url('/admin/auctions/viewCsv/'.$auction->id)}}" class="btn btn-sm btn-warning">View</a>
+                                                <form action="{{url('/admin/auctions'.$auction->id) }}" method="POST" style="display:inline;">
                                                    @csrf @method('DELETE')
                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                                                 </form>

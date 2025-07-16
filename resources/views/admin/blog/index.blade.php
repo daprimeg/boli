@@ -94,8 +94,9 @@
             $(document).ready(function () {
              let table = $('#blogTable').DataTable({
                     processing: true,
+                    ordering:false,
                     serverSide: true,
-                    ajax: "{{ route('blogs.index') }}",
+                    ajax: "{{ url('/admin/blogs') }}",
                 });
 
                 table.on('draw.dt', function () {

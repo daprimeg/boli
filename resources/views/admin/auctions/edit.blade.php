@@ -32,7 +32,7 @@
                      <h5 class="card-title">Edit Auction</h5>
                   </div>
                   <div class="card-body">
-                     <form class="pt-3" method="POST" action="{{ route('admin.auctions.update', $auction->id) }}" enctype="multipart/form-data">
+                     <form class="pt-3" method="POST" action="{{ url('/admin/auctions/'.$auction->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -117,9 +117,8 @@
 @section('js')
       <script>
             document.addEventListener("DOMContentLoaded", function () {
-
+               
                const platformSelect = document.getElementById('platform_id');
-
                $('select[name=auction_type]').change(function (e) { 
                
                   if($(this).val() == "Online Auction"){
@@ -131,44 +130,6 @@
                   }
                   
                }).trigger('change');
-
-
-               // const centerSelect = document.getElementById('center_id');
-               // const ajaxUrlTemplate = @json(route('centers.ajax', ':id'));
-
-               // function fetchCenters(platformId, selectedCenterId = null) {
-               //    const ajaxUrl = ajaxUrlTemplate.replace(':id', platformId);
-               //    centerSelect.innerHTML = '<option value="">Loading...</option>';
-
-               //    fetch(ajaxUrl)
-               //          .then(response => response.json())
-               //          .then(data => {
-               //             centerSelect.innerHTML = '<option value="">-- Select Center --</option>';
-               //             data.forEach(center => {
-               //                const option = document.createElement('option');
-               //                option.value = center.id;
-               //                option.textContent = center.name;
-               //                if (selectedCenterId && selectedCenterId == center.id) {
-               //                      option.selected = true;
-               //                }
-               //                centerSelect.appendChild(option);
-               //             });
-               //          });
-               // }
-
-               // platformSelect.addEventListener('change', function () {
-               //    const platformId = this.value;
-               //    if (platformId) {
-               //          fetchCenters(platformId);
-               //    } else {
-               //          centerSelect.innerHTML = '<option value="">-- Select Center --</option>';
-               //    }
-               // });
-
-               // Load centers if editing
-               // @if(old('platform_id', $auction->platform_id))
-                  // fetchCenters("{{ old('platform_id', $auction->platform_id) }}", "{{ old('center_id', $auction->center_id) }}");
-               // @endif
 
             });
       </script>

@@ -41,7 +41,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form method="POST" action="{{ route('admin.memberships.store') }}">
+                        <form method="POST" action="{{ url('/admin/memberships/store') }}">
                             @csrf
 
                             <div class="row">
@@ -198,7 +198,7 @@
             document.getElementById('fetchUser').addEventListener('click', function() {
                 var email = document.getElementById('email').value;
 
-                fetch("{{ route('admin.memberships.fetch-user') }}", {
+                fetch("{{ url('/admin/memberships/fetch-user') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

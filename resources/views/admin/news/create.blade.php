@@ -41,7 +41,7 @@
                     </div>
                     <div class="card-body">
 
-                           <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data">
+                           <form action="{{url('/admin/news')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="row">

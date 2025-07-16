@@ -15,19 +15,63 @@ use Illuminate\Support\Facades\Auth;
 
 class InterestController extends Controller
 {
-public function index()
-{
-    $interests = Interest::with(['user', 'make', 'model', 'modelVariant', 'bodyType', 'auctionHouse'])->get();
 
-    return view('user.interests.index', compact('interests'), [
-        'makes' => Make::all(),
-        'models' => VehicleModel::all(),
-        'years' => Year::all(),
-        'modelVariants' => ModelVariant::all(),
-        'auctionHouses' => AuctionPlatform::all(),
-        'bodyTypes' => BodyType::all(),
-    ]);
-}
+    public function index(Request $request)
+    {
+
+        if ($request->ajax()) {
+
+
+            $search = $request->input('search.value');
+            $start = $request->input('start') ?? 0;
+            $length = $request->input('length') ?? 10;
+
+            $query = Interest::where("user_id", Auth::user()->id);
+             if (!empty($search)) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('tickets.issue_topic', 'like', "%{$search}%")
+                    ->orWhere('tickets.issue_type', 'like', "%{$search}%");
+                    // ->orWhere('users.companyName', 'like', "%{$search}%");
+                });
+            }
+
+            $totalData = clone $query;
+            $data = $query->select(
+                    'interest.*',
+            )
+            ->orderBy('created_at','desc')
+            ->offset($start)
+            ->limit($length)
+            ->get()
+            ->map(function ($row) {
+
+                 
+
+                  return [
+                      $row->id,
+                      '',
+                      '',
+                      '',
+                      '', 
+                      '',
+                      '',
+                      '',
+                  ];
+
+              });
+
+    
+                return  [
+                    "draw" => intval($request->input('draw')),
+                    "recordsTotal" => $totalData->count(),
+                    "recordsFiltered" => $totalData->count(),
+                    "data" => $data
+                ];
+        }
+        
+        return view('user.interests.index',[]);
+
+    }
 
 
     public function create()
