@@ -1,0 +1,237 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+/* define variable in  bg, text bg, text etc  */
+:root {
+  --text-color: #0080ff;
+  --white-text: #ffff;
+  --nave-text-color: #c2c2c2;
+  --background-color: #000f21;
+  --items-background: #0f1c2c;
+  --items-border-colur: #263240;
+  --font-family: "Inter", sans-serif;
+}
+
+
+
+
+
+
+
+
+
+/* main body bg color */
+body {
+  background-color: var(--background-color) !important;
+  font-family: var(--font-family) !important;
+}
+
+
+
+/* create costome navebar */
+.custom-navbar {
+  background-color: var(--background-color);
+  padding: 10px 30px;
+}
+
+
+/* nave links */
+.nav-link {
+  color: var(--nave-text-color) !important;
+  position: relative;
+  margin: 0 12px;
+  font-weight: 500;
+  font-family: var(--font-family) !important;
+  padding-bottom: 5px
+}
+
+/* nave link hover */
+
+
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--white-text) !important;
+}
+
+
+/* nave border bottom */
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-color);
+  bottom: 0; /* or -2px if needed */
+  left: 0;
+}
+
+
+
+.btn-outline-light {
+  color: var(--white-text);
+  border-color: #fff !important;
+}
+/* nave hover  */
+.btn-outline-light:hover {
+  background-color: var(--white-text);
+  color: #000;
+}
+/* nave get started */
+.btn-get-started {
+  border: 2px solid var(--text-color) !important;
+}
+
+
+/* nave bar img  */
+.navbar-brand img {
+  height: 35px;
+}
+
+/* nave bar end  */
+
+
+
+
+
+
+
+/* footer */
+input::placeholder {
+  color: var(--white-text);
+}
+
+.userinfu {
+  border-radius: 8px !important;
+  border: 1px solid var(--items-border-colur) !important;
+}
+
+.subcribe-btn {
+  border-radius: 8px !important;
+  background-color:var(--white-text) !important;
+  color: black;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  border: 6px solid var(--items-border-colur) !important;
+}
+
+.inpu {
+  border: none !important;
+}
+
+/* foooter end */
+
+
+/* --------------------------------------------------------------RESPONSIVE STYLING --------------------------------------------------------------*/
+
+/* Extra extra large devices (≥1400px) */
+@media (min-width: 1400px) {
+  /* your styles here */
+  /* carosel card start */
+  .carousel-card {
+    flex: 0 0 18%;
+    min-width: 320px;
+  }
+
+}
+
+
+/* Extra large devices (≥1200px) */
+@media (min-width: 1200px) {
+  /* your styles here */
+}
+
+/* Large devices (≥992px) */
+@media (min-width: 992px) {
+  /* your styles here */
+
+
+  /* hersection  */
+  .hero-img {
+    width: 80vw;
+    height: 20vh;
+    margin-top: 10rem;
+  }
+}
+
+
+/* Medium devices (≥768px) */
+@media (min-width: 768px) {
+
+  
+  /* your styles here */
+
+  
+}  
+
+
+/* max responsive  */
+
+@media (max-width: 768px) {
+
+  /* responsive caroesel only  */
+  .carousel-wrapper {
+    height: 50vh;
+    min-height: 350px;
+  }
+
+  .carousel-card {
+    flex: 0 0 85%;
+    min-width: 250px;
+    margin: 0 8px;
+  }
+
+  .carousel-card .card-body {
+    padding: 2rem 1rem;
+  }
+
+  .arrow-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .arrow-prev {
+    left: 5%;
+  }
+
+  .arrow-next {
+    right: 5%;
+  }
+
+  .carousel-row {
+    padding: 0 0.5rem;
+  }
+}
+
+/* Small devices (≥576px) */
+@media (min-width: 576px) {
+/* your styles here */
+} 
+
+
+/* Extra responsive adjustments */
+@media (max-width: 480px) {
+  /* carsosel section  */
+  .carousel-card {
+    flex: 0 0 90%;
+    margin: 0 5px;
+  }
+
+  .carousel-wrapper {
+    height: 45vh;
+    min-height: 300px;
+  }
+
+  .arrow-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+}
+

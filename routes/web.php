@@ -38,6 +38,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
+use App\Http\Controllers\WebController;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
@@ -54,7 +55,11 @@ use Carbon\Carbon;
 */
 
 // Public routes
-Route::get('/', fn () => view('welcome'));
+
+
+Route::get('/', [WebController::class,'index']);
+Route::get('/feautres', [WebController::class,'feautres']);
+
 
 
 
@@ -173,16 +178,14 @@ Route::get('/uploading2', function (Request $request) {
 
 
 
+
+
 Route::get('/register', function (Request $request) {
-    
     $planId = $request->query('plan');
     return view('auth.register', compact('planId'));
-
 })->name('register.form');
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-
-
 
 
 Route::get('/login',  [AuthController::class, 'loginform'])->name('login.form');
@@ -197,15 +200,10 @@ Route::view('/registration', 'front.register')->name('registration');
 // Logout (shared)
 Route::post('/logout', fn () => Auth::logout() ?: redirect('/login'))->name('logout');
 
-
-
-
 Route::middleware(['auth'])->prefix('user/settings')->group(function () {
     Route::get('/ui', [UiSettingController::class, 'edit'])->name('user.settings.ui');
     Route::post('/ui', [UiSettingController::class, 'update'])->name('user.settings.ui.update');
 });
-
-
 
 
 // News (public)
@@ -215,8 +213,6 @@ Route::post('/news/{id}/toggle-pin', [NewsController::class, 'togglePin'])->name
 // Dashboard data (AJAX)
 Route::get('dashboard/data', [VehicleController::class, 'getVehicles']);
 Route::get('/dashboard/filters', [VehicleController::class, 'getFilterOptions']);
-
-
 
 Route::get('/test-payment', [TestPaymentController::class, 'showPaymentForm'])->name('test.payment.form');
 Route::post('/processpayment', [TestPaymentController::class, 'processPayment'])->name('payment.process');
@@ -322,8 +318,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/ticket/{id}/reply', [TicketController::class, 'reply'])->name('ticket.reply');
     Route::get('/ticket-history/data', [TicketController::class, 'historyData'])->name('ticket.history.data');
     Route::post('/ticket/{id}/feedback', [TicketController::class, 'submitFeedback'])->name('ticket.feedback');
-
-
 
 
 });
