@@ -75,7 +75,7 @@ class UserController extends Controller
 
      public function create(Request $request)
     {
-        return view('admin.users.create',[
+        return view('admin.users.edit',[
 
         ]);
 

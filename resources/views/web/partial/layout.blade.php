@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"/>
-    
+    <link rel="icon" type="image/x-icon" href="{{ asset('public/theme/fav.png')}}" />
     <link href="{{asset('/public/theme/css/bootstrap.css')}}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('/public/theme/styles.css')}}" />
 
@@ -17,14 +17,11 @@
   </head>
   <body>
 
-     @include('web.nav')
-    
-
+     @include('web.partial.nav')
      @yield('content')
    
      
-       <footer
-      class="bg-dark text-light py-5"
+    <footer class="bg-dark text-light py-5"
       style="background: linear-gradient(170deg, #000f21 50%, #0080ff4b 100%);font-family: var(--font-family);">
       <div style="border-top: 1px solid #263240; border-bottom: 1px solid #263240">
         <div class="container p-4 rounded-4 mb-5">

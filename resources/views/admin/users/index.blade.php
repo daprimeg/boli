@@ -40,7 +40,7 @@
                                 <h5 class="card-title" >Users</h5>
                            </div>
                             <div class="col-md-6 text-end">
-                               <a href="{{ url('/admin/users/create') }}" class="btn btn-primary mb-3">Add New User</a>
+                               <a href="{{ url('/admin/users/0/edit') }}" class="btn btn-primary mb-3">Add New User</a>
                             </div>
                         </div>
                        

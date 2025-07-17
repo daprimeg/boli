@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg custom-navbar  navbar-dark" style="font-family: var(--font-family)">
       <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="{{url('/')}}">
           <img src="{{asset('/public/theme/assets/nave-icon.png')}}" alt="Logo" class="me-2" />
         </a>
         
@@ -40,8 +40,8 @@
 
           <div class="d-flex align-items-center justify-content-center mt-3 mt-lg-0">
             <img src="{{asset('/public/theme/assets/Screenshot.png')}}" class="rounded-circle me-2" height="30" width="30"/>
-            <a class="btn me-2 text-light" href="#">Sign In</a>
-            <a class="btn btn-get-started text-white" href="#">Get Started</a>
+            <a class="btn me-2 text-light" href="{{url('/login')}}">Sign In</a>
+            <a class="btn btn-get-started text-white" href="{{url('/register')}}">Get Started</a>
         </div>
       </div>
    </div>

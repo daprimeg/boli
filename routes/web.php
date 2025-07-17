@@ -60,6 +60,13 @@ use Carbon\Carbon;
 Route::get('/', [WebController::class,'index']);
 Route::get('/feautres', [WebController::class,'feautres']);
 
+Route::get('/login',  [AuthController::class, 'login']);
+Route::post('/login_submit', [AuthController::class, 'login_submit']);
+
+Route::get('/register', [AuthController::class, 'register']);
+
+Route::post('/register_submit', [AuthController::class, 'register_submit']);
+
 
 
 
@@ -180,16 +187,10 @@ Route::get('/uploading2', function (Request $request) {
 
 
 
-Route::get('/register', function (Request $request) {
-    $planId = $request->query('plan');
-    return view('auth.register', compact('planId'));
-})->name('register.form');
-
-Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
-Route::get('/login',  [AuthController::class, 'loginform'])->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+
 
 
 Route::get('/packages', [FrontendController::class, 'pricing'])->name('packages');
