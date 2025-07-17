@@ -27,7 +27,7 @@ class AdminAuthController extends Controller
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
             Auth::login($user);
-            return redirect()->route('admin.dashboard');
+            return redirect('/admin/dashboard');
         }
 
         return back()->with('error', 'Invalid credentials or unauthorized access');
@@ -39,13 +39,13 @@ class AdminAuthController extends Controller
             return view('admin.dashboard');
         }
 
-        return redirect()->route('admin.login.form')->with('error', 'Access denied');
+        return redirect('/admin')->with('error', 'Access denied');
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('admin.login.form')->with('message', 'Logged out successfully');
+        return redirect()->route('/admin')->with('message', 'Logged out successfully');
     }
 
         public function profile()

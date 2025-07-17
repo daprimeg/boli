@@ -13,7 +13,8 @@
   <div class="container-xxl flex-grow-1 container-p-y">
       <div class="row g-6"> 
          <div class="col-md-12">
-             <form action="{{ route('admin.users.update', $user ? $user->id : 0 )}}" method="POST" enctype="multipart/form-data">
+             <?php $id = $user ? $user->id : 0; ?> 
+             <form action="{{ url('/admin/users/'.$id.'/update')}}" method="POST" enctype="multipart/form-data">
                   @csrf
                   @if($user)
                     <input type="hidden" name="user_type" value="{{ $user->user_type }}" />
@@ -34,7 +35,7 @@
                                     <input type="text" name="companyName" class="form-control" value="{{ $user ? $user->companyName : ''}}" required>
                                 </div>
                             </div>
-                             <div class="col-md-4">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-label">Business Type <span class="text-danger" >*</span></label>
                                     <select name="businessType" class="form-control" required >

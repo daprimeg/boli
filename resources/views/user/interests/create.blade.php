@@ -46,7 +46,7 @@
                     </div>
                     <div class="card-body">
                  
-                        <form class="pt-4" action="{{ url('/interest/store') }}" method="POST" enctype="multipart/form-data"  id="ticketForm" >
+                        <form class="pt-4" action="{{ url('/interest') }}" method="POST" enctype="multipart/form-data"  id="ticketForm" >
                             @csrf
 
                             <div class="row">
@@ -55,95 +55,63 @@
                                     <h4 class="card-title ">Primary</h4>
                                 </div>
 
-                                <div class="mb-3 col-md-12">
-                                    <label for="title" class="form-label">Title</label>
+                                <div class="mb-3 col-md-4">
+                                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
                                     <input type="text" name="title" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3 col-md-4">
-                                    <label for="make_id" class="form-label">Make</label>
-                                    <select id="make_id" name="make_id" class="form-control">
-                                        <option value="">Select Make</option>
-                                        @foreach($makes as $make)
-                                            <option value="{{ $make->id }}">{{ $make->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="make_id" class="form-label">Make <span class="text-danger">*</span></label> <br>
+                                    <select name="make_id" class="form-control form-select" required></select>
                                 </div>          
 
                                 <div class="mb-3 col-md-4">
-                                    <label for="model_id" class="form-label">Model</label>
-                                    <select id="model_id" name="model_id" class="form-control">
-                                        <option value="">Select Model</option>
-                                    </select>
+                                    <label for="model_id" class="form-label">Model <span class="text-danger">*</span></label> <br>
+                                    <select name="model_id" class="form-select form-control" required></select>
                                 </div>
                                 
                                 <div class="mb-3 col-md-4">
-                                    <label for="model_variant_id" class="form-label">Model Variant</label>
-                                    <select name="model_variant_id" class="form-select" required>
-                                        <option value="">Select Variant</option>
-                                        {{-- Will be dynamically populated --}}
-                                    </select>
+                                    <label for="model_variant_id" class="form-label">Model Variant <span class="text-danger">*</span></label> <br>
+                                    <select name="variant_id" class="form-select form-control" required></select>
                                 </div>
 
-
-                                <div class="mb-3 col-md-3">
-                                    <label for="year_from" class="form-label">Year From</label>
-                                    <select name="year_from" class="form-select" required>
-                                        <option value="">Select Year From</option>
-                                        @foreach($years as $year)
-                                            <option value="{{ $year->id }}">{{ $year->name }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="mb-3 col-md-4">
+                                    <label for="year_from" class="form-label">Year</label>
+                                    <div class="d-flex">
+                                        <div class="box w-100">
+                                            <select name="year_from" class="form-select" >
+                                                <option value="">From</option>
+                                                @foreach($years as $year)
+                                                    <option value="{{ $year->id }}">{{ $year->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="box w-100">
+                                            <select name="year_from" class="form-select" >
+                                                <option value="">To</option>
+                                                @foreach($years as $year)
+                                                    <option value="{{ $year->id }}">{{ $year->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3 col-md-3">
-                                    <label for="year_to" class="form-label">Year To</label>
-                                    <select name="year_to" class="form-select" required>
-                                        <option value="">Select Year To</option>
-                                        @foreach($years as $year)
-                                            <option value="{{ $year->id }}">{{ $year->name }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="mb-3 col-md-4">
+                                    <label class="form-label">Mileage</label>
+                                    <div class="d-flex">
+                                        <div class="box w-100">
+                                            <input name="mileage_from" step="any" placeholder="From" type="number" class="form-control"  />
+                                        </div>
+                                        <div class="box w-100">
+                                            <input name="mileage_to" step="any" placeholder="To" type="number" class="form-control"  />
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="transmission" class="form-label">Transmission</label>
-                                    <select name="transmission" class="form-select" required>
-                                        <option value="">Select Transmission</option>                    
-                                            <option value="None">None</option>
-                                            <option value="Auto Clutch">Auto Clutch</option> 
-                                            <option value="Auto/Manual Mode">Auto/Manual Mode</option> 
-                                            <option value="Automatic">Automatic</option> 
-                                            <option value="CVT">CVT</option> 
-                                            <option value="CVT/Manual Mode">CVT/Manual Mode</option>
-                                            <option value="Manual Transmission">Manual Transmission</option>                     
-                                    </select>
-                                </div>
-
-                            
-
-                                <div class="col-12 pt-3">
-                                    <h4 class="card-title ">Seceondry</h4>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="engine_size_min" class="form-label">Engine Size Min</label>
-                                    <input type="number" name="engine_size_min" class="form-control">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="engine_size_max" class="form-label">Engine Size Max</label>
-                                    <input type="number" name="engine_size_max" class="form-control">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="mileage_max" class="form-label">Mileage Max</label>
-                                    <input type="number" name="mileage_max" class="form-control">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="auction_house_id" class="form-label">Auction House</label>
-                                    <select name="auction_house_id" class="form-select" required>
+                                <div class="mb-3 col-md-4">
+                                    <label for="platform_id" class="form-label">Auction House</label>
+                                    <select name="platform_id" class="form-select" >
                                         <option value="">Select Auction House</option>
                                         @foreach($auctionHouses as $auctionHouse)
                                             <option value="{{ $auctionHouse->id }}">{{ $auctionHouse->name }}</option>
@@ -151,46 +119,81 @@
                                     </select>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="auction_grade_condition" class="form-label">Auction Grade Condition</label>
-                                    <select name="auction_grade_condition" class="form-select" required>
-                                        <option value="">Select Grade</option>                    
-                                            <option value="1">1</option>
-                                            <option value="2">2</option> 
-                                            <option value="3">3</option> 
-                                            <option value="4">4</option> 
-                                            <option value="5">5</option>                    
+                                <div class="col-12 pt-3">
+                                    <h4 class="card-title ">Secondry</h4>
+                                </div>
+
+                                <div class="mb-3 col-md-4">
+                                    <label for="Fuel Type" class="form-label">Fuel Type</label>
+                                    <select name="fuel_type" class="form-select" >
+                                        <option value="">Select Fuel Type</option>
+                                        <option value="Petrol">Petrol</option> 
+                                        <option value="Diesel">Diesel</option> 
+                                        <option value="Electric">Electric</option>
+                                        <option value="Petrol/Electric">Petrol/Electric</option>
+                                        <option value="None">None</option> 
+                                        <option value="Diesel/Electric">Diesel/Electric</option> 
+                                        <option value="Bi-Fuel">Bi-Fuel</option>
                                     </select>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="previous_owners_max" class="form-label">Previous Owners Max</label>
-                                    <input type="number" name="previous_owners_max" class="form-control">
+                                <div class="mb-3 col-md-4">
+                                    <label class="form-label">CC</label>
+                                    <div class="d-flex">
+                                        <div class="box w-100">
+                                            <select name="cc_from" class="form-select">
+                                                <option value="">From</option>
+                                                @foreach($cc as $c)
+                                                    <option value="{{ $c }}">{{$c}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="box w-100">
+                                            <select name="cc_to" class="form-select">
+                                                <option value="">To</option>
+                                                @foreach($cc as $c)
+                                                    <option value="{{$c}}">{{$c}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3 col-md-4">
+                                    <label class="form-label">Price</label>
+                                    <div class="d-flex">
+                                        <div class="box w-100">
+                                            <input name="price_from" step="any" placeholder="From" type="number" class="form-control"  />
+                                        </div>
+                                        <div class="box w-100">
+                                            <input name="price_to" step="any" placeholder="To" type="number" class="form-control"  />
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="body_type_id" class="form-label">Body Type</label>
-                                    <select name="body_type_id" class="form-select" required>
-                                        <option value="">Select Body Type</option>
-                                        @foreach($bodyTypes as $bodyType)
-                                            <option value="{{ $bodyType->id }}">{{ $bodyType->name }}</option>
-                                        @endforeach
+                                <div class="mb-3 col-md-4">
+                                    <label for="transmission" class="form-label">Transmission</label>
+                                    <select name="transmission" class="form-select">
+                                        <option value="">Select Transmission</option>
+                                        @foreach ($transmission as $item)
+                                            <option value="{{$item}}">{{$item}}</option>
+                                        @endforeach                    
                                     </select>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="no_of_service_max" class="form-label">No. of Services Max</label>
-                                    <input type="number" name="no_of_service_max" class="form-control">
+                                <div class="mb-3 col-md-4">
+                                    <label for="grade" class="form-label">Grade</label>
+                                    <select name="grade" class="form-select">
+                                        <option value="">Select Grade</option>
+                                        @foreach ($grade as $item)
+                                                 <option value="{{$item}}">{{$item}}</option>
+                                        @endforeach                    
+                                    </select>
                                 </div>
 
-                                <div class="mb-3 col-md-6">
-                                    <label for="estimated_retail_value_min" class="form-label">Estimated Retail Value Min</label>
-                                    <input type="number" name="estimated_retail_value_min" class="form-control">
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="estimated_retail_value_max" class="form-label">Estimated Retail Value Max</label>
-                                    <input type="number" name="estimated_retail_value_max" class="form-control">
+                                <div class="mb-3 col-md-4">
+                                    <label class="form-label">Former Keepers</label>
+                                    <input type="number" name="former_keeper" class="form-control">
                                 </div>
 
                                 <div class="col-12 text-center pt-3">
@@ -198,7 +201,6 @@
                                 </div>
 
                             </div>
-
                         </form>
                     </div>
                 </div>
@@ -206,6 +208,38 @@
         </div>
 @endsection
 @section('js')
+
+
+<script>
+
+     $('select[name=make_id]').select2({
+        placeholder: 'Select Make',
+        allowClear: true,
+        ajax: {
+            url: "{{url('/admin/masters/makes/getMakes')}}",
+            dataType: 'json'
+        }
+    });
+
+    $('select[name=model_id]').select2({
+        placeholder: 'Select Model',
+        allowClear: true,
+        ajax: {
+            url: "{{url('/admin/masters/models/getModels')}}",
+            dataType: 'json',
+        }
+    });
+
+    $('select[name=variant_id]').select2({
+        placeholder: 'Select Variant',
+        allowClear: true,
+        ajax: {
+            url: "{{url('/admin/masters/variants/getVariants')}}",
+            dataType: 'json',
+        }
+    });
+
+</script>
 
 
 @endsection

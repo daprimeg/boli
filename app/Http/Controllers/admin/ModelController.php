@@ -20,9 +20,13 @@ class ModelController extends Controller
 
         $search = $request->input('q');
         $models = VehicleModel::where('name', 'like', "%$search%")
-            ->select('id', 'name as text')
-            ->limit(20)
-            ->get();
+            ->select('id', 'name as text');
+
+        if($request->has('make_id') && $request->make_id != ''){
+            $models = $models->where('make_id',$request->make_id);
+        }
+
+        $models = $models->limit(20)->get();
 
         return response()->json(['results' => $models]);
   }

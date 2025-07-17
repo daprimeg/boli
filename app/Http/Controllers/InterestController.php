@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FuelType;
+use App\Enums\Year;
 use App\Models\Interest;
 use App\Models\User;
 use App\Models\Make;
 use App\Models\VehicleModel;
 use App\Models\ModelVariant;
-use App\Models\Year;
 use App\Models\AuctionPlatform;
 use App\Models\BodyType;
+use App\Models\Vehicle;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,11 +29,20 @@ class InterestController extends Controller
             $start = $request->input('start') ?? 0;
             $length = $request->input('length') ?? 10;
 
-            $query = Interest::where("user_id", Auth::user()->id);
+            $query = Interest::where("user_id", Auth::user()->id)
+            ->Leftjoin('auction_platform','auction_platform.id','=','interest.platform_id')
+            ->Leftjoin('make','make.id','=','interest.make_id')
+            ->Leftjoin('model','model.id','=','interest.model_id')
+            ->Leftjoin('model_variant','model_variant.id','=','interest.variant_id');
+
              if (!empty($search)) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('tickets.issue_topic', 'like', "%{$search}%")
-                    ->orWhere('tickets.issue_type', 'like', "%{$search}%");
+                    $q->where('interest.id', 'like', "%{$search}%")
+                    ->orWhere('interest.title', 'like', "%{$search}%")
+                    ->orWhere('model.name', 'like', "%{$search}%")
+                    ->orWhere('model_variant.name', 'like', "%{$search}%")
+                     ->orWhere('auction_platform.name', 'like', "%{$search}%")
+                    ->orWhere('make.name', 'like', "%{$search}%");
                     // ->orWhere('users.companyName', 'like', "%{$search}%");
                 });
             }
@@ -38,6 +50,10 @@ class InterestController extends Controller
             $totalData = clone $query;
             $data = $query->select(
                     'interest.*',
+                    'make.name as make_name',
+                    'model.name as model_name',
+                    'model_variant.name as variant_name',
+                    'auction_platform.name as platform_name',
             )
             ->orderBy('created_at','desc')
             ->offset($start)
@@ -45,17 +61,26 @@ class InterestController extends Controller
             ->get()
             ->map(function ($row) {
 
+
+                      $html = '
+                        <a href="' . url('/interest/'.$row->id). '/edit" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="' . url('/interest/'.$row->id).'" method="POST" style="display:inline-block;">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                        </form>';
                  
 
                   return [
                       $row->id,
-                      '',
-                      '',
-                      '',
-                      '', 
-                      '',
-                      '',
-                      '',
+                      $row->title,
+                      $row->make_name,
+                      $row->model_name,
+                      $row->variant_name,
+                      $row->platform_name,
+                      $row->year_form.' - '.$row->year_to, 
+                      $row->mileage_from.' - '.$row->mileage_to, 
+                      $row->cc_from.' - '.$row->cc_to, 
+                      $html,
                   ];
 
               });
@@ -76,43 +101,193 @@ class InterestController extends Controller
 
     public function create()
     {
+
+        $transmission = Vehicle::whereNotNull('transmission')
+        ->where('transmission', '!=', '')
+        ->distinct()
+        ->orderByDesc('transmission')
+        ->pluck('transmission');
+
+        $grade = Vehicle::whereNotNull('grade')
+        ->where('grade', '!=', '')
+        ->distinct()
+        ->orderByDesc('grade')
+        ->pluck('grade');
+
+        $cc = Vehicle::whereNotNull('cc')
+        ->where('cc', '!=', '')
+        ->distinct()
+        ->orderBy('cc')
+        ->pluck('cc');
+
+        $price = Vehicle::whereNotNull('last_bid')
+        ->where('last_bid', '!=', '')
+        ->distinct()
+        ->orderBy('last_bid')
+        ->pluck('last_bid');
+
         return view('user.interests.create', [
-            'makes' => Make::all(),
-            'models' => VehicleModel::all(),
-            'years' => Year::all(),
-            'modelVariants' => ModelVariant::all(),
-            'auctionHouses' => AuctionPlatform::all(),
-            'bodyTypes' => BodyType::all(),
+        
+            'years' => Year::list(),
+            'transmission' => $transmission,
+            'grade' => $grade,
+            'cc' => $cc,
+            'price' => $price,
         ]);
     }
 
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'make_id' => 'required|integer|exists:make,id',
-        'model_id' => 'required|integer|exists:model,id',
-        'model_variant_id' => 'nullable|integer|exists:model_variant,id',
-        'year_from' => 'nullable|integer',
-        'year_to' => 'nullable|integer',
-        'transmission' => 'nullable|string|max:255',
-        'engine_size_min' => 'nullable|numeric',
-        'engine_size_max' => 'nullable|numeric',
-        'mileage_max' => 'nullable|numeric',
-        'auction_house_id' => 'nullable|integer|exists:auction_platform,id',
-        'auction_grade_condition' => 'nullable|string|max:255',
-        'previous_owners_max' => 'nullable|integer',
-        'body_type_id' => 'nullable|integer|exists:body_types,id',
-        'no_of_service_max' => 'nullable|integer',
-        'estimated_retail_value_min' => 'nullable|numeric',
-        'estimated_retail_value_max' => 'nullable|numeric',
-    ]);
+    {
 
-    $validatedData['user_id'] = Auth::id();
+        
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'make_id' => 'required|integer|exists:make,id',
+            'model_id' => 'required|integer|exists:model,id',
+            'variant_id' => 'required|integer|exists:model_variant,id',
+            'platform_id' => 'nullable|integer|exists:auction_platform,id',
 
-    Interest::create($validatedData);
+            'year_from' => 'nullable|integer',
+            'year_to' => 'nullable|integer',
 
-    return redirect()->route('interests.index')->with('success', 'Interest created successfully.');
+            'transmission' => 'nullable|string|max:255',
+
+            'cc_from' => 'nullable|numeric',
+            'cc_to' => 'nullable|numeric',
+            
+            'mileage_from' => 'nullable|numeric',
+            'mileage_to' => 'nullable|numeric',
+            
+            'grade' => 'nullable|numeric|max:255',
+
+            'former_keeper' => 'nullable|integer',
+
+            'price_from' => 'nullable|numeric',
+            'price_to' => 'nullable|numeric',
+        ]);
+
+
+        $intrest = Interest::create([
+            'user_id' =>  Auth::id(),
+            'title' =>  $request->title,
+            'make_id' =>  $request->make_id,
+            'model_id' =>  $request->model_id,
+            'variant_id' =>  $request->variant_id,
+            'platform_id' =>  $request->platform_id,
+            'year_from' =>  $request->year_from,
+            'year_to' =>  $request->year_from,
+            'mileage_from' =>  $request->mileage_from,
+            'mileage_to' =>  $request->mileage_to,
+            'transmission' =>  $request->transmission,
+            'cc_from' => $request->cc_from,
+            'cc_to' => $request->cc_to,
+            'grade' => $request->grade,
+            'former_keeper' => $request->former_keeper,
+            'price_from' => $request->price_from,
+            'price_to' => $request->price_to,
+            'created_at' => Carbon::now(),
+            'updated_at' => NULL,
+        ]);
+
+         return redirect('/admin/intrest')->with('success', 'Interest created successfully.');
+    }
+
+    public function edit(Interest $interest)
+    {
+
+
+        $transmission = Vehicle::whereNotNull('transmission')
+        ->where('transmission', '!=', '')
+        ->distinct()
+        ->orderByDesc('transmission')
+        ->pluck('transmission');
+
+        $grade = Vehicle::whereNotNull('grade')
+        ->where('grade', '!=', '')
+        ->distinct()
+        ->orderByDesc('grade')
+        ->pluck('grade');
+
+        $cc = Vehicle::whereNotNull('cc')
+        ->where('cc', '!=', '')
+        ->distinct()
+        ->orderBy('cc')
+        ->pluck('cc');
+
+        $price = Vehicle::whereNotNull('last_bid')
+        ->where('last_bid', '!=', '')
+        ->distinct()
+        ->orderBy('last_bid')
+        ->pluck('last_bid');
+
+        return view('user.interests.edit', [
+            'model' => $interest,
+            'fuel_types' => FuelType::list(),
+            'years' => Year::list(),
+            'transmission' => $transmission,
+            'grade' => $grade,
+            'cc' => $cc,
+            'price' => $price,
+        ]);
+
+   
+    }
+
+    
+    public function update(Request $request,$id)
+    {
+        
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'make_id' => 'required|integer|exists:make,id',
+            'model_id' => 'required|integer|exists:model,id',
+            'variant_id' => 'required|integer|exists:model_variant,id',
+            'platform_id' => 'nullable|integer|exists:auction_platform,id',
+
+            'year_from' => 'nullable|integer',
+            'year_to' => 'nullable|integer',
+
+            'transmission' => 'nullable|string|max:255',
+
+            'cc_from' => 'nullable|numeric',
+            'cc_to' => 'nullable|numeric',
+            
+            'mileage_from' => 'nullable|numeric',
+            'mileage_to' => 'nullable|numeric',
+            
+            'grade' => 'nullable|numeric|max:255',
+
+            'former_keeper' => 'nullable|integer',
+
+            'price_from' => 'nullable|numeric',
+            'price_to' => 'nullable|numeric',
+        ]);
+
+        $intrest = Interest::where('id',$id)->update([
+            'title' =>  $request->title,
+            'make_id' =>  $request->make_id,
+            'model_id' =>  $request->model_id,
+            'variant_id' =>  $request->variant_id,
+            'platform_id' =>  $request->platform_id,
+            'year_from' =>  $request->year_from,
+            'year_to' =>  $request->year_from,
+            'mileage_from' =>  $request->mileage_from,
+            'mileage_to' =>  $request->mileage_to,
+            'transmission' =>  $request->transmission,
+            'cc_from' => $request->cc_from,
+            'cc_to' => $request->cc_to,
+            'grade' => $request->grade,
+            'fuel_type' => $request->fuel_type,
+            'former_keeper' => $request->former_keeper,
+            'price_from' => $request->price_from,
+            'price_to' => $request->price_to,
+            'updated_at' => Carbon::now(),
+        ]);
+
+
+        return back()->with('success', 'Interest updated successfully');
+
     }
 
 
@@ -139,28 +314,15 @@ class InterestController extends Controller
         return view('user.interests.show', compact('interest'));
     }
 
-    public function edit(Interest $interest)
+  
+
+
+    public function destroy(Interest $interest)
     {
-        return view('user.interests.edit', [
-            'interest' => $interest,
-            'makes' => Make::all(),
-            'models' => VehicleModel::all(),
-            'years' => Year::all(),
-            'modelVariants' => ModelVariant::all(),
-            'auctionHouses' => AuctionPlatform::all(),
-            'bodyTypes' => BodyType::all(),
-        ]);
+        // dd('check');
+
+        $interest->delete();
+        return redirect('/interest')->with('success', 'interest Deleted Successfully ');
     }
 
-    public function update(Request $request, Interest $interest)
-    {
-        $interest->update($request->all());
-        return redirect()->route('interests.index')->with('success', 'Interest updated successfully.');
-    }
-
-        public function destroy(Interest $interest)
-        {
-            $interest->delete();
-            return redirect()->route('interests.index')->with('success', 'Interest deleted successfully.');
-        }
 }

@@ -60,7 +60,7 @@
                             <div class="col-md-4 text-end">
                               <input style="max-width: 300px"  placeholder="Search.." type="text" class="d-inline form-control" name="search"  />
                             </div>
-                        </div>
+                         </div>
 
                          <div class="pt-5 table-responsive text-nowrap">
                             <table  class="table table-bordered">
@@ -89,8 +89,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{route('admin.users.edit', $item->id)}}" class="btn btn-warning btn-sm">Edit</a>
-                                                <a href="{{route('admin.users.delete', $item->id)}}" class="btn btn-danger btn-sm" onclick="return confirm(\'Delete user?\')">Delete</a>
+                                                <a href="{{url('/admin/users/'.$item->id.'/edit')}}" class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="{{url('/admin/users/'.$item->id.'/delete')}}" class="btn btn-danger btn-sm" onclick="return confirm(\'Delete user?\')">Delete</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -129,24 +129,6 @@
             const length = $(this).val();
             table.page.len(length).draw();
          }).trigger('change');
-
-
-        // $(document).ready(function() {
-        //     $('#usersTable').DataTable({
-        //         processing: true,
-        //         serverSide: true,
-        //         ajax: '{{ route('admin.users.data') }}',  // This is the AJAX route
-        //         columns: [
-        //             { data: 'id', name: 'id' },
-        //             { data: 'companyName', name: 'companyName' },
-        //             { data: 'full_name', name: 'full_name', orderable: false, searchable: false },
-        //             { data: 'businessEmail', name: 'businessEmail' },
-        //             { data: 'status', name: 'status', orderable: false, searchable: false },
-        //             { data: 'actions', name: 'actions', orderable: false, searchable: false },
-        //         ]
-        //     });
-        // });
-
          
 
       });

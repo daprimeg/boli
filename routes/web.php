@@ -485,22 +485,22 @@ Route::prefix('admin')->group(function () {
 
 
     //Users
-    Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::get('users-data', [UserController::class, 'getData'])->name('admin.users.data');
-    Route::get('users/create', [UserController::class, 'create'])->name('admin.users.create');
-    Route::post('users/store', [UserController::class, 'store'])->name('admin.users.store');
-    Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
-    Route::post('users/{id}/update', [UserController::class, 'update'])->name('admin.users.update');
-    Route::get('users/{id}/delete', [UserController::class, 'destroy'])->name('admin.users.delete');
-    Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus'])->name('admin.users.status');
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users-data', [UserController::class, 'getData']);
+    Route::get('users/create', [UserController::class, 'create']);
+    Route::post('users/store', [UserController::class, 'store']);
+    Route::get('users/{id}/edit', [UserController::class, 'edit']);
+    Route::post('users/{id}/update', [UserController::class, 'update']);
+    Route::get('users/{id}/delete', [UserController::class, 'destroy']);
+    Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus']);
 
     // Admin Authentication
-    Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
     Route::get('/profile', [AdminAuthController::class, 'profile']);
 
-    Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+    Route::get('/', [AdminAuthController::class, 'showLoginForm']);
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/logout', [AdminAuthController::class, 'logout']);
 
 });
 

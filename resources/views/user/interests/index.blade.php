@@ -74,9 +74,11 @@
                                        <th>Name</th>
                                        <th>Make</th>
                                        <th>Model</th>
-                                       <th>Year Range</th>
-                                       <th>Transmission</th>
-                                       <th>Engine Size</th>
+                                       <th>Variant</th>
+                                       <th>Auction</th>
+                                       <th>Year</th>
+                                       <th>Mileage</th>
+                                       <th>CC</th>
                                        <th>Actions</th>
                                     </tr>
                                 </thead>
