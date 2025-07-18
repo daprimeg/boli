@@ -32,6 +32,12 @@
                     </li>
                 </ul>
             </li>
+          <li class="menu-item">
+              <a href="{{ URL::to('/auctionscheduler') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-gavel"></i>
+                <div data-i18n="Auction Scheduler">Auction Schduler</div>
+              </a>
+            </li>
 
             <li  class="menu-item">
               <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px;" data-i18n="Profile">Profile </div>

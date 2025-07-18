@@ -60,6 +60,8 @@ use Carbon\Carbon;
 Route::get('/', [WebController::class,'index']);
 Route::get('/feautres', [WebController::class,'feautres']);
 
+Route::get('/pricing', [WebController::class,'pricing']);
+
 Route::get('/login',  [AuthController::class, 'login']);
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
 
@@ -255,7 +257,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
    
 
-    
+    Route::get('/auctionscheduler', [AuctionFinderController::class,'index1']);
 
 
     
@@ -289,7 +291,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/gellery', 'user/gellery')->name('gellery');
     Route::view('/comparevehicles', 'user/comparevehicles')->name('comparevehicles');
     Route::view('/reauctiontracker', 'user/reauctiontracker')->name('reauctiontracker');
-    Route::view('/pricing', 'user/pricing')->name('pricing');
+    // Route::view('/pricing', 'user/pricing')->name('pricing');
     Route::view('/platformwise', 'user/platformwise')->name('platformwise');
     Route::view('/search', 'user/search')->name('search');
 
@@ -453,6 +455,9 @@ Route::prefix('admin')->group(function () {
     Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
     Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
     Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
+    Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
+    Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
+        
     
 
     //News

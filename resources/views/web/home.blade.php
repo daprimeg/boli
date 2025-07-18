@@ -208,17 +208,18 @@
 }
 
 .autoboli-card {
+
   margin: 5rem 0px;
+  
   color:var(--white-text);
   border-radius: 30px;
   text-align: left;
   border: 1px solid var(--items-border-colur) !important;
-  background-color: var(--items-background);
+  background-color: var(--items-background); 
 }
 
 .Right-Visual {
-  height: 100%;
-  width: 100%;
+  
   background: var(--background-color) !important;
   border-radius: 200px 8px 8px 8px;
   -webkit-border-radius: 200px 8px 8px 8px;
@@ -498,14 +499,14 @@
     <!-- Every thing you need -->
 
      <section
-      class="text-center pt-5"
+      class="text-center pt-5 container"
       style="
         background-color: var(--background-color);
         font-family: var(--font-family);
         padding: 4rem 1rem;
       "
     >
-      <div class="container">
+      <div class="">
         <button
           class="btn text-white mb-4"
           style="background-color: var(--text-color)"
@@ -598,11 +599,11 @@
 
     <!-- Card Section -->
      <div
-        class="container autoboli-card mt-5 shadow-lg backdrop-blur-lg px-4 px-md-5 py-5"
+        class=" autoboli-card mt-5 shadow-lg backdrop-blur-lg px-4 px-md-5 py-5"
       >
         <div class="row align-items-center"> 
     <!-- Left -->
-     <div class="col-12 col-lg-6 text-start mb-4 mb-lg-0">
+     <div class="col-12 col-lg-6 text-start mb-4 mb-lg-0 ">
             <h1 class="display-5 fw-bold mb-3">
               Find the Best Auction for Your Next Buy
             </h1>

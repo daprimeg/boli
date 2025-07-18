@@ -124,6 +124,7 @@
     {{-- Lib --}}
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/select2.css') }}" />
 
+
     @yield('css')
 
   </head>

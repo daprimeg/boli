@@ -74,6 +74,20 @@
                                  </select>
                               </div>
                            </div>
+                           <div class="col-md-4">
+                              <div class="form-group ">
+                                 <label class="form-label" for="platform_id">Status</label>
+                                 <select name="status" class="form-select form-select-sm status-dropdown" >
+                                 <option value=""> {{old('status', $auction->status)}}</option>
+                                 <option value="Planned" {{ $auction->status == 'Planned' ? 'selected' : '' }}>Planned</option>
+                                 <option value="In Progress" {{ $auction->status =='In Progress' ? 'selected' : '' }}>InProgress</option>
+                                 <option value="update" {{ $auction->status =='update' ? 'selected' : '' }}>Update</option>
+                                 <option value="cancel" {{ $auction->status =='cancel' ? 'selected' : '' }}>Cancel</option>
+                                 {{-- <option value="updated" {{ $auction->status == 'updated' ? 'selected' : '' }}>Updated</option>
+                                 <option value="cancel" {{ $auction->status == 'cancel' ? 'selected' : '' }}>Cancel</option> --}}
+                              </select>
+                              </div>
+                           </div>
 
                            <div class="col-md-4">
                               <div class="form-group">
@@ -130,6 +144,7 @@
                   }
                   
                }).trigger('change');
+               
 
             });
       </script>
