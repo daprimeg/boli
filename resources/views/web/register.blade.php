@@ -73,11 +73,22 @@
             height: 15px;
             margin-right: 5px;
         }
+
+
+        #card-element {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+        }
 </style>
 @endsection
 
 @section('content')
 <div class="container p-4">
+     <form class="register-form" enctype="multipart/form-data" action="{{ url('/register_submit') }}" method="post" >
+       @csrf
            
             <div class=" mb-4 text-white p-3" style="background-color: rgba(255, 0, 0, 0.301); border-radius: 12px; border:1px solid red ;">
                 <p class="mb-2">
@@ -93,30 +104,23 @@
                     <a href="#" class="text-primary">Read more</a>
                 </p>
             </div>
+
             <div class="row justify-content-start">
                 <div class="col-12 col-md-10 col-lg-8">
                     <div class="bg-black bg-opacity-50 p-4 p-md-5 rounded-4 shadow">
-                        <form enctype="multipart/form-data" action="{{ url('/register_submit') }}" method="post" >
-                            @csrf
-                            
                             <div class="mb-5">
-                                <h2 class="mb-3 text-white">
-                                    Company Details
+                                <h2 class="mb-3 text-white">Company Details
                                     <div class="border-bottom border-primary" style="width: 100px; margin-top: 5px"></div>
                                 </h2>
 
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <input name="companyName" value="{{old('companyName')}}" type="text" class="sign-input" placeholder="Company / Trading or Business Name"  />
-                                         @error('companyName')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                         <input name="companyName"  type="text" class="sign-input" placeholder="Company / Trading or Business Name"  />
+                                         <small class="error error-companyName text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="companyAddress1" value="{{old('companyAddress1')}}" type="text" class="sign-input" placeholder="Company Address 1"  />
-                                        @error('companyAddress1')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="companyAddress1"  type="text" class="sign-input" placeholder="Company Address 1"  />
+                                            <small class="error error-companyAddress1 text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
                                         <select name="businessType" class="sign-input" >
@@ -126,51 +130,35 @@
                                             <option @if(old('businessType') == 'independent') selected @endif value="independent">Independent Dealer</option>
                                             <option @if(old('businessType') == 'other') selected @endif value="other">Other</option>
                                         </select>
-                                        @error('businessType')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                            <small class="error error-businessType text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="companyAddress2" value="{{old('companyAddress2')}}" type="text" class="sign-input" placeholder="Company Address 2 (Optional)" />
-                                        @error('companyAddress2')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="companyAddress2"  type="text" class="sign-input" placeholder="Company Address 2 (Optional)" />
+                                            <small class="error error-companyAddress2 text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="companyReg" value="{{old('companyReg')}}" type="text" class="sign-input" placeholder="Company Reg. Number (Optional)" />
-                                        @error('companyReg')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="companyReg"  type="text" class="sign-input" placeholder="Company Reg. Number (Optional)" />
+                                            <small class="error error-companyReg text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="townCity" value="{{old('townCity')}}" type="text" class="sign-input" placeholder="Town / City"  />
-                                        @error('townCity')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="townCity"  type="text" class="sign-input" placeholder="Town / City"  />
+                                            <small class="error error-townCity text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="website" value="{{old('website')}}"  type="url" class="sign-input" placeholder="Website (Optional)" />
-                                        @error('website')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="website"   type="url" class="sign-input" placeholder="Website (Optional)" />
+                                            <small class="error error-website text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="country" value="{{old('country')}}" type="text" class="sign-input" placeholder="Country"  />
-                                        @error('country')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="country" type="text" class="sign-input" placeholder="Country"  />
+                                            <small class="error error-country text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="businessEmail" value="{{old('businessEmail')}}" type="email" class="sign-input" placeholder="Business Email (Optional)" />
-                                        @error('businessEmail')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="businessEmail" type="email" class="sign-input" placeholder="Business Email (Optional)" />
+                                            <small class="error error-businessEmail text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="postcode" value="{{old('postcode')}}" type="text" class="sign-input" placeholder="Postcode / Zip code"  />
-                                        @error('postcode')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="postcode"  type="text" class="sign-input" placeholder="Postcode / Zip code"  />
+                                            <small class="error error-postcode text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
                                         <select name="motorTradeInsurance" class="sign-input">
@@ -179,21 +167,15 @@
                                             <option @if(old('motorTradeInsurance') == 'no') selected @endif value="no">No</option>
                                             <option @if(old('motorTradeInsurance') == 'pending') selected @endif value="pending">Pending</option>
                                         </select>
-                                        @error('motorTradeInsurance')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                            <small class="error error-postcode text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="telephone" value="{{old('telephone')}}" type="tel" class="sign-input" placeholder="Telephone"  />
-                                         @error('telephone')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="telephone" type="tel" class="sign-input" placeholder="Telephone"  />
+                                            <small class="error error-telephone text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="vatNumber" value="{{old('vatNumber')}}" type="text" class="sign-input" placeholder="VAT Number (if applicable)" />
-                                        @error('vatNumber')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="vatNumber" type="text" class="sign-input" placeholder="VAT Number (if applicable)" />
+                                            <small class="error error-vatNumber text-danger"></small>
                                     </div>
                                 </div>
                             </div>
@@ -215,28 +197,20 @@
 
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-4">
-                                        <input name="firstName" value="{{old('firstName')}}" type="text" class="sign-input" placeholder="First Name"  />
-                                        @error('firstName')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="firstName" class="sign-input" placeholder="First Name"  />
+                                            <small class="error error-firstName text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
-                                        <input name="surname" type="text" value="{{old('surname')}}" class="sign-input" placeholder="Surname"  />
-                                        @error('surname')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="surname" class="sign-input" placeholder="Surname"  />
+                                            <small class="error error-surname text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
-                                        <input name="title" type="text" value="{{old('title')}}" class="sign-input" placeholder="Title" />
-                                        @error('title')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="title" class="sign-input" placeholder="Title" />
+                                            <small class="error error-title text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
-                                        <input name="jobTitle"  type="text" value="{{old('jobTitle')}}" class="sign-input" placeholder="Job Title"  />
-                                        @error('jobTitle')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                        <input name="jobTitle" class="sign-input" placeholder="Job Title"  />
+                                            <small class="error error-jobTitle text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
                                         <div class=" position-relative sign-input d-flex align-items-center p-0">
@@ -268,23 +242,14 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Phone Input -->
-                                            <input name="phone" value="{{old('phone')}}" type="tel" class="sign-input"
-                                                style="border: none !important ; border-left: 1px solid var(--text-color) !important; border-radius: 0;"
-                                                placeholder="Phone Number"  />
+                                            <input name="phone" type="tel" class="sign-input" style="border: none !important ; border-left: 1px solid var(--text-color) !important; border-radius: 0;" placeholder="Phone Number"  />
                                         </div>
-
-                                        @error('phone')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                            <small class="error error-phone text-danger"></small>
                                     </div>
 
-
                                     <div class="col-md-4">
-                                        <input type="email" value="{{old('personalEmail')}}" name="personalEmail" class="sign-input" placeholder="Personal Email "  />
-                                        @error('personalEmail')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+                                         <input type="email" name="personalEmail" class="sign-input" placeholder="Personal Email" />
+                                         <small class="error error-personalEmail text-danger"></small>
                                     </div>
                                 </div>
 
@@ -303,86 +268,175 @@
                                     </label>
                                     <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
                                 </div>
-                                @error('uploadID')
-                                    <small class="text-danger">{{ $message }}</small> </br>
-                                @enderror
-
+                                    <small class="error error-uploadID text-danger"></small> </br>
                                 <small class="text-muted ">Upload must be in .jpg, .png or .pdf format.</small>
-
-                              
                             </div>
-                    
 
-                    <!-- Proof Section -->
-                    <div class="mb-5">
-                        <h2 class="mb-4 text-white">
-                            Proof
-                            <div class="border-bottom border-primary" style="width: 100px; height: 3px; margin-top: 5px">
-                            </div>
-                        </h2>
+                            <div class="mb-5">
+                                <h2 class="mb-4 text-white">Proof
+                                    <div class="border-bottom border-primary" style="width: 100px; height: 3px; margin-top: 5px"></div>
+                                </h2>
 
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label class="form-label text-white">Proof of motor trade (Optional)</label>
-                                <div class="d-flex align-items-center py-4" >
-                                    <label class="sign-input">
-                                        Select file (Max. 4MB)
-                                        <input name="motorTradeProof" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
-                                    </label>
-                                    <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white">Proof of motor trade (Optional)</label>
+                                        <div class="d-flex align-items-center py-4" >
+                                            <label class="sign-input">
+                                                Select file (Max. 4MB)
+                                                <input name="motorTradeProof" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
+                                            </label>
+                                            <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
+                                        </div>
+                                            <small class="error error-motorTradeProof text-danger"></small> </br>
+                                        <small class="text-muted">Upload must be in .jpg, .png or .pdf format.</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white">
+                                            Proof of address <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="d-flex align-items-center py-4" >
+                                            <label class="sign-input"> Select file (Max. 4MB)
+                                                <input name="addressProof" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
+                                            </label>
+                                            <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
+                                        </div>
+                                        <small class="error error-addressProof text-danger"></small></br>
+                                        <small class="text-muted">Upload must be in .jpg, .png or .pdf format.</small>
+                                    </div>
                                 </div>
-                                @error('motorTradeProof')
-                                    <small class="text-danger">{{ $message }}</small> </br>
-                                @enderror
-                                <small class="text-muted">Upload must be in .jpg, .png or .pdf format.</small>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-white">
-                                    Proof of address <span class="text-danger">*</span>
-                                </label>
-                                <div class="d-flex align-items-center py-4" >
-                                    <label class="sign-input">
-                                        Select file (Max. 4MB)
-                                        <input name="addressProof" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
-                                    </label>
-                                    <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
-                                </div>
-                                @error('addressProof')
-                                    <small class="text-danger">{{ $message }}</small> </br>
-                                @enderror
-                                <small class="text-muted">Upload must be in .jpg, .png or .pdf format.</small>
+
+                            <div class="mb-5">
+                                <h2 class="mb-4 text-white">Plan Details
+                                    <div class="border-bottom border-primary" style="width: 100px; height: 3px; margin-top: 5px"></div>
+                                </h2>
+
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Terms and Submit -->
-                    <div class="mb-4">
-                        <p class="text-muted">
-                            By submitting this form, you are accepting the
-                            <a href="#" class="text-white text-decoration-none">terms and conditions</a> and
-                            <a href="#" class="text-white text-decoration-none">privacy policy</a> which
-                            apply when buying with AutoBoli LTD.
-                        </p>
-                    </div>
+                            <!-- Stripe Card Element -->
+                            <div> 
+                                <div id="card-element"></div>
+                                <div id="card-errors" style="color: red;"></div>
+                            </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="mx-5 py-2 text-white"
-                            style=" background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border-radius: 8px; outline: none; ">
+                            <div class="mb-4">
+                                <p class="text-muted">
+                                    By submitting this form, you are accepting the
+                                    <a href="#" class="text-white text-decoration-none">terms and conditions</a> and
+                                    <a href="#" class="text-white text-decoration-none">privacy policy</a> which
+                                    apply when buying with AutoBoli LTD.
+                                </p>
+                            </div>
 
-                            Submit Application
-                        </button>
-                    </div>
-                    </form>
+                            <div class="d-grid">
+                                <button type="submit" class="mx-5 py-2 text-white" style=" background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); border-radius: 8px; outline: none; ">Submit Application</button>
+                            </div>
+                  
                     </div>
                 </div>
             </div>
-        </div>
-    
-@endsection
+        
+        </form>
+    </div>
 
+@endsection
 @section('js')
 
+   <script src="https://js.stripe.com/v3/"></script>
    <script>
+
+
+    $(document).ready(function () {
+
+        let stripe = Stripe("{{ env('STRIPE_PUBLISHABLE_KEY') }}");
+        let elements = stripe.elements();
+        let card = elements.create('card');
+        card.mount('#card-element');
+
+
+        async function checkpayment(){
+             $('#card-errors').text('');
+               let response = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                });
+
+               if(response.error){
+
+                   $('#card-errors').text(response.error.message); 
+                   return false;
+               }else{
+                return true;
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'payment_method',
+                        value: response.paymentMethod.id
+                    }).appendTo('.register-form');
+               }
+
+        }
+
+            
+    
+        $('.register-form').on('submit', async function (e) {
+
+                e.preventDefault();
+
+                $(`.error`).text('');
+                $('button[type=submit]').prop('disabled', true);
+
+                // let res = await checkpayment();
+
+                // if(!res){
+                //     alert('Please Enter Card Details');
+                //     return false;
+                // }
+
+    
+
+                let form = $(this)[0];
+                let formData = new FormData(form);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        
+                        console.log(response);
+                        alert("Form submitted successfully!");
+                        $('button[type=submit]').prop('disabled', false);
+
+                    },
+                    error: function (xhr) {
+
+                        if(xhr?.responseJSON?.errors){
+
+                            $.each(xhr.responseJSON.errors, function (key, messages) {
+                                $(`.error-${key}`).text(messages);
+                                
+                            });
+                        }else{
+
+                            alert("Something went wrong.");
+                        }   
+
+
+                        $('button[type=submit]').prop('disabled', false);
+                        
+                        
+                    }
+                });
+
+
+
+            });
+
+        });
+
+           
             const selected = document.getElementById("selectedOption");
             const options = document.getElementById("optionList");
 
