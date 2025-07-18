@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Auction;
 use App\Models\Auctions;
 use App\Models\AutoBasic;
 use App\Models\AutoAdvance;
 use App\Models\AutoPrice;
 use App\Models\AutoLegal;
 use App\Models\AuctionPlatform;
+use App\Models\AuctionCenter;
 use App\Models\VehicleType;
 use App\Models\Make;
 use App\Models\VehicleModel;
@@ -20,6 +22,7 @@ use App\Models\Vehicle;
 use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class AuctionFinderController extends Controller
 {
@@ -568,6 +571,73 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
 
     return response()->json(['html' => $html]);
 }
+ public function index1(Request $request){
 
+ if ($request->ajax()) {
+    $search = $request->input('search.value');
+    $start = $request->input('start') ?? 0;
+    $length = $request->input('length') ?? 10;
+
+    $query = DB::table('auctions')
+        ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+        // ->leftJoin('auction_center', 'auction_center.id', '=', 'auctions.center_id')
+        ;
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('auction_platform.name', 'like', "%{$search}%")
+              ->orWhere('auction_center.name', 'like', "%{$search}%")
+              ->orWhere('auctions.auction_date', 'like', "%{$search}%");
+        });
+    }
+
+    if ($request->has('platform_id') && $request->platform_id != '') {
+        $query->where('auctions.platform_id', $request->platform_id);
+    }
+
+    if ($request->has('center_id') && $request->center_id != '') {
+        $query->where('auctions.center_id', $request->center_id);
+    }
+
+    $totalData = clone $query;
+
+    $data = $query ->select(
+            'auctions.id',
+            'auction_platform.name as platform_name',
+            // 'auction_center.name as center_name',
+            'auctions.auction_date',
+        )
+        ->offset($start)
+        ->limit($length)
+        ->get()
+        ->map(function ($auction) {
+            return [
+                $auction->platform_name ?? 'N/A',
+                $auction->center_name ?? 'Unknown',
+                $auction->total_vehicles ?? 0,
+                $auction->auction_date ?? '-',
+                'Scheduled', // Static or computed status
+                '<a href="#" class="btn btn-sm btn-primary">View</a> / 
+                 <a href="#" class="btn btn-sm btn-danger">Alert</a>'
+            ];
+        });
+
+    return [
+        "draw" => intval($request->input('draw')),
+        "recordsTotal" => $totalData->count(),
+        "recordsFiltered" => $totalData->count(),
+        "data" => $data
+    ];
+}
+
+  
+    $auctionsPlatform = DB::table('auction_platform')->pluck('name', 'id');
+    $auctionCenter = DB::table('auction_center')->pluck('name', 'id');
+    $auctions = DB::table('auctions')->pluck('name', 'id');
+    
+
+    
+
+    return view('user.auctionscheduler.index', compact('auctionsPlatform' , 'auctionCenter','auctions'));
+ }
 
 }

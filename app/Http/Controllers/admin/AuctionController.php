@@ -171,6 +171,7 @@ class AuctionController extends Controller
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
             'platform_id' => 'required|integer',
+            'status' => 'required|in:Planned,In Progress,cancel,update',
             'csv_path' => 'nullable|file|mimes:csv,txt',
         ]);
 
@@ -186,6 +187,7 @@ class AuctionController extends Controller
                 'end_date' => $request->end_date,
                 'auction_type' => $request->auction_type,
                 'platform_id' => $request->platform_id,
+                'status' => $request->status,
             ]);
 
 
@@ -346,6 +348,7 @@ class AuctionController extends Controller
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
             'platform_id' => 'required|integer',
+            'status' => 'required|in:Planned,In Progress,cancel,update',
             'csv_path' => 'nullable|file|mimes:csv,txt',
         ]);
 
@@ -361,6 +364,7 @@ class AuctionController extends Controller
                 'end_date' => $request->end_date,
                 'auction_type' => $request->auction_type,
                 'platform_id' => $request->platform_id,
+                'status' => $request->status,
             ]);
 
              $auction->save(); 

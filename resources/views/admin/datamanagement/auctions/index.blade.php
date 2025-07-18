@@ -70,6 +70,7 @@
                                              <th>Date</th>
                                              <th>End Date</th>
                                              <th>Platform</th>
+                                             <th>status</th>
                                              <th>Actions</th>
                                           </tr>
                                        </thead>
@@ -80,6 +81,7 @@
                                              <td>{{ date('d-M-Y H:i', strtotime($auction->auction_date))}}</td>
                                              <td>@if($auction->end_date){{ date('d-M-Y H:i', strtotime($auction->end_date))}}@endif</td>
                                              <td>{{ $auction->platform->name ?? '' }}</td>
+                                             <td>{{ $auction->status ?? '' }}</td>
                                              <td>
                                                 <a href="{{ route('admin.auctions.edit', $auction->id) }}" class="btn btn-sm btn-warning">Edit</a>
                                                 <a href="{{URL::to('/admin/auctions/viewCsv/'.$auction->id)}}" class="btn btn-sm btn-warning">View</a>

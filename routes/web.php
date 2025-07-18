@@ -257,7 +257,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
    
 
-    
+    Route::get('/auctionscheduler', [AuctionFinderController::class,'index1']);
 
 
     
@@ -481,6 +481,9 @@ Route::prefix('admin')->group(function () {
     Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
     Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
     Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
+    Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
+    Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
+        
     
     Route::middleware('auth')->prefix('news')->name('admin.news.')->group(function () {
         Route::get('/', [AdminNewscrudController::class, 'index'])->name('index');

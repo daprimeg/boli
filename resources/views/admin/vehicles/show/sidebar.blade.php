@@ -1,8 +1,8 @@
         {{-- Sidebar Filters --}}
-        <div class="filters-sidebar  border-end  text-white p-3" style="background-color: #0f1c2c; width:500px ">
-           <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">Filters</h5>
-                    <a href="{{URL::to('')}}" class="btn" style="text-decoration: underline; text-decoration-color: #07509a; margin-right: -12px;">Clear All</a> 
+        <div class="filters-sidebar  border-end  text-white p-3" style="background-color: #0f1c2c; width:800px ">
+           <div class="d-flex justify-content-between align-items-center pt-7">
+                <span class="mb-0" style=" font-size: 15px">Filters</span>
+                    <a href="{{URL::to('#')}}" class="btn" style="text-decoration: underline; text-decoration-color: #07509a; font-size: 15px; margin-right: -20px;">Clear All</a> 
             </div>
             {{-- Example: Platform Filter --}}
             <form method="GET" action="{{ URL::to('/vehicles/index')}}">
@@ -12,7 +12,7 @@
                         <div class="form-group">
                             <div class="dropdown ">
                                 <button class="btn border dropdown-toggle  text-left py-1 px-1" type="button"
-                                        id="dataDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                       style="font-size: 15px;" id="dataDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                     Data
                                 </button>
                                 <div class="dropdown-menu " aria-labelledby="dataDropdown">
@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <div class="dropdown ">
                                 <button class="btn border dropdown-toggle  text-left py-1 px-1" type="button"
-                                        id="platformDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                       style="font-size: 15px;" id="platformDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                     Platform
                                 </button>
                                 <div class="dropdown-menu " aria-labelledby="platformDropdown">
@@ -46,7 +46,7 @@
                     </div>
                             <div class="col-md-5 d-flex justify-content-end align-items-center">
                                 <div class="form-group mb-0">
-                                    <span style="font-size:20px; margin-right: -20px">15,276</span>
+                                    <span style="font-size:15px; margin-right: -15px">15,276</span>
                                 </div>
                             </div>
                 </div>
@@ -74,23 +74,26 @@
                             </button>
 
                             {{-- Collapsible Details --}}
-                                <div class="collapse" style="padding: 17px; padding-top: 0px;" id="vehicle-{{ $v->id }}">
+                        <a href="{{$v->id}}"  >  
+                            <div class="collapse" style="padding: 17px; padding-top: 0px;" id="vehicle-{{ $v->id }}">
                                 <div class="">
-                                    {{-- Pickup Info --}}
-                                    <div class="mb-2">
-                                                {{-- <a href="{{$v->id}}" > --}}
-                                            <button class="pickup-badge btn border   pl-3" style="font-size: 12px; background-color: #0f1c2c ">{{ $vehicle->auction->platform->name }}</button>
-                                                {{-- </a> --}}
+                                    {{-- Pickup Info --}}  
+                                 
+                                    <div class="mb-2" style="  text-decoration: none;">
+                                              <button class="pickup-badge btn border   pl-3" style="font-size: 15px; background-color: #0f1c2c ">{{ $vehicle->auction->platform->name }}</button>
                                         <span class="ms-2">{{ date('j/n/Y_H:i', strtotime($v->pickup_at ?? now())) }}</span>
                                     </div>
+                                          
 
                                             {{-- Image --}}
                                             <img src="{{ $v->getImage() }}"
                                                 alt="Vehicle Image"
                                                 class="vehicle-image mb-2"
                                                 style="border-radius: 20px; max-width: 85%; height: 100%; display: block; margin-left: auto; margin-right: auto;">
-                                    </div>
-                                </div>
+                                        
+                                     </div> 
+                            </div>
+                        </a>
                         
                         </div>
                     @endforeach
