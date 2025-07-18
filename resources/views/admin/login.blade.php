@@ -35,7 +35,7 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
 
-        <form method="POST" action="{{ route('admin.login') }}">
+        <form method="POST" action="{{ url('/admin/login') }}">
             @csrf
 
             <div class="mb-3">

@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                            <form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ url('/admin/news/'.$news->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 

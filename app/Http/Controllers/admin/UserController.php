@@ -11,45 +11,71 @@ use DataTables;
 
 class UserController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
+
+        if($request->ajax()) {
+
+            $search = $request->input('search.value');
+            $start = $request->input('start') ?? 0;
+            $length = $request->input('length') ?? 10;
+            
+            $query = User::Leftjoin('users', 'users.id', '=', 'tickets.user_id');
+
+             if (!empty($search)) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('users.id', 'like', "%{$search}%")
+                    ->orWhere('users.firstName', 'like', "%{$search}%");
+                });
+            }
+
+            $totalData = clone $query;
+            $data = $query->select(
+                    'users.*',
+            )
+            ->orderBy('users.created_at','desc')
+            ->offset($start)
+            ->limit($length)
+            ->get()
+            ->map(function ($row) {
+        
+                    $html = '';
+                    $html .= '<a href="' .url('/admin/users/'.$row->id). '" class="btn btn-sm btn-warning" >View</a>';
+                    $html .= '<a href="' .url('/admin/users/'.$row->id.'/edit'). '" class="btn btn-sm btn-warning" >Edit</a>';
+                    $html .= '<form action="' .url('/admin/users/'.$row->id). '" method="POST" style="display:inline-block;">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Delete this news?\')">Delete</button>
+                    </form>';
+
+                    $status =  $row->status == 1 ? '<a href="'.url('/admin/users/'.$row->id.'/status/0').'" class="btn btn-success btn-sm">Active</a>' : 
+                    '<a href="'.route('admin.users.status', [$row->id, 1]).'" class="btn btn-danger btn-sm">Deactive</a>';
+            
+                  return [
+                        $row->id,
+                        $row->company,
+                        $row->firstName.' '.$row->surname,
+                        $row->email,
+                        $status,
+                        $html,
+                  ];
+              });
+
+                return  [
+                    "draw" => intval($request->input('draw')),
+                    "recordsTotal" => $totalData->count(),
+                    "recordsFiltered" => $totalData->count(),
+                    "data" => $data
+                ];
+        }
+
         $users = User::all();
         return view('admin.users.index', compact('users'));
     }
 
-
-    public function getData(Request $request)
-{
-    $users = User::query();
-
-    return DataTables::of($users)
-        ->addColumn('full_name', function($user) {
-            return $user->firstName . ' ' . $user->surname;
-        })
-        ->addColumn('status', function($user) {
-            if ($user->status == 1) {
-                return '<a href="'.route('admin.users.status', [$user->id, 0]).'" class="btn btn-success btn-sm">Active</a>';
-            } else {
-                return '<a href="'.route('admin.users.status', [$user->id, 1]).'" class="btn btn-danger btn-sm">Deactive</a>';
-            }
-        })
-        ->addColumn('actions', function($user) {
-            $editUrl = route('admin.users.edit', $user->id);
-            $deleteUrl = route('admin.users.delete', $user->id);
-
-            return '
-                <a href="'.$editUrl.'" class="btn btn-warning btn-sm">Edit</a>
-                <a href="'.$deleteUrl.'" class="btn btn-danger btn-sm" onclick="return confirm(\'Delete user?\')">Delete</a>
-            ';
-        })
-        ->rawColumns(['status', 'actions'])  // <-- important to render HTML
-        ->make(true);
-}
-
      public function create(Request $request)
     {
-
-        return view('admin.users.create',[
+        return view('admin.users.edit',[
 
         ]);
 
@@ -72,9 +98,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
         }
         
-        $data = [
-          'user' => $user
-        ];
+        $data = ['user' => $user];
 
         return view('admin.users.edit',$data);
     }
@@ -89,7 +113,6 @@ class UserController extends Controller
             $user = User::findOrFail($id);
         }
 
-        
         $validations = [
             'businessEmail' => 'required|email',
             'personalEmail' => 'required|email',
@@ -99,9 +122,6 @@ class UserController extends Controller
             'motorTradeProof' => 'nullable|file',
             'addressProof' => 'nullable|file',
         ];
-
-      
-
 
         $request->validate($validations);
 
@@ -134,7 +154,6 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
         }
 
-     
         if ($request->file('avatar')) {
             // Remove existing thumbnail if it exists
             if ($user->avatar && file_exists(public_path('uploads/' . $user->avatar))) {
@@ -147,7 +166,6 @@ class UserController extends Controller
             // $user->save();
         }
 
-
         if ($request->file('uploadID')) {
             // Remove existing thumbnail if it exists
             if ($user->uploadID && file_exists(public_path('uploads/' . $user->uploadID))) {
@@ -159,7 +177,6 @@ class UserController extends Controller
             $user->uploadID = $fileName;
             // $user->save();
         }
-
 
         if ($request->file('motorTradeProof')) {
             // Remove existing thumbnail if it exists
@@ -187,16 +204,17 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
-        
+        return redirect('/admin/users')->with('success', 'User updated successfully.');        
+
     }
+
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+        return redirect('/admin/users')->with('success', 'User deleted successfully.');
     }
 
     public function updateStatus($id, $status)
@@ -205,6 +223,6 @@ class UserController extends Controller
         $user->status = $status;
         $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'User status updated.');
+        return redirect('/admin/users')->with('success', 'User status updated.');
     }
 }

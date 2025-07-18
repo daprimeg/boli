@@ -60,25 +60,6 @@
                     <div data-i18n="Variant">Variant</div>
                   </a>
                 </li>
-
-                {{-- <li class="menu-item">
-                  <a href="{{ route('upcomingauction') }}" class="menu-link">
-                    <div data-i18n="Upcoming Auction">Upcoming Auction</div>
-                  </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="{{ route('updatingfields') }}" class="menu-link">
-                    <div data-i18n="Updating Field">Updating Field</div>
-                  </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="{{ route('managelisting') }}" class="menu-link">
-                    <div data-i18n="Manage Listings">Manage Listings</div>
-                  </a>
-                </li> --}}
-
               </ul>
             </li>
 
@@ -90,7 +71,7 @@
               <ul class="menu-sub">
 
                 <li class="menu-item {{ request()->is('admin/auctions*') ? 'active' : '' }}">
-                  <a href="{{ route('admin.auctions.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/auctions') }}" class="menu-link">
                     <div data-i18n="Import Data CSV">Import Data CSV</div>
                   </a>
                 </li>
@@ -100,25 +81,6 @@
                     <div data-i18n="Vehicles">Vehicles</div>
                   </a>
                 </li>
-
-                {{-- <li class="menu-item">
-                  <a href="{{ route('upcomingauction') }}" class="menu-link">
-                    <div data-i18n="Upcoming Auction">Upcoming Auction</div>
-                  </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="{{ route('updatingfields') }}" class="menu-link">
-                    <div data-i18n="Updating Field">Updating Field</div>
-                  </a>
-                </li>
-
-                <li class="menu-item">
-                  <a href="{{ route('managelisting') }}" class="menu-link">
-                    <div data-i18n="Manage Listings">Manage Listings</div>
-                  </a>
-                </li> --}}
-
               </ul>
             </li>
 
@@ -129,39 +91,12 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }}">
-                  <a href="{{ route('admin.users.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/users') }}" class="menu-link">
                     <div data-i18n="Manage Users">Manage Users</div>
                   </a>
                 </li>
-                
-                 {{-- <li class="menu-item">
-                  <a href="{{ route('staff') }}" class="menu-link">
-                    <div data-i18n="Manage Staff">Manage Staff</div>
-                  </a>
-                </li>  --}}
-
               </ul>
             </li>
-            
-          {{-- 
-             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-calendar-time"></i>
-                <div data-i18n="Scrapping Schedule">Scrapping Schedule</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{{ route('scrappinglogs') }}" class="menu-link">
-                    <div data-i18n="Scraper Logs & Setting">Scraper Logs & Setting</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{{ route('datascrapereview') }}" class="menu-link">
-                    <div data-i18n="Scrape Data Review">Scrape Data Review</div>
-                  </a>
-                </li>
-              </ul>
-            </li>  --}}
 
             <li class="menu-item {{ request()->is('admin/tickets*') ? 'active' : '' }} {{ request()->is('admin/tickets*') ? 'open' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -171,7 +106,7 @@
               <ul class="menu-sub">
 
                 <li class="menu-item {{ request()->is('admin/tickets*') ? 'active' : '' }}">
-                  <a href="{{ route('admin.tickets.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/tickets') }}" class="menu-link">
                     <div data-i18n="All Support Tickets">All Support Tickets
                     </div>
                   </a>
@@ -186,17 +121,17 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item {{ request()->is('admin/blogs*')  ? 'active' : '' }} ">
-                  <a href="{{ route('blogs.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/blogs') }}" class="menu-link">
                     <div data-i18n="Blogs">Blogs</div>
                   </a>
                 </li>
                 <li class="menu-item {{ request()->is('admin/blogcategories*')  ? 'active' : '' }}">
-                  <a href="{{ route('blogcategories.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/blogcategories') }}" class="menu-link">
                     <div data-i18n="Blogs Categories">Blogs Categories</div>
                   </a>
                 </li>
                 <li class="menu-item {{ request()->is('admin/news*')  ? 'active' : '' }}">
-                  <a href="{{ route('admin.news.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/news') }}" class="menu-link">
                     <div data-i18n="News">News</div>
                   </a>
                 </li>
@@ -210,65 +145,17 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item {{ request()->is('admin/memberships*') ? 'active open' : '' }}">
-                  <a href="{{ route('admin.memberships.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/memberships') }}" class="menu-link">
                     <div data-i18n="Members">Members</div>
                   </a>
                 </li>
                 <li class="menu-item {{ request()->is('admin/plans*') ? 'active open' : '' }}">
-                  <a href="{{ route('admin.plans.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/plans') }}" class="menu-link">
                     <div data-i18n="Plans">Plans</div>
                   </a>
                 </li>
               </ul>
             </li>
-
-            {{-- <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-shield-cog"></i>
-                <div data-i18n="Security Setting">Security Setting</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{{ route('rolepermission') }}" class="menu-link">
-                    <div data-i18n="User Role and & Permission">User Role and & Permission</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{{ route('backuprestore') }}" class="menu-link">
-                    <div data-i18n="Backup & Restore">Backup & Restore</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{{ route('activitylog') }}" class="menu-link">
-                    <div data-i18n="Activity Log">Activity Log</div>
-                  </a>
-                </li>
-              </ul>
-            </li>  --}}
-{{-- 
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-presentation-analytics"></i>
-                <div data-i18n="Reports & Analytics">Reports & Analytics</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{{ route('mostsearch') }}" class="menu-link">
-                    <div data-i18n="Most Searched">Most Searched</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{{ route('auctionperformancereport') }}" class="menu-link">
-                    <div data-i18n="Auction Performance Report">Auction Performance Report</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{{ route('realtimeuseractivity') }}" class="menu-link">
-                    <div data-i18n="Real Time User Activity">Real Time User Activity Tracking</div>
-                  </a>
-                </li>
-              </ul>
-            </li> --}}
 
             <li class="menu-item {{ request()->is('admin/alerts*') ? 'active open' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -276,17 +163,12 @@
                 <div data-i18n="Notifications">Notifications</div>
               </a>
               <ul class="menu-sub">
-                {{-- <li class="menu-item">
-                  <a href="{{ route('customemailtemplate') }}" class="menu-link">
-                    <div data-i18n="Custom Email Template">Custom Email Template</div>
-                  </a>
-                </li> --}}
                 <li class="menu-item {{ request()->is('admin/alerts*') ? 'active' : '' }}">
-                  <a href="{{ route('alerts.index') }}" class="menu-link">
+                  <a href="{{ url('/admin/alerts') }}" class="menu-link">
                     <div data-i18n="Alerts">Alerts</div>
                   </a>
                 </li>
               </ul>
             </li>
 
-            @endif
+  @endif

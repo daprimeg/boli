@@ -86,18 +86,7 @@
 @endsection
 @section('js')
     <script>
-        $('#alertForm').submit(function(e){
-            e.preventDefault();
-            let formData = new FormData(this);
-            $.ajax({
-                url: '{{ route("alerts.store") }}',
-                method: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(){ window.location.href = '{{ route("alerts.index") }}'; }
-            });
-        });
+ 
     </script>
 @endsection
 

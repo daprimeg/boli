@@ -66,7 +66,7 @@
             <h5 class="mb-0">Send a Reply</h5>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('admin.tickets.reply', $ticket->id) }}">
+            <form method="POST" action="{{ url('/admin/tickets/'.$ticket->id.'/reply') }}">
                 @csrf
                 <textarea name="message" class="form-control" rows="3" required placeholder="Type your reply..."></textarea>
                 <button type="submit" class="btn btn-primary mt-2">Send Reply</button>
@@ -96,7 +96,7 @@
             <h5 class="mb-0">Update Ticket</h5>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ route('admin.tickets.update', $ticket->id) }}">
+            <form method="POST" action="{{ url('/admin/tickets/'.$ticket->id.'/update')}}">
                 @csrf
                 <div class="row gy-3">
                     <div class="col-md-6">

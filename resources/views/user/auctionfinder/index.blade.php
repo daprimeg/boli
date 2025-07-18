@@ -28,15 +28,35 @@
       color: white!important;
    }
 
+   .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: #444;
+      line-height: 33px;
+   }
+
+   .select2-container {
+      width: 236px;
+      margin-right: 5px;
+   }
+
+   .select2-container--default .select2-selection--single {
+      background-color: var(--bs-paper-bg) !important;
+      border: 1px solid var(--bs-b-color) !important;
+   }
+
+   .filter .select2-container--default .select2-selection--single {
+    background-color: var(--bs-body-bg)!important;
+   
+   }
+
    
 </style>
 @endsection
 @section('content')
 
 
-<div class="container-xxl flex-grow-1 container-p-y">
+<div class="container-xxl flex-grow-1 container-p-y filter">
 
-      <div class="row">
+      <div class="row ">
          <div class="col-md-3 auction-tabs">
                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
                   <ul class="nav flex-column flex-md-row gap-md-0 gap-2">
@@ -49,7 +69,7 @@
                   </ul>
                </div>
          </div>
-         <div class="col-md-9 text-right">
+         <div class="col-md-9 text-right ">
             <div class="row">
                <div class="col-md-6 align-self-center">
                   <span style="padding-right: 5px" >Show Entries</span>
@@ -64,11 +84,7 @@
                <div class="col-md-6">
                   <div class="d-flex justify-content-end">
                      <div class="invoice_status">
-                        <select id="auction_name" name="auction_name" class="form-select auction">
-                           <option value="">Select Auction</option>
-                           @foreach ($platforms as $platform)
-                           <option value="{{ $platform->id }}">{{ $platform->name }}</option>
-                           @endforeach
+                        <select id="auction_name" name="auction_name" class="form-select auctions">
                         </select>
                      </div>
                      <div class="invoice_status">

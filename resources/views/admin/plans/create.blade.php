@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                           <form action="{{ route('admin.plans.store') }}" method="POST" enctype="multipart/form-data">
+                           <form action="{{ url('/admin/plans/store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                  @include('admin.plans.form')
                                  

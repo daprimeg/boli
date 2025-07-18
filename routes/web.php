@@ -30,6 +30,7 @@ use App\Http\Controllers\admin\PlatformController;
 use App\Http\Controllers\admin\VariantController;
 use App\Http\Controllers\admin\VehichleTypeController;
 use App\Http\Controllers\admin\VehicleTypeController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\PaymentController; // Import the controller
 use App\Http\Controllers\TestPaymentController;
 use App\Http\Controllers\UiSettingController;
@@ -37,6 +38,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
+use App\Http\Controllers\WebController;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
@@ -53,7 +55,18 @@ use Carbon\Carbon;
 */
 
 // Public routes
-Route::get('/', fn () => view('welcome'));
+
+
+Route::get('/', [WebController::class,'index']);
+Route::get('/feautres', [WebController::class,'feautres']);
+
+Route::get('/login',  [AuthController::class, 'login']);
+Route::post('/login_submit', [AuthController::class, 'login_submit']);
+
+Route::get('/register', [AuthController::class, 'register']);
+
+Route::post('/register_submit', [AuthController::class, 'register_submit']);
+
 
 
 
@@ -172,20 +185,12 @@ Route::get('/uploading2', function (Request $request) {
 
 
 
-Route::get('/register', function (Request $request) {
-    
-    $planId = $request->query('plan');
-    return view('auth.register', compact('planId'));
-
-})->name('register.form');
-
-Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
 
 
-Route::get('/login',  [AuthController::class, 'loginform'])->name('login.form');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+
 
 
 Route::get('/packages', [FrontendController::class, 'pricing'])->name('packages');
@@ -196,15 +201,10 @@ Route::view('/registration', 'front.register')->name('registration');
 // Logout (shared)
 Route::post('/logout', fn () => Auth::logout() ?: redirect('/login'))->name('logout');
 
-
-
-
 Route::middleware(['auth'])->prefix('user/settings')->group(function () {
     Route::get('/ui', [UiSettingController::class, 'edit'])->name('user.settings.ui');
     Route::post('/ui', [UiSettingController::class, 'update'])->name('user.settings.ui.update');
 });
-
-
 
 
 // News (public)
@@ -214,8 +214,6 @@ Route::post('/news/{id}/toggle-pin', [NewsController::class, 'togglePin'])->name
 // Dashboard data (AJAX)
 Route::get('dashboard/data', [VehicleController::class, 'getVehicles']);
 Route::get('/dashboard/filters', [VehicleController::class, 'getFilterOptions']);
-
-
 
 Route::get('/test-payment', [TestPaymentController::class, 'showPaymentForm'])->name('test.payment.form');
 Route::post('/processpayment', [TestPaymentController::class, 'processPayment'])->name('payment.process');
@@ -273,16 +271,18 @@ Route::middleware('auth')->group(function () {
 
 
     Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
-    Route::view('/interest', 'user/interest')->name('interest');
+    // Route::view('/interest', 'user/interest')->name('interest');
 
-    Route::get('interests', [InterestController::class, 'index'])->name('interests.index');        // List all interests
-    Route::get('interests/create', [InterestController::class, 'create'])->name('interests.create'); // Show form to create
-    Route::post('interests/store', [InterestController::class, 'store'])->name('interests.store');   // Handle storing
-    Route::get('interests/{interest}/edit', [InterestController::class, 'edit'])->name('interests.edit');  // Show form to edit
-    Route::post('interests/{interest}/update', [InterestController::class, 'update'])->name('interests.update'); // Handle updating
-    Route::delete('interests/{interest}/delete', [InterestController::class, 'destroy'])->name('interests.destroy'); // Handle delete
-    Route::get('/get-models-by-make', [InterestController::class, 'getModelsByMake'])->name('get.models.by.make');
-    Route::get('/get-variants-by-model', [InterestController::class, 'getVariantsByModel'])->name('get.variants.by.model');
+    Route::resource('/interest',InterestController::class);
+
+    // Route::get('interests', [InterestController::class, 'index'])->name('interests.index');        // List all interests
+    // Route::get('interests/create', [InterestController::class, 'create'])->name('interests.create'); // Show form to create
+    // Route::post('interests/store', [InterestController::class, 'store'])->name('interests.store');   // Handle storing
+    // Route::get('interests/{interest}/edit', [InterestController::class, 'edit'])->name('interests.edit');  // Show form to edit
+    // Route::post('interests/{interest}/update', [InterestController::class, 'update'])->name('interests.update'); // Handle updating
+    // Route::delete('interests/{interest}/delete', [InterestController::class, 'destroy'])->name('interests.destroy'); // Handle delete
+    // Route::get('/get-models-by-make', [InterestController::class, 'getModelsByMake'])->name('get.models.by.make');
+    // Route::get('/get-variants-by-model', [InterestController::class, 'getVariantsByModel'])->name('get.variants.by.model');
 
 
 
@@ -321,49 +321,28 @@ Route::middleware('auth')->group(function () {
     Route::post('/ticket/{id}/feedback', [TicketController::class, 'submitFeedback'])->name('ticket.feedback');
 
 
-
-
 });
+
 
 
 
 // Admin Routes
 Route::prefix('admin')->group(function () {
 
-    //     Route::prefix('email')->group(function () {
-    //     Route::resource('email_templates', EmailTemplateController::class)->name('email_templates.index');
-    //     Route::get('email_templates/{id}/send', [EmailTemplateController::class, 'sendForm'])->name('email_templates.send_form');
-    //     Route::post('email_templates/{id}/send', [EmailTemplateController::class, 'sendEmail'])->name('email_templates.send');
-    // });
-
-
     //Profile
-
-    Route::view('/importcsv', 'admin/datamanagement/importcsv')->name('importcsv');
-    Route::view('/upcomingauction', 'admin/datamanagement/upcomingauction')->name('upcomingauction');
-    Route::view('/updatingfields', 'admin/datamanagement/updatingfields')->name('updatingfields');
-    Route::view('/managelisting', 'admin/datamanagement/managelisting')->name('managelisting');
-
-    Route::view('/staff', 'admin/staff/index')->name('staff');
-
-    Route::view('/scrappinglogs', 'admin/datamanagement/scrappinglogs')->name('scrappinglogs');
-    Route::view('/datascrapereview', 'admin/datamanagement/datascrapereview')->name('datascrapereview');
-
-    Route::view('/rolepermission', 'admin/securitysetting/rolepermission')->name('rolepermission');
-    Route::view('/backuprestore', 'admin/securitysetting/backuprestore')->name('backuprestore');
-    Route::view('/activitylog', 'admin/securitysetting/activitylog')->name('activitylog');
-
-    Route::view('/mostsearch', 'admin/reportsanalytics/mostsearch')->name('mostsearch');
-    Route::view('/auctionperformancereport', 'admin/reportsanalytics/auctionperformancereport')->name('auctionperformancereport');
-    Route::view('/realtimeuseractivity', 'admin/reportsanalytics/realtimeuseractivity')->name('realtimeuseractivity');
-
-    Route::view('/customemailtemplate', 'admin/alerts/customemailtemplate')->name('customemailtemplate');
-
+    Route::view('/importcsv', 'admin/datamanagement/importcsv');
+    Route::view('/scrappinglogs', 'admin/datamanagement/scrappinglogs');
+    Route::view('/datascrapereview', 'admin/datamanagement/datascrapereview');
+    Route::view('/rolepermission', 'admin/securitysetting/rolepermission');
+    Route::view('/backuprestore', 'admin/securitysetting/backuprestore');
+    Route::view('/activitylog', 'admin/securitysetting/activitylog');
+    Route::view('/mostsearch', 'admin/reportsanalytics/mostsearch');
+    Route::view('/auctionperformancereport', 'admin/reportsanalytics/auctionperformancereport');
+    Route::view('/realtimeuseractivity', 'admin/reportsanalytics/realtimeuseractivity');
+    Route::view('/customemailtemplate', 'admin/alerts/customemailtemplate');
 
 
     //Masters
-    
-
     Route::get('/masters/platforms/getPlatforms', [PlatformController::class,'getPlatforms']);
     Route::resource('masters/platforms',PlatformController::class);
 
@@ -389,89 +368,82 @@ Route::prefix('admin')->group(function () {
     Route::resource('/masters/variants',VariantController::class);
 
     
-
+    //Auctions
     Route::prefix('auctions')->group(function () {
 
         Route::get('/getAuction', [AuctionController::class, 'getAuctions']);
-        Route::get('/', [AuctionController::class, 'index'])->name('admin.auctions.index');
+        Route::get('/', [AuctionController::class, 'index']);
         Route::get('/viewCsv/{id}', [AuctionController::class,'viewCsv']);
-        Route::get('/create', [AuctionController::class, 'create'])->name('admin.auctions.create');
-        Route::post('/', [AuctionController::class, 'store'])->name('admin.auctions.store');
-        Route::get('/{auction}/edit', [AuctionController::class, 'edit'])->name('admin.auctions.edit');
-        Route::put('/{auction}', [AuctionController::class, 'update'])->name('admin.auctions.update');
-        Route::delete('/{auction}', [AuctionController::class, 'destroy'])->name('admin.auctions.destroy');
-        Route::get('/ajax/get', [AuctionController::class, 'getAjaxData'])->name('admin.auctions.getAjaxData'); // optional AJAX listing
-
-        Route::get('/ajax/platform/{id}/centers', [AuctionController::class, 'getCentersByPlatform'])->name('centers.ajax');
-
+        Route::get('/create', [AuctionController::class, 'create']);
+    
+        Route::post('/', [AuctionController::class, 'store']);
+        Route::get('/{auction}/edit', [AuctionController::class, 'edit']);
+        Route::put('/{auction}', [AuctionController::class, 'update']);
+        Route::delete('/{auction}', [AuctionController::class, 'destroy']);
+    
+        Route::get('/ajax/get', [AuctionController::class, 'getAjaxData']);
+        Route::get('/ajax/platform/{id}/centers', [AuctionController::class,'getCentersByPlatform']);
     });
 
-    
+
+    //Plans
     Route::prefix('plans')->group(function () {
-        Route::get('/', [PlanController::class, 'index'])->name('admin.plans.index');
-        Route::get('/create', [PlanController::class, 'create'])->name('admin.plans.create');
-        Route::post('/', [PlanController::class, 'store'])->name('admin.plans.store');
-        Route::get('/{plan}/edit', [PlanController::class, 'edit'])->name('admin.plans.edit');
-        Route::put('/{plan}', [PlanController::class, 'update'])->name('admin.plans.update');
-        Route::delete('/{plan}', [PlanController::class, 'destroy'])->name('admin.plans.destroy');
-        Route::get('/ajax/get', [PlanController::class, 'getAjaxData'])->name('admin.plans.getAjaxData'); // <-- added here
+        Route::get('/', [PlanController::class, 'index']);
+        Route::get('/create', [PlanController::class, 'create']);
+        Route::post('/store', [PlanController::class, 'store']);
+        Route::put('/update/{plan}', [PlanController::class, 'update']);
 
+        Route::get('/{plan}/edit', [PlanController::class, 'edit']);
+       
+        Route::delete('/{plan}', [PlanController::class, 'destroy']);
+        Route::get('/ajax/get', [PlanController::class, 'getAjaxData']);
     });
 
 
+    //Tickets
     Route::prefix('tickets')->group(function () {
-        Route::get('/', [TicketsController::class, 'index'])->name('admin.tickets.index');
-        Route::get('/data', [TicketsController::class, 'data'])->name('admin.tickets.data');
-        Route::get('/{id}', [TicketsController::class, 'show'])->name('admin.tickets.show');
-        Route::post('/{id}/reply', [TicketsController::class, 'reply'])->name('admin.tickets.reply');
-        Route::post('/{id}/update', [TicketsController::class, 'updateStatus'])->name('admin.tickets.update');
+        Route::get('/', [TicketsController::class, 'index']);
+        Route::get('/{id}', [TicketsController::class, 'show']);
+        Route::post('/{id}/reply', [TicketsController::class, 'reply']);
+        Route::post('/{id}/update', [TicketsController::class, 'updateStatus']);
     });
 
+
+    //Membership
     Route::prefix('memberships')->group(function () {
-        Route::get('/', [MembershipController::class, 'index'])->name('admin.memberships.index');
-        Route::get('/create', [MembershipController::class, 'create'])->name('admin.memberships.create');
-        Route::post('/store', [MembershipController::class, 'store'])->name('admin.memberships.store');
-        Route::post('/fetch-user', [MembershipController::class, 'fetchUser'])->name('admin.memberships.fetch-user');
-        Route::get('/{id}/edit', [MembershipController::class, 'edit'])->name('admin.memberships.edit');
-        Route::post('/{id}/update', [MembershipController::class, 'update'])->name('admin.memberships.update');
-        Route::post('/{id}/destroy', [MembershipController::class, 'destroy'])->name('admin.memberships.destroy');
-
+        Route::get('/', [MembershipController::class, 'index']);
+        Route::get('/create', [MembershipController::class, 'create']);
+        Route::post('/store', [MembershipController::class, 'store']);
+        Route::post('/fetch-user', [MembershipController::class, 'fetchUser']);
+        Route::get('/{id}/edit', [MembershipController::class, 'edit']);
+        Route::post('/{id}/update', [MembershipController::class, 'update']);
+        Route::post('/{id}/destroy', [MembershipController::class, 'destroy']);
     });
-
- 
-
-    // Admin Dashboard (for logged-in admins)
-    Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/profile', [AdminAuthController::class, 'profile']);
-
-    
-
 
 
     // Blog Categories (CRUD)
     Route::prefix('blogcategories')->group(function () {
-        Route::get('/', [BlogCategoryController::class, 'index'])->name('blogcategories.index');
-        Route::get('/create', [BlogCategoryController::class, 'create'])->name('blogcategories.create');
-        Route::post('/', [BlogCategoryController::class, 'store'])->name('blogcategories.store');
-        Route::get('/{blogcategory}/edit', [BlogCategoryController::class, 'edit'])->name('blogcategories.edit');
-        Route::put('/{blogcategory}', [BlogCategoryController::class, 'update'])->name('blogcategories.update');
-        Route::delete('/{blogcategory}', [BlogCategoryController::class, 'destroy'])->name('blogcategories.destroy');
-        Route::get('/ajax', [BlogCategoryController::class, 'getAjaxData'])->name('blogcategories.ajax');
+        Route::get('/', [BlogCategoryController::class, 'index']);
+        Route::get('/create', [BlogCategoryController::class, 'create']);
+        Route::post('/', [BlogCategoryController::class, 'store']);
+        Route::get('/{blogcategory}/edit', [BlogCategoryController::class, 'edit']);
+        Route::put('/{blogcategory}', [BlogCategoryController::class, 'update']);
+        Route::delete('/{blogcategory}', [BlogCategoryController::class, 'destroy']);
     });
+
 
     // Blogs (CRUD with AJAX)
     Route::middleware('auth')->prefix('blogs')->name('blogs.')->group(function () {
-        Route::get('/', [BlogController::class, 'index'])->name('index');
-        Route::get('/ajax/data', [BlogController::class, 'ajaxData'])->name('ajax');
-        Route::get('/create', [BlogController::class, 'create'])->name('create');
-        Route::post('/store', [BlogController::class, 'store'])->name('store');
-        Route::get('/{slug}', [BlogController::class, 'show'])->name('show');
-        Route::get('/{blog}/edit', [BlogController::class, 'edit'])->name('edit');
-        Route::put('/{blog}', [BlogController::class, 'update'])->name('update');
-        Route::delete('/{blog}', [BlogController::class, 'destroy'])->name('destroy');
-        Route::post('/upload-image', [BlogController::class, 'uploadImage'])->name('upload');
-
+        Route::get('/', [AdminBlogController::class, 'index']);
+        Route::get('/create', [AdminBlogController::class, 'create']);
+        Route::post('/store', [AdminBlogController::class, 'store']);
+        Route::get('/{slug}', [AdminBlogController::class, 'show']);
+        Route::get('/{blog}/edit', [AdminBlogController::class, 'edit']);
+        Route::put('/{blog}', [AdminBlogController::class, 'update']);
+        Route::delete('/{blog}', [AdminBlogController::class, 'destroy']);
+        Route::post('/upload-image', [AdminBlogController::class, 'uploadImage']);
     });
+
 
     //Vehicles
     Route::get('/vehicles', [AVehicleController::class,'index']);
@@ -485,27 +457,20 @@ Route::prefix('admin')->group(function () {
     Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
         
     
-    Route::middleware('auth')->prefix('news')->name('admin.news.')->group(function () {
-        Route::get('/', [AdminNewscrudController::class, 'index'])->name('index');
-        Route::get('/create', [AdminNewscrudController::class, 'create'])->name('create');
-        Route::post('/store', [AdminNewscrudController::class, 'store'])->name('store');
-        Route::get('/{news}/edit', [AdminNewscrudController::class, 'edit'])->name('edit');
-        Route::put('/{news}', [AdminNewscrudController::class, 'update'])->name('update');
-        Route::delete('/{news}', [AdminNewscrudController::class, 'destroy'])->name('destroy');
-        Route::get('/ajax', [AdminNewscrudController::class, 'ajax'])->name('ajax');
+
+    //News
+    Route::prefix('news')->name('admin.news.')->group(function () {
+        Route::get('/', [AdminNewscrudController::class, 'index']);
+        Route::post('/', [AdminNewscrudController::class, 'store']);
+        Route::get('/create', [AdminNewscrudController::class, 'create']);
+        
+        Route::get('/{news}/edit', [AdminNewscrudController::class, 'edit']);
+        Route::put('/{news}', [AdminNewscrudController::class, 'update']);
+        Route::delete('/{news}', [AdminNewscrudController::class, 'destroy']);
     });
 
-    Route::middleware(['auth'])->group(function () {
-        Route::get('users', [UserController::class, 'index'])->name('admin.users.index');
-        Route::get('users-data', [UserController::class, 'getData'])->name('admin.users.data'); // <-- NEW
-        Route::get('users/create', [UserController::class, 'create'])->name('admin.users.create');
-        Route::post('users/store', [UserController::class, 'store'])->name('admin.users.store');
-        Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
-        Route::post('users/{id}/update', [UserController::class, 'update'])->name('admin.users.update');
-        Route::get('users/{id}/delete', [UserController::class, 'destroy'])->name('admin.users.delete');
-        Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus'])->name('admin.users.status');
-    });
 
+    //Alerts
     Route::prefix('alerts')->middleware('auth')->name('alerts.')->group(function () {
         Route::get('/', [AlertController::class, 'index'])->name('index');
         Route::get('/create', [AlertController::class, 'create'])->name('create');
@@ -517,12 +482,23 @@ Route::prefix('admin')->group(function () {
     });
 
 
+    //Users
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users-data', [UserController::class, 'getData']);
+    Route::get('users/create', [UserController::class, 'create']);
+    Route::post('users/store', [UserController::class, 'store']);
+    Route::get('users/{id}/edit', [UserController::class, 'edit']);
+    Route::post('users/{id}/update', [UserController::class, 'update']);
+    Route::get('users/{id}/delete', [UserController::class, 'destroy']);
+    Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus']);
 
     // Admin Authentication
-    Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
-    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-    
-    
+    Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
+    Route::get('/profile', [AdminAuthController::class, 'profile']);
+
+    Route::get('/', [AdminAuthController::class, 'showLoginForm']);
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/logout', [AdminAuthController::class, 'logout']);
+
 });
 

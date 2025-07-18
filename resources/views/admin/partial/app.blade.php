@@ -7,130 +7,122 @@
     <meta name="description" content="" />
     <style>
 
-        table.dataTable tbody th, table.dataTable tbody td {
-            padding: .782rem 1.25rem;
-        }
+            table.dataTable tbody th, table.dataTable tbody td {
+                padding: .782rem 1.25rem;
+            }
 
-        .dataTables_length {
-            padding: 10px 15px;
-        }
+            .dataTables_length {
+                padding: 10px 15px;
+            }
 
-        /* Add padding around "Showing 1 to 10 of X entries" */
-        .dataTables_info {
-            padding: 10px 15px;
-            display: none;
-        }
+            /* Add padding around "Showing 1 to 10 of X entries" */
+            .dataTables_info {
+                padding: 10px 15px;
+                display: none;
+            }
 
-        /* Add padding around pagination controls */
+            /* Add padding around pagination controls */
+            .dataTables_paginate {
+                padding: 10px 15px;
+                justify-content: right !important;
+            }
+
+            /* Make search box have padding too */
+            .dataTables_filter {
+                padding: 10px 15px;
+                display: none;
+            }
+            .table-responsive {
+                overflow-x: hidden;
+            }
+
+        /* Center the pagination */
         .dataTables_paginate {
-            padding: 10px 15px;
-            justify-content: right !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
         }
 
-        /* Make search box have padding too */
-        .dataTables_filter {
-            padding: 10px 15px;
-            display: none;
+        /* Style each pagination button */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #f8f9fa; /* light grey */
+            color: #5e5873 !important; /* Vuexy's default text color */
+            border: 1px solid #d8d6de;
+            border-radius: 0.375rem; /* rounded like Vuexy buttons */
+            padding: 0.5rem 1rem;
+            margin: 0 2px;
+            font-size: 0.9375rem; /* small button */
+            transition: all 0.3s ease;
         }
+
+        /* Hover effect */
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: var(--bs-primary); /* Vuexy primary color */
+            color: #ffffff !important;
+            border-color: var(--bs-primary);
+            box-shadow: 0 4px 12px rgba(115, 103, 240, 0.4); /* soft primary shadow */
+        }
+
+        /* Active (current) page */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: var(--bs-primary) !important;
+            color: #ffffff !important;
+            border-color: var(--bs-primary);
+        }
+
+        /* Disabled buttons */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            background-color: #e9ecef;
+            color: #b9b9c3 !important;
+            border-color: #d8d6de;
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
         .table-responsive {
-            overflow-x: hidden;
+            overflow-x: hidden !important;
         }
 
-      /* Center the pagination */
-      .dataTables_paginate {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-top: 20px;
-      }
+        .template-customizer-open-btn{
+            display: none!important;
+        }
 
-      /* Style each pagination button */
-      .dataTables_wrapper .dataTables_paginate .paginate_button {
-          background-color: #f8f9fa; /* light grey */
-          color: #5e5873 !important; /* Vuexy's default text color */
-          border: 1px solid #d8d6de;
-          border-radius: 0.375rem; /* rounded like Vuexy buttons */
-          padding: 0.5rem 1rem;
-          margin: 0 2px;
-          font-size: 0.9375rem; /* small button */
-          transition: all 0.3s ease;
-      }
-
-      /* Hover effect */
-      .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-          background-color: var(--bs-primary); /* Vuexy primary color */
-          color: #ffffff !important;
-          border-color: var(--bs-primary);
-          box-shadow: 0 4px 12px rgba(115, 103, 240, 0.4); /* soft primary shadow */
-      }
-
-      /* Active (current) page */
-      .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-          background-color: var(--bs-primary) !important;
-          color: #ffffff !important;
-          border-color: var(--bs-primary);
-      }
-
-      /* Disabled buttons */
-      .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-          background-color: #e9ecef;
-          color: #b9b9c3 !important;
-          border-color: #d8d6de;
-          cursor: not-allowed;
-          opacity: 0.65;
-      }
-
-      .table-responsive {
-          overflow-x: hidden !important;
-      }
-
-      .template-customizer-open-btn{
-        display: none!important;
-      }
-
-      .select2-container--default .select2-selection--single {
-         background-color:var(--bs-paper-bg)!important;
-         border: 1px solid var(--bs-b-color)!important;
-      }
-
-      .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: var(--bs-card-title-color)!important;
-      }
-
-      .select2-dropdown{
+        .select2-container--default .select2-selection--single {
             background-color:var(--bs-paper-bg)!important;
-      }
+            border: 1px solid var(--bs-b-color)!important;
+        }
 
-      .select2-container .select2-selection--single {
-        height: 36px!important;
-      }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: var(--bs-card-title-color)!important;
+        }
 
+        .select2-dropdown{
+                background-color:var(--bs-paper-bg)!important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 36px!important;
+        }
 
     </style>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('public/assets/img/favicon/favicon.ico') }}" />
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/fonts/iconify-icons.css') }}" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/libs/node-waves/node-waves.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/libs/pickr/pickr-themes.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/css/core.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/assets/css/demo.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/libs/plyr/plyr.css') }}" />
-    <link rel="stylesheet" href="{{ asset('public/assets/vendor/css/pages/app-academy-details.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- In your Blade layout (layouts/app.blade.php or similar) -->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap" 
+    rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/fonts/iconify-icons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/node-waves/node-waves.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/pickr/pickr-themes.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/core.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/demo.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/pages/app-academy-details.css') }}" /> --}}
 
-<!-- Head -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
-<!-- End of body -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    {{-- Lib --}}
+    <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/select2.css') }}" />
 
 
     @yield('css')
@@ -147,7 +139,7 @@
                     </span>
                     <div class="app-brand demo">
                         {{-- <a href="{{URL::to('/admin/dashboard')}}"> --}}
-                        <img src="{{ asset('public/images/logo/logo.png') }}" />
+                        <img src="{{ asset('public/themeadmin/images/logo/logo.png') }}" />
                         {{-- </a> --}}
                     </div>
                     <div class="menu-inner-shadow"></div>
@@ -195,34 +187,35 @@
               </div>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-        <script src="{{asset('public/assets/vendor/js/template-customizer.js')}}"></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-        <script src="{{ asset('public/assets/vendor/js/helpers.js') }}"></script>
-        <script src="{{ asset('public/assets/js/config.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/js/jquery.js')}}"></script>
+        <script src="{{asset('public/themeadmin/assets/vendor/js/template-customizer.js')}}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/js/helpers.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/js/config.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/popper/popper.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/js/bootstrap.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/@algolia/autocomplete-js.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/pickr/pickr.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/hammer/hammer.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/i18n/i18n.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/js/menu.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/js/main.js') }}"></script>
 
-        <!-- Core JS -->
-        <!-- build:js assets/vendor/js/theme.js -->
-        <!-- <script src="{{ asset('public/assets/vendor/libs/jquery/jquery.js') }}"></script> -->
-        <script src="{{ asset('public/assets/vendor/libs/popper/popper.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/js/bootstrap.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/node-waves/node-waves.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/@algolia/autocomplete-js.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/pickr/pickr.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/hammer/hammer.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/i18n/i18n.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/js/menu.js') }}"></script>
-        <script src="{{ asset('public/assets/vendor/libs/plyr/plyr.js') }}"></script>
-        <script src="{{ asset('public/assets/js/main.js') }}"></script>
-        <script src="{{ asset('public/assets/js/app-academy-course-details.js') }}"></script>
-        <script>
+        {{-- <script src="{{ asset('public/themeadmin/assets/js/app-academy-course-details.js') }}"></script> --}}
+
+        {{-- Libs --}}
+         <script src="{{asset('public/themeadmin/assets/js/select2.js')}}"></script>
+         <script src="{{asset('public/themeadmin/assets/js/jquertdatatable.js')}}"></script>
+         <script>
 
             $(document).ready(function () {
 
                 $('.make').select2({
+                    placeholder: 'Select Make',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/makes/getMakes')}}",
                         dataType: 'json'
@@ -230,53 +223,68 @@
                 });
 
                 $('.model').select2({
+                    placeholder: 'Select Model',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/models/getModels')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.vehicleTtypes').select2({
+                    placeholder: 'Select Vehicle Type',
                     ajax: {
                         url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.variants').select2({
+                    placeholder: 'Select Variant',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/variants/getVariants')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.bodyTypes').select2({
+                    placeholder: 'Body Type',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/bodytypes/getBodyTypes')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.color').select2({
+                    placeholder: 'Select Color',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/colours/getColours')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
                 $('.auctions').select2({
+                    placeholder: 'Select Auction',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/auctions/getAuction')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
 
                 $('.center').select2({
+                    placeholder: 'Select Center',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/centers/getCenters')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
 
                 $('.platform').select2({
+                    placeholder: 'Select Plateform',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/platforms/getPlatforms')}}",
-                        dataType: 'json'
+                        dataType: 'json',
                     }
                 });
 

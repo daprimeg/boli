@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                            <form action="{{ isset($blogcategory) ? route('blogcategories.update', $blogcategory->id) : route('blogcategories.store') }}" method="POST">
+                            <form action="{{ isset($blogcategory) ? url('/admin/blogcategories/'.$blogcategory->id) : url('/admin/blogcategories') }}" method="POST">
                             @csrf
                                 @if(isset($blogcategory)) @method('PUT') @endif
                                 <div class="mb-3">

@@ -15,7 +15,7 @@
         <div class="form-group">
             <label class="form-label">Image</label>
             <input type="file" name="image" class="form-control">
-            @if($blog && $blog->image)
+            @if(isset($blog) && $blog->image)
                 <a href="{{asset('/public/uploads/blogs/'.$blog->image)}}" target="_blank">
                     <img class="pt-2" style="width: 50px;" src="{{asset('/public/uploads/blogs/'.$blog->image)}}" />
                 </a>

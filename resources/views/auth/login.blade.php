@@ -13,7 +13,6 @@
                     </div>
                 @endif
 
-                <!-- Login Form -->
                 <form action="{{ url('/login') }}" method="POST">
                     @csrf
                     <div class="mb-3">

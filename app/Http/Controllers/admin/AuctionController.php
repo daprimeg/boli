@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Auctions;
 use App\Models\AuctionPlatform;
 use App\Models\AuctionCenter;
-use App\Models\AutoBasic;
-use App\Models\AutoLegal;
-use App\Models\AutoPrice;
-use App\Models\AutoAdvance;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
@@ -27,29 +23,29 @@ use Illuminate\Support\Facades\Storage;
 class AuctionController extends Controller
 {
 
-         public function getAuctions(Request $request)
-  {
+    public function getAuctions(Request $request)
+    {
 
-        $search = $request->input('q');
-        $auctions = Auctions::where('name', 'like', "%$search%")
-            ->select('id', 'name as text')
-            ->limit(20)
-            ->get();
+            $search = $request->input('q');
+            $auctions = Auctions::where('name', 'like', "%$search%")
+                ->select('id', 'name as text')
+                ->limit(20)
+                ->get();
 
-        return response()->json(['results' => $auctions]);
-  }
+            return response()->json(['results' => $auctions]);
+    }
+
     public function index()
     {
         $auctions = Auctions::with(['platform', 'center'])->latest()->get();
-        return view('admin.datamanagement.auctions.index', compact('auctions'));
+        return view('admin.auctions.index', compact('auctions'));
     }
 
-    
     public function create()
     {
         $platforms = AuctionPlatform::all();
         $centers = AuctionCenter::all();
-        return view('admin.datamanagement.auctions.create', compact('platforms', 'centers'));
+        return view('admin.auctions.create', compact('platforms', 'centers'));
     }
 
     public function getCentersByPlatform($platformId)
@@ -176,7 +172,6 @@ class AuctionController extends Controller
         ]);
 
     
-
         DB::beginTransaction();
 
         try {
@@ -190,12 +185,7 @@ class AuctionController extends Controller
                 'status' => $request->status,
             ]);
 
-
-             
-
             if ($request->hasFile('csv_path')) {
-
-                
 
                 $csvFile = $request->file('csv_path');
                 $filename = time() . '_' . $csvFile->getClientOriginalName();
@@ -208,8 +198,6 @@ class AuctionController extends Controller
                 if(Storage::exists($path) == false) {
                     throw new \Exception("Failed to open CSV file: " . $fullPath);
                 }
-
-                
 
                 $csv = Storage::get($path);
                 $rows = array_map('str_getcsv', explode("\n", $csv));
@@ -235,7 +223,6 @@ class AuctionController extends Controller
                                 'year' => $data['year'] ?? null,
 
                                 
-
                                 'doors' => is_numeric($data['doors']) ? (int)$data['doors'] : null,
                                 'seats' => is_numeric($data['seats']) ? (int)$data['seats'] : null,
                                 'fuel_type' => $data['fuel_type'] ?? null,
@@ -307,18 +294,12 @@ class AuctionController extends Controller
                                 
                             ]);
 
-                             
-
                 }
                    
             }
 
-           
-
+        
             DB::commit();
-
-            
-
             
             return redirect('/admin/auctions')->with('success', 'Auction and related data created successfully.');
         } catch (\Exception $e) {
@@ -329,13 +310,11 @@ class AuctionController extends Controller
     }
 
 
-
-
     public function edit(Auctions $auction)
     {
         $platforms = AuctionPlatform::all();
         $centers = AuctionCenter::all();
-        return view('admin.datamanagement.auctions.edit', compact('auction', 'platforms', 'centers'));
+        return view('admin.auctions.edit', compact('auction', 'platforms', 'centers'));
     }
 
     
@@ -496,13 +475,12 @@ class AuctionController extends Controller
                 $auction->save();
             }
 
-            return redirect()->route('admin.auctions.index')->with('success', 'Auction updated successfully.');
+            return redirect('/admin/auctions')->with('success', 'Auction updated successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Update failed: ' . $e->getMessage()])->withInput();
         }
-
 
     }
 
@@ -524,7 +502,8 @@ class AuctionController extends Controller
 
             $auction->delete();
             DB::commit();
-            return redirect()->route('admin.auctions.index')->with('success', 'Auction and related data deleted successfully.');
+            return redirect('/admin/auctions')->with('success', 'Auction and related data deleted successfully.');
+
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Delete failed: ' . $e->getMessage()]);
@@ -548,9 +527,11 @@ class AuctionController extends Controller
     }
 
 
-        public function getAjaxData()
-        {
-            $auctions = Auctions::with(['platform', 'center'])->latest()->get();
-            return response()->json($auctions);
-        }
+    public function getAjaxData()
+    {
+        $auctions = Auctions::with(['platform', 'center'])->latest()->get();
+        return response()->json($auctions);
     }
+
+
+}

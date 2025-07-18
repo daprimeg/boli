@@ -70,7 +70,6 @@ class AdminNewscrudController extends Controller
                   ];
               });
 
-    
                 return  [
                     "draw" => intval($request->input('draw')),
                     "recordsTotal" => $totalData->count(),
@@ -123,7 +122,7 @@ class AdminNewscrudController extends Controller
 
      
 
-        return redirect()->route('admin.news.index')->with('success', 'News created successfully.');
+        return redirect('/admin/news')->with('success', 'News created successfully.');
     }
 
     // Show edit form
@@ -133,8 +132,6 @@ class AdminNewscrudController extends Controller
 
     // Update existing news
     public function update(Request $request, News $news) {
-
-      
 
         $request->validate([
             'title' => 'required|max:255',
@@ -153,8 +150,6 @@ class AdminNewscrudController extends Controller
         //     $news->feature_image = 'storage/' . $path;
         // }
 
-    
-
         $news->save();
 
 
@@ -170,81 +165,14 @@ class AdminNewscrudController extends Controller
             $news->save();
         }
 
-        return redirect()->route('admin.news.index')->with('success', 'News updated successfully.');
+        return redirect('/admin/news')->with('success', 'News updated successfully.');
     }
 
     // Delete news
     public function destroy(News $news) {
         $news->delete();
-        return redirect()->route('admin.news.index')->with('success', 'News deleted successfully.');
+        return redirect('/admin/news')->with('success', 'News deleted successfully.');
     }
-
-
-
-
-
-
-
-
-
-    public function ajax(Request $request)
-{
-    if ($request->ajax()) {
-        $data = News::query()
-            ->with('creator') // optional if you have relation (better way than join)
-            ->withCount('pinnedUsers') // now pinnedUsers_count will be auto available
-            ->get();
-
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->editColumn('feature_image', function($row) {
-                if ($row->feature_image) {
-                    return '<img src="' . asset('public/' . $row->feature_image) . '" width="80" height="60" style="object-fit: cover;">';
-                } else {
-                    return '<span class="badge bg-secondary">N/A</span>';
-                }
-            })
-
-            ->editColumn('title', function($row) {
-                return \Str::limit(strip_tags($row->title), 20);
-            })
-
-            ->editColumn('description', function($row) {
-                return \Str::limit(strip_tags($row->description), 40);
-            })
-            ->editColumn('created_by', function($row) {
-                return $row->creator->firstName ?? 'N/A'; // use relationship instead of manual join
-            })
-            ->editColumn('pins_count', function($row) {
-                return $row->pinned_users_count ?? 0; // here it's pinned_users_count automatically
-            })
-            ->addColumn('action', function($row) {
-                $editUrl = route('admin.news.edit', $row->id);
-                $deleteUrl = route('admin.news.destroy', $row->id);
-
-                $btn = '<a href="' . $editUrl . '" class="btn btn-sm btn-warning" >Edit</a>';
-                $btn .= '<form action="' . $deleteUrl . '" method="POST" style="display:inline-block;">
-                    ' . csrf_field() . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Delete this news?\')">Delete</button>
-                </form>';
-                return $btn;
-            })
-            ->rawColumns(['feature_image', 'action'])
-            ->make(true);
-    }
-}
-
-
-
-
-    
-
-
-
-
-
-
-
 
 
 }

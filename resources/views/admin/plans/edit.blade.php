@@ -38,24 +38,23 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.plans.update', $plan->id) }}" method="POST">
+                    <form action="{{ url('/admin/plans/update', $plan->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         @include('admin.plans.form')
 
-                        <div class="text-center" >
+                        <div class="text-center pt-3" >
                             <button type="submit" class="btn btn-primary">Update</button>
                         </div>
+
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
-
 @endsection
+
 @section('js')
     
 @endsection

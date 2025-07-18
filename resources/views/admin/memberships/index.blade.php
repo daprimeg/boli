@@ -95,6 +95,7 @@
             $(document).ready(function () {
              let table = $('.table').DataTable({
                     processing: true,
+                    ordering:false,
                     serverSide: true,
                     ajax: "{{URL::to('/admin/memberships')}}",
                 });

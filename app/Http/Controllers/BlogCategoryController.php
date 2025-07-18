@@ -46,8 +46,8 @@ class BlogCategoryController extends Controller
             ->map(function ($blog) {
 
 
-                    $editUrl = route('blogcategories.edit', $blog->id);
-                    $deleteUrl = route('blogcategories.destroy', $blog->id);
+                    $editUrl = url('/admin/blogcategories/'.$blog->id.'/edit');
+                    $deleteUrl = url('/admin/blogcategories/'.$blog->id);
 
                     $html =  '<a href="' . $editUrl . '" class="btn btn-sm btn-warning">Edit</a>
                     <form method="POST" action="' . $deleteUrl . '" style="display:inline-block">
@@ -74,42 +74,8 @@ class BlogCategoryController extends Controller
 
 
 
-    return view('admin.blogcategories.index'); // no need to compact('categories')
-}
-
-
-
-
-public function getAjaxData(Request $request)
-{
-    if ($request->ajax()) {
-        $data = BlogCategory::select(['id', 'name', 'created_at']);
-
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->editColumn('created_at', function ($row) {
-                return Carbon::parse($row->created_at)->format('d M Y'); // 👉 "22 Apr 2025"
-            })
-            ->addColumn('action', function ($row) {
-                $editUrl = route('blogcategories.edit', $row->id);
-                $deleteUrl = route('blogcategories.destroy', $row->id);
-                return '
-                    <a href="' . $editUrl . '" class="btn btn-sm btn-warning">Edit</a>
-                    <form method="POST" action="' . $deleteUrl . '" style="display:inline-block">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
-                    </form>';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-    }
-}
-
-
-
-
-
-
+     return view('admin.blogcategories.index'); // no need to compact('categories')
+   }
 
     public function create()
     {
@@ -120,7 +86,7 @@ public function getAjaxData(Request $request)
     {
         $request->validate(['name' => 'required']);
         BlogCategory::create($request->all());
-        return redirect()->route('blogcategories.index')->with('success', 'Category added.');
+        return redirect('/admin/blogcategories')->with('success', 'Category added.');
     }
 
     public function edit(BlogCategory $blogcategory)
@@ -132,12 +98,12 @@ public function getAjaxData(Request $request)
     {
         $request->validate(['name' => 'required']);
         $blogcategory->update($request->all());
-        return redirect()->route('blogcategories.index')->with('success', 'Category updated.');
+        return redirect('/admin/blogcategories')->with('success', 'Category updated.');
     }
 
     public function destroy(BlogCategory $blogcategory)
     {
         $blogcategory->delete();
-        return redirect()->route('blogcategories.index')->with('success', 'Category deleted.');
+        return redirect('/admin/blogcategories')->with('success', 'Category deleted.');
     }
 }

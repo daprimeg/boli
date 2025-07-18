@@ -94,6 +94,7 @@
     <script>
             $(document).ready(function () {
              let table = $('.table').DataTable({
+                    ordering:false,
                     processing: true,
                     serverSide: true,
                     ajax: "{{URL::to('/admin/news')}}",
