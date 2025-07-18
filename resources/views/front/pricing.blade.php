@@ -43,15 +43,15 @@
 
 
 
-        @forelse($plans as $plan)
+      @forelse($plans as $plan)
 
         @php
         $mod = $loop->iteration % 3;
-    @endphp
+       @endphp
 
 
-@if($mod == 1)
-<div class="elementor-element elementor-element-4ba7581 e-con-full blur e-flex e-con e-child" data-id="4ba7581" data-element_type="container">
+      @if($mod == 1)
+      <div class="elementor-element elementor-element-4ba7581 e-con-full blur e-flex e-con e-child" data-id="4ba7581" data-element_type="container">
             <div class="elementor-element elementor-element-e05dda4 e-con-full e-flex e-con e-child" data-id="e05dda4" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
                <div class="elementor-element elementor-element-9cd3290 elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="9cd3290" data-element_type="widget" data-widget_type="icon-list.default">
                   <div class="elementor-widget-container">
@@ -77,7 +77,7 @@
                <div class="elementor-element elementor-element-e4140ba elementor-align-justify elementor-widget elementor-widget-button" data-id="e4140ba" data-element_type="widget" data-widget_type="button.default">
                   <div class="elementor-widget-container">
                      <div class="elementor-button-wrapper">
-                        <a class="elementor-button elementor-button-link elementor-size-sm" href="{{ route('register.form', $plan->id) }}">
+                        <a class="elementor-button elementor-button-link elementor-size-sm" href="{{ url('/register/'.$plan->id) }}">
                         <span class="elementor-button-content-wrapper">
                         <span class="elementor-button-text">Subscribe Now</span>
                         </span>
@@ -97,30 +97,20 @@
             <div class="elementor-element elementor-element-e34c1d1 e-con-full e-flex e-con e-child" data-id="e34c1d1" data-element_type="container">
                <div class="elementor-element elementor-element-f372b80 elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="f372b80" data-element_type="widget" data-widget_type="icon-list.default">
                   <div class="elementor-widget-container">
-
-
                      <ul class="elementor-icon-list-items">
-
-
-
                          @foreach(explode("\n", $plan->description) as $item)
-        @if(trim($item) != '')
-        <li class="elementor-icon-list-item">
-            <span class="elementor-icon-list-icon">
-                <svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path>
-                </svg>
-            </span>
-            <span class="elementor-icon-list-text">{{ trim($item) }}</span>
-        </li>
-        @endif
-    @endforeach
-
-
-
+                           @if(trim($item) != '')
+                           <li class="elementor-icon-list-item">
+                                 <span class="elementor-icon-list-icon">
+                                    <svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                                       <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path>
+                                    </svg>
+                                 </span>
+                                 <span class="elementor-icon-list-text">{{ trim($item) }}</span>
+                           </li>
+                           @endif
+                        @endforeach
                      </ul>
-
-
                   </div>
                </div>
             </div>
@@ -193,7 +183,7 @@
                <div class="elementor-element elementor-element-ded32a6 elementor-align-justify elementor-widget elementor-widget-button" data-id="ded32a6" data-element_type="widget" data-widget_type="button.default">
                   <div class="elementor-widget-container">
                      <div class="elementor-button-wrapper">
-                        <a class="elementor-button elementor-button-link elementor-size-sm" href="{{ route('register.form', $plan->id) }}">
+                        <a class="elementor-button elementor-button-link elementor-size-sm" href="{{ url('/register/'.$plan->id) }}">
                         <span class="elementor-button-content-wrapper">
                         <span class="elementor-button-text">Subscribe Now</span>
                         </span>
@@ -258,7 +248,7 @@
                <div class="elementor-element elementor-element-46e2238 elementor-align-justify elementor-widget elementor-widget-button" data-id="46e2238" data-element_type="widget" data-widget_type="button.default">
                   <div class="elementor-widget-container">
                      <div class="elementor-button-wrapper">
-                        <a class="elementor-button elementor-button-link elementor-size-sm" href="{{ route('register.form', $plan->id) }}">
+                        <a class="elementor-button elementor-button-link elementor-size-sm" href="{{ url('/register/'.$plan->id) }}">
                         <span class="elementor-button-content-wrapper">
                         <span class="elementor-button-text">Subscribe Now</span>
                         </span>

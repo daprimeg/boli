@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use DataTables;
 use Illuminate\Support\Facades\Hash as FacadesHash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -27,59 +28,66 @@ class AuthController extends Controller
 
     // dd($request->all());
     
-    $request->validate([
-        'companyName' => 'required|string|max:255',
-        'companyAddress1' => 'required|string|max:255',
-        'companyAddress2' => 'required|string|max:255',
-        'townCity' => 'required|string|max:255',
-        'country' => 'required|string|max:255',
-        'postcode' => 'required|string|max:255',
-        'telephone' => 'required|string|max:255',
-        'businessType' => 'required|string|max:255',
-        'companyReg' => 'required|string|max:255',
-        'website' => 'required|url',
-        'businessEmail' => 'required|string|email|max:255|unique:users',
-        'motorTradeInsurance' => 'required|string|max:255',
-        'vatNumber' => 'required|string|max:255',
-        
-        'firstName' => 'required|string|max:255',
-        'surname' => 'required|string|max:255',
-        'title' => 'required|string|max:255',
-        'jobTitle' => 'required|string|max:255',
+            $validator = Validator::make($request->all(), [
+                'companyName' => 'required|string|max:255',
+                'companyAddress1' => 'required|string|max:255',
+                'companyAddress2' => 'required|string|max:255',
+                'townCity' => 'required|string|max:255',
+                'country' => 'required|string|max:255',
+                'postcode' => 'required|string|max:255',
+                'telephone' => 'required|string|max:255',
+                'businessType' => 'required|string|max:255',
+                'companyReg' => 'required|string|max:255',
+                'website' => 'required|url',
+                'businessEmail' => 'required|string|email|max:255|unique:users',
+                'motorTradeInsurance' => 'required|string|max:255',
+                'vatNumber' => 'required|string|max:255',
+                
+                'firstName' => 'required|string|max:255',
+                'surname' => 'required|string|max:255',
+                'title' => 'required|string|max:255',
+                'jobTitle' => 'required|string|max:255',
 
-        'phone' => 'required|string|max:255',
-        'personalEmail' => 'required|string|email|max:255|unique:users',
-        // 'password' => 'required|string|min:8|confirmed',
-        'uploadID' => 'required|file|mimes:jpg,png,pdf|max:4096',
-        'motorTradeProof' => 'required|file|mimes:jpg,png,pdf|max:4096',
-        'addressProof' => 'required|file|mimes:jpg,png,pdf|max:4096',
-    ],[],
-        [
-        'companyName' => 'Company Name',
-        'companyAddress1' => 'Address Line 1',
-        'companyAddress2' => 'Address Line 2',
-        'townCity' => 'Town or City',
-        'country' => 'Country',
-        'postcode' => 'Postcode',
-        'telephone' => 'Telephone Number',
-        'businessType' => 'Business Type',
-        'companyReg' => 'Company Registration Number',
-        'website' => 'Company Website',
-        'businessEmail' => 'Business Email',
-        'motorTradeInsurance' => 'Motor Trade Insurance',
-        'vatNumber' => 'VAT Number',
-        'firstName' => 'First Name',
-        'surname' => 'Surname',
-        'title' => 'Title',
-        'jobTitle' => 'Job Title',
+                'phone' => 'required|string|max:255',
+                'personalEmail' => 'required|string|email|max:255|unique:users',
+                // 'password' => 'required|string|min:8|confirmed',
+                'uploadID' => 'required|file|mimes:jpg,png,pdf|max:4096',
+                'motorTradeProof' => 'required|file|mimes:jpg,png,pdf|max:4096',
+                'addressProof' => 'required|file|mimes:jpg,png,pdf|max:4096',
+            ],[],
+            [
+            'companyName' => 'Company Name',
+            'companyAddress1' => 'Address Line 1',
+            'companyAddress2' => 'Address Line 2',
+            'townCity' => 'Town or City',
+            'country' => 'Country',
+            'postcode' => 'Postcode',
+            'telephone' => 'Telephone Number',
+            'businessType' => 'Business Type',
+            'companyReg' => 'Company Registration Number',
+            'website' => 'Company Website',
+            'businessEmail' => 'Business Email',
+            'motorTradeInsurance' => 'Motor Trade Insurance',
+            'vatNumber' => 'VAT Number',
+            'firstName' => 'First Name',
+            'surname' => 'Surname',
+            'title' => 'Title',
+            'jobTitle' => 'Job Title',
 
-        'phone' => 'Phone Number',
-        'personalEmail' => 'Personal Email',
-        'password' => 'Password',
-        'uploadID' => 'Upload ID',
-        'motorTradeProof' => 'Motor Trade Proof',
-        'addressProof' => 'Address Proof',
-    ]);
+            'phone' => 'Phone Number',
+            'personalEmail' => 'Personal Email',
+            'password' => 'Password',
+            'uploadID' => 'Upload ID',
+            'motorTradeProof' => 'Motor Trade Proof',
+            'addressProof' => 'Address Proof',
+        ]);
+
+        if ($validator->fails()) {
+         return response()->json([
+            'message' => 'Request Failed',
+            'errors' => $validator->errors()
+          ], 422);
+        }
 
    
 
@@ -163,17 +171,16 @@ class AuthController extends Controller
 
         $user->save();
 
-    
-        // Auto-login the user
-        Auth::login($user);
+        // return redirect('/dashboard')->with('success', 'Registration successful. Please complete your membership.');
 
-        return redirect('/dashboard')->with('success', 'Registration successful. Please complete your membership.');
+        return response()->json([
+            'message' => 'Registration successful.',
+        ], 201);
 
 
         // $planId = $request->query('plan');
         // Redirect to checkout page
         // return redirect('/dashboard')->route('user.checkout.index', ['plan' => $planId])->with('success', 'Registration successful. Please complete your membership.');
-        
 
     // } catch (\Exception $e) {
     // return redirect()->back()
@@ -198,20 +205,26 @@ class AuthController extends Controller
 
     public function login_submit(Request $request)
     {
-        
+
+        // dd($request->email);
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
+    
+
         // Find the user with personalEmail and user_type = 0
-        $user = User::where('personalEmail', $request->email)
-                    ->where('user_type', 0)
-                    ->first();
+        $user = User::where('personalEmail',$request->email)->first();
+
+     
 
         if (!$user) {
             return redirect()->back()->with('error', 'User not found or not authorized.');
         }
+
+      
     
         // Check user account status
         if ($user->status == 0) {
@@ -231,7 +244,7 @@ class AuthController extends Controller
         // }
     
         // Check credentials
-        if (Auth::attempt(['personalEmail' => $request->personalEmail, 'password' => $request->password])) {
+        if (Auth::attempt(['personalEmail' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('dashboard');
         } else {
             return redirect()->back()->with('error', 'Invalid credentials. Please try again.');

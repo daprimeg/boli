@@ -136,6 +136,7 @@
     </footer> 
   </body>
 
+  <script src="{{asset('/public/themeadmin/assets/js/jquery.js')}}"></script>
   <script src="{{asset('/public/theme/js/bootstrap.js')}}"></script>
   <script src="{{asset('/public/theme/app.js')}}"></script>
    @yield('js')
