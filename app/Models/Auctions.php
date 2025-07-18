@@ -14,6 +14,7 @@ class Auctions extends Model
         'end_date',
         'auction_type',
         'platform_id',
+        'status',
         'csv_path'
     ];
 
@@ -26,6 +27,7 @@ class Auctions extends Model
     {
         return $this->belongsTo(AuctionCenter::class);
     }
+    
 
 public function autoBasics() {
     return $this->hasMany(AutoBasic::class, 'auction_id');

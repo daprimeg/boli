@@ -431,9 +431,23 @@ public function show($id)
     // Get other vehicles (e.g., for sidebar list)
     $vehicles = Vehicle::with('auction.platform')->latest()->take(10)->get();
     $colors = DB::table('color')->where('id', $vehicle->color_id)->first();
+    $biddingHistoryArray = json_decode($vehicle->bidding_history, true);
 
-    return view('admin.vehicles.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform'));
+
+    return view('admin.vehicles.show.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform', 'biddingHistoryArray'));
 }
-    
+  public function vehicleDetails($id)
+{
+    $vehicle = Vehicle::findOrFail($id);
+
+    return view('admin.vehicles.show.vehicle_details', compact('vehicle'));
+}
+
+public function vehicleValuation($id)
+{
+    $vehicle = Vehicle::findOrFail($id);
+    return view('admin.vehicles.show.vehicle_valuation', compact('vehicle'));
+}
+
     
 }
