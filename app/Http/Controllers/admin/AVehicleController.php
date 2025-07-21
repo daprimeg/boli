@@ -436,18 +436,7 @@ public function show($id)
 
     return view('admin.vehicles.show.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform', 'biddingHistoryArray'));
 }
-  public function vehicleDetails($id)
-{
-    $vehicle = Vehicle::findOrFail($id);
 
-    return view('admin.vehicles.show.vehicle_details', compact('vehicle'));
-}
-
-public function vehicleValuation($id)
-{
-    $vehicle = Vehicle::findOrFail($id);
-    return view('admin.vehicles.show.vehicle_valuation', compact('vehicle'));
-}
 
     
 }

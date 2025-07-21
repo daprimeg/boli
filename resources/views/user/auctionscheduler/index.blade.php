@@ -27,6 +27,10 @@
    .auction-tabs .active:focus{
       color: white!important;
    }
+   .dataTables_length {
+    display: none !important;
+    }
+
 
    
 </style>
@@ -48,37 +52,34 @@
             <div class="d-flex gap-3">
                 {{-- Platform Dropdown --}}
                 <div class="form-group">
-                     <label class="form-label " for="platform_id">Platform</label>
                      <select name="platform_id" id="platform_id" class="form-control platform" select2 required>
                         <option value="">-- Select Platform --</option>
                            @foreach($auctionsPlatform as $id => $name)
-                        <option value="{{ $id }}">
-                     {{ $name }}
-                     </option>
+                        <option  value="{{ $id }}">{{ $name }} </option>
                            @endforeach
                      </select>
-                     </div>
+                </div>   
 
                 {{-- Center Dropdown --}}
                <div class="form-group">
-                                       <label class="form-label" for="center_id">Center</label>
-                                            <select name="center_id" id="center_id" class="form-control center" select2 required>
-                                                <option value="">-- Select Center --</option>
-                                            @foreach($auctionCenter as $id => $name)
-                                               <option value="{{ $id }}">   {{ $name }}  </option>
-                                             @endforeach
-                                            </select>
-                                    </div>
+                        <select name="center_id" id="center_id" class="form-control center" select2 required>
+                            <option value="">-- Select Center --</option>
+                            @foreach($auctionCenter as $id => $name)
+                            <option value="{{ $id }}">   {{ $name }}  </option>
+                            @endforeach
+                        </select>
+                </div>
                 
                 <form method="GET" id="lengthForm">
                 <div class="d-flex align-items-center gap-2 " style="margin-left: 50px">
                     <span style="font-size: 20px;">Show Entries</span> 
                    <select style="max-width:200px;padding:5px;"  name="length" class="">
-                                    <option value="10">10</option>
-                                    <option value="100">100</option>
-                                    <option value="200">200</option>
-                                    <option value="500">500</option>
-                                </select>
+                        <option value="10">10</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
+
                 </div>
             </form>
             </div>
@@ -92,7 +93,7 @@
     <div class="col-md-6">
         <div class="d-flex justify-content-end ">
             <div class="form-group">
-                <span style="font-size: 20px;"> of 15,276</span>
+                <span class="pageinfo" style="font-size: 20px;"></span>
             </div>
          
         </div>
@@ -107,7 +108,7 @@
          <div class="col-md-12">
             <div class="card">
                <div class="table-responsive text-nowrap">
-                  <table id="vehicleTable" class="table table-borderless table-sm">
+                  <table id="vehicleTable" class="table  table-sm">
                      <thead>
                            <tr>
                               <th>Platform</th>
@@ -144,17 +145,24 @@
                             d.platform_id = $('#platform_id').val();
                             d.center_id = $('#center_id').val();
                             d.auction_type = $('#auction_type').val();
+                            d.total = $('#recordsTotal').val();
                             d.auction_id = $('#auction_id').val();
                             
                         }
-                    }
-                    
-                });
+                    },
+                        // drawCallback: function (settings) {
+                        //     // After the table is redrawn, add "divider" row
+                        //             $('#vehicleTable tbody tr').each(function () {
+                        //                 $(this).after('<tr class=""> <td colspan="6"><hr class="my-1" style="border: 0; border-top: 1px solid #ddd;"></td></tr>');
+                        //             });
+                        //         }
+                            });
+                 
                 
 
                 table.on('draw.dt', function () {
                     var info = table.page.info();
-                    $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
+                    $('.pageinfo').html(`${info.recordsDisplay} entries`);
                 });
 
                 $("input[name='search']").on('keyup change', function () {

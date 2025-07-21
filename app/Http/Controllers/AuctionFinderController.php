@@ -580,7 +580,7 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
 
     $query = DB::table('auctions')
         ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
-        // ->leftJoin('auction_center', 'auction_center.id', '=', 'auctions.center_id')
+        ->join('auction_center', 'auctions.platform_id', '=', 'auction_center.auction_platform_id')
         ;
     if (!empty($search)) {
         $query->where(function ($q) use ($search) {
@@ -600,26 +600,45 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
 
     $totalData = clone $query;
 
+
     $data = $query ->select(
             'auctions.id',
             'auction_platform.name as platform_name',
-            // 'auction_center.name as center_name',
+            'auction_center.name as center_name',
+            // 'auctions.total_vehicles', 
             'auctions.auction_date',
+            'auctions.status',
         )
+        
         ->offset($start)
         ->limit($length)
         ->get()
         ->map(function ($auction) {
+            $view = URL::to('/auctionfinder');
+
+    // ✅ Add status badge with color
+    $statusColor = match (strtolower($auction->status)) {
+        'Planned'   => 'danger',
+        'In progress' => 'warning',
+        'update' => 'success',
+        'cancel'    => 'primary',
+        default     => 'secondary',
+    };
+
+    $statusBadge = '<span class="badge bg-' . $statusColor . '">' . ucfirst($auction->status ?? '-') . '</span>';
+
             return [
                 $auction->platform_name ?? 'N/A',
                 $auction->center_name ?? 'Unknown',
                 $auction->total_vehicles ?? 0,
                 $auction->auction_date ?? '-',
-                'Scheduled', // Static or computed status
-                '<a href="#" class="btn btn-sm btn-primary">View</a> / 
+                $statusBadge ?? '-',
+               
+                '<a href="'.$view.'" class="btn btn-sm btn-primary">View</a> / 
                  <a href="#" class="btn btn-sm btn-danger">Alert</a>'
             ];
         });
+  
 
     return [
         "draw" => intval($request->input('draw')),

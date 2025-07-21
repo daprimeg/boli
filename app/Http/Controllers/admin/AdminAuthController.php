@@ -5,9 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Alert;
 use Illuminate\Http\Request;
+use App\Models\Vehicle;
+use App\Models\Auctions;
+use App\Models\Auction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class AdminAuthController extends Controller
 {
@@ -33,11 +39,41 @@ class AdminAuthController extends Controller
         return back()->with('error', 'Invalid credentials or unauthorized access');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+          
         if (Auth::check() && Auth::user()->user_type == 1) {
-            return view('admin.dashboard');
+                    if ($request->ajax()) {
+         $query = Vehicle::
+         leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id');
+
+         $totalData = clone $query;
+           $data = $query->select(
+                  
+        )
+         ->map(function ($Vehicle) {
+             return [];
+         });
         }
+
+        //    $totalVehicles = DB::table('vehicles')->count();
+        //      $totalAuctions = DB::table('auctions')->count();
+        //      $liveAuctions = DB::table('auctions')
+        //     ->where('status', 'live') // adjust if needed
+        //     ->where('auction_date', '<=', Carbon::now())
+        //     ->where('end_date', '>=', Carbon::now())
+        //     ->count();
+        //     $inProgressAuctions = DB::table('auctions')
+        //     ->where('auction_date', '<=', Carbon::now())
+        //     ->where('end_date', '>=', Carbon::now())
+        //     ->count();
+        //     $inProgressVehicles = DB::table('vehicles')
+        //     ->join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
+        //     ->where('auctions.auction_date', '<=', Carbon::now())
+        //     ->where('auctions.end_date', '>=', Carbon::now())
+        //     ->count();
+            return view('admin.dashboard' , compact('inProgressVehicles','totalVehicles', 'totalAuctions','inProgressAuctions', 'liveAuctions'));
+    }
 
         return redirect('/admin')->with('error', 'Access denied');
     }
@@ -54,5 +90,5 @@ class AdminAuthController extends Controller
     
         return view('user.profile.userprofile', compact('alerts'));
     }
-    
+
 }

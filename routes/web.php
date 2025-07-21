@@ -453,8 +453,8 @@ Route::prefix('admin')->group(function () {
     Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
     Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
     Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
-    Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
-    Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
+    // Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
+    // Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
         
     
 
