@@ -167,7 +167,7 @@ class AuctionController extends Controller
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
             'platform_id' => 'required|integer',
-            'status' => 'required|in:Planned,In Progress,cancel,update',
+            'status' => 'required|in:Planned,In Progress,Cancel,Update',
             'csv_path' => 'nullable|file|mimes:csv,txt',
         ]);
 
@@ -327,7 +327,7 @@ class AuctionController extends Controller
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
             'platform_id' => 'required|integer',
-            'status' => 'required|in:Planned,In Progress,cancel,update',
+            'status' => 'required|in:Planned,In Progress,Cancel,Update',
             'csv_path' => 'nullable|file|mimes:csv,txt',
         ]);
 

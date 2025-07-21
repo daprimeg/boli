@@ -43,38 +43,80 @@ class AdminAuthController extends Controller
     {
           
         if (Auth::check() && Auth::user()->user_type == 1) {
-                    if ($request->ajax()) {
-         $query = Vehicle::
-         leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id');
+
+            if ($request->ajax()) {
+
+
+            $search = $request->input('search.value');
+            $start = $request->input('start') ?? 0;
+            $length = $request->input('length') ?? 10;
+            
+            
+         $query = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+
+         ;
 
          $totalData = clone $query;
-           $data = $query->select(
+
+            $data = $query->select(
+                    'auction_platform.name AS auction_platform_name',
+                     DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
+
+
                   
-        )
-         ->map(function ($Vehicle) {
-             return [];
-         });
+
+            )
+            // ->orderBy('created_at','desc')
+            ->offset($start)
+            ->limit($length)
+            ->get()
+            ->map(function ($auctions) {
+                  return [
+                      $auctions->auction_platform_name,
+                      $auctions->car_count,
+                      $auctions->remaining ?? 'N/A',
+                      $auctions->lots ?? 'N/A',
+              
+                    //   $Vehicle->fuel_type,
+                    //   $Vehicle->mileage,
+                    //   $Vehicle->transmission,
+                    //   $Vehicle->cc,
+                    
+                    //  '<a href="' .URL::to('admin/vehicles/edit/'.$Vehicle->id). '" class="btn btn-sm btn-warning">Edit</a>',
+                    //  '<a href="' .URL::to('admin/vehicles/delete/'.$Vehicle->id). '" class="btn btn-sm btn-danger">Delete</a>',
+                  ];
+              });
+
+    
+                return  [
+                    "data" => $data
+                ];
         }
 
-        //    $totalVehicles = DB::table('vehicles')->count();
-        //      $totalAuctions = DB::table('auctions')->count();
-        //      $liveAuctions = DB::table('auctions')
-        //     ->where('status', 'live') // adjust if needed
-        //     ->where('auction_date', '<=', Carbon::now())
-        //     ->where('end_date', '>=', Carbon::now())
-        //     ->count();
-        //     $inProgressAuctions = DB::table('auctions')
-        //     ->where('auction_date', '<=', Carbon::now())
-        //     ->where('end_date', '>=', Carbon::now())
-        //     ->count();
-        //     $inProgressVehicles = DB::table('vehicles')
-        //     ->join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
-        //     ->where('auctions.auction_date', '<=', Carbon::now())
-        //     ->where('auctions.end_date', '>=', Carbon::now())
-        //     ->count();
-            return view('admin.dashboard' , compact('inProgressVehicles','totalVehicles', 'totalAuctions','inProgressAuctions', 'liveAuctions'));
-    }
+                  
 
+     
+         
+
+            $totalVehicles = DB::table('vehicles')->count();
+            $totalAuctions = DB::table('auctions')->count();
+            $liveAuctions = DB::table('auctions')
+            ->where('status', 'live') // adjust if needed
+            ->where('auction_date', '<=', Carbon::now())
+            ->where('end_date', '>=', Carbon::now())
+            ->count();
+            $inProgressAuctions = DB::table('auctions')
+            ->where('auction_date', '<=', Carbon::now())
+            ->where('end_date', '>=', Carbon::now())
+            ->count();
+            $inProgressVehicles = DB::table('vehicles')
+            ->join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
+            ->where('auctions.auction_date', '<=', Carbon::now())
+            ->where('auctions.end_date', '>=', Carbon::now())
+            ->count();
+            return view('admin.dashboard' , compact('inProgressVehicles','totalVehicles', 'totalAuctions','inProgressAuctions', 'liveAuctions'));
+    
+ }
         return redirect('/admin')->with('error', 'Access denied');
     }
 

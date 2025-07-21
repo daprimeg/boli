@@ -210,7 +210,7 @@ class AVehicleController extends Controller
    
 //     $validated = $request->validate([
 
-//         'auction_id' => 'required',  // 👈 Must be present
+//         'auction_id' => 'required',  // 👈Must be present
 //         'title' => 'required|string|max:255',
 //         'vehicle_type_id' => 'required|integer',
 //         'make_id' => 'required|integer',

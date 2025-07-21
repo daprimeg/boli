@@ -66,13 +66,13 @@
                            </div>
                             <div class="col-md-4">
                               <div class="form-group ">
-                                 <label class="form-label" for="status">Status</label>
-                                 <select name="status" class="form-select form-select-sm status-dropdown" >
+                                 <label class="form-label" for="status">Status <span class="text-danger" >*</span></label>
+                                 <select name="status" class="form-control status-dropdown" >
                                  <option value=""> --Status--</option>
-                                 <option value="Planned"{{old('status')=='planned' ? 'selected':''}} >Planned</option>
-                                 <option value="In Progress"{{old('status')=='In progress' ? 'selected':''}}>InProgress</option>
-                                 <option value="update" {{old('status')=='update' ? 'selected':''}}>Update</option>
-                                 <option value="cancel" {{old('status')=='cancel' ? 'selected':''}} >Cancel</option>
+                                 <option value="Planned"{{old('status')=='Planned' ? 'selected':''}} >Planned</option>
+                                 <option value="In Progress"{{old('status')=='In Progress' ? 'selected':''}}>InProgress</option>
+                                 <option value="Update" {{old('status')=='Update' ? 'selected':''}}>Update</option>
+                                 <option value="Cancel" {{old('status')=='Cancel' ? 'selected':''}} >Cancel</option>
                               </select>
                               </div>
                            </div>

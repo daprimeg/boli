@@ -126,18 +126,18 @@
         <div class="col-md-6 col-12">
             <div class="card h-100">
                <div class="card-header d-flex justify-content-between align-items-center">
-                  <h5 class="card-title m-0 me-2">Your Favourite vehicles</h5>
+                  <h5 class="card-title m-0 me-2">Online Auction</h5>
                   <div class="dropdown">
-                     <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-2 me-n1 waves-effect" type="button" id="teamMemberList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select Auc
+                     <button class="btn btn-secondary   border-0 p-2 me-n1 waves-effect" type="button" id="teamMemberList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Auction
                      </button>
                      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="teamMemberList" style="">
                        
                      </div>
                   </div>
                </div>
-               <div class="table-responsive" id="platformStatsTable">
-                  <table class="table table-borderless border-top">
+               <div class="table-responsive" >
+                  <table class="table table-borderless border-top" id="auctionsTable">
                      <thead class="border-bottom">
                         <tr>
                            <th>Platform</th>
@@ -146,6 +146,10 @@
                            <th>Lots</th>
                         </tr>
                      </thead>
+                      <tbody >
+                        
+
+                     </tbody>
                   
                   </table>
                </div>
@@ -193,38 +197,53 @@
 @section('js')
 
     <script>
+        $(document).ready(function () {
+             let table = $('#auctionsTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax:{
+                        url:"{{ URL::to('/admin/dashboard')}}",
+                        data:function (d){
+                       
+                            
+                        }
+                    }
+                    
+                });
+                });
+
          document.addEventListener('DOMContentLoaded', function () {
-            const totalSegments = 40;
-            const data = [];
-            const colors = [];
+    const totalSegments = 40;
+    const data = [];
+    const colors = [];
 
-            for (let i = 0; i < totalSegments; i++) {
-            data.push(2);
-            colors.push(i % 1 === 0 ? '#00c4ff' : '#0f172a'); // alternate colors
-            }
+    for (let i = 0; i < totalSegments; i++) {
+      data.push(2);
+      colors.push(i % 1 === 0 ? '#00c4ff' : '#0f172a'); // alternate colors
+    }
 
-            const ctx = document.getElementById('ringChart').getContext('2d');
+    const ctx = document.getElementById('ringChart').getContext('2d');
 
-            new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                data: data,
-                backgroundColor: colors,
-                borderColor: '#0f172a',
-                borderWidth: 3,
-                cutout: '75%',
-                hoverOffset: 0
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }
-                }
-            }
-            });
-        });
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        datasets: [{
+          data: data,
+          backgroundColor: colors,
+          borderColor: '#0f172a',
+          borderWidth: 3,
+          cutout: '75%',
+          hoverOffset: 0
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
+      }
+    });
+  });
     </script>
 @endsection

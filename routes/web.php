@@ -257,7 +257,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
    
 
-    Route::get('/auctionscheduler', [AuctionFinderController::class,'index1']);
+    Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
 
 
     
