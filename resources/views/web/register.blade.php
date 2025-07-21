@@ -88,8 +88,9 @@
 @section('content')
 <div class="container p-4">
      <form class="register-form" enctype="multipart/form-data" action="{{ url('/register_submit') }}" method="post" >
-       @csrf
-           
+            <input type="hidden" name="payment_method" value="" />
+            @csrf
+
             <div class=" mb-4 text-white p-3" style="background-color: rgba(255, 0, 0, 0.301); border-radius: 12px; border:1px solid red ;">
                 <p class="mb-2">
                     <strong>AUTOBOLI LTD</strong> is exclusively designed for use by
@@ -115,67 +116,68 @@
 
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                         <input name="companyName"  type="text" class="sign-input" placeholder="Company / Trading or Business Name"  />
+                                         <input name="companyName" value="My Company"  type="text" class="sign-input" placeholder="Company / Trading or Business Name"  />
                                          <small class="error error-companyName text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="companyAddress1"  type="text" class="sign-input" placeholder="Company Address 1"  />
+                                        <input name="companyAddress1" value="Company Address 1"  type="text" class="sign-input" placeholder="Company Address 1"  />
                                             <small class="error error-companyAddress1 text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
                                         <select name="businessType" class="sign-input" >
-                                            <option @if(old('businessType') == '') selected @endif value="" >Business Type</option>
-                                            <option @if(old('businessType') == 'dealer') selected @endif value="dealer">Motor Dealer</option>
-                                            <option @if(old('businessType') == 'trader') selected @endif value="trader">Motor Trader</option>
-                                            <option @if(old('businessType') == 'independent') selected @endif value="independent">Independent Dealer</option>
-                                            <option @if(old('businessType') == 'other') selected @endif value="other">Other</option>
+                                            <option value="">Business Type</option>
+                                            <option selected value="dealer">Motor Dealer</option>
+                                            <option value="trader">Motor Trader</option>
+                                            <option value="independent">Independent Dealer</option>
+                                            <option value="other">Other</option>
                                         </select>
-                                            <small class="error error-businessType text-danger"></small>
+                                        <small class="error error-businessType text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="companyAddress2"  type="text" class="sign-input" placeholder="Company Address 2 (Optional)" />
-                                            <small class="error error-companyAddress2 text-danger"></small>
+                                        <input name="companyAddress2" value="Company Address 2"  type="text" class="sign-input" 
+                                          placeholder="Company Address 2 (Optional)" />
+                                         <small class="error error-companyAddress2 text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="companyReg"  type="text" class="sign-input" placeholder="Company Reg. Number (Optional)" />
-                                            <small class="error error-companyReg text-danger"></small>
+                                        <input name="companyReg" value="Company Reg. Number" type="text" class="sign-input" placeholder="Company Reg. Number (Optional)" />
+                                        <small class="error error-companyReg text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="townCity"  type="text" class="sign-input" placeholder="Town / City"  />
-                                            <small class="error error-townCity text-danger"></small>
+                                        <input name="townCity" value="Town / City" type="text" class="sign-input" placeholder="Town / City"  />
+                                        <small class="error error-townCity text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="website"   type="url" class="sign-input" placeholder="Website (Optional)" />
-                                            <small class="error error-website text-danger"></small>
+                                        <input name="website" value="https://autodroid.co.uk/" type="url" class="sign-input" placeholder="Website (Optional)" />
+                                        <small class="error error-website text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="country" type="text" class="sign-input" placeholder="Country"  />
-                                            <small class="error error-country text-danger"></small>
+                                        <input name="country" value="Country" type="text" class="sign-input" placeholder="Country"  />
+                                        <small class="error error-country text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="businessEmail" type="email" class="sign-input" placeholder="Business Email (Optional)" />
-                                            <small class="error error-businessEmail text-danger"></small>
+                                        <input name="businessEmail" value="business@gmail.com" type="email" class="sign-input" placeholder="Business Email (Optional)" />
+                                        <small class="error error-businessEmail text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="postcode"  type="text" class="sign-input" placeholder="Postcode / Zip code"  />
-                                            <small class="error error-postcode text-danger"></small>
+                                        <input name="postcode" value="123"  type="text" class="sign-input" placeholder="Postcode / Zip code"  />
+                                        <small class="error error-postcode text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
                                         <select name="motorTradeInsurance" class="sign-input">
-                                            <option @if(old('motorTradeInsurance') == '') selected @endif value="" >Motor Trade Insurance? (Optional)</option>
-                                            <option @if(old('motorTradeInsurance') == 'yes') selected @endif value="yes">Yes</option>
-                                            <option @if(old('motorTradeInsurance') == 'no') selected @endif value="no">No</option>
-                                            <option @if(old('motorTradeInsurance') == 'pending') selected @endif value="pending">Pending</option>
+                                            <option value="" >Motor Trade Insurance? (Optional)</option>
+                                            <option selected value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                            <option value="pending">Pending</option>
                                         </select>
-                                            <small class="error error-postcode text-danger"></small>
+                                        <small class="error error-postcode text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="telephone" type="tel" class="sign-input" placeholder="Telephone"  />
-                                            <small class="error error-telephone text-danger"></small>
+                                        <input name="telephone" value="03112239342" type="tel" class="sign-input" placeholder="Telephone"  />
+                                        <small class="error error-telephone text-danger"></small>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="vatNumber" type="text" class="sign-input" placeholder="VAT Number (if applicable)" />
-                                            <small class="error error-vatNumber text-danger"></small>
+                                        <input name="vatNumber" value="123" type="text" class="sign-input" placeholder="VAT Number (if applicable)" />
+                                        <small class="error error-vatNumber text-danger"></small>
                                     </div>
                                 </div>
                             </div>
@@ -197,19 +199,19 @@
 
                                 <div class="row g-3 mb-4">
                                     <div class="col-md-4">
-                                        <input name="firstName" class="sign-input" placeholder="First Name"  />
+                                        <input name="firstName" class="sign-input" value="Owais" placeholder="First Name"  />
                                             <small class="error error-firstName text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
-                                        <input name="surname" class="sign-input" placeholder="Surname"  />
+                                        <input name="surname" class="sign-input" value="Azam" placeholder="Surname"  />
                                             <small class="error error-surname text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
-                                        <input name="title" class="sign-input" placeholder="Title" />
+                                        <input name="title" class="sign-input" value="Owais Azam" placeholder="Title" />
                                             <small class="error error-title text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
-                                        <input name="jobTitle" class="sign-input" placeholder="Job Title"  />
+                                        <input name="jobTitle" value="Dev" class="sign-input" placeholder="Job Title"  />
                                             <small class="error error-jobTitle text-danger"></small>
                                     </div>
                                     <div class="col-md-4">
@@ -242,14 +244,18 @@
                                                 </div>
                                             </div>
 
-                                            <input name="phone" type="tel" class="sign-input" style="border: none !important ; border-left: 1px solid var(--text-color) !important; border-radius: 0;" placeholder="Phone Number"  />
+                                            <input name="phone" type="tel" value="03112239342" class="sign-input" style="border: none !important ; border-left: 1px solid var(--text-color) !important; border-radius: 0;" placeholder="Phone Number"  />
                                         </div>
                                             <small class="error error-phone text-danger"></small>
                                     </div>
 
                                     <div class="col-md-4">
-                                         <input type="email" name="personalEmail" class="sign-input" placeholder="Personal Email" />
+                                         <input type="email" value="iamowaisazam@gmail1.com" name="personalEmail" class="sign-input" placeholder="Personal Email" />
                                          <small class="error error-personalEmail text-danger"></small>
+                                    </div>
+                                    <div class="col-md-4">
+                                         <input type="password" value="owais123" name="password" class="sign-input" placeholder="Password" />
+                                         <small class="error error-password text-danger"></small>
                                     </div>
                                 </div>
 
@@ -281,22 +287,20 @@
                                     <div class="col-md-6">
                                         <label class="form-label text-white">Proof of motor trade (Optional)</label>
                                         <div class="d-flex align-items-center py-4" >
-                                            <label class="sign-input">
-                                                Select file (Max. 4MB)
-                                                <input name="motorTradeProof" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
-                                            </label>
+                                            <label class="sign-input">Select file (Max. 4MB) <input name="motorTradeProof" type="file" class="fileName" 
+                                                accept=".jpg,.jpeg,.png,.pdf" hidden /></label>
                                             <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
                                         </div>
-                                            <small class="error error-motorTradeProof text-danger"></small> </br>
+                                        <small class="error error-motorTradeProof text-danger"></small> </br>
                                         <small class="text-muted">Upload must be in .jpg, .png or .pdf format.</small>
                                     </div>
+
                                     <div class="col-md-6">
-                                        <label class="form-label text-white">
-                                            Proof of address <span class="text-danger">*</span>
-                                        </label>
+                                        <label class="form-label text-white">Proof of address <span class="text-danger">*</span></label>
                                         <div class="d-flex align-items-center py-4" >
                                             <label class="sign-input"> Select file (Max. 4MB)
-                                                <input name="addressProof" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
+                                                <input name="addressProof" type="file" class="fileName" 
+                                                accept=".jpg,.jpeg,.png,.pdf" hidden  />
                                             </label>
                                             <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
                                         </div>
@@ -311,13 +315,27 @@
                                     <div class="border-bottom border-primary" style="width: 100px; height: 3px; margin-top: 5px"></div>
                                 </h2>
 
+                                <div class="plans">
+                                    <label class="form-label text-white" for="plan_id">Subscription Plan</label>
+                                    <select class="form-control" name="plan_id" >
+                                        <option value="">Select Plan</option>
+                                        @foreach ($plans as $item)
+                                            <option value="{{$item->id}}">{{$item->plan_name}} - £ {{$item->price}} / month</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="error error-plan_id text-danger"></small>
+                                </div>
+                                <div class="pt-3" >
+                                      <div class="form-group">
+                                            <label class="form-label text-white">Card Info</label> 
+                                            <div id="card-element"></div>
+                                            <div id="card-errors" style="color: red;"></div>
+                                      </div>
+                                </div>
                             </div>
 
                             <!-- Stripe Card Element -->
-                            <div> 
-                                <div id="card-element"></div>
-                                <div id="card-errors" style="color: red;"></div>
-                            </div>
+                   
 
                             <div class="mb-4">
                                 <p class="text-muted">
@@ -355,29 +373,26 @@
 
 
         async function checkpayment(){
-             $('#card-errors').text('');
-               let response = await stripe.createPaymentMethod({
-                    type: 'card',
-                    card: card,
-                });
+            
+            $('#card-errors').text('');
+            
+            let response = await stripe.createPaymentMethod({
+                type: 'card',
+                card: card,
+            });
 
-               if(response.error){
-
-                   $('#card-errors').text(response.error.message); 
-                   return false;
-               }else{
-                return true;
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'payment_method',
-                        value: response.paymentMethod.id
-                    }).appendTo('.register-form');
-               }
+            if(response.error){
+                $('input[name=payment_method]').val('');
+                $('#card-errors').text(response.error.message); 
+                return false;
+            }else{
+                $('input[name=payment_method]').val(response.paymentMethod.id);
+                return true;   
+            }
 
         }
 
             
-    
         $('.register-form').on('submit', async function (e) {
 
                 e.preventDefault();
@@ -385,12 +400,14 @@
                 $(`.error`).text('');
                 $('button[type=submit]').prop('disabled', true);
 
-                // let res = await checkpayment();
+                let res = await checkpayment();
 
-                // if(!res){
-                //     alert('Please Enter Card Details');
-                //     return false;
-                // }
+                if(!res){
+                    alert('Please Enter Card Details');
+                    $('button[type=submit]').prop('disabled', false);
+                    return false;
+                    
+                }
 
     
 
@@ -407,6 +424,7 @@
                         
                         console.log(response);
                         alert("Form submitted successfully!");
+                        window.location.href = "{{url('/dashboard')}}";
                         $('button[type=submit]').prop('disabled', false);
 
                     },
@@ -419,8 +437,7 @@
                                 
                             });
                         }else{
-
-                            alert("Something went wrong.");
+                            alert(xhr?.responseJSON?.message);
                         }   
 
 
