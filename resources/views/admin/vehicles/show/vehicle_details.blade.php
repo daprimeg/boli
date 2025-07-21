@@ -1,3 +1,5 @@
+
+
 <div class=" p-4" style="" >
             <div class="row " style="padding: 30px; border-radius: 10px; background-color: var(--bs-navbar-bg) !important;">
                 {{-- Left Column: Image & Thumbnails --}}
@@ -22,14 +24,14 @@
                                 {{-- Thumbnails --}}
                                 <div class="d-flex flex-wrap justify-content-left gap-2">
                                     <!-- Thumbnail Slider -->
-                                    <div class="swiper mySwiper w-full max-w-md">
-                                        <div class="swiper-wrapper">
+                                    <div class="swiper mySwiper ">
+                                        <div class="swiper-wrapper " style="display: flex !important;">
                                             @foreach ($vehicle->getImages() as $index => $item)
-                                                <div class="swiper-slide">
+                                                <div class="swiper-slide p-1">
                                                     <img 
                                                         src="{{ $item }}" 
                                                         class="img-thumbnail"
-                                                        style="cursor: pointer; width: 80px; height: 60px; border-radius: 20%; object-fit: cover;"
+                                                        style="cursor: pointer; width: 80px !important; height: 80px important; border-radius: 10%; object-fit: cover;"
                                                         onclick="setMainImage('{{ $item }}')"
                                                     >
                                                 </div>
@@ -547,4 +549,13 @@
             }
 
 
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+            document.addEventListener('DOMContentLoaded', function () {
+                    const swiper = new Swiper('.swiper', {
+                        slidesPerView: 4,
+                        spaceBetween: 10,
+                        loop: true,
+                    });
+                });
             </script>
+            

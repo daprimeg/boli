@@ -25,7 +25,7 @@
               <a class="nav-link " href="Features.html">Features</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="Pricing.html">Pricing</a>
+              <a class="nav-link" href="{{url('/pricing')}}">Pricing</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="Explore.html">Explore</a>

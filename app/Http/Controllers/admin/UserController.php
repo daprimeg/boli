@@ -55,7 +55,7 @@ class UserController extends Controller
                         $row->id,
                         $row->company,
                         $row->firstName.' '.$row->surname,
-                        $row->email,
+                        $row->personalEmail,
                         $status,
                         $html,
                   ];

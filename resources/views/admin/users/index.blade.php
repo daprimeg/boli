@@ -69,7 +69,8 @@
                                         <th>ID</th>
                                         <th>Company</th>
                                         <th>Full Name</th>
-                                        <th>Email</th>
+                                        <th>Business Email</th>
+                                        <th>Personal Email</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -81,6 +82,7 @@
                                             <td>{{$item->companyName}}</td>
                                             <td>{{$item->firstName . ' ' . $item->surname}}</td>
                                             <td>{{$item->businessEmail}}</td>
+                                            <td>{{$item->personalEmail}}</td>
                                             <td>
                                                 @if($item->status == 1)
                                                     <a href="{{url('/admin/users/'.$item->id.'/status/0')}}" class="btn btn-success btn-sm">Active</a>

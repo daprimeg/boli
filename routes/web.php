@@ -60,6 +60,8 @@ use Carbon\Carbon;
 Route::get('/', [WebController::class,'index']);
 Route::get('/feautres', [WebController::class,'feautres']);
 
+Route::get('/pricing', [WebController::class,'pricing']);
+
 Route::get('/login',  [AuthController::class, 'login']);
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
 
@@ -289,7 +291,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/gellery', 'user/gellery')->name('gellery');
     Route::view('/comparevehicles', 'user/comparevehicles')->name('comparevehicles');
     Route::view('/reauctiontracker', 'user/reauctiontracker')->name('reauctiontracker');
-    Route::view('/pricing', 'user/pricing')->name('pricing');
+    // Route::view('/pricing', 'user/pricing')->name('pricing');
     Route::view('/platformwise', 'user/platformwise')->name('platformwise');
     Route::view('/search', 'user/search')->name('search');
 

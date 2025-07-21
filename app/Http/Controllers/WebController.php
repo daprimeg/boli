@@ -20,7 +20,12 @@ class WebController extends Controller
     
         return view('web.feautres');
     }
-  
+    
+
+    public function pricing ()
+    {
+        return view('web.pricing');
+    }
 
 
     
