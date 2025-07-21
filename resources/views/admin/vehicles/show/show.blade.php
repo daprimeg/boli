@@ -109,6 +109,16 @@
         background-color: #1e3a8a !important; /* Tailwind blue-800 */
         border: 2px solid #3b82f6;
     }
+.vehicle-detail-page{
+
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-image:  url('{{ asset('/public/images/backgrounds/Dots.png') }}'));
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
      
 </style>
 @endsection
@@ -119,10 +129,40 @@
       @include('admin.vehicles.show.sidebar')
 
         {{-- Main Content --}}
-        <div class="p-4" >
-            <div class="mb-4" >
-             <div class="flex space-x-4">
-    <button 
+
+
+<div class="container my-5 showblade-bg-img-dot ">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+    </li>
+    
+  </ul>
+
+  <div class="tab-content mt-3" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+     <div id="tabContent">
+   @include('admin.vehicles.show.vehicle_valuation') 
+   </div>
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+       @include('admin.vehicles.show.vehicle_details') 
+    </div>
+    
+  </div>
+
+
+</div>
+</div>
+
+
+        {{-- <div class="p-4 bg-white" > --}}
+            {{-- <div class="mb-4" > --}}
+             {{-- <div class="flex space-x-4"> --}}
+    {{-- <button 
         class="tab-button py-2 bg-blue-600 btn btn-primary m-4 mb-0 ml-0 text-white rounded-lg hover:bg-blue-700 transition"
         data-url="{{ url::to('/admin/vehicles/show/' . $vehicle->id . '/vehicle_details') }}"
         onclick="loadTabFromButton(this)">
@@ -134,22 +174,24 @@
         data-url="{{ url::to('/admin/vehicles/show/' . $vehicle->id . '/vehicle_valuation') }}"
         onclick="loadTabFromButton(this)">
         Vehicle Valuation
-    </button>
-</div>
-                </div>
-                    <div id="tabContent">
-                        @include('admin.vehicles.show.vehicle_valuation') {{-- Load default tab --}}
-                    </div>
+    </button> --}}
+{{-- </div> --}}
+{{-- </div> --}}
+    {{-- <div id="tabContent">
+   @include('admin.vehicles.show.vehicle_valuation') 
+   </div> --}}
             
+{{-- </div> --}}
+
 </div>
-</div>
-</div>
+
+
 
 
 @endsection
 
 
-@push('scripts')
+@section('scripts')
 <script>
     function loadTabFromButton(button) {
         const url = button.getAttribute('data-url');
@@ -171,7 +213,7 @@
             });
     }
 </script>
-@endpush
+@endsection
 
 
 

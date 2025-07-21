@@ -1,5 +1,5 @@
         {{-- Sidebar Filters --}}
-        <div class="filters-sidebar  border-end  text-white p-3" style="background-color: #0f1c2c; width:800px ">
+        <div class="filters-sidebar  border-end  text-white p-3" style="background-color: #0f1c2c; width:18%">
            <div class="d-flex justify-content-between align-items-center pt-7">
                 <span class="mb-0" style=" font-size: 15px">Filters</span>
                     <a href="{{URL::to('#')}}" class="btn" style="text-decoration: underline; text-decoration-color: #07509a; font-size: 15px; margin-right: -20px;">Clear All</a> 
