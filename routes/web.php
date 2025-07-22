@@ -38,10 +38,13 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebController;
+use App\Http\Middleware\CheckUserStatus;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
+use App\Models\Membership;
 use App\Models\ModelVariant;
 use App\Models\Vehicle;
 use App\Models\VehicleModel;
@@ -209,9 +212,7 @@ Route::middleware(['auth'])->prefix('user/settings')->group(function () {
 });
 
 
-// News (public)
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-Route::post('/news/{id}/toggle-pin', [NewsController::class, 'togglePin'])->name('news.togglePin');
+
 
 // Dashboard data (AJAX)
 Route::get('dashboard/data', [VehicleController::class, 'getVehicles']);
@@ -238,92 +239,104 @@ Route::post('/stripe/webhook', [WebhookController::class, 'handleStripeWebhook']
 
 
 
+Route::middleware('auth')->group(function () {
+
+    Route::get('/subscriptions', [DashboardController::class,'subscriptions']);
+
+});
+
+
+
 
 
 // User Authenticated Routes
-Route::middleware('auth')->group(function () {
-
-    Route::resource('associate-users', \App\Http\Controllers\AssociateUserController::class);
-
-    // User Dashboard & Pages
-    Route::view('/dashboard', 'user/dashboard')->name('dashboard');
-
-
-    Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');
-    Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
-
+Route::middleware(['auth',CheckUserStatus::class])->group(function () {
     
 
-    Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
-   
+            Route::resource('associate-users', \App\Http\Controllers\AssociateUserController::class);
 
-    Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
-
-
-    
-    Route::view('/upcoming', 'user/upcoming')->name('upcoming');
-
-    Route::view('/auctioncalender', 'user/auctioncalender')->name('auctioncalender');
-
-    Route::view('/auctiondetail', 'user/auctiondetail')->name('auctiondetail');
-    Route::view('/futureauction', 'user/futureauction')->name('futureauction');
-    Route::view('/timeauction', 'user/timeauction')->name('timeauction');
+            // User Dashboard & Pages
+            Route::view('/dashboard', 'user/dashboard')->name('dashboard');
 
 
+            Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');
+            Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
+
+            
+
+            Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
+        
+
+            Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
 
 
-    Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
-    // Route::view('/interest', 'user/interest')->name('interest');
+            
+            Route::view('/upcoming', 'user/upcoming')->name('upcoming');
 
-    Route::resource('/interest',InterestController::class);
+            Route::view('/auctioncalender', 'user/auctioncalender')->name('auctioncalender');
 
-    // Route::get('interests', [InterestController::class, 'index'])->name('interests.index');        // List all interests
-    // Route::get('interests/create', [InterestController::class, 'create'])->name('interests.create'); // Show form to create
-    // Route::post('interests/store', [InterestController::class, 'store'])->name('interests.store');   // Handle storing
-    // Route::get('interests/{interest}/edit', [InterestController::class, 'edit'])->name('interests.edit');  // Show form to edit
-    // Route::post('interests/{interest}/update', [InterestController::class, 'update'])->name('interests.update'); // Handle updating
-    // Route::delete('interests/{interest}/delete', [InterestController::class, 'destroy'])->name('interests.destroy'); // Handle delete
-    // Route::get('/get-models-by-make', [InterestController::class, 'getModelsByMake'])->name('get.models.by.make');
-    // Route::get('/get-variants-by-model', [InterestController::class, 'getVariantsByModel'])->name('get.variants.by.model');
-
-
-
-    Route::view('/gellery', 'user/gellery')->name('gellery');
-    Route::view('/comparevehicles', 'user/comparevehicles')->name('comparevehicles');
-    Route::view('/reauctiontracker', 'user/reauctiontracker')->name('reauctiontracker');
-    // Route::view('/pricing', 'user/pricing')->name('pricing');
-    Route::view('/platformwise', 'user/platformwise')->name('platformwise');
-    Route::view('/search', 'user/search')->name('search');
-
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('user.checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('user.checkout.store');
-
-    // Route::get('/checkout/{id?}', [CheckoutController::class, 'index'])->name('checkout.index');
-    // Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+            Route::view('/auctiondetail', 'user/auctiondetail')->name('auctiondetail');
+            Route::view('/futureauction', 'user/futureauction')->name('futureauction');
+            Route::view('/timeauction', 'user/timeauction')->name('timeauction');
 
 
 
 
-    // Profile Settings
-    Route::get('/profilesetting', [ProfileSettingController::class, 'edit'])->name('profile.edit');
-    Route::post('/profilesetting/update', [ProfileSettingController::class, 'update'])->name('profile.update');
-    Route::post('/changepassword', [ProfileSettingController::class, 'changePassword'])->name('profile.changePassword');
-    Route::get('/changepassword', [ProfileSettingController::class, 'editSecuritySettings'])->name('profile.editSecuritySettings');
+            Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
+            // Route::view('/interest', 'user/interest')->name('interest');
 
-    Route::view('/billingplan', 'user.profile.billingplans')->name('profile.billingplans');
-    Route::get('/userprofile', [AlertController::class, 'userAlerts'])->name('profile.userprofile');
+            Route::resource('/interest',InterestController::class);
 
-    // Ticket Management
-    Route::get('/createticket', [TicketController::class, 'create'])->name('ticket.create');
-    Route::post('/ticket/store', [TicketController::class, 'store'])->name('ticket.store');
-    Route::get('/tickethistory', [TicketController::class, 'history'])->name('ticket.history');
-    Route::get('/ticket/{id}', [TicketController::class, 'view'])->name('ticket.view');
-    Route::post('/ticket/{id}/reply', [TicketController::class, 'reply'])->name('ticket.reply');
-    Route::get('/ticket-history/data', [TicketController::class, 'historyData'])->name('ticket.history.data');
-    Route::post('/ticket/{id}/feedback', [TicketController::class, 'submitFeedback'])->name('ticket.feedback');
+            // Route::get('interests', [InterestController::class, 'index'])->name('interests.index');        // List all interests
+            // Route::get('interests/create', [InterestController::class, 'create'])->name('interests.create'); // Show form to create
+            // Route::post('interests/store', [InterestController::class, 'store'])->name('interests.store');   // Handle storing
+            // Route::get('interests/{interest}/edit', [InterestController::class, 'edit'])->name('interests.edit');  // Show form to edit
+            // Route::post('interests/{interest}/update', [InterestController::class, 'update'])->name('interests.update'); // Handle updating
+            // Route::delete('interests/{interest}/delete', [InterestController::class, 'destroy'])->name('interests.destroy'); // Handle delete
+            // Route::get('/get-models-by-make', [InterestController::class, 'getModelsByMake'])->name('get.models.by.make');
+            // Route::get('/get-variants-by-model', [InterestController::class, 'getVariantsByModel'])->name('get.variants.by.model');
 
 
-});
+
+            Route::view('/gellery', 'user/gellery')->name('gellery');
+            Route::view('/comparevehicles', 'user/comparevehicles')->name('comparevehicles');
+            Route::view('/reauctiontracker', 'user/reauctiontracker')->name('reauctiontracker');
+            // Route::view('/pricing', 'user/pricing')->name('pricing');
+            Route::view('/platformwise', 'user/platformwise')->name('platformwise');
+            Route::view('/search', 'user/search')->name('search');
+
+            Route::get('/checkout', [CheckoutController::class, 'index'])->name('user.checkout.index');
+            Route::post('/checkout', [CheckoutController::class, 'store'])->name('user.checkout.store');
+
+            // Route::get('/checkout/{id?}', [CheckoutController::class, 'index'])->name('checkout.index');
+            // Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+
+            // Profile Settings
+            Route::get('/profilesetting', [ProfileSettingController::class, 'edit'])->name('profile.edit');
+            Route::post('/profilesetting/update', [ProfileSettingController::class, 'update'])->name('profile.update');
+            Route::post('/changepassword', [ProfileSettingController::class, 'changePassword'])->name('profile.changePassword');
+            Route::get('/changepassword', [ProfileSettingController::class, 'editSecuritySettings'])->name('profile.editSecuritySettings');
+
+            // Route::view('/billingplan', 'user.profile.billingplans')->name('profile.billingplans');
+
+            
+            Route::get('/billingplan', [DashboardController::class, 'billingplan']);
+            Route::get('/userprofile', [AlertController::class, 'userAlerts'])->name('profile.userprofile');
+
+            // Ticket Management
+            Route::get('/createticket', [TicketController::class, 'create'])->name('ticket.create');
+            Route::post('/ticket/store', [TicketController::class, 'store'])->name('ticket.store');
+            Route::get('/tickethistory', [TicketController::class, 'history'])->name('ticket.history');
+            Route::get('/ticket/{id}', [TicketController::class, 'view'])->name('ticket.view');
+            Route::post('/ticket/{id}/reply', [TicketController::class, 'reply'])->name('ticket.reply');
+            Route::get('/ticket-history/data', [TicketController::class, 'historyData'])->name('ticket.history.data');
+            Route::post('/ticket/{id}/feedback', [TicketController::class, 'submitFeedback'])->name('ticket.feedback');
+
+            // News (public)
+            Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+            Route::post('/news/{id}/toggle-pin', [NewsController::class, 'togglePin'])->name('news.togglePin');
+
+    });
 
 
 

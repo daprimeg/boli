@@ -320,12 +320,12 @@
                                     <select class="form-control" name="plan_id" >
                                         <option value="">Select Plan</option>
                                         @foreach ($plans as $item)
-                                            <option value="{{$item->id}}">{{$item->plan_name}} - £ {{$item->price}} / month</option>
+                                            <option @if(request()->plan_id == $item->id) selected @endif value="{{$item->id}}">{{$item->plan_name}} - £ {{$item->price}} / month</option>
                                         @endforeach
                                     </select>
                                     <small class="error error-plan_id text-danger"></small>
                                 </div>
-                                <div class="pt-3" >
+                                <div class="pt-3 payment-card " >
                                       <div class="form-group">
                                             <label class="form-label text-white">Card Info</label> 
                                             <div id="card-element"></div>
@@ -392,6 +392,14 @@
 
         }
 
+        $('select[name=plan_id]').change(function (e) { 
+            if($(this).val() == 2){
+                $('.payment-card').hide();
+            }else{
+                $('.payment-card').show();
+            }
+        }).trigger('change');
+
             
         $('.register-form').on('submit', async function (e) {
 
@@ -400,13 +408,14 @@
                 $(`.error`).text('');
                 $('button[type=submit]').prop('disabled', true);
 
-                let res = await checkpayment();
-
-                if(!res){
-                    alert('Please Enter Card Details');
-                    $('button[type=submit]').prop('disabled', false);
-                    return false;
-                    
+                if($('select[name=plan_id]').val() != 2){
+                    let res = await checkpayment();
+                    if(!res){
+                        alert('Please Enter Card Details');
+                        $('button[type=submit]').prop('disabled', false);
+                        return false;
+                        
+                    }
                 }
 
     
@@ -431,7 +440,6 @@
                     error: function (xhr) {
 
                         if(xhr?.responseJSON?.errors){
-
                             $.each(xhr.responseJSON.errors, function (key, messages) {
                                 $(`.error-${key}`).text(messages);
                                 
@@ -439,11 +447,7 @@
                         }else{
                             alert(xhr?.responseJSON?.message);
                         }   
-
-
                         $('button[type=submit]').prop('disabled', false);
-                        
-                        
                     }
                 });
 

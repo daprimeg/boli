@@ -110,6 +110,37 @@ class AuthController extends Controller
 
     }
 
+    private function planCreate($user,$transactionId,$plan,$request){
+
+           
+            $startDate = now();
+            $expiryDate = now()->addMonths($plan->duration_value);
+        
+            $membership = Membership::create([
+                'user_id' => $user->id,
+                'plan_id' => $plan->id,
+                'membership_start_date' => $startDate,
+                'membership_expiry_date' => $expiryDate,
+                'membership_status' => 'Pending',
+                'membership_type' => 'monthly',
+            ]);
+
+            MembershipPayment::create([
+                'membership_id' => $membership->id,
+                'payment_date' => now(),
+                'payment_method' => 'stripe',
+                'transaction_id' => $transactionId,
+                'charge_id' => $transactionId,
+                'payer_id' => $transactionId ,
+                'amount' => $plan->price,
+                'currency' => 'GBP',
+                'payment_status' => 'Completed',
+            ]);
+
+            $membership->update(['membership_status' => 'Active']);
+
+    }
+
 
       public function register(Request $request)
     {
@@ -118,7 +149,7 @@ class AuthController extends Controller
           return redirect('/dashboard')->with('message', 'You are already logged in.');
         }
 
-        $plans = Plan::where('status',1)->get();
+        $plans = Plan::where('status',1)->orderBy('sort_by')->get();
 
         return view('web.register',compact('plans'));
     }
@@ -132,7 +163,7 @@ class AuthController extends Controller
         }
 
             $validator = Validator::make($request->all(), [
-                'payment_method' => 'required|string',
+                'payment_method' => 'nullable|string',
                 'password' => 'required|string',
                 'companyName' => 'required|string|max:255',
                 'companyAddress1' => 'required|string|max:255',
@@ -197,31 +228,53 @@ class AuthController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+        
 
-
-    
-        $planId = 2;
-        $plan = Plan::find($planId);
+        $plan = Plan::find($request->plan_id);
         if(!$plan){
             return response()->json([
-            'message' => 'Request Failed',
-            'errors' => [
-                "addressProof" => ['Plan Not Found']
-            ]
+            'message' => 'Plan Not Found',
           ], 422);
         }
 
         
-    
+        if($request->plan_id == 2){
+
+            $user = $this->AccountCreate($request);
+            $transactionId = "00";
+            $this->planCreate($user,$transactionId,$plan,$request);
+            Auth::login($user);
+
+            return response()->json([
+                'message' => 'Registration Successful.',
+            ], 201);
+
+        }else{
+
+            $validator = Validator::make($request->all(),[
+                  'payment_method' => 'required|string',
+            ]);
+
+            if($validator->fails()) {
+                return response()->json([
+                    'message' => 'Request Failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+        }
+
+        
+
 
         //Stripe Process
 
-            Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
             try {
                 
                 $intent = PaymentIntent::create([
-                    'amount' => intVal($plan->price),
+                    'amount' => round($plan->price * 100),
                     'currency' => 'gbp',
                     'automatic_payment_methods' => [
                         'enabled' => true,
@@ -241,35 +294,8 @@ class AuthController extends Controller
             if ($intent->status == 'succeeded') {
 
                 $user = $this->AccountCreate($request);
-                $startDate = now();
-                $expiryDate = now()->addMonths($plan->duration_value);
-          
-                $membership = Membership::create([
-                    'user_id' => $user->id,
-                    'plan_id' => $plan->id,
-                    'membership_start_date' => $startDate,
-                    'membership_expiry_date' => $expiryDate,
-                    'membership_status' => 'Pending',
-                ]);
-
                 $transactionId = $intent->latest_charge;
-              
-                MembershipPayment::create([
-                    'user_id' => $user->id,
-                    'membership_id' => $membership->id,
-                    'plan_id' => $plan->id,
-                    'payment_date' => now(),
-                    'payment_method' => 'stripe',
-                    'transaction_id' => $transactionId,
-                    'charge_id' => $transactionId,
-                    'payer_id' => $transactionId ,
-                    'amount' => $plan->price,
-                    'currency' => 'GBP',
-                    'payment_status' => 'Completed',
-                ]);
-
-                $membership->update(['membership_status' => 'Active']);
-                
+                $this->planCreate($user,$transactionId,$plan,$request);
                 Auth::login($user);
 
                 return response()->json([
@@ -328,14 +354,10 @@ class AuthController extends Controller
         // Find the user with personalEmail and user_type = 0
         $user = User::where('personalEmail',$request->email)->first();
 
-     
-
         if (!$user) {
             return redirect()->back()->with('error', 'User not found or not authorized.');
         }
 
-      
-    
         // Check user account status
         if ($user->status == 0) {
             return redirect()->back()->with('error', 'Your account is deactivated.');

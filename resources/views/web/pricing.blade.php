@@ -142,17 +142,15 @@
 
       <!-- Free Plan -->
       <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" >
-        <div class="pricing-card h-100" style="border-top-left-radius: 10px !important; border-bottom-left-radius: 12px; border-right: none !important;background-color: var(---background-color) !important;" 
-        >
+        <div class="pricing-card h-100" 
+        style="border-top-left-radius: 10px !important; border-bottom-left-radius: 12px; border-right: none !important;background-color: var(---background-color) !important;" >
           <div class="px-4 pt-4">
             <h5 class="text-white mb-3 fw-normal">Free</h5>
 
             <div class="mb-3">
               <div class="price-current">$0 <span class="price-period">/month</span></div>
             </div>
-
-            <button class="btn btn-get-starteds mb-4 " style="margin-top: 26px; border: 1px solid var(--items-border-colur) !important;
-      color: #ccc !important;">Get Started</button>
+            <a href="{{url('/register?plan_id=2')}}" class="btn btn-get-starteds mb-4 " style="margin-top: 26px; border: 1px solid var(--items-border-colur) !important;color: #ccc !important;" >Get Started</a>
           </div>
           
           <div class="d-flex align-items-center mb-4 border-top border-bottom " style="border-color:var(--items-border-colur) !important ;">
@@ -160,28 +158,25 @@
             <span class="credits-info">40 credits <span class="price-period">/day</span> </span>
             <i class="bi bi-info-circle ms-2 text-muted"></i>
           </div>
-<div class="p-4">
+              <div class="p-4">
+                  <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                      <span class="feature-text">Image Generation</span>
+                    </div>
+                    <div class="feature-subtext ms-4 mb-2">2 AI models</div>
 
-          <div class="mb-4">
-            <div class="d-flex align-items-center mb-2">
-              <i class="bi bi-check-circle-fill text-primary me-2"></i>
-              <span class="feature-text">Image Generation</span>
-            </div>
-            <div class="feature-subtext ms-4 mb-2">2 AI models</div>
+                  </div>
 
-          </div>
-
-          <div class="mb-4">
-            <div class="d-flex align-items-center mb-2">
-              <i class="bi bi-check-circle-fill text-primary me-2"></i>
-              <span class="feature-text">Image Editing</span>
-            </div>
-            <div class="feature-subtext ms-4 mb-2">1 project</div>
-
-          </div>
-</div>
-
-        </div>
+                  <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                      <span class="feature-text">Image Editing</span>
+                    </div>
+                    <div class="feature-subtext ms-4 mb-2">1 project</div>
+                  </div>
+              </div>
+         </div>
       </div>
 
       <!-- Entry Plan -->
@@ -193,15 +188,15 @@
             <div class="d-flex align-items-center">
 
               <div class="mb-2 me-2">
-                <span class="price-original">$10</span>
+                <span class="price-original">$40</span>
               </div>
               <div class="mb-2">
-                <span class="price-current">$8 <span class="price-period">/month</span></span>
+                <span class="price-current">$30 <span class="price-period">/month</span></span>
               </div>
             </div>
-            <div class="billing-info mb-3">billed $96 yearly, excl. tax</div>
-
-            <button class="btn btn-light-custom btn-get-starteds mb-4" style="margin-top: 25 px;">Get Started</button>
+            <div class="billing-info mb-3">For small dealers.</div>
+            
+            <a href="{{url('/register?plan_id=5')}}" class="btn btn-light-custom btn-get-starteds mb-4" style="margin-top: 25 px;" >Get Started</a>
           </div>
            
             <div class="d-flex align-items-center mb-4  border-top border-bottom" style="border-color:var(--items-border-colur) !important ;">
@@ -264,16 +259,17 @@
             <div class="d-flex align-items-center">
 
               <div class="mb-2 me-2">
-                <span class="price-original">$10</span>
+                <span class="price-original">$60</span>
               </div>
               <div class="mb-2">
-                <span class="price-current">$8 <span class="price-period">/month</span></span>
+                <span class="price-current">$50 <span class="price-period">/month</span></span>
               </div>
             </div>
-            <div class="billing-info" style="margin-bottom: 15px;">billed $660 yearly, excl. tax</div>
+            <div class="billing-info" style="margin-bottom: 15px;">For medium-sized businesses.</div>
 
-            <button class="btn btn-primary-custom btn-get-starteds mb-4">Get Started</button>
-              </div>
+                <a href="{{url('/register?plan_id=4')}}" class="btn btn-primary-custom btn-get-starteds mb-4">Get Started</a>
+       
+            </div>
             <div class="d-flex align-items-center mb-4  border-top border-bottom" style="border-color:var(--items-border-colur) !important ;">
               <i class="bi bi-lightning-charge text-warning py-2 ps-4 me-2"></i>
               <span class="credits-info">35k credits <span class="price-period">/month</span> </span>
@@ -342,75 +338,73 @@
             <h5 class="text-white mb-3 fw-normal">Ultra</h5>
 
             <div class="d-flex align-items-center">
-
               <div class="mb-2 me-2">
-                <span class="price-original">$10</span>
+                <span class="price-original">$110</span>
               </div>
               <div class="mb-2">
-                <span class="price-current">$8 <span class="price-period">/month</span></span>
+                <span class="price-current">$100 <span class="price-period">/month</span></span>
               </div>
             </div>
-            <div class="billing-info mb-3 ">billed $1,800 yearly, excl. tax</div>
-
-            <button class="btn btn-light-custom btn-get-starteds " style="margin-bottom: 24px;">Get Started</button>
+            <div class="billing-info mb-3 ">For larger operations.</div>
+            <a href="{{url('/register?plan_id=3')}}" class="btn btn-light-custom btn-get-starteds " style="margin-bottom: 24px;">Get Started</a>
           </div>
 
             <div class="d-flex align-items-center mb-4  border-top border-bottom" style="border-color:var(--items-border-colur) !important ;">
               <i class="bi bi-lightning-charge text-warning py-2 px-4 me-2 px-4 py-2"></i>
               <span class="credits-info">100k credits <span class="price-period">/month</span></span>
             </div>
-<div class="p-4">
+            <div class="p-4">
 
-            <div class="mb-4">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                <span class="feature-text">Image Generation</span>
+                          <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                              <span class="feature-text">Image Generation</span>
+                            </div>
+                            <div class="feature-subtext ms-4 mb-2">8 AI models</div>
+
+                          </div>
+
+                          <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                              <span class="feature-text">Video Generation</span>
+                            </div>
+                            <div class="feature-subtext ms-4 mb-2">20 AI models</div>
+
+                          </div>
+
+                          <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                              <span class="feature-text">Image Editing</span>
+                            </div>
+                            <div class="feature-subtext ms-4 mb-2">Unlimited projects</div>
+
+                          </div>
+
+                          <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                              <span class="feature-text">Parallel jobs</span>
+                            </div>
+                            <div class="feature-subtext ms-4 mb-2">10 generations at a time</div>
+
+                          </div>
+
+                          <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                              <span class="feature-text">Model Training</span>
+                            </div>
+                          </div>
+
+                          <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                              <span class="feature-text">Top-up Credits</span>
+                            </div>
+                          </div>
               </div>
-              <div class="feature-subtext ms-4 mb-2">8 AI models</div>
-
-            </div>
-
-            <div class="mb-4">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                <span class="feature-text">Video Generation</span>
-              </div>
-              <div class="feature-subtext ms-4 mb-2">20 AI models</div>
-
-            </div>
-
-            <div class="mb-4">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                <span class="feature-text">Image Editing</span>
-              </div>
-              <div class="feature-subtext ms-4 mb-2">Unlimited projects</div>
-
-            </div>
-
-            <div class="mb-4">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                <span class="feature-text">Parallel jobs</span>
-              </div>
-              <div class="feature-subtext ms-4 mb-2">10 generations at a time</div>
-
-            </div>
-
-            <div class="mb-4">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                <span class="feature-text">Model Training</span>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                <span class="feature-text">Top-up Credits</span>
-              </div>
-            </div>
-</div>
 
         </div>
       </div>
