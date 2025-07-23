@@ -143,6 +143,7 @@ class AuctionFinderController extends Controller
 
             //Base Query
             $query = Vehicle::join('auctions','auctions.id','=','vehicles.auction_id')
+            ->join('auction_platform','auction_platform.id','=','auctions.platform_id')
             ->join('make','make.id','=','vehicles.make_id')
             ->join('model','model.id','=','vehicles.model_id')
             ->join('model_variant','model_variant.id','=','vehicles.variant_id');
@@ -256,7 +257,7 @@ class AuctionFinderController extends Controller
                 ->limit($perPage)
                 ->select([
                  'vehicles.*',
-                 'auctions.name',
+                 'auction_platform.name',
                  'auctions.auction_date as auction_date',
 
                  'make.name as make_name',

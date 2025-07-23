@@ -242,9 +242,9 @@ Route::post('/stripe/webhook', [WebhookController::class, 'handleStripeWebhook']
 Route::middleware('auth')->group(function () {
 
     Route::get('/subscriptions', [DashboardController::class,'subscriptions']);
+    Route::post('/subscriptions_submit', [DashboardController::class,'subscriptions_submit']);
 
 });
-
 
 
 

@@ -18,22 +18,23 @@ class CheckUserStatus
     public function handle(Request $request, Closure $next): Response
     {
 
-        
+        $auth = Auth::user();
+         
+        if($auth->user_type == 0){
 
-        // $auth = Auth::user();
-        // if($auth->user_type == 0){
+            $membership = Membership::where('user_id', $auth->id)
+                            ->where('membership_status', 'Active')
+                            ->whereDate('membership_start_date', '<=', now())
+                            ->whereDate('membership_expiry_date', '>=', now())
+                            ->first();
 
-        //     $membership = Membership::where('user_id', $auth->id)
-        //                     ->where('membership_status', 'Active')
-        //                     ->whereDate('membership_start_date', '<=', now())
-        //                     ->whereDate('membership_expiry_date', '>=', now())
-        //                     ->first();
-        
-        //     if (!$membership) {
-                // return redirect('/subscriptions')->with('error', 'No active membership found. Please subscribe or renew your plan.');
-        //     }
+            if ($membership) {
+                
+            }else{
+                return redirect('/subscriptions')->with('error', 'No active membership found. Please subscribe or renew your plan.');
+            }
             
-        // }
+        }
 
         return $next($request);
     }

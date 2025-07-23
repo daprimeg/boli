@@ -1,40 +1,40 @@
 <!doctype html>
  <html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-wide" dir="ltr" data-skin="default" data-assets-path="../assets/" data-template="vertical-menu-template" data-bs-theme="dark">
-   <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>@stack('title')</title>
     <meta name="description" content="" />
     <style>
 
-            table.dataTable tbody th, table.dataTable tbody td {
-                padding: .782rem 1.25rem;
-            }
+        table.dataTable tbody th, table.dataTable tbody td {
+            padding: .782rem 1.25rem;
+        }
 
-            .dataTables_length {
-                padding: 10px 15px;
-            }
+        .dataTables_length {
+            padding: 10px 15px;
+        }
 
-            /* Add padding around "Showing 1 to 10 of X entries" */
-            .dataTables_info {
-                padding: 10px 15px;
-                display: none;
-            }
+        /* Add padding around "Showing 1 to 10 of X entries" */
+        .dataTables_info {
+            padding: 10px 15px;
+            display: none;
+        }
 
-            /* Add padding around pagination controls */
-            .dataTables_paginate {
-                padding: 10px 15px;
-                justify-content: right !important;
-            }
+        /* Add padding around pagination controls */
+        .dataTables_paginate {
+            padding: 10px 15px;
+            justify-content: right !important;
+        }
 
-            /* Make search box have padding too */
-            .dataTables_filter {
-                padding: 10px 15px;
-                display: none;
-            }
-            .table-responsive {
-                /* overflow-x: hidden; */
-            }
+        /* Make search box have padding too */
+        .dataTables_filter {
+            padding: 10px 15px;
+            display: none;
+        }
+        .table-responsive {
+            /* overflow-x: hidden; */
+        }
 
         /* Center the pagination */
         .dataTables_paginate {
@@ -64,24 +64,18 @@
             box-shadow: 0 4px 12px rgba(115, 103, 240, 0.4); /* soft primary shadow */
         }
 
-        /* Active (current) page */
         .dataTables_wrapper .dataTables_paginate .paginate_button.current {
             background-color: var(--bs-primary) !important;
             color: #ffffff !important;
             border-color: var(--bs-primary);
         }
 
-        /* Disabled buttons */
         .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
             background-color: #e9ecef;
             color: #b9b9c3 !important;
             border-color: #d8d6de;
             cursor: not-allowed;
             opacity: 0.65;
-        }
-
-        .table-responsive {
-            /* overflow-x: hidden !important; */
         }
 
         .template-customizer-open-btn{
@@ -104,9 +98,7 @@
         .select2-container .select2-selection--single {
             height: 36px!important;
         }
-
     </style>
-
     <link rel="icon" type="image/x-icon" href="{{ asset('public/assets/img/favicon/favicon.ico') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -123,7 +115,6 @@
 
     {{-- Lib --}}
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/select2.css') }}" />
-
 
     @yield('css')
 
@@ -189,7 +180,7 @@
 
 
         <script src="{{ asset('public/themeadmin/assets/js/jquery.js')}}"></script>
-        <script src="{{asset('public/themeadmin/assets/vendor/js/template-customizer.js')}}"></script>
+        {{-- <script src="{{asset('public/themeadmin/assets/vendor/js/template-customizer.js')}}"></script> --}}
         <script src="{{ asset('public/themeadmin/assets/vendor/js/helpers.js') }}"></script>
         <script src="{{ asset('public/themeadmin/assets/js/config.js') }}"></script>
         <script src="{{ asset('public/themeadmin/assets/vendor/libs/popper/popper.js') }}"></script>
