@@ -33,7 +33,7 @@
                 display: none;
             }
             .table-responsive {
-                overflow-x: hidden;
+                /* overflow-x: hidden; */
             }
 
         /* Center the pagination */
@@ -81,7 +81,7 @@
         }
 
         .table-responsive {
-            overflow-x: hidden !important;
+            /* overflow-x: hidden !important; */
         }
 
         .template-customizer-open-btn{

@@ -27,6 +27,8 @@ class DashboardController extends Controller
         $plans = Plan::all();
         $membership = Membership::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->get();
 
+      
+
         return view('user.dashboard.subscriptions', compact('membership','plans'));
 
     }

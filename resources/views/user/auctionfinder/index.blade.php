@@ -14,8 +14,6 @@
       background-color: var(--bs-paper-bg);
    }
 
-   
-
    .auction-tabs .active{
       background: #0080ff;
    }
@@ -84,7 +82,7 @@
                <div class="col-md-6">
                   <div class="d-flex justify-content-end">
                      <div class="invoice_status">
-                        <select id="auction_name" name="auction_name" class="form-select auctions">
+                        <select id="auction_name" name="auction_name" class="form-select platform">
                         </select>
                      </div>
                      <div class="invoice_status">
@@ -272,7 +270,7 @@
                      });
 
                      $('select[name=auction_name]').change(function (e) { 
-                         filters.plateform_id = $(this).val();
+                         filters.platform_id = $(this).val();
                          searchrecord();
                      });
 

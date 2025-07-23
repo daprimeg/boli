@@ -148,8 +148,8 @@ class AuctionFinderController extends Controller
             ->join('model_variant','model_variant.id','=','vehicles.variant_id');
 
             
-            if($request->has('plateform_id') && $request->plateform_id != ''){
-                 $query->where('vehicles.auction_id',explode(',',$request->plateform_id));
+            if($request->has('platform_id') && $request->platform_id != ''){
+                 $query->where('auctions.platform_id',$request->platform_id);
             }
 
             if($request->has('vehicle_types') && $request->vehicle_types != ''){

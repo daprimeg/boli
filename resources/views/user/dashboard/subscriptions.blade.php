@@ -89,6 +89,9 @@
                             </thead>
                              <tbody>
                                 @foreach ($membership as $key => $item)
+                                @if(!$item->payment)
+                                <?php continue; ?>
+                                @endif
                                     <tr>
                                         <td>{{$item->created_at}}</td>
                                         <td>{{$item->plan->plan_name}}</td>

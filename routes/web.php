@@ -65,7 +65,7 @@ Route::get('/feautres', [WebController::class,'feautres']);
 
 Route::get('/pricing', [WebController::class,'pricing']);
 
-Route::get('/login',  [AuthController::class, 'login']);
+Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
 
 Route::get('/register', [AuthController::class, 'register']);
