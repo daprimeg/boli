@@ -16,7 +16,7 @@
      @yield('css')
   </head>
   <body>
-
+<div class="dropdown-backdrop-blur" id="dropdownBackdrop"></div>
      @include('web.partial.nav')
      @yield('content')
    
@@ -71,15 +71,18 @@
             <div class="row text-white">
               <!-- Section: Explore -->
               <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">Explore</h6>
+                <h6 class="fw-semibold">AutoBoli</h6>
               </div>
               <div class="col-12 col-md-10 mb-3">
                 <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">about us</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">customer</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">community</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Affiliate & Referrals</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">News</a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Brand</a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Bidding </a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Roadmap </a></li> 
                 </ul>
               </div>
 
@@ -98,28 +101,31 @@
               </div>
 
                 <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">conste</h6>
+                <h6 class="fw-semibold">Resources </h6>
               </div>
               <div class="col-12 col-md-10 mb-3">
                 <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Guidance</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Explore</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">featuristic panels</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">blog</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">support</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">vin search </a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">find auc</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">vahicle value</a></li>
                 </ul>
               </div>
 
               <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">Resporse</h6>
+                <h6 class="fw-semibold">Connect </h6>
               </div>
               <div class="col-12 col-md-10 mb-3">
                 <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Facbook</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">insta</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">tiktok</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">x</a></li>
+                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li> --}}
                 </ul>
               </div>
             </div>
@@ -139,6 +145,20 @@
   <script src="{{asset('/public/themeadmin/assets/js/jquery.js')}}"></script>
   <script src="{{asset('/public/theme/js/bootstrap.js')}}"></script>
   <script src="{{asset('/public/theme/app.js')}}"></script>
+  
    @yield('js')
+  <script>
+ window.addEventListener("scroll", function () {
+  const navbar = document.getElementById("navbar");
 
+  if (window.scrollY > 50) {
+    navbar.style.background = "var(--items-background)";
+    // navbar.style.border = "2px solid var(--items-background)";
+  } else {
+    navbar.style.background = "var(--background-color)";
+    navbar.style.border = "none";
+  }
+});
+
+</script>
 </html>
