@@ -210,7 +210,7 @@ class AVehicleController extends Controller
    
 //     $validated = $request->validate([
 
-//         'auction_id' => 'required',  // 👈 Must be present
+//         'auction_id' => 'required',  // 👈Must be present
 //         'title' => 'required|string|max:255',
 //         'vehicle_type_id' => 'required|integer',
 //         'make_id' => 'required|integer',
@@ -436,18 +436,7 @@ public function show($id)
 
     return view('admin.vehicles.show.show', compact('vehicle','colors', 'vehicles', 'auctionsPlatform', 'biddingHistoryArray'));
 }
-  public function vehicleDetails($id)
-{
-    $vehicle = Vehicle::findOrFail($id);
 
-    return view('admin.vehicles.show.vehicle_details', compact('vehicle'));
-}
-
-public function vehicleValuation($id)
-{
-    $vehicle = Vehicle::findOrFail($id);
-    return view('admin.vehicles.show.vehicle_valuation', compact('vehicle'));
-}
 
     
 }

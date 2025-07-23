@@ -35,7 +35,7 @@
 
                 @if(Auth::user()->user_type == 0)
                 <!-- Quick links  -->
-                <li class=" nav-item dropdown-shortcuts navbar-dropdown dropdown">
+                <li class="d-none nav-item dropdown-shortcuts navbar-dropdown dropdown">
                   <a
                     class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
                     href="javascript:void(0);"
@@ -197,7 +197,7 @@
                 <!-- / Style Switcher-->
 
                 @if(Auth::user()->user_type == 0)
-                <li class="nav-item dropdown-language dropdown">
+                <li class="d-none nav-item dropdown-language dropdown">
                   <a
                     class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
                     href="javascript:void(0);"
@@ -232,7 +232,7 @@
 
                 @if(Auth::user()->user_type == 0)
                 <!-- Notification -->
-                <li class=" nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                <li class="d-none nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
                   <a
                     class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
                     href="javascript:void(0);"
@@ -529,8 +529,8 @@
                       </a>
                     </li>
                     @endif
-                    {{-- <li>
-                      <a class="dropdown-item" href="pages-account-settings-billing.html">
+                    <li>
+                      <a class="dropdown-item" href="{{url('/billingplan')}}">
                         <span class="d-flex align-items-center align-middle">
                           <i class="flex-shrink-0 icon-base ti tabler-file-dollar me-3 icon-md"></i
                           ><span class="flex-grow-1 align-middle">Billing</span>
@@ -539,7 +539,7 @@
                           >
                         </span>
                       </a>
-                    </li> --}}
+                    </li>
                     {{-- <li>
                       <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>

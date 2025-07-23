@@ -117,7 +117,7 @@ class PlanController extends Controller
     public function destroy($id)
     {
         $plan = Plan::findOrFail($id);
-        $plan->delete();
+        // $plan->delete();
 
         return redirect('/admin/plans')->with('success', 'Plan deleted successfully.');
     }

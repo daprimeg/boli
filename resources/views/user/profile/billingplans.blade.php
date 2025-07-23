@@ -1,7 +1,11 @@
-@include('user.partial.layout')
-<div class="content-wrapper">
-    <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
+@extends('admin.partial.app')
+@push('title') Billing Plan @endpush
+
+@section('content')
+
+
+   <div class="container-xxl flex-grow-1 container-p-y">
+
         <div class="row">
             <div class="col-md-12">
 
@@ -61,9 +65,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /Current Plan -->
+               
                 </div>
-                <div class="card mb-6">
+                {{-- <div class="card mb-6">
                     <h5 class="card-header">Payment Methods</h5>
                     <div class="card-body">
                         <div class="row gx-6">
@@ -300,9 +304,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card mb-6">
-                    <!-- Billing Address -->
+                </div> --}}
+                {{-- <div class="card mb-6">
+                
                     <h5 class="card-header">Billing Address</h5>
                     <div class="card-body">
                         <form id="formAccountSettings" onsubmit="return false">
@@ -396,7 +400,7 @@
                         </form>
                     </div>
                     <!-- /Billing Address -->
-                </div>
+                </div> --}}
                 <div class="card">
                     <!-- Billing History -->
                     <h5 class="card-header text-md-start text-center">Billing History</h5>
@@ -404,26 +408,37 @@
                         <table class="invoice-list-table table border-top">
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>#</th>
-                                    <th><i class="icon-base ti tabler-trending-up"></i></th>
-                                    <th>Client</th>
-                                    <th>Total</th>
-                                    <th class="text-truncate">Issued Date</th>
-                                    <th>Balance</th>
-                                    <th>Invoice Status</th>
+                                    <th>Date</th>
+                                    <th>Plan Name</th>
+                                    <th>Type</th>
+                                    <th>Start</th>
+                                    <th>Expiry</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
                                     <th class="cell-fit">Action</th>
                                 </tr>
                             </thead>
+                             <tbody>
+                                @foreach ($membership as $key => $item)
+                                    <tr>
+                                        <td>{{$item->created_at}}</td>
+                                        <td>{{$item->plan->plan_name}}</td>
+                                        <td>{{$item->membership_type}}</td>
+                                        <td>{{$item->membership_start_date}}</td>
+                                        <td>{{$item->membership_expiry_date}}</td>
+                                        <td>{{$item->payment->amount}} {{$item->payment->currency}}</td>
+                                        <td><span class="badge bg-secondary">{{$item->membership_status}}</span></td>
+                                        <td class="cell-fit">Action</td>
+                                    </tr>
+                                @endforeach
+                             </tbody>
                         </table>
                     </div>
-                    <!--/ Billing History -->
+                    
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <!-- Pricing Modal -->
+      
         <div class="modal fade" id="pricingModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-simple modal-pricing">
                 <div class="modal-content">
@@ -573,44 +588,14 @@
                 </div>
             </div>
         </div>
-        <!--/ Pricing Modal -->
-        <script src="../../assets//js/pages-pricing.js"></script>
-        <!--/ Modal -->
+        
+       
+
     </div>
-    <!-- / Content -->
-    <!-- Footer -->
-    <footer class="content-footer footer bg-footer-theme">
-        <div class="container-xxl">
-            <div
-                class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
-                <div class="text-body">
-                    ©
-                    <script>
-                        document.write(new Date().getFullYear());
-                    </script>
-                    , made with ❤️ by <a href="https://pixinvent.com" target="_blank" class="footer-link">Pixinvent</a>
-                </div>
-                <div class="d-none d-lg-inline-block">
-                    <a href="https://themeforest.net/licenses/standard" class="footer-link me-4" target="_blank"
-                        >License</a
-                        >
-                    <a href="https://themeforest.net/user/pixinvent/portfolio" target="_blank" class="footer-link me-4"
-                        >More Themes</a
-                        >
-                    <a
-                        href="https://demos.pixinvent.com/vuexy-html-admin-template/documentation/"
-                        target="_blank"
-                        class="footer-link me-4"
-                        >Documentation</a
-                        >
-                    <a href="https://pixinvent.ticksy.com/" target="_blank" class="footer-link d-none d-sm-inline-block"
-                        >Support</a
-                        >
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- / Footer -->
-    <div class="content-backdrop fade"></div>
 </div>
-@include('user.partial.footer')
+@endsection
+
+
+@section('js')
+     <script src="../../assets//js/pages-pricing.js"></script>
+@endsection

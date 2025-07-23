@@ -32,7 +32,7 @@
                     </li>
                 </ul>
             </li>
-          <li class="menu-item">
+            <li class="menu-item">
               <a href="{{ URL::to('/auctionscheduler') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>
                 <div data-i18n="Auction Scheduler">Auction Schduler</div>
@@ -60,6 +60,13 @@
                   </a>
                 </li>
               </ul>
+            </li>
+
+            <li class="menu-item {{ request()->is('subscriptions*') ? 'active' : '' }}">
+              <a href="{{url('/subscriptions')}}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-id"></i>
+                <div data-i18n="Billing Plan">Billing Plan</div>
+              </a>
             </li>
 
             <li class="menu-item {{ request()->is('news*') ? 'active' : '' }}">

@@ -41,7 +41,7 @@
                     </div>
                     <div class="card-body">
 
-                           <form action="{{ URL::to('/admin/memberships/'.$membership->membership_id.'/update')}}" method="POST">
+                           <form action="{{ URL::to('/admin/memberships/'.$membership->id.'/update')}}" method="POST">
                                 @csrf
                                 
 
@@ -62,7 +62,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="form-label">Plan</label>
-                                            <select name="plan_id" class="form-control" required>
+                                            <select disabled name="plan_id" class="form-control" required>
                                                 @foreach($plans as $plan)
                                                 <option value="{{ $plan->id }}" {{ $plan->id == $membership->plan_id ? 'selected' : '' }}>
                                                     {{ $plan->plan_name }} (£{{ $plan->price }})
@@ -86,7 +86,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="form-label">Payment Method</label>
-                                            <select name="payment_method" class="form-control" required>
+                                            <select disabled name="payment_method" class="form-control" required >
                                                 @foreach($paymentMethods as $method)
                                                 <option value="{{ $method }}" {{ $membership->payment_method == $method ? 'selected' : '' }}>{{ ucfirst($method) }}</option>
                                                 @endforeach
@@ -97,7 +97,7 @@
                                     <div class="col-md-4" >
                                         <div class="form-group">
                                             <label class="form-label">Membership Type</label>
-                                            <select name="membership_type" class="form-control" id="membership_type" required>
+                                            <select disabled name="membership_type" class="form-control" id="membership_type" required>
                                                 <option value="weekly" {{ $membership->membership_type == 'weekly' ? 'selected' : '' }}>Weekly</option>
                                                 <option value="monthly" {{ $membership->membership_type == 'monthly' ? 'selected' : '' }}>Monthly</option>
                                                 <option value="yearly" {{ $membership->membership_type == 'yearly' ? 'selected' : '' }}>Yearly</option>

@@ -6,21 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class MembershipPayment extends Model
 {
-    protected $primaryKey = 'payment_id';
+   
 
-    protected $fillable = [
-        'user_id',
-        'membership_id',
-        'plan_id',
-        'payment_date',
-        'payment_method',
-        'transaction_id',
-        'payer_id',
-        'charge_id',
-        'amount',
-        'currency',
-        'payment_status',
-        'webhook_received',
-        'webhook_data',
-    ];
+    protected $guarded = [];
+
+    // protected $fillable = [
+    //     'user_id',
+    //     'membership_id',
+    //     'plan_id',
+    //     'payment_date',
+    //     'payment_method',
+    //     'transaction_id',
+    //     'payer_id',
+    //     'charge_id',
+    //     'amount',
+    //     'currency',
+    //     'payment_status',
+    //     'webhook_received',
+    //     'webhook_data',
+    // ];
+
 }

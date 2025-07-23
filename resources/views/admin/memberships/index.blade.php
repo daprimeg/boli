@@ -39,7 +39,7 @@
                   @endif
 
                 <div class="card">
-                    <div class="card-header border-bottom">
+                    <div class="card-header border-bottom">   
                         <div class="row">
                             <div class="col-md-6">
                                 <h5 class="card-title ">Membership</h5>
@@ -50,6 +50,60 @@
                         </div>
                     </div>
                     <div class="card-body">
+                            <div class="row pt-5">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                         <label class="form-label" for="status">Status</label>
+                                         <select name="status" class="form-control">
+                                            <option value="">Select Status</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Expired">Expired</option>
+                                        </select>
+                                      </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                         <label class="form-label">Type</label>
+                                         <select name="type" class="form-control">
+                                            <option value="">Select Type</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="yearly">Yearly</option>
+                                            <option value="custom">Custom</option>  
+                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Start Date:</label>
+                                                <input type="date" name="start_date" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">End Date:</label>
+                                                <input type="date" name="end_date" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 pt-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Search</label>
+                                        <input placeholder="Search.." type="text" class="form-control" name="search"  />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 pt-8" > 
+                                  <button type="button" id="searchBtn" class="btn btn-primary">Search</button>
+                                </div>
+                        </div>
 
                         <div class="row pt-5">
                             <div class="col-md-8">
@@ -62,7 +116,7 @@
                                 <span style="padding-left: 5px" class="pl-2 pageinfo">0</span>
                             </div>
                             <div class="col-md-4 text-end">
-                              <input style="max-width: 300px"  placeholder="Search.." type="text" class="d-inline form-control" name="search"  />
+                             
                             </div>
                         </div>
 
@@ -72,6 +126,7 @@
                                      <tr>
                                         <th>#</th>
                                         <th>User</th>
+                                        <th>Type</th>
                                         <th>Plan</th>
                                         <th>Status</th>
                                         <th>Start Date</th>
@@ -97,7 +152,18 @@
                     processing: true,
                     ordering:false,
                     serverSide: true,
-                    ajax: "{{URL::to('/admin/memberships')}}",
+                    ajax:{
+                        url:"{{ URL::to('/admin/memberships')}}",
+                        data:function (d){
+
+                            d.status = $('select[name=status]').val();
+                            d.type = $('select[name=type]').val();
+                            d.start_date = $('input[name=start_date]').val();
+                            d.end_date = $('input[name=end_date]').val();
+                            d.search = $('input[name=search]').val();
+                            
+                        }
+                    }
                 });
 
                 table.on('draw.dt', function () {
@@ -105,8 +171,8 @@
                     $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
                 });
 
-                $("input[name='search']").on('keyup change', function () {
-                    table.search(this.value).draw();
+                $("#searchBtn").click(function () {
+                    table.draw();
                 });
 
                 $("select[name='length']").on('change', function () {
