@@ -18,6 +18,8 @@ class CheckUserStatus
     public function handle(Request $request, Closure $next): Response
     {
 
+        
+
         // $auth = Auth::user();
         // if($auth->user_type == 0){
 
