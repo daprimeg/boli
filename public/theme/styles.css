@@ -88,10 +88,32 @@ body {
 }
 
 
+.dropdown-menu {
+    background-color: var( --items-background) !important;
+    backdrop-filter: blur(1px) !important; 
+    text-align: left;
+    /* min-width: 200px; */
+  }
+
+  .dropdown-item {
+    color: white; 
+    padding: 10px 20px;
+    text-align: left !important;
+  }
+
+  .dropdown-item:hover {
+    background-color: var(--text-color) !important; /* hover effect */
+  }
+
+  .nav-link.dropdown-toggle {
+    cursor: pointer;
+  }
+
 /* nave bar img  */
 .navbar-brand img {
   height: 35px;
 }
+
 
 /* nave bar end  */
 
