@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 ->count();
 
             $timeAuctions = DB::table('auctions')
-                ->whereRaw("LOWER(auction_type) = 'time auction'")
+                ->whereRaw("auction_type = 'time auction'")
                 ->where('auction_date', '<=', Carbon::now())
                 ->where('end_date', '>=', Carbon::now())
                 ->count();
@@ -91,9 +91,28 @@ class DashboardController extends Controller
             DB::raw('COUNT(auctions.id) as auctions'),
         ])->first();
 
+
+
+        $online = Auctions::query();
+        $online = $online->where('auction_type', 'Online Auction');
+        $online = $online->select([
+            DB::raw('COUNT(auctions.id) as onlineauctions'),
+        ])->first();
+
+
+
+
+        $time = Auctions::query();
+        $time = $time->where('auction_type', 'Time Auction');
+        $time = $time->select([
+            DB::raw("COUNT(auctions.id) as timeauctions"),
+        ])->first();
+
         return response()->json(
         [
             "data" => $data->auctions,
+            "online" => $online->onlineauctions,
+            "time" => $time->timeauctions,
         ]
         ,200);
     }

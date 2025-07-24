@@ -163,6 +163,8 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
             dataType: "json",
             success: function (response) {
                 $('.getTotalAuctions').text(response.data);
+                $('.getOnlineAuctions').text(response.online);
+                $('.getTimeAuctions').text(response.time);
             }
         });
     }
