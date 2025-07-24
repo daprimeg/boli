@@ -17,9 +17,9 @@
                   <p class="mb-1">Total Auctions</p>
                   <p class="mb-0">
                      <small class="text-body-secondary">Live Auctions: </small>
-                     <span class="text-heading fw-medium me-2">{{ $onlineAuctions }}</span>
+                     <span class="text-heading fw-medium me-2 getOnlineAuctions"></span>
                      <small class="text-body-secondary">Time Auctions: </small>
-                     <span class="text-heading fw-medium me-0">{{ $timeAuctions }} </span>
+                     <span class="text-heading fw-medium me-0 getTimeAuctions"> </span>
                   </p>
                </div>
                </div>
