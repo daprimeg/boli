@@ -94,7 +94,7 @@
                                    <div class="col-md-4 pt-8" > 
                                 <button type="button" id="searchBtn" class="btn btn-primary">Search</button>
                             </div>
-                            </div>
+                        </div>
                           
                         
                         <div class="row pt-5">

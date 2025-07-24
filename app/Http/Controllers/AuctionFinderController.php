@@ -143,13 +143,14 @@ class AuctionFinderController extends Controller
 
             //Base Query
             $query = Vehicle::join('auctions','auctions.id','=','vehicles.auction_id')
+            ->join('auction_platform','auction_platform.id','=','auctions.platform_id')
             ->join('make','make.id','=','vehicles.make_id')
             ->join('model','model.id','=','vehicles.model_id')
             ->join('model_variant','model_variant.id','=','vehicles.variant_id');
 
             
-            if($request->has('plateform_id') && $request->plateform_id != ''){
-                 $query->where('vehicles.auction_id',explode(',',$request->plateform_id));
+            if($request->has('platform_id') && $request->platform_id != ''){
+                 $query->where('auctions.platform_id',$request->platform_id);
             }
 
             if($request->has('vehicle_types') && $request->vehicle_types != ''){
@@ -256,7 +257,7 @@ class AuctionFinderController extends Controller
                 ->limit($perPage)
                 ->select([
                  'vehicles.*',
-                 'auctions.name',
+                 'auction_platform.name',
                  'auctions.auction_date as auction_date',
 
                  'make.name as make_name',
@@ -576,102 +577,102 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
 
  public function auctionScheduler(Request $request){
 
- if ($request->ajax()) {
-    // $search = $request->input('search.value');
-    
-    $start = $request->input('start') ?? 0;
-    $length = $request->input('length') ?? 10;
+            if ($request->ajax()) {
+                // $search = $request->input('search.value');
+                
+                $start = $request->input('start') ?? 0;
+                $length = $request->input('length') ?? 10;
 
-    $query = DB::table('auctions')
-        ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id');
-        // ->leftJoin('auction_center', 'auctions.platform_id', '=', 'auction_center.auction_platform_id');
+                $query = DB::table('auctions')
+                    ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id');
+                    // ->leftJoin('auction_center', 'auctions.platform_id', '=', 'auction_center.auction_platform_id');
 
-    // if (!empty($search)) {
-    //     $query->where(function ($q) use ($search) {
-    //         $q->where('auction_platform.name', 'like', "%{$search}%")
-    //           ->orWhere('auction_center.name', 'like', "%{$search}%")
-    //           ->orWhere('auctions.auction_date', 'like', "%{$search}%");
-    //     });
-    // }
+                // if (!empty($search)) {
+                //     $query->where(function ($q) use ($search) {
+                //         $q->where('auction_platform.name', 'like', "%{$search}%")
+                //           ->orWhere('auction_center.name', 'like', "%{$search}%")
+                //           ->orWhere('auctions.auction_date', 'like', "%{$search}%");
+                //     });
+                // }
 
-    if ($request->has('platform_id') && $request->platform_id != '') {
-        $query->where('auctions.platform_id', $request->platform_id);
+                if ($request->has('platform_id') && $request->platform_id != '') {
+                    $query->where('auctions.platform_id', $request->platform_id);
+                }
+
+                if ($request->has('date_range') && $request->date_range != '') {
+                        
+                            $dateRange = $request->input('date_range');
+                            $now = \Carbon\Carbon::now();
+
+                            $fromDate = match ($dateRange) {
+                                'today' => $now->copy()->startOfDay(),
+                                'yesterday' => $now->copy()->subDay()->startOfDay(),
+                                'last_week' => $now->copy()->subWeek(),
+                                'last_month' => $now->copy()->subMonth(),
+                                'past_3_months' => $now->copy()->subMonths(3),
+                                default => $now->copy()->subMonths(3),
+                            };
+
+                            $toDate = $now->copy()->endOfDay();
+
+                            // $query->whereBetween('auctions.auction_date', [$fromDate->toDateString(),$toDate->toDateString()]);
+                            $query = $query->whereBetween('auctions.auction_date', [$fromDate, $toDate]);
+
+                }
+            
+                $totalData = clone $query;
+
+                $data = $query ->select(
+                        'auctions.id',
+                        'auction_platform.name as platform_name',
+                        // 'auction_center.name as center_name',
+                        // 'auctions.total_vehicles', 
+                        'auctions.auction_date',
+                        'auctions.status',
+                        DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
+                    )
+                    
+                    ->offset($start)
+                    ->limit($length)
+                    ->get()
+                    ->map(function ($auction) {
+                        $view = URL::to('/auctionfinder');
+
+                        // ✅ Add status badge with color
+                        $statusColor = match (strtolower($auction->status)) {
+                            'planned'   => 'danger',
+                            'in progress' => 'warning',
+                            'update' => 'success',
+                            'cancel'    => 'primary',
+                            default     => 'secondary',
+                        };
+
+                        $statusBadge = '<span class="badge bg-' . $statusColor . '">' . ucfirst($auction->status ?? '-') . '</span>';
+
+                        return [
+                            $auction->platform_name ?? 'N/A',
+                            $auction->center_name ?? 'Unknown',
+                            $auction->car_count,
+                            $auction->auction_date ?? '-',
+                            $statusBadge ?? '-',
+                        
+                            '<a href="'.$view.'" class="btn btn-sm btn-primary">View</a> 
+                            '
+                        ];
+                    });
+            
+
+                return [
+                    "draw" => intval($request->input('draw')),
+                    "recordsTotal" => $totalData->count(),
+                    "recordsFiltered" => $totalData->count(),
+                    "data" => $data
+                ];
+            }
+
+
+          return view('user.auctionscheduler.index');
     }
 
-    if ($request->has('date_range') && $request->date_range != '') {
-               
-                $dateRange = $request->input('date_range');
-                $now = \Carbon\Carbon::now();
-                $fromDate = match ($dateRange) {
-                    'today' => $now->copy()->startOfDay(),
-                    'yesterday' => $now->copy()->subDay()->startOfDay(),
-                    'last_week' => $now->copy()->subWeek(),
-                    'last_month' => $now->copy()->subMonth(),
-                    'past_3_months' => $now->copy()->subMonths(3),
-                    default => $now->copy()->subMonths(3),
-                };
-
-                $toDate = $now->copy()->endOfDay();
-                $query->whereBetween('auctions.auction_date', [$fromDate->toDateString(), $toDate->toDateString()]);
-
-    }
-  
-    $totalData = clone $query;
-
-    $data = $query ->select(
-            'auctions.id',
-            'auction_platform.name as platform_name',
-            // 'auction_center.name as center_name',
-            // 'auctions.total_vehicles', 
-            'auctions.auction_date',
-            'auctions.status',
-            DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
-        )
-        
-        ->offset($start)
-        ->limit($length)
-        ->get()
-        ->map(function ($auction) {
-            $view = URL::to('/auctionfinder');
-
-            // ✅ Add status badge with color
-            $statusColor = match (strtolower($auction->status)) {
-                'planned'   => 'danger',
-                'in progress' => 'warning',
-                'update' => 'success',
-                'cancel'    => 'primary',
-                default     => 'secondary',
-            };
-
-            $statusBadge = '<span class="badge bg-' . $statusColor . '">' . ucfirst($auction->status ?? '-') . '</span>';
-
-            return [
-                $auction->platform_name ?? 'N/A',
-                $auction->center_name ?? 'Unknown',
-                $auction->car_count,
-                $auction->auction_date ?? '-',
-                $statusBadge ?? '-',
-               
-                '<a href="'.$view.'" class="btn btn-sm btn-primary">View</a> 
-                 '
-            ];
-        });
-  
-
-    return [
-        "draw" => intval($request->input('draw')),
-        "recordsTotal" => $totalData->count(),
-        "recordsFiltered" => $totalData->count(),
-        "data" => $data
-    ];
-}
-
-
-    
-
-    
-
-    return view('user.auctionscheduler.index');
- }
 
 }

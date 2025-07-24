@@ -24,12 +24,31 @@ class MembershipController extends Controller
             $query = Membership::Leftjoin('users', 'users.id', '=', 'memberships.user_id')
             ->Leftjoin('membership_plans', 'membership_plans.id', '=', 'memberships.plan_id');
 
-             if (!empty($search)) {
+
+            if($request->has('status') && $request->status != '') {
+                $query->where('memberships.membership_status',$request->status);
+            }
+
+            if($request->has('type') && $request->type != '') {
+                $query->where('memberships.membership_type',$request->type);
+            }
+
+            if ($request->has('start_date') && $request->start_date != '') {
+                $query->whereDate('memberships.membership_start_date', $request->start_date);
+            }
+
+            if ($request->has('end_date') && $request->end_date != '') {
+                $query->whereDate('memberships.membership_expiry_date', $request->end_date);
+            }
+
+            if (!empty($search)) {
                 $query->where(function ($q) use ($search) {
                     
                     $q->where('memberships.membership_id', 'like', "%{$search}%")
                     ->orWhere('users.firstName', 'like', "%{$search}%")
                     ->orWhere('users.surname', 'like', "%{$search}%")
+                    ->orWhere('memberships.membership_type', 'like', "%{$search}%")
+                    
                     ->orWhere('users.personalEmail', 'like', "%{$search}%")
                     ->orWhere('membership_plans.plan_name', 'like', "%{$search}%");
 
@@ -54,8 +73,8 @@ class MembershipController extends Controller
             ->map(function ($item) {
         
                     
-                    $html = '<a href="'.URL::to('/admin/memberships/'.$item->membership_id.'/edit').'" class="btn btn-sm btn-primary">Edit</a>
-                        <form action="'.URL::to('/admin/memberships/'.$item->membership_id).'/destroy" method="POST" style="display:inline-block;">
+                    $html = '<a href="'.URL::to('/admin/memberships/'.$item->id.'/edit').'" class="btn btn-sm btn-primary">Edit</a>
+                        <form action="'.URL::to('/admin/memberships/'.$item->id).'/destroy" method="POST" style="display:inline-block;">
                             '.csrf_field().method_field('POST').'
                             <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
                         </form>';
@@ -68,8 +87,9 @@ class MembershipController extends Controller
                     };
                 
                   return [
-                      $item->membership_id,
+                      $item->id,
                       $item->firstName . ' ' . $item->surname . '<br><small class="text-muted">' . $item->personalEmail . '</small>',
+                      ucfirst($item->membership_type),
                       $item->plan_name . '<br><small class="text-muted">£' . number_format($item->price, 2) . '</small>',
                      '<span class="badge ' . $badgeClass . '">' . $item->membership_status . '</span>',
                       $item->membership_start_date ? \Carbon\Carbon::parse($item->membership_start_date)->format('Y-m-d') : '',
@@ -107,7 +127,8 @@ class MembershipController extends Controller
     {
         $membership = Membership::with(['user', 'plan'])->findOrFail($id);
         $plans = Plan::all();
-        $paymentMethods = ['paypal', 'stripe', 'manual'];
+        
+        $paymentMethods = ['stripe','manual'];
 
         return view('admin.memberships.edit', compact('membership', 'plans', 'paymentMethods'));
     }
@@ -121,32 +142,30 @@ class MembershipController extends Controller
         $membership = Membership::findOrFail($id);
 
         $request->validate([
-            'plan_id' => 'required|integer',
-            'membership_type' => 'required|string',
+            // 'plan_id' => 'required|integer',
+            // 'membership_type' => 'required|string',
             'membership_status' => 'required|string',
         ]);
 
-        $membership->plan_id = $request->plan_id;
+        // $membership->plan_id = $request->plan_id;
         $membership->membership_status = $request->membership_status;
-        $membership->membership_type = $request->membership_type;
+        // $membership->membership_type = $request->membership_type;
 
-        if ($request->membership_type === 'custom') {
-            $membership->membership_start_date = $request->membership_start_date;
-            $membership->membership_expiry_date = $request->membership_expiry_date;
-        } else {
+        // if ($request->membership_type === 'custom') {
+        //     $membership->membership_start_date = $request->membership_start_date;
+        //     $membership->membership_expiry_date = $request->membership_expiry_date;
+        // } else {
+        //     $start = now();
+        //     $end = match($request->membership_type) {
+        //         'weekly' => $start->copy()->addWeek(),
+        //         'monthly' => $start->copy()->addMonth(),
+        //         'yearly' => $start->copy()->addYear(),
+        //     };
 
-            // auto-calculate based on type
-            $start = now();
-            $end = match($request->membership_type) {
-                'weekly' => $start->copy()->addWeek(),
-                'monthly' => $start->copy()->addMonth(),
-                'yearly' => $start->copy()->addYear(),
-            };
+        //     $membership->membership_start_date = $start;
+        //     $membership->membership_expiry_date = $end;
 
-            $membership->membership_start_date = $start;
-            $membership->membership_expiry_date = $end;
-
-        }
+        // }
 
         $membership->save();
         return redirect('/admin/memberships')->with('success', 'Membership updated successfully.');
@@ -193,7 +212,7 @@ class MembershipController extends Controller
 
         MembershipPayment::create([
             'user_id' => $user->id,
-            'membership_id' => $membership->membership_id,
+            'membership_id' => $membership->id,
             'plan_id' => $request->plan_id,
             'payment_date' => now(),
             'payment_method' => $request->payment_method,

@@ -23,6 +23,7 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
+        
         $request->validate([
             'plan_id' => 'required|exists:membership_plans,id',
             'payment_method' => 'required|in:stripe,paypal',
@@ -34,7 +35,9 @@ class CheckoutController extends Controller
         $startDate = now();
         $expiryDate = now()->addMonths($plan->duration_value);
 
+
         try {
+
             $membership = Membership::create([
                 'user_id' => $user->id,
                 'plan_id' => $plan->id,

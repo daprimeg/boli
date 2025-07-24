@@ -127,7 +127,7 @@ class InterestController extends Controller
         ->pluck('last_bid');
 
         return view('user.interests.create', [
-        
+            'fuel_types' => FuelType::list(),
             'years' => Year::list(),
             'transmission' => $transmission,
             'grade' => $grade,
@@ -168,7 +168,6 @@ class InterestController extends Controller
 
 
         $intrest = Interest::create([
-            'user_id' =>  Auth::id(),
             'title' =>  $request->title,
             'make_id' =>  $request->make_id,
             'model_id' =>  $request->model_id,
@@ -182,19 +181,21 @@ class InterestController extends Controller
             'cc_from' => $request->cc_from,
             'cc_to' => $request->cc_to,
             'grade' => $request->grade,
+            'fuel_type' => $request->fuel_type,
             'former_keeper' => $request->former_keeper,
             'price_from' => $request->price_from,
             'price_to' => $request->price_to,
+            'user_id' => Auth::user()->id,
+
             'created_at' => Carbon::now(),
             'updated_at' => NULL,
         ]);
 
-         return redirect('/admin/intrest')->with('success', 'Interest created successfully.');
+         return redirect('/interest')->with('success', 'Interest created successfully.');
     }
 
     public function edit(Interest $interest)
     {
-
 
         $transmission = Vehicle::whereNotNull('transmission')
         ->where('transmission', '!=', '')
