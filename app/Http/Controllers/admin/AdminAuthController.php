@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Vehicle;
 use App\Models\Auctions;
 use App\Models\Auction;
+use App\Models\AuctionPlatform;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -42,81 +43,52 @@ class AdminAuthController extends Controller
     public function dashboard(Request $request)
     {
           
-        if (Auth::check() && Auth::user()->user_type == 1) {
-
-            if ($request->ajax()) {
-
-
-            $search = $request->input('search.value');
-            $start = $request->input('start') ?? 0;
-            $length = $request->input('length') ?? 10;
-            
-            
-         $query = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
-
-         ;
-
-         $totalData = clone $query;
-
-            $data = $query->select(
-                    'auction_platform.name AS auction_platform_name',
-                     DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
-
-
-                  
-
-            )
-            // ->orderBy('created_at','desc')
-            ->offset($start)
-            ->limit($length)
-            ->get()
-            ->map(function ($auctions) {
-                  return [
-                      $auctions->auction_platform_name,
-                      $auctions->car_count,
-                      $auctions->remaining ?? 'N/A',
-                      $auctions->lots ?? 'N/A',
-              
-                    //   $Vehicle->fuel_type,
-                    //   $Vehicle->mileage,
-                    //   $Vehicle->transmission,
-                    //   $Vehicle->cc,
-                    
-                    //  '<a href="' .URL::to('admin/vehicles/edit/'.$Vehicle->id). '" class="btn btn-sm btn-warning">Edit</a>',
-                    //  '<a href="' .URL::to('admin/vehicles/delete/'.$Vehicle->id). '" class="btn btn-sm btn-danger">Delete</a>',
-                  ];
-              });
-
-    
-                return  [
-                    "data" => $data
-                ];
-        }
-
-                  
-
-     
-         
+        if (Auth::check() && Auth::user()->user_type == 1)
+        {
 
             $totalVehicles = DB::table('vehicles')->count();
+            $totalSoldVehicles= DB::table('vehicles')
+            ->whereRaw("LOWER(bidding_status) = 'on sale'")
+            ->count();
+
+            $notSoldVehicles= DB::table('vehicles')
+            ->whereRaw("LOWER(bidding_status) = 'Reserve not met'")
+            ->count();
+
+            $provisionalVehicles= DB::table('vehicles')
+            ->whereRaw("LOWER(bidding_status) = 'provisional'")
+            ->count();
+
             $totalAuctions = DB::table('auctions')->count();
-            $liveAuctions = DB::table('auctions')
-            ->where('status', 'live') // adjust if needed
-            ->where('auction_date', '<=', Carbon::now())
-            ->where('end_date', '>=', Carbon::now())
-            ->count();
+
+            $onlineAuctions = DB::table('auctions')
+                ->whereRaw("LOWER(auction_type) = 'Online Auction'")
+                ->where('auction_date', '<=', Carbon::now())
+                ->where('end_date', '>=', Carbon::now())
+                ->count();
+
+            $timeAuctions = DB::table('auctions')
+                ->whereRaw("LOWER(auction_type) = 'time auction'")
+                ->where('auction_date', '<=', Carbon::now())
+                ->where('end_date', '>=', Carbon::now())
+                ->count();
+
             $inProgressAuctions = DB::table('auctions')
+            ->whereRaw("LOWER(status) = 'In Progress'")
             ->where('auction_date', '<=', Carbon::now())
             ->where('end_date', '>=', Carbon::now())
             ->count();
+
             $inProgressVehicles = DB::table('vehicles')
             ->join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
+            ->whereRaw("LOWER(status) = 'In Progress'")
             ->where('auctions.auction_date', '<=', Carbon::now())
             ->where('auctions.end_date', '>=', Carbon::now())
             ->count();
-            return view('admin.dashboard' , compact('inProgressVehicles','totalVehicles', 'totalAuctions','inProgressAuctions', 'liveAuctions'));
+
+            return view('admin.dashboard.dashboard' , compact('notSoldVehicles','provisionalVehicles' ,'inProgressVehicles','totalSoldVehicles', 'totalVehicles', 'totalAuctions','inProgressAuctions', 'onlineAuctions', 'timeAuctions'));
     
- }
+        }
         return redirect('/admin')->with('error', 'Access denied');
     }
 
@@ -132,5 +104,82 @@ class AdminAuthController extends Controller
     
         return view('user.profile.userprofile', compact('alerts'));
     }
+
+    public function onlineAuctions(Request $request)
+    {
+        if ($request->ajax()) {
+            $onlineData = AuctionPlatform::leftJoin('auctions', 'auction_platform.id', '=', 'auctions.platform_id')
+                ->whereRaw("LOWER(auctions.auction_type) = 'online auction'")
+                ->select(
+                    'auction_platform.name AS auction_platform_name',
+                    'auctions.auction_type',
+                    DB::raw('(  SELECT COUNT(*)  FROM vehicles v  JOIN auctions a ON v.auction_id = a.id  WHERE a.platform_id = auctions.platform_id  ) as car_count'),
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'on sale') as remaining"),
+                    DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as lots'),
+                )
+                ->get()
+                ->map(function ($auction) {
+                    return [
+                        $auction->auction_platform_name,
+                        $auction->car_count,
+                        $auction->remaining ?? 'N/A',
+                        $auction->lots ?? 'N/A',
+                    ];
+                });
+
+            return response()->json(['data' => $onlineData]);
+        }
+    }
+
+    public function timeAuctions(Request $request)
+    {
+        if ($request->ajax()) {
+            $timeData = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+                ->whereRaw("LOWER(auctions.auction_type) = 'time auction'")
+                ->select(
+                    'auction_platform.name AS auction_platform_name',
+                    'auctions.auction_type',
+                    DB::raw('(  SELECT COUNT(*)  FROM vehicles v  JOIN auctions a ON v.auction_id = a.id  WHERE a.platform_id = auctions.platform_id  ) as car_count'),
+                    'auctions.end_date'
+                )
+                ->get()
+                ->map(function ($auction) {
+                    return [
+                        $auction->auction_platform_name,
+                        $auction->car_count,
+                        $auction->end_date,
+                    ];
+                });
+
+            return response()->json(['data' => $timeData]);
+        }
+    }
+
+
+    public function favouriteAuctions(Request $request)
+    {
+        if ($request->ajax()) {
+            $favData = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+                ->select(
+                    'auction_platform.name AS auction_platform_name',
+                    'auctions.auction_type',
+                    DB::raw("( SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Reserve not met') as reauction"),
+                    DB::raw("( SELECT COUNT(*)  FROM vehicles  WHERE vehicles.auction_id = auctions.id ) as total_lots"),
+                )
+                ->get()
+                ->map(function ($auction) {
+                    return [
+                        $auction->auction_platform_name,
+                        $auction->auction_type,
+                        $auction->total_lots,
+                        $auction->values ?? '🔥',
+                        $auction->reauction,
+                    ];
+                });
+
+            return response()->json(['data' => $favData]);
+        }
+    }
+    
 
 }

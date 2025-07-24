@@ -33,8 +33,8 @@ class AVehicleController extends Controller
             $search = $request->input('search.value');
             $start = $request->input('start') ?? 0;
             $length = $request->input('length') ?? 10;
-            
-            
+         
+           
          $query = Vehicle::leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id')
          ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
          ->leftJoin('make', 'make.id', '=', 'vehicles.make_id')
@@ -63,9 +63,13 @@ class AVehicleController extends Controller
         $query->where('auctions.platform_id',  $request->platform_id );
     }
     // Example: Filtering by plan_type
-    if ($request->has('center_id') && $request->center_id != '') {
-        $query->where('auctions.center_id',  $request->center_id );
+    
+
+  if ($request->has('center_id') && $request->center_id != '') {
+        $query->where('vehicles.center_id',  $request->center_id );
     }
+
+
     // Example: Filtering by plan_type
     if ($request->has('auction_type') && $request->auction_type != '') {
         $query->where('auctions.auction_type',  $request->auction_type);
@@ -79,7 +83,7 @@ class AVehicleController extends Controller
             $totalData = clone $query;
 
             $data = $query->select(
-                    'Vehicles.*',
+                    'vehicles.*',
                     'auctions.name AS auction_name',
                     'vehicle_type.name AS vehicle_name',
                     'make.name AS make_name',
@@ -140,12 +144,6 @@ class AVehicleController extends Controller
                     "data" => $data
                 ];
         }
-        // $auctionsPlatform = AuctionPlatform:: all();
-    $auctionsPlatform = DB::table('auction_platform')->pluck('name', 'id');
-    $auctionCenter = DB::table('auction_center')->pluck('name', 'id');
-    $auctions = DB::table('auctions')->pluck('name', 'id');
-
-
     
         return view('admin.vehicles.index', compact('auctionsPlatform' , 'auctionCenter','auctions'));
     }

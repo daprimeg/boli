@@ -497,6 +497,11 @@ Route::prefix('admin')->group(function () {
     // Admin Authentication
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
     Route::get('/profile', [AdminAuthController::class, 'profile']);
+    Route::get('/dashboard/online', [AdminAuthController::class, 'onlineAuctions']);
+    Route::get('/dashboard/time', [AdminAuthController::class, 'timeAuctions']);
+    Route::get('/dashboard/favourite', [AdminAuthController::class, 'favouriteAuctions']);
+    Route::get('/dashboard/stats', [AdminAuthController::class, 'statsAuctions']);
+
 
     Route::get('/', [AdminAuthController::class, 'showLoginForm']);
     Route::post('/login', [AdminAuthController::class, 'login']);
