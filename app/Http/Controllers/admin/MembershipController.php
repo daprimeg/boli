@@ -42,7 +42,7 @@ class MembershipController extends Controller
             }
 
             if (!empty($search)) {
-                $query->where(function ($q) use ($search) {
+                $query = $query->where(function ($q) use ($search) {
                     
                     $q->where('memberships.membership_id', 'like', "%{$search}%")
                     ->orWhere('users.firstName', 'like', "%{$search}%")

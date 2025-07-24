@@ -39,6 +39,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebController;
 use App\Http\Middleware\CheckUserStatus;
 use App\Models\BodyType;
@@ -50,6 +51,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleModel;
 use App\Models\VehicleType;
 use Carbon\Carbon;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -241,12 +243,10 @@ Route::post('/stripe/webhook', [WebhookController::class, 'handleStripeWebhook']
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/subscriptions', [DashboardController::class,'subscriptions']);
-    Route::post('/subscriptions_submit', [DashboardController::class,'subscriptions_submit']);
+    Route::get('/subscriptions', [SubscriptionController::class,'subscriptions']);
+    Route::post('/subscriptions_submit', [SubscriptionController::class,'subscriptions_submit']);
 
 });
-
-
 
 
 // User Authenticated Routes
@@ -256,7 +256,13 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::resource('associate-users', \App\Http\Controllers\AssociateUserController::class);
 
             // User Dashboard & Pages
-            Route::view('/dashboard', 'user/dashboard')->name('dashboard');
+            Route::get('/dashboard',[DashboardController::class,'dashboard'])->name('dasahbord');
+            Route::get('/dashboard/online', [DashboardController::class, 'onlineAuctions']);
+            Route::get('/dashboard/time', [DashboardController::class, 'timeAuctions']);
+            Route::get('/dashboard/favourite', [DashboardController::class, 'favouriteAuctions']);
+            Route::get('/dashboard/stats', [DashboardController::class, 'statsAuctions']);
+
+             Route::get('/dashboard/getTotalAuctions', [DashboardController::class, 'getTotalAuctions']);
 
 
             Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');
@@ -317,10 +323,6 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::post('/changepassword', [ProfileSettingController::class, 'changePassword'])->name('profile.changePassword');
             Route::get('/changepassword', [ProfileSettingController::class, 'editSecuritySettings'])->name('profile.editSecuritySettings');
 
-            // Route::view('/billingplan', 'user.profile.billingplans')->name('profile.billingplans');
-
-            
-            Route::get('/billingplan', [DashboardController::class, 'billingplan']);
             Route::get('/userprofile', [AlertController::class, 'userAlerts'])->name('profile.userprofile');
 
             // Ticket Management
@@ -510,10 +512,7 @@ Route::prefix('admin')->group(function () {
     // Admin Authentication
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
     Route::get('/profile', [AdminAuthController::class, 'profile']);
-    Route::get('/dashboard/online', [AdminAuthController::class, 'onlineAuctions']);
-    Route::get('/dashboard/time', [AdminAuthController::class, 'timeAuctions']);
-    Route::get('/dashboard/favourite', [AdminAuthController::class, 'favouriteAuctions']);
-    Route::get('/dashboard/stats', [AdminAuthController::class, 'statsAuctions']);
+
 
 
     Route::get('/', [AdminAuthController::class, 'showLoginForm']);

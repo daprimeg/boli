@@ -145,7 +145,7 @@ class AVehicleController extends Controller
                 ];
         }
     
-        return view('admin.vehicles.index', compact('auctionsPlatform' , 'auctionCenter','auctions'));
+        return view('admin.vehicles.index',[]);
     }
     // public function ajaxData(Request $request)
     // {

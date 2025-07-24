@@ -251,12 +251,11 @@
               </div>
           
 
-      
-
+  
+        </div>
+        </div>
+      </div>
     </div>
-    </div>
-  </div>
-</div>
           <!-- Left Side: Stats -->
          
             <br><br>

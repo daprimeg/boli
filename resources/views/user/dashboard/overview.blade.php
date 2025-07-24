@@ -12,7 +12,7 @@
                      <div class="avatar">
                      <div class="dot-box"><div class="dot"></div></div>
                      </div>
-                     <h4 class="mb-0">{{$totalAuctions}}</h4>
+                     <h4 class="mb-0"><span class="getTotalAuctions"></span></h4>
                   </div>
                   <p class="mb-1">Total Auctions</p>
                   <p class="mb-0">
