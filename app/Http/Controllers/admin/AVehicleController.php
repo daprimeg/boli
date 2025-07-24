@@ -40,6 +40,7 @@ class AVehicleController extends Controller
          ->leftJoin('make', 'make.id', '=', 'vehicles.make_id')
          ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
          ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
+         ->leftJoin('auction_center', 'auction_center.id', '=', 'vehicles.center_id')
          ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
          ->leftJoin('color', 'color.id', '=', 'vehicles.color_id')
          ;
@@ -86,6 +87,7 @@ class AVehicleController extends Controller
                     'vehicles.*',
                     'auctions.name AS auction_name',
                     'vehicle_type.name AS vehicle_name',
+                    'auction_center.name AS center_name',
                     'make.name AS make_name',
                     'model.name AS model_name',
                     'model_variant.name AS model_variant_name',
@@ -126,6 +128,7 @@ class AVehicleController extends Controller
                       $Vehicle->body_type_name,
                       $Vehicle->year,
                       $Vehicle->color_name,
+                      $Vehicle->center_name,
                     //   $Vehicle->fuel_type,
                     //   $Vehicle->mileage,
                     //   $Vehicle->transmission,

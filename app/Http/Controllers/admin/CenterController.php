@@ -21,9 +21,14 @@ class CenterController extends Controller
 
         $search = $request->input('q');
         $models = AuctionCenter::where('name', 'like', "%$search%")
-            ->select('id', 'name as text')
-            ->limit(20)
-            ->get();
+            ->select('id', 'name as text');
+            
+        if($request->has('platform_id') && $request->platform_id){
+            $models = $models->where('auction_center.auction_platform_id',$request->platform_id);
+        }
+            
+        $models = $models->limit(20)
+        ->get();
 
         return response()->json(['results' => $models]);
   }

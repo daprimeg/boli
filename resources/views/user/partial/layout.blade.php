@@ -239,7 +239,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu">
           <div class="app-brand demo">
-<img src="{{ asset('public/images/logo/logo.png') }}">
+              <img src="{{ asset('public/images/logo/logo.png') }}">
           </div>
 
           <div class="menu-inner-shadow"></div>
@@ -261,10 +261,6 @@ table.dataTable tbody th, table.dataTable tbody td {
               </a>
             </li>
 
-
-
-
-
             <li class="menu-item">              
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-pointer-heart"></i>
@@ -283,17 +279,6 @@ table.dataTable tbody th, table.dataTable tbody td {
                 </li>
                 </ul>
             </li>
-
-
-
-
-
-
-
-
-
-
-
 
             <li class="menu-item">              
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -319,37 +304,12 @@ table.dataTable tbody th, table.dataTable tbody td {
                 </ul>
             </li>
 
-
-
-
-
-
-
-
-
-
-
-
-
             <li class="menu-item">
               <a href="{{ route('pricing') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-clock-dollar"></i>
                 <div data-i18n="Pricing">Pricing</div>
               </a>
             </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">

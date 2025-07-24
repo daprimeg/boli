@@ -32,62 +32,92 @@
     }
 
 
+    .select2-container--default .select2-selection--single {
+        background: #1d2632 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 33px!important;
+    }
+
+
+    .centers{
+        /* min-width: 400px; */
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        height: 30px;
+    }
+
+     .centers:hover{
+        min-width: auto;
+        height: auto;
+        overflow: inherit
+    }
+
+    
+    .centers span{
+        display: block;
+        padding: 2px;
+        background: #000f21;
+        color: #0073e5;
+        margin: 1px 2px;
+    }
+
    
 </style>
 @endsection
 @section('content')
-
-
-    <div class="container-xxl flex-grow-1 container-p-y">
-
-        <div class="row">
-                @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-            <div class="row pb-2">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select name="platform_id" id="platform_id" class="form-control platform " >
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select name="center_id" id="center_id" class="form-control center">
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <form method="GET" id="lengthForm">
-                        <div class="d-flex align-items-center " style="margin-left: 50px">
-                            <span class="pageinfo" style="font-size: 15px; padding-right: 6px; "></span>
-                            <select style="max-width:200px;padding:3px; "  name="length" class="">
-                                <option value="10">10</option>
-                                <option value="100">100</option>
-                                <option value="200">200</option>
-                                <option value="500">500</option>
-                            </select>
+    <div class="container-fluid ">
+        <div class="row" style="padding-top: 50px" >
+            <div class="col-md-12">
+                 @if(session('success'))
+                     <div class="alert alert-success">{{ session('success') }}</div>
+                 @endif
+            </div>
+            <div class="col-12 pb-2">
+                <div class="row">
+                       <div class="col-md-2">
+                            <div class="form-group">
+                                <select name="platform_id" id="platform_id" class="form-control platform " >
+                                </select>
+                            </div>
                         </div>
-                    </form>
-                </div>
-                <div class="col-md-5">
-                    <div class="d-flex justify-content-end">
-                        <div class="invoice_status">
-                            <select id="date_range" name="date_range" class="form-select">
-                                <option value="today">Today</option>
-                                <option value="yesterday">Yesterday</option>
-                                <option value="last_week">Last Week</option>
-                                <option value="last_month">Last Month</option>
-                                <option selected value="past_3_months">Past 3 Months</option>
-                            </select>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <select name="center_id" id="center_id" class="form-control center">
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-md-3 align-self-center">
+                                <div class="d-flex align-items-center">
+                                    <span class="pageinfo" style="font-size: 15px; padding-right: 6px; "></span>
+                                    <select style="max-width:200px;padding:3px; "  name="length" class="">
+                                        <option value="10">10</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                        <option value="500">500</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="d-flex justify-content-end">
+                                <div class="invoice_status">
+                                    <select id="date_range" name="date_range" class="form-select">
+                                        <option value="today">Today</option>
+                                        <option value="yesterday">Yesterday</option>
+                                        <option value="last_week">Last Week</option>
+                                        <option value="last_month">Last Month</option>
+                                        <option selected value="past_3_months">Past 3 Months</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
-            <div class="row">
-                <!-- Right: 9col Table section -->
-                <div class="col-md-12">
-                    <div class="card">
+            <div class="col-12 pt-5">
+                <div class="card">
+                    <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table id="vehicleTable" class="table  table-sm">
                                 <thead>
@@ -106,6 +136,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 @endsection
@@ -119,13 +150,11 @@
                     ajax:{
                         url: "{{ url('auctionscheduler') }}",
                         data:function (d){
+
                             d.platform_id = $('#platform_id').val();
                             d.center_id = $('#center_id').val();
-
-                            d.auction_type = $('#auction_type').val();
                             d.date_range = $('select[name=date_range]').val();
-                           
-                            
+
                         }
                     },
                 });
@@ -136,6 +165,14 @@
                     var info = table.page.info();
                     $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
                 });
+
+                 $('select[name=center_id]').change(function (e) { 
+                       table.search(this.value).draw();
+                 });
+
+                 $('select[name=platform_id]').change(function (e) { 
+                       table.search(this.value).draw();
+                 });
 
                  $('select[name=date_range]').change(function (e) { 
                        table.search(this.value).draw();
@@ -153,6 +190,40 @@
                  $('#searchBtn').on('click', function() {
                    table.ajax.reload();
                 });   
+
+
+                $('select[name=platform_id]').select2({
+                    placeholder: 'Select Platform',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/platforms/getPlatforms')}}",
+                        dataType: 'json',
+                    }
+                }).on('change', function () {
+                    $('select[name=center_id]').val(null).trigger('change');
+                });
+
+
+                $('select[name=center_id]').select2({
+                    placeholder: 'Select Center',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/centers/getCenters')}}",
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                q: params.term,
+                                platform_id: $('select[name=platform_id]').val()
+                            };
+                        }
+                    }
+                }).on('change', function () {
+                 
+                });
+
+
+
+
     });
     </script>
 @endsection

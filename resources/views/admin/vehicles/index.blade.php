@@ -130,6 +130,7 @@
                                         <th>Body Type</th>
                                         <th>Year</th>
                                         <th>Color</th>
+                                        <th>Center</th>
                                         {{-- <th>Feul Type</th>
                                         <th>Transmission</th>
                                         <th>Milage</th>

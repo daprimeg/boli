@@ -583,9 +583,7 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
                 $start = $request->input('start') ?? 0;
                 $length = $request->input('length') ?? 10;
 
-                $query = DB::table('auctions')
-                    ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id');
-                    // ->leftJoin('auction_center', 'auctions.platform_id', '=', 'auction_center.auction_platform_id');
+                $query = Auctions::join('auction_platform','auction_platform.id','=','auctions.platform_id');
 
                 // if (!empty($search)) {
                 //     $query->where(function ($q) use ($search) {
@@ -598,6 +596,19 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
                 if ($request->has('platform_id') && $request->platform_id != '') {
                     $query->where('auctions.platform_id', $request->platform_id);
                 }
+
+                if ($request->has('center_id') && $request->center_id != '') {
+                    $query->whereExists(function ($sub) use ($request) {
+                        $sub->select(DB::raw(1))
+                            ->from('vehicles')
+                            ->whereColumn('vehicles.auction_id', 'auctions.id')
+                            ->where('vehicles.center_id', $request->center_id);
+                    });
+                }
+
+                // if ($request->has('center_id') && $request->platform_id != '') {
+                //     $query->where('auctions.platform_id', $request->platform_id);
+                // }
 
                 if ($request->has('date_range') && $request->date_range != '') {
                         
@@ -630,6 +641,12 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
                         'auctions.auction_date',
                         'auctions.status',
                         DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
+                        DB::raw('(
+                            SELECT GROUP_CONCAT(DISTINCT auction_center.name)
+                            FROM vehicles
+                            JOIN auction_center ON auction_center.id = vehicles.center_id
+                            WHERE vehicles.auction_id = auctions.id
+                        ) as center_names')
                     )
                     
                     ->offset($start)
@@ -649,13 +666,20 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
 
                         $statusBadge = '<span class="badge bg-' . $statusColor . '">' . ucfirst($auction->status ?? '-') . '</span>';
 
+                        $centers = "<div class='centers' >";
+                        foreach (explode(',',$auction->center_names) as $key => $value) {
+                          $centers .="<span>".$value."</span>";
+                        }
+
+                        $centers .="</div>";
+
+
                         return [
-                            $auction->platform_name ?? 'N/A',
-                            $auction->center_name ?? 'Unknown',
+                            "<span class='text-primary' >".$auction->platform_name ?? 'N/A'."</span>",
+                            $centers,
                             $auction->car_count,
-                            $auction->auction_date ?? '-',
+                            "<span>".date('d-m-Y',strtotime($auction->auction_date))."</span><br><span>".date('h:s A',strtotime($auction->auction_date))."</span>",
                             $statusBadge ?? '-',
-                        
                             '<a href="'.$view.'" class="btn btn-sm btn-primary">View</a> 
                             '
                         ];
