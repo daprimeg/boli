@@ -83,6 +83,7 @@
                 <div data-i18n="Your Profile">Your Profile</div>
               </a>
             </li>
+            
             <li class="menu-item {{ request()->is('profilesetting*') || request()->is('changepassword*')  ? 'active' : '' }}">
               <a href="{{ route('profile.edit') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-settings"></i>

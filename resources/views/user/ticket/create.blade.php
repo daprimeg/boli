@@ -127,7 +127,7 @@
                             data.append('upload', file);
                             data.append('_token', '{{ csrf_token() }}');
 
-                            fetch("{{ route('blogs.upload') }}", {
+                            fetch("{{ url('//upload-image') }}", {
                                 method: 'POST',
                                 body: data
                             })
