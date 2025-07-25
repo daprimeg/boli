@@ -109,6 +109,40 @@ body {
     cursor: pointer;
   }
 
+
+  .dropdown-menu {
+    background-color: var( --items-background) !important;
+    backdrop-filter: blur(1px) !important; 
+    text-align: left;
+  }
+
+  .dropdown-item {
+    color: white; 
+    padding: 10px 20px;
+    text-align: left !important;
+  }
+
+  .dropdown-item:hover {
+    background-color: var(--text-color) !important; /* hover effect */
+  }
+
+  .nav-link.dropdown-toggle {
+    cursor: pointer;
+  }
+
+
+
+  .expore-megemenu{
+    border: 1px solid var(--items-border-colur);
+    padding: 11px 17px ;
+    color: white;
+    border-radius: 5px;
+    width: 250px;
+  }
+  .expore-megemenu:hover{
+      cursor: pointer;
+      border :1px solid var(--text-color) !important;
+  }
 /* nave bar img  */
 .navbar-brand img {
   height: 35px;
