@@ -78,6 +78,15 @@
             opacity: 0.65;
         }
 
+        .table{
+            width: 100%!important;
+        }
+
+        .table-responsive {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: !important;
+        }
+
         .template-customizer-open-btn{
             display: none!important;
         }
@@ -91,12 +100,20 @@
                 color: var(--bs-card-title-color)!important;
         }
 
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: var(--bs-body-color)!important;
+        }
+
         .select2-dropdown{
                 background-color:var(--bs-paper-bg)!important;
         }
 
         .select2-container .select2-selection--single {
             height: 36px!important;
+        }
+
+        .select2{
+            width: 100%!important;
         }
     </style>
     <link rel="icon" type="image/x-icon" href="{{ asset('public/assets/img/favicon/favicon.ico') }}" />

@@ -41,16 +41,17 @@ class MembershipController extends Controller
                 $query->whereDate('memberships.membership_expiry_date', $request->end_date);
             }
 
-            if (!empty($search)) {
+            if ($request->has('search') && $request->search != '') {
+                $search = $request->search;
                 $query = $query->where(function ($q) use ($search) {
-                    
-                    $q->where('memberships.membership_id', 'like', "%{$search}%")
+                    // dd($search);
+                    $q->where('memberships.id', 'like', "%{$search}%")
                     ->orWhere('users.firstName', 'like', "%{$search}%")
                     ->orWhere('users.surname', 'like', "%{$search}%")
-                    ->orWhere('memberships.membership_type', 'like', "%{$search}%")
+                    ->orWhere('memberships.membership_type','like',"%{$search}%")
                     
-                    ->orWhere('users.personalEmail', 'like', "%{$search}%")
-                    ->orWhere('membership_plans.plan_name', 'like', "%{$search}%");
+                    ->orWhere('users.personalEmail', 'like',"%{$search}%")
+                    ->orWhere('membership_plans.plan_name','like',"%{$search}%");
 
                     // ->orWhere('users.companyName', 'like', "%{$search}%");
                 });

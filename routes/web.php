@@ -262,7 +262,15 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/dashboard/favourite', [DashboardController::class, 'favouriteAuctions']);
             Route::get('/dashboard/stats', [DashboardController::class, 'statsAuctions']);
 
-             Route::get('/dashboard/getTotalAuctions', [DashboardController::class, 'getTotalAuctions']);
+            Route::get('/dashboard/getTotalAuctions', [DashboardController::class, 'getTotalAuctions']);
+            Route::get('/dashboard/getOnlineAuctions', [DashboardController::class, 'getOnlineAuctions']);
+            Route::get('/dashboard/getTimeAuctions', [DashboardController::class, 'getTimeAuctions']);
+            Route::get('/dashboard/vehicleStates', [DashboardController::class, 'vehicleStates']);
+            Route::get('/dashboard/bestAuctions', [DashboardController::class, 'bestAuctions']);
+            Route::get('/dashboard/getPreviousLots', [DashboardController::class, 'getPreviousLots']);
+            Route::get('/dashboard/upComingVehicles', [DashboardController::class, 'upComingVehicles']);
+
+            
 
 
             Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');

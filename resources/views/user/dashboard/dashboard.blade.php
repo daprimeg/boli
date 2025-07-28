@@ -239,10 +239,10 @@
 
       <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            @include('user.dashboard.overview')
+            @include('user.dashboard.intrest')
           </div>
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            @include('user.dashboard.intrest')
+            @include('user.dashboard.overview')
           </div>
       </div>
 
