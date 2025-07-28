@@ -77,8 +77,8 @@
                                             <select name="membership_status" class="form-control" required>
                                                 <option value="Active" {{ $membership->membership_status == 'Active' ? 'selected' : '' }}>Active</option>
                                                 <option value="Inactive" {{ $membership->membership_status == 'Inactive' ? 'selected' : '' }}>Inactive</option>
-                                                <option value="Pending" {{ $membership->membership_status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                <option value="Expired" {{ $membership->membership_status == 'Expired' ? 'selected' : '' }}>Expired</option>
+                                                {{-- <option value="Pending" {{ $membership->membership_status == 'Pending' ? 'selected' : '' }}>Pending</option> --}}
+                                                {{-- <option value="Expired" {{ $membership->membership_status == 'Expired' ? 'selected' : '' }}>Expired</option> --}}
                                             </select>
                                         </div>
                                     </div>

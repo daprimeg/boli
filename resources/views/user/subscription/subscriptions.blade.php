@@ -88,6 +88,7 @@
                         <table class="invoice-list-table table border-top">
                             <thead>
                                  <tr>
+                                    <th>ID</th>
                                     <th>Date</th>
                                     <th>Plan Name</th>
                                     <th>Start</th>
@@ -98,10 +99,9 @@
                             </thead>
                              <tbody>
                                 @foreach ($membership as $key => $item)
-                                @if(!$item->payment)
-                                <?php continue; ?>
-                                @endif
+                            
                                     <tr>
+                                        <td>{{$item->id}}</td>
                                         <td>{{$item->created_at}}</td>
                                         <td>{{$item->plan->plan_name}}</td>
                                         <td>{{date('d-M-Y',strtotime($item->membership_start_date))}}</td>
@@ -109,9 +109,14 @@
                                         <td>{{$item->payment->amount}} {{$item->payment->currency}}</td>
                                         <td>
                                              @if($current && $current->id == $item->id)
-                                            <span class="badge bg-secondary">Active</span>
-                                            @else
-                                            <span class="badge bg-danger">Expired</span>
+                                                  <span class="badge bg-secondary">Active</span>
+                                              @else
+                                                 @if($item->membership_status == 'Active')
+                                                    <span class="badge bg-danger">Expired </span>
+                                                   @else
+                                                    <span class="badge bg-danger">Disabled</span>
+                                                 @endif
+                                                 
                                             @endif
                                         </td>
                                     </tr>

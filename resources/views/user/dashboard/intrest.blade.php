@@ -33,14 +33,14 @@
                         <div class="avatar">
                         <div class="dot-box"><div class="dot"></div></div>
                         </div>
-                        <h4 class="mb-0">{{$totalAuctions}}</h4>
+                        <h4 class="mb-0"><span class="total_auctions"></span></h4>
                     </div>
                     <p class="mb-1">Total Auctions</p>
                     <p class="mb-0">
                         <small class="text-body-secondary">Live Auctions: </small>
-                        <span class="text-heading fw-medium me-2">{{ $onlineAuctions }}</span>
+                        <span class="text-heading fw-medium me-2 online_auctions"></span>
                         <small class="text-body-secondary">Time Auctions: </small>
-                        <span class="text-heading fw-medium me-0">{{ $timeAuctions }} </span>
+                        <span class="text-heading fw-medium me-0 time_auctions"> </span>
                     </p>
                 </div>
                 </div>
@@ -52,12 +52,12 @@
                         <div class="avatar me-4">
                         <div class="dot-box"><div class="dot"></div></div>
                         </div>
-                        <h4 class="mb-0"> {{ $inProgressAuctions }}</h4>
+                        <h4 class="mb-0"> <span class="inprogress_auctions"></span></h4>
                     </div>
                     <p class="mb-1">Inprogress Auctions</p>
                     <p class="mb-0">
                         <small class="text-body-secondary">Vehicles: </small>
-                        <span class="text-heading fw-medium me-2">{{ $inProgressVehicles }}</span>
+                        <span class="text-heading fw-medium me-2"><span class="inprogress_auctions"></span></span>
                         <a href=""> <span class="text-heading fw-medium me-0">view</span></a>
                     </p>
                 </div>
@@ -71,12 +71,12 @@
                         <div class="avatar me-4">
                         <div class="dot-box"><div class="dot"></div></div>
                         </div>
-                        <h4 class="mb-0"> {{$totalVehicles }}</h4>
+                        <h4 class="mb-0"> <span class="total_vehicles"></span></h4>
                     </div>
                     <p class="mb-1">Total Vehicles</p>
                     <p class="mb-0">
                         <small class="text-body-secondary">Sold</small>
-                        <span class="text-heading fw-medium me-2">{{$totalSoldVehicles }}</span>
+                        <span class="text-heading fw-medium me-2"><span class="sold_vehicles"></span></span>
                         <a href=""> <span class="text-heading fw-medium me-0">view</span></a>
                     </p>
                 </div>
@@ -90,12 +90,12 @@
                             <div class="avatar me-4">
                             <div class="dot-box"><div class="dot"></div></div>
                             </div>
-                            <h4 class="mb-0">42</h4>
+                            <h4 class="mb-0"><span class="duplicate_vehicles"></span></h4>
                         </div>
                         <p class="mb-1">Vehicle in reauctions</p>
                         <p class="mb-0">
                             <small class="text-body-secondary">Vehicles </small>
-                            <span class="text-heading fw-medium me-2">36</span>
+                            <span class="text-heading fw-medium me-2"><span class="duplicate_vehicles"></span></span>
                             <a href=""> <span class="text-heading fw-medium me-0">view</span></a>
                         </p>
                     </div>
@@ -170,7 +170,7 @@
           <button class="btn card btn-sm">Setting</button>
           <select class="form-select form-select-sm card border-secondary text-white" >
             {{-- @foreach($auctions_platform as $platform) --}}
-            <option value="sdff">dffsfd</option>
+            <option value="selectAuc">Select Auc</option>
             {{-- @endforeach --}}
           </select>
         </div>
@@ -261,43 +261,44 @@
             <br><br>
         <div class="row">
             <!-- Left Side: Stats -->
-            <div class="col-md-7 ">
-                    <div class="card h-100">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="card-title m-0 me-2">Your Favourite </h5>
-                            <div class="dropdown">
-                                <button class="btn border  waves-effect form-select" type="button" id="teamMemberList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Select Auction
-                                </button>
-                            </div>
-                        </div>
-                        <div class="table-responsive" >
-                            <table class="table table-borderless border-top" id="previousLots">
-                                <thead class="border-bottom">
-                                    <tr>
-                                    <th>Platform</th>
-                                    <th>Auction Type</th>
-                                    <th>Total Lots</th>
-                                    <th>Value</th>
-                                    <th>Reauction</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+            <div class="col-md-7 getPreviousLots">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title m-0 me-2">Previous Lots</h5>
+                        <div class="col-md-4">
+                            <select class="form-control platform" name="platform_ids[]" multiple>
+                                <option value="">Select</option>
+                                <!-- Populate options dynamically via backend -->
+                            </select>
                         </div>
                     </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless border-top">
+                            <thead class="border-bottom">
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Auction Type</th>
+                                    <th>Sold</th>
+                                    <th>Provisional</th>
+                                    <th>Not Sold</th>
+                                </tr>
+                            </thead>
+                            <tbody class="rows">
+                                <!-- Results go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-5 ">
-                    <div class="card h-100">
+
+            <div class="col-md-5 upComingVehicles">
+                    <div class="card h-100 ">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title m-0 me-2">Upcoming Vehicles</h5>
-                        <div class="dropdown">
-                            <button class="btn border form-select waves-effect" type="button" id="teamMemberList" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Select Auction
-                            </button>
-                        
-                        </div>
+                       <select class="form-control platform" name="platform_ids[]" multiple>
+                                <option value="">Select</option>
+                                <!-- Populate options dynamically via backend -->
+                            </select>
                     </div>
                     <div class="table-responsive" >
                         <table class="table table-borderless border-top" id="">
@@ -306,10 +307,10 @@
                                 <th>Vehicle</th>
                                 <th>Mileage</th>
                                 <th>Report</th>
-                                <th>Autroboli</th>
+                                <th>Autoboli</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="rows">
                             </tbody>
                         </table>
                     </div>

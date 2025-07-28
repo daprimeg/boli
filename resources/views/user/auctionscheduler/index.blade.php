@@ -77,19 +77,19 @@
             </div>
             <div class="col-12 pb-2">
                 <div class="row">
-                       <div class="col-md-2">
+                       <div class="col-lg-12 col-xl-2 py-2">
                             <div class="form-group">
                                 <select name="platform_id" id="platform_id" class="form-control platform " >
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-lg-12 col-xl-2 py-2">
                             <div class="form-group">
                                 <select name="center_id" id="center_id" class="form-control center">
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 align-self-center">
+                        <div class="col-12 col-sm-6 col-xl-4 align-self-center py-2">
                                 <div class="d-flex align-items-center">
                                     <span class="pageinfo" style="font-size: 15px; padding-right: 6px; "></span>
                                     <select style="max-width:200px;padding:3px; "  name="length" class="">
@@ -100,7 +100,7 @@
                                     </select>
                                 </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-12 col-sm-6 col-xl-4 py-2">
                             <div class="d-flex justify-content-end">
                                 <div class="invoice_status">
                                     <select id="date_range" name="date_range" class="form-select">
@@ -119,7 +119,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
-                            <table id="vehicleTable" class="table  table-sm">
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>Platform</th>
@@ -144,7 +144,7 @@
     <script>
         $(document).ready(function () {
 
-             let table = $('#vehicleTable').DataTable({
+             let table = $('.table').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax:{

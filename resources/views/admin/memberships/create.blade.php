@@ -104,7 +104,6 @@
                                     <div class="form-group">
                                         <label class="form-label">Payment Method:</label>
                                         <select name="payment_method" class="form-control" required>
-                                            <option value="paypal">PayPal</option>
                                             <option value="stripe">Stripe</option>
                                             <option value="manual">Manual</option>
                                         </select>

@@ -156,24 +156,205 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
   });
 
 
+    function getOnlineAuctions() {
+        
+        $.ajax({
+            url:path+"/dashboard/getOnlineAuctions",
+            dataType: "json",
+            data:{
+               platform_id: $('.getOnlineAuctions .platform').val(),
+            },
+            success: function (response) {
+
+                $('.getOnlineAuctions .rows').html('');
+
+                response.forEach(res => {
+                    let lots = res.onsale_vehicles + res.provisional_vehicles;
+                    $('.getOnlineAuctions .rows').append(`
+                      <tr>
+                        <td>${res.name}</td>
+                        <td>${res.total_auctions}</td>
+                        <td>${res.total_auctions - res.total_auctions}</td>
+                        <td>${res.vehicles_total} / ${res.vehicles_total - lots}</td>
+                      </tr>
+                    `);
+
+                });
+            }
+        });
+    }
+    $('.getOnlineAuctions .platform').change(() => {
+        getOnlineAuctions();
+    });
+
+
+
+
+    function getTimeAuctions() {
+        
+        $.ajax({
+            url:path+"/dashboard/getTimeAuctions",
+            dataType: "json",
+            data:{
+               platform_id: $('.getTimeAuctions .platform').val(),
+            },
+            success: function (response) {
+
+                $('.getTimeAuctions .rows').html('');
+
+                response.forEach(res => {
+                    let lots = res.onsale_vehicles + res.provisional_vehicles;
+                    $('.getTimeAuctions .rows').append(`
+                      <tr>
+                        <td>${res.name}</td>
+                        <td>${res.total_auctions}</td>
+                        <td>${res.end_date}</td
+                      </tr>
+                    `);
+
+                });
+            }
+        });
+    }
+    $('.getTimeAuctions .platform').change(() => {
+        getTimeAuctions();
+    });
+
+    function getPreviousLots() {
+        $.ajax({
+            url: path + "/dashboard/getPreviousLots",
+            dataType: "json",
+            data: {
+                platform_ids: $('.getPreviousLots ').val() // collect platform IDs
+            },
+            success: function (response) {
+                $('.getPreviousLots .rows').html('');
+
+                response.forEach(res => {
+                    $('.getPreviousLots .rows').append(`
+                    <tr>
+                        <td>${res.name}</td>
+                        <td>${res.auction_type}</td>
+                        <td>${res.onsale_vehicles}</td>
+                        <td>${res.provisional_vehicles}</td>
+                        <td>${res.notsold_vehicles ?? 0}</td>
+                    </tr>
+                    `);
+                });
+            }
+        });
+    }
+
+    $('.getPreviousLots .platform').change(() => {
+        getPreviousLots();
+    });
+    function upComingVehicles() {
+        $.ajax({
+            url: path + "/dashboard/upComingVehicles",
+            dataType: "json",
+            data: {
+                platform_ids: $('.upComingVehicles ').val() // collect platform IDs
+            },
+            success: function (response) {
+                $('.upComingVehicles .rows').html('');
+
+                response.forEach(res => {
+                    $('.upComingVehicles .rows').append(`
+                    <tr>
+                        <td>${res.vehicle_id}</td>
+                        <td>${res.mileage}</td>
+                        <td>${res.report}</td>
+                        <td>${res.autoboli}</td>
+                    </tr>
+                    `);
+                });
+            }
+        });
+    }
+
+    $('.upComingVehicles .platform').change(() => {
+        upComingVehicles();
+    });
+
+
+
+    
+
+
+
     function getTotalAuctions() {
     
         $.ajax({
             url:path+"/dashboard/getTotalAuctions",
             dataType: "json",
             success: function (response) {
-                $('.getTotalAuctions').text(response.data);
-                $('.getOnlineAuctions').text(response.online);
-                $('.getTimeAuctions').text(response.time);
+
+                $('.total_auctions').text(response.total_auctions);
+                $('.online_auctions').text(response.online_auctions);
+                $('.time_auctions').text(response.time_auctions);
+                $('.inprogress_auctions').text(response.inprogress_auctions);
+                $('.inprogress_vehicles').text(response.inprogress_vehicles);
+                $('.onsale_vehicles').text(response.onsale_vehicles);
+                $('.total_vehicles').text(response.total_vehicles);
+                $('.provisional_vehicles').text(response.provisional_vehicles);
+                $('.duplicate_vehicles').text(response.duplicate_vehicles);
+                $('.sold_vehicles').text(response.sold_vehicles);
+
             }
         });
     }
 
 
+
+    
+
+    
+    function vehicleStates() {
+    
+        $.ajax({
+            url:path+"/dashboard/vehicleStates",
+            dataType: "json",
+            success: function (response) {
+                
+                let rows = response.onsale_vehicles +  response.provisional_vehicles;
+                let remaining = response.total_vehicles - rows;
+
+                $(".vehicleStates .sold").text(response.sold_vehicles);
+                $(".vehicleStates .provisional").text(response.provisional_vehicles);
+                $(".vehicleStates .not_sold").text(remaining);
+                 $(".vehicleStates .done").text(rows);
+
+                
+
+                
+                // $('.total_auctions').text(response.total_auctions);
+                // $('.online_auctions').text(response.online_auctions);
+                // $('.time_auctions').text(response.time_auctions);
+                // $('.inprogress_auctions').text(response.inprogress_auctions);
+                // $('.inprogress_vehicles').text(response.inprogress_vehicles);
+                // $('.onsale_vehicles').text(response.onsale_vehicles);
+                // $('.total_vehicles').text(response.total_vehicles);
+                // $('.provisional_vehicles').text(response.provisional_vehicles);
+                // $('.duplicate_vehicles').text(response.duplicate_vehicles);
+                // $('.sold_vehicles').text(response.sold_vehicles);
+
+            }
+        });
+    }
+
+  
+
+
+
+
     function onStart() {
  
         getTotalAuctions();
-        
+        getOnlineAuctions();
+        getTimeAuctions();
+        vehicleStates();
+        bestAuctions();
+        getPreviousLots();
 
     }
 
@@ -183,18 +364,18 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
 
          onStart();
 
-                    $('#onlineAuctionsTable').DataTable({
-                        paging: false,
-                        searching: false,
-                        processing: true,
-                        serverSide: true,
-                        ajax:{
-                                url:path+"/dashboard/online",
-                                data:function (d){
+                    // $('#onlineAuctionsTable').DataTable({
+                    //     paging: false,
+                    //     searching: false,
+                    //     processing: true,
+                    //     serverSide: true,
+                    //     ajax:{
+                    //             url:path+"/dashboard/online",
+                    //             data:function (d){
 
-                                }
-                            }
-                        });
+                    //             }
+                    //         }
+                    //     });
             
             
                     $('#timeAuctionsTable').DataTable({

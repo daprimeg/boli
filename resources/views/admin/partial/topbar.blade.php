@@ -27,11 +27,11 @@
               <!-- /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-                    <div class="nav-item navbar-search-wrapper px-md-0 px-2 mb-0">
+                    {{-- <div class="nav-item navbar-search-wrapper px-md-0 px-2 mb-0">
                       <a class="nav-item nav-link search-toggler d-flex align-items-center px-0" href="javascript:void(0);">
                         <span class="d-inline-block text-body-secondary fw-normal" id="autocomplete"></span>
                       </a>
-                  </div>
+                  </div> --}}
 
                 @if(Auth::user()->user_type == 0)
                 <!-- Quick links  -->
