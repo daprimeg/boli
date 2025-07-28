@@ -18,6 +18,20 @@
   .nav-link.dropdown-toggle {
     cursor: pointer;
   }
+
+
+
+  .expore-megemenu{
+    border: 1px solid var(--items-border-colur);
+    padding: 11px 17px ;
+    color: white;
+    border-radius: 5px;
+    width: 250px;
+  }
+  .expore-megemenu:hover{
+      cursor: pointer;
+      border :1px solid var(--text-color) !important;
+  }
 /* Add inside your existing <style> tag */
 /* .dropdown-menu {
   background-color: var(--items-background) !important;
@@ -77,26 +91,65 @@
  <div class="dropdown-menu w-100 mt-0 border-0 shadow"
      style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: rgba(18, 18, 18, 0.57) !important; "
      aria-labelledby="exploreDropdown">
- <div class="container py-4" 
-     style="background: var(--items-background); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 40% !important;">
+ <div class="container py-3" 
+     style="background: var(--background-color); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 43% !important;">
       <div class="row">
-        <div class="col-md-4">
-          <h6 class=" text-white ps-2">Resorese</h6>
-          <a class="dropdown-item" href="#">Blcoge</a>
-          <a class="dropdown-item" href="#">Analytics</a>
-          <a class="dropdown-item" href="#">Integrations</a>
+        <div class="col-md-4 ">
+          <div class="expore-megemenu">
+            <div class="d-flex">
+              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+              <h6 class=" text-white ">Resorese</h6>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </div>
+
+           <div class="expore-megemenu mt-3">
+            <div class="d-flex">
+              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+              <h6 class=" text-white ">Resorese</h6>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </div>
         </div>
         <div class="col-md-4">
-          <h6 class=" text-white ps-2">Community</h6>
-          <a class="dropdown-item" href="#">Events</a>
-          <a class="dropdown-item" href="#">Forums</a>
-          <a class="dropdown-item" href="#">Partnerships</a>
+         <div class="expore-megemenu">
+            <div class="d-flex">
+              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+              <h6 class=" text-white ">Resorese</h6>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </div>
+
+           <div class="expore-megemenu mt-3">
+            <div class="d-flex">
+              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+              <h6 class=" text-white ">Resorese</h6>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </div>
         </div>
         <div class="col-md-4">
-          <h6 class=" text-white ps-2">Company</h6>
-          <a class="dropdown-item" href="#">About Us</a>
-          <a class="dropdown-item" href="#">Careers</a>
-          <a class="dropdown-item" href="#">Contact</a>
+          <div class="expore-megemenu">
+            <div class="d-flex">
+              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+              <h6 class=" text-white ">Resorese</h6>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </div>
+
+           <div class="expore-megemenu mt-3">
+            <div class="d-flex">
+              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+              <h6 class=" text-white ">Resorese</h6>
+            </div>
+            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </div>
         </div>
       </div>
     </div>
@@ -110,31 +163,59 @@
     Resources
   </a>
     <div class="dropdown-menu w-100 mt-0 border-0 shadow"
-     style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: rgba(18, 18, 18, 0.57) !important; "
+     style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: #000e2038 !important; "
      aria-labelledby="exploreDropdown">
- <div class="container py-4" 
-     style="background: var(--items-background); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 40% !important;">
-      <div class="row">
-        <div class="col-md-4">
-          <h6 class=" text-white ps-2">Explore</h6>
-          <a class="dropdown-item" href="#">Bloge</a>
-          <a class="dropdown-item" href="#">Analytics</a>
-          <a class="dropdown-item" href="#">Integrations</a>
-        </div>
-        <div class="col-md-4">
-          <h6 class=" text-white ps-2">Community</h6>
-          <a class="dropdown-item" href="#">Events</a>
-          <a class="dropdown-item" href="#">Forums</a>
-          <a class="dropdown-item" href="#">Partnerships</a>
-        </div>
-        <div class="col-md-4">
-          <h6 class=" text-white ps-2">Company</h6>
-          <a class="dropdown-item" href="#">About Us</a>
-          <a class="dropdown-item" href="#">Careers</a>
-          <a class="dropdown-item" href="#">Contact</a>
-        </div>
-      </div>
+ <div class="container py-3" 
+     style="background: var(--background-color); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 40% !important;">
+       <div class="row mb-3">
+    
+    <!-- Learn Section -->
+    <div class="col-md-4">
+      <h5 style="color: white;">Learn</h5>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Guidance</a></p>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">how to use</a></p>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Best auction</a></p>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Find valuation</a></p>
     </div>
+
+    <!-- Discover Section -->
+    <div class="col-md-4">
+      <h5 style="color: WHITE;">Discover</h5>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Blog</a></p>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">News</a></p>
+      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Trader Experience</a></p>
+      {{-- <p><span style="color: white;">📘</span></p> --}}
+    </div>
+
+    <!-- Slider Placeholder -->
+    <div class="col-md-4">
+  <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="public/theme/fav.png" class="d-block w-75" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="public/theme/fav.png" class="d-block w-75" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="public/theme/fav.png" class="d-block w-75" alt="...">
+    </div>
+  </div>
+  
+</div>
+
+    </div>
+
+    
+    <div class="d-flex justify-content-end  py-2 " style="position: relative; top: 40px; border-radius: 8px; background-color: #0e1b2b !important; border-top: 1px solid grey; ">
+    <a href="#" style="color: white; text-decoration: none; "><span style="color: white;">📘</span> Download</a>
+    <a href="#" style="color: white; text-decoration: none; padding-left: 18px;"><span style="color: white;">📘</span> About us</a>
+    <a href="#" style="color: white; text-decoration: none; padding-left: 18px;"><span style="color: white;">📘</span> Contact us</a>
+  </div>
+  </div>
+  
+    </div>
+    
   </div>
 
 </li>
