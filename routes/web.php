@@ -266,9 +266,16 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/dashboard/getOnlineAuctions', [DashboardController::class, 'getOnlineAuctions']);
             Route::get('/dashboard/getTimeAuctions', [DashboardController::class, 'getTimeAuctions']);
             Route::get('/dashboard/vehicleStates', [DashboardController::class, 'vehicleStates']);
+
             Route::get('/dashboard/bestAuctions', [DashboardController::class, 'bestAuctions']);
-            Route::get('/dashboard/getPreviousLots', [DashboardController::class, 'getPreviousLots']);
+            Route::get('/dashboard/previousLots', [DashboardController::class, 'previousLots']);
+            Route::get('/dashboard/lookbestauction', [DashboardController::class, 'lookbestauction']);
+
             Route::get('/dashboard/upComingVehicles', [DashboardController::class, 'upComingVehicles']);
+            Route::get('/dashboard/getValuation', [DashboardController::class, 'getValuation']);
+            
+
+            
 
             
 

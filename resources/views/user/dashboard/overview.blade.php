@@ -4,118 +4,42 @@
       <div class="row g-6"> 
             <div class="col-md-12">
 
-        <div class="row">
-          <div class="col-lg-3 col-sm-6">
-               <div class="card card-border-shadow-primary h-100">
-               <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                     <div class="avatar">
-                     <div class="dot-box"><div class="dot"></div></div>
-                     </div>
-                     <h4 class="mb-0"><span class="total_auctions">0</span></h4>
-                  </div>
-                  <p class="mb-1">Total Auctions</p>
-                  <p class="mb-0">
-                     <small class="text-body-secondary">Live Auctions:</small>
-                     <span class="text-heading fw-medium me-2 online_auctions">0</span>
-                     <small class="text-body-secondary">Time Auctions: </small>
-                     <span class="text-heading fw-medium me-0 time_auctions">0</span>
-                  </p>
-               </div>
-               </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-               <div class="card card-border-shadow-primary h-100">
-               <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                     <div class="avatar me-4">
-                     <div class="dot-box"><div class="dot"></div></div>
-                     </div>
-                     <h4 class="mb-0"> <span class="inprogress_auctions"></span></h4>
-                  </div>
-                  <p class="mb-1">Inprogress Auctions</p>
-                  <p class="mb-0">
-                     <small class="text-body-secondary">Vehicles: </small>
-                     <span class="text-heading fw-medium me-2"> <span class="inprogress_vehicles"></span></span>
-                      {{-- <a href=""> <span class="text-heading fw-medium me-0">view</span></a> --}}
-                  </p>
-               </div>
-               </div>
-            </div>
-
-            <div class="col-lg-3 col-sm-6">
-               <div class="card card-border-shadow-primary h-100">
-               <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                     <div class="avatar me-4">
-                     <div class="dot-box"><div class="dot"></div></div>
-                     </div>
-                     <h4 class="mb-0"> <span class="total_vehicles" ></span></h4>
-                  </div>
-                  <p class="mb-1">Total Vehicles</p>
-                  <p class="mb-0">
-                     <small class="text-body-secondary">Sold</small>
-                     <span class="text-heading fw-medium me-2"><span class="sold_vehicles"></span></span>
-                    {{-- <a href=""> <span class="text-heading fw-medium me-0">view</span></a> --}}
-                  </p>
-               </div>
-               </div>
-            </div>
-
-            <div class="col-lg-3 col-sm-6">
-               <div class="card card-border-shadow-primary h-100">
-               <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                     <div class="avatar me-4">
-                     <div class="dot-box"><div class="dot"></div></div>
-                     </div>
-                     <h4 class="mb-0"><span class="duplicate_vehicles"></span></h4>
-                  </div>
-                  <p class="mb-1">Vehicle in reauctions</p>
-                  <p class="mb-0">
-                     <small class="text-body-secondary">Vehicles </small>
-                     <span class="text-heading fw-medium me-2"><span class="duplicate_vehicles"></span></span>
-                    {{-- <a href=""> <span class="text-heading fw-medium me-0">view</span></a> --}}
-                  </p>
-               </div>
-               </div>
-            </div>
-            </div>
-        <br><br>
+               @include('user.dashboard.infocard')
+               <br><br>
 
 
-       <div class="row">
-        <div class="getOnlineAuctions col-md-6 col-12">
-            <div class="card h-100">
-               <div class="card-header">
-                  <div class="row">
-                     <div class="col-md-6">
-                        <h5 class="card-title m-0 me-2">Online Auction</h5>
-                     </div>
-                     <div class="col-md-6">
-                        <select class="form-control platform" name="paltform_id[]" multiple >
-                           <option value="">Select</option>
-                        </select>
+               <div class="row">
+               <div class="getOnlineAuctions col-md-6 col-12">
+                     <div class="card h-100">
+                        <div class="card-header">
+                           <div class="row">
+                              <div class="col-md-6">
+                                 <h5 class="card-title m-0 me-2">Online Auction</h5>
+                              </div>
+                              <div class="col-md-6">
+                                 <select class="form-control platform" name="paltform_id[]" multiple >
+                                    <option value="">Select</option>
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="table-responsive" >
+                           <table class="table table-borderless border-top" id="onlineAuctionsTable">
+                              <thead class="border-bottom">
+                                 <tr>
+                                    <th>Platform</th>
+                                    <th>Total Auction</th>
+                                    <th>Remaining</th>
+                                    <th>Lots</th>
+                                 </tr>
+                              </thead>
+                              <tbody class="rows" >
+                                 
+                              </tbody>
+                           </table>
+                        </div>
                      </div>
                   </div>
-               </div>
-               <div class="table-responsive" >
-                  <table class="table table-borderless border-top" id="onlineAuctionsTable">
-                     <thead class="border-bottom">
-                        <tr>
-                           <th>Platform</th>
-                           <th>Total Auction</th>
-                           <th>Remaining</th>
-                           <th>Lots</th>
-                        </tr>
-                     </thead>
-                      <tbody class="rows" >
-                        
-                     </tbody>
-                  </table>
-               </div>
-            </div>
-         </div>
 
             <!-- Left Side: Stats -->
          <div class="col-md-6 vehicleStates" style="background-color: #000f21; padding: 30px; border-radius: 10px; ">

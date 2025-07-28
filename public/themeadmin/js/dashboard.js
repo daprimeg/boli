@@ -73,45 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
 // });
 
 
-const auctionChart = new Chart(document.getElementById('auctionChart').getContext('2d'), {
-    type: 'bar',
-    data: {
-        labels: ['BCA', 'CCA', 'MAG', '1Link', 'CAG'],
-        datasets: [{
-            data: [346, 290, 245, 200, 150],
-            backgroundColor: [
-                '#9b5de5', // BCA
-                '#00bbf9', // CCA
-                '#00f5d4', // MAG
-                '#ef233c', // 1Link
-                '#f4a261'  // CAG
-            ],
-            borderRadius: 20,
-            barThickness: 20
-        }]
-    },
-    options: {
-        indexAxis: 'y',
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    label: context => `${context.raw}`
-                }
-            }
-        },
-        scales: {
-            x: {
-                grid: { color: '#2a2a2a' },
-                ticks: { color: '#bbb' }
-            },
-            y: {
-                grid: { display: false },
-                ticks: { color: '#bbb' }
-            }
-        }
-    }
-});
 
   function toggleChart(button) {
     const chartSection = button.closest('.info-card').querySelector('.chart-section');
@@ -156,6 +117,32 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
   });
 
 
+
+    // getTotalAuctions____________________________________________________________________________
+    function getTotalAuctions() {
+
+        $.ajax({
+            url:path+"/dashboard/getTotalAuctions",
+            dataType: "json",
+            success: function (response) {
+
+                $('.total_auctions').text(response.total_auctions);
+                $('.online_auctions').text(response.online_auctions);
+                $('.time_auctions').text(response.time_auctions);
+                $('.inprogress_auctions').text(response.inprogress_auctions);
+                $('.inprogress_vehicles').text(response.inprogress_vehicles);
+                $('.onsale_vehicles').text(response.onsale_vehicles);
+                $('.total_vehicles').text(response.total_vehicles);
+                $('.provisional_vehicles').text(response.provisional_vehicles);
+                $('.duplicate_vehicles').text(response.duplicate_vehicles);
+                $('.sold_vehicles').text(response.sold_vehicles);
+
+            }
+        });
+    }
+
+
+    // getOnlineAuctions____________________________________________________________________________________
     function getOnlineAuctions() {
         
         $.ajax({
@@ -190,6 +177,7 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
 
 
 
+    // getTimeAuctions_______________________________________________________________________________________
     function getTimeAuctions() {
         
         $.ajax({
@@ -220,34 +208,10 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
         getTimeAuctions();
     });
 
-    function getPreviousLots() {
-        $.ajax({
-            url: path + "/dashboard/getPreviousLots",
-            dataType: "json",
-            data: {
-                platform_ids: $('.getPreviousLots ').val() // collect platform IDs
-            },
-            success: function (response) {
-                $('.getPreviousLots .rows').html('');
 
-                response.forEach(res => {
-                    $('.getPreviousLots .rows').append(`
-                    <tr>
-                        <td>${res.name}</td>
-                        <td>${res.auction_type}</td>
-                        <td>${res.onsale_vehicles}</td>
-                        <td>${res.provisional_vehicles}</td>
-                        <td>${res.notsold_vehicles ?? 0}</td>
-                    </tr>
-                    `);
-                });
-            }
-        });
-    }
 
-    $('.getPreviousLots .platform').change(() => {
-        getPreviousLots();
-    });
+ 
+    // upComingVehicles___________________________________________________________________________
     function upComingVehicles() {
         $.ajax({
             url: path + "/dashboard/upComingVehicles",
@@ -280,35 +244,7 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
 
     
 
-
-
-    function getTotalAuctions() {
-    
-        $.ajax({
-            url:path+"/dashboard/getTotalAuctions",
-            dataType: "json",
-            success: function (response) {
-
-                $('.total_auctions').text(response.total_auctions);
-                $('.online_auctions').text(response.online_auctions);
-                $('.time_auctions').text(response.time_auctions);
-                $('.inprogress_auctions').text(response.inprogress_auctions);
-                $('.inprogress_vehicles').text(response.inprogress_vehicles);
-                $('.onsale_vehicles').text(response.onsale_vehicles);
-                $('.total_vehicles').text(response.total_vehicles);
-                $('.provisional_vehicles').text(response.provisional_vehicles);
-                $('.duplicate_vehicles').text(response.duplicate_vehicles);
-                $('.sold_vehicles').text(response.sold_vehicles);
-
-            }
-        });
-    }
-
-
-
-    
-
-    
+    // vehicleStates_____________________________________________________________________
     function vehicleStates() {
     
         $.ajax({
@@ -322,9 +258,7 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
                 $(".vehicleStates .sold").text(response.sold_vehicles);
                 $(".vehicleStates .provisional").text(response.provisional_vehicles);
                 $(".vehicleStates .not_sold").text(remaining);
-                 $(".vehicleStates .done").text(rows);
-
-                
+                $(".vehicleStates .done").text(rows);
 
                 
                 // $('.total_auctions').text(response.total_auctions);
@@ -342,9 +276,224 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
         });
     }
 
+
+    // lookbestauction_________________________________________________________________________________________
+
+      let lookbestchartInstance;
+
+      function lookbestauction() {
+
+        $.ajax({
+        url: path + "/dashboard/lookbestauction",
+        dataType: "json",
+        data: {
+            platform_id: $('#lookbestauction .platform').val() 
+        },
+        success: function (response) {
+
+                    let lookbestauction = $("#lookbestauction");
+                    let chart = lookbestauction.find(".chart")[0].getContext('2d');
+                  
+
+                 
+
+                    if (lookbestchartInstance) {
+                        lookbestchartInstance.destroy();
+                    }
+
+                    lookbestchartInstance = new Chart(chart, {
+                                type: 'bar',
+                                data: {
+                                    labels: response.labels,
+                                    datasets: [
+                                            {
+                                                label: 'Auction Progress',
+                                                data: response.total,
+                                                backgroundColor: response.colors,
+                                                borderRadius: 10,
+                                                barThickness: 18
+                                            }
+                                        ],
+                                    borderRadius: 10,
+                                    barThickness: 18
+                                
+                            },
+                        options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                // maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: context => `${context.label}: ${context.raw}%`
+                                        }
+                                    }
+                                },
+                                    scales: {
+                                        x: {
+                                            grid: { color: '#2a2a2a' },
+                                            ticks: { color: '#bbb' }
+                                        },
+                                        y: {
+                                            grid: { display: false },
+                                            ticks: { color: '#bbb' }
+                                        }
+                                    }
+                            }
+                        });
+
+                        console.log(response.data);
+                        
+                       lookbestauction.find('.labels-container').html('');
+                       response.data.forEach(element => {
+                              lookbestauction.find('.labels-container').append(`
+                                 <div style="display:flex;align-items:center;margin-bottom:4px;">
+                                    <div style="width:12px;height:12px;background:${element.color};margin-right:8px;"></div>
+                                    <span>${element.label}</span>
+                                    <span class="px-2" >(${element.total})</span>
+                                </div>
+                             `);
+                       }); 
+                       
+             }
+        });
+    }
+
+    $('#lookbestauction .platform').change(() => {
+        lookbestauction();
+    });
+
+   
+
+    
+
+    // getPreviousLots_________________________________________________________________________________________
+    function previousLots() {
+        $.ajax({
+            url: path + "/dashboard/previousLots",
+            dataType: "json",
+            data: {
+                platform_id: $('.previousLots .platform').val() 
+            },
+            success: function (response) {
+            
+                $('.previousLots .rows').html('');
+                response.data.forEach(res => {
+                    $('.previousLots .rows').append(`
+                    <tr>
+                        <td>${res.auction_platform_name}</td>
+                        <td>${res.auction_type}</td>
+                        <td>${res.onSale ?? 0}</td>
+                        <td>${res.onProvisional ?? 0}</td>
+                        <td>${res.onReserve ?? 0}</td>
+                    </tr>
+                    `);
+                });
+
+            }
+        });
+    }
+
+    $('.previousLots .platform').change(() => {
+        previousLots();
+    });
+
+
+
+    
+    // upComingVehicles_________________________________________________________________________________________
+    function upComingVehicles() {
+        $.ajax({
+            url: path + "/dashboard/upComingVehicles",
+            dataType: "json",
+            data: {
+                platform_id: $('.upComingVehicles .platform').val() 
+            },
+            success: function (response) {
+            
+                $('.upComingVehicles .rows').html('');
+                response.data.forEach(res => {
+                    $('.upComingVehicles .rows').append(`
+                    <tr>
+                        <td>${res.make_name} ${res.model_name} ${res.variant_name}</td>
+                        <td>${res.mileage}</td>
+                        <td> <a target="_blank" href="${res.report}"/>View Report</a></td>
+                        <td>0</td>
+                    </tr>
+                    `);
+                });
+
+                $(".upComingVehicles .vehicles_count").text(response.total +" Vehicles");
+
+            }
+        });
+    }
+
+
+      // upComingVehicles_________________________________________________________________________________________
+    function getValuation() {
+        $.ajax({
+            url: path + "/dashboard/getValuation",
+            dataType: "json",
+            data: {
+                platform_id: $('.getValuation .platform').val() 
+            },
+            success: function (response) {
+           
+
+                $('.getValuation .rows').html('');
+                response.data.forEach(res => {
+
+                    $('.getValuation .rows').append(`
+                        <div class="info-card">
+                            <div class="auction-item">
+                                <div class="logo-text">
+                                <img src="" alt="BCA ">
+                                <div>
+                                <div class="price">£22,600</div>
+                                <small class="text-muted">${res.auction_platform_name}</small>
+                                </div>
+                            </div>
+                            <div class="change down">
+                                <button class="toggle-btn minus-icon" onclick="toggleChart(this)">+</button>
+                            </div>
+                            </div>
+                            <div class="chart-section">
+                                <h5><span class="badge rounded-circle bg-primary me-2">&nbsp;</span>Past 3 months</h5>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="price me-2">£22,600</div>
+                                    <small class="text-muted">Average</small>
+                                </div>
+                                <div class="change up">
+                                    <span class="me-1">▲</span> 5.8&amp;
+                                </div>
+                                </div>
+                                <div class="chart-placeholder">
+                                <canvas id="priceChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+                                </div>
+                            </div>
+                    </div>
+                    `);
+                });
+
+
+                // $(".upComingVehicles .vehicles_count").text(response.total +" Vehicles");
+
+            }
+        });
+    }
+
+
+    
   
 
 
+
+    
 
 
     function onStart() {
@@ -353,8 +502,13 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
         getOnlineAuctions();
         getTimeAuctions();
         vehicleStates();
-        bestAuctions();
-        getPreviousLots();
+
+
+        lookbestauction();
+        previousLots();
+        upComingVehicles();
+        getValuation();
+        
 
     }
 
@@ -378,73 +532,52 @@ const auctionChart = new Chart(document.getElementById('auctionChart').getContex
                     //     });
             
             
-                    $('#timeAuctionsTable').DataTable({
-                        paging: false,
-                        searching: false,
-                        processing: true,
-                        serverSide: true,
-                        ajax:{
-                                url:path+"/dashboard/time",
-                                data:function (d){
-
-                                }
-                            }
-                        });
-
-                    $('#favouriteTable').DataTable({
-                        paging: false,
-                        searching: false,
-                        processing: true,
-                        serverSide: true,
-                        ajax:{
-                                url:path+"/dashboard/favourite",
-                                data:function (d){
-
-                                }
-                            }
-                            
-                    });
+                   
 
 
 
-                    // Replace these with actual data
-                const total = totalVehicles;
-                const sold =605;
-                const segments = 50;
+                
 
-                // How many segments should be marked as sold
-                const soldSegments = Math.round((sold / total) * segments);
-                const data = [];
-                const colors = [];
-
-                for (let i = 0; i < segments; i++) {
-                    data.push(2); // constant width
-                    colors.push(i < soldSegments ? '#00c4ff' : '#2e3a4e'); // blue for sold, gray for unsold
-                }
-
-                new Chart(document.getElementById('ringChart').getContext('2d'), {
-                    type: 'doughnut',
-                    data: {
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors,
-                        borderColor: '#0f172a',
-                        borderWidth: 2,
-                        cutout: '70%',
-                        hoverOffset: 0
-                    }]
-                    },
-                    options: {
-                    responsive: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false }
-                    }
-                    }
-                });
+               
 
             // Optional: Set dynamic number in center
             // document.getElementById('ringChartValue').textContent = '1255'; 
+
+              // How many segments should be marked as sold
+            // Replace these with actual data
+                // const total = totalVehicles;
+                // const sold =605;
+                // const segments = 50;
+
+                // const soldSegments = Math.round((sold / total) * segments);
+                // const data = [];
+                // const colors = [];
+
+                // for (let i = 0; i < segments; i++) {
+                //     data.push(2); // constant width
+                //     colors.push(i < soldSegments ? '#00c4ff' : '#2e3a4e'); // blue for sold, gray for unsold
+                // }
+
+                // new Chart(lookbestauction.querySelector(".chart") document.getElementById('ringChart').getContext('2d'), {
+                //     type: 'doughnut',
+                //     data: {
+                //     datasets: [{
+                //         data: data,
+                //         backgroundColor: colors,
+                //         borderColor: '#0f172a',
+                //         borderWidth: 2,
+                //         cutout: '70%',
+                //         hoverOffset: 0
+                //     }]
+                //     },
+                //     options: {
+                //     responsive: false,
+                //     plugins: {
+                //         legend: { display: false },
+                //         tooltip: { enabled: false }
+                //     }
+                //     }
+                // });
         
 
   });

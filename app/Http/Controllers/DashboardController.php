@@ -183,187 +183,6 @@ class DashboardController extends Controller
     }
 
 
-        public function getPreviousLots(Request $request)
-{
-    DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
-
-    $data = Vehicle::join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
-        ->join('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id');
-
-
-
-    $data = $data->select([
-            "auction_platform.id",
-            "auction_platform.name",
-            DB::raw("(auctions.auction_type) as auction_type"),
-            DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'On Sale' THEN vehicles.id END) as onsale_vehicles"),
-            DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Provisional' THEN vehicles.id END) as provisional_vehicles"),
-            DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Not Sold' THEN vehicles.id END) as notsold_vehicles"),
-            DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Sold' THEN vehicles.id END) as sold_vehicles"),
-        ])
-        ->groupBy('auction_platform.id', 'auction_platform.name')
-        ->get();
-
-    return response()->json($data, 200);
-}
-
-        public function upComingVehicles(Request $request)
-{
-    DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
-
-    $data = DB::table('vehicles') ;
-
-    $data = $data->select([
-            "vehicles.id",
-            "vehicles.title",
-            "vehicles.mileage",
-        //   "vehicles.mileage ?? 'N/A' ",
-       
-           
-        ])
-        ->get();
-
-    return response()->json($data, 200);
-}
-
-
-
-
-    
-    public function subscriptions()
-    {
-
-        $plans = Plan::all();
-        $membership = Membership::where('user_id',Auth::user()->id)
-        ->orderBy('created_at','desc')
-        ->get();
-
-        $current = Membership::where('user_id',Auth::user()->id)
-        ->where('membership_status', 'Active')
-        ->whereDate('membership_start_date', '<=', now())
-        ->whereDate('membership_expiry_date', '>=', now())
-        ->first();
-
-        return view('user.dashboard.subscriptions', compact('membership','plans','current'));
-    }
-
-
-
-    public function subscriptions_submit(Request $request)
-    {
-
-        $request->validate([
-            "plan_id" => "required|string",
-        ]);
-        
-        $plan = Plan::find($request->plan_id);
-        if (!$plan) {
-          return back()->withErrors(['plan_id' => 'Selected plan was not found.'])->withInput();
-        }
-
-        if($plan->id == 2) {
-
-            $transactionId = "00";
-            $startDate = now();
-            $expiryDate = now()->addMonths($plan->duration_value);
-        
-            $membership = Membership::create([
-                'user_id' => Auth::user()->id,
-                'plan_id' => $plan->id,
-                'membership_start_date' => $startDate,
-                'membership_expiry_date' => $expiryDate,
-                'membership_status' => 'Pending',
-                'membership_type' => 'monthly',
-            ]);
-
-            MembershipPayment::create([
-                'membership_id' => $membership->id,
-                'payment_date' => now(),
-                'payment_method' => 'stripe',
-                'transaction_id' => $transactionId,
-                'charge_id' => $transactionId,
-                'payer_id' => $transactionId,
-                'amount' => $plan->price,
-                'currency' => 'GBP',
-                'payment_status' => 'Completed',
-            ]);
-
-            $membership->update(['membership_status' => 'Active']);
-            return back()->with('success','Plan Added Successfully');
-
-        }
-        
-        //Stripe
-        if(!$request->payment_method){
-            return back()->withErrors(['card' => 'Please Enter Card Details..'])->withInput();
-        }
-
-
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
-            try {
-                
-                $intent = PaymentIntent::create([
-                    'amount' => round($plan->price * 100),
-                    'currency' => 'gbp',
-                    'automatic_payment_methods' => [
-                        'enabled' => true,
-                        'allow_redirects' => 'never',
-                    ],
-                    'confirm' => true,
-                    'payment_method' => $request->payment_method
-                ]);
-
-            } catch (\Exception $e) {
-                return response()->json([
-                    "message" => $e->getMessage(),
-                ],500);
-            }
-
-
-            if ($intent->status == 'succeeded') {
-
-                $transactionId = "00";
-                $startDate = now();
-                $expiryDate = now()->addMonths($plan->duration_value);
-            
-                $membership = Membership::create([
-                    'user_id' => Auth::user()->id,
-                    'plan_id' => $plan->id,
-                    'membership_start_date' => $startDate,
-                    'membership_expiry_date' => $expiryDate,
-                    'membership_status' => 'Pending',
-                    'membership_type' => 'monthly',
-                ]);
-
-                MembershipPayment::create([
-                    'membership_id' => $membership->id,
-                    'payment_date' => now(),
-                    'payment_method' => 'stripe',
-                    'transaction_id' => $transactionId,
-                    'charge_id' => $transactionId,
-                    'payer_id' => $transactionId ,
-                    'amount' => $plan->price,
-                    'currency' => 'GBP',
-                    'payment_status' => 'Completed',
-                ]);
-
-                $membership->update(['membership_status' => 'Active']);
-                return back()->with('success',"Subscription and Payment successful"); 
-
-            }elseif ($intent->status == 'requires_action' && $intent->next_action->type == 'use_stripe_sdk') {
-
-                 return back()->with('error',
-                 "Additional authentication is required (e.g. 3D Secure)");
-
-            } else {
-
-                return back()->with('error',$intent->last_payment_error->message ?? 'Payment failed or incomplete.'); 
-            }
-
-
-    }
-
       public function onlineAuctions(Request $request)
     {
         if ($request->ajax()) {
@@ -415,31 +234,171 @@ class DashboardController extends Controller
     }
 
 
-    public function favouriteAuctions(Request $request)
+       public function lookbestauction(Request $request)
     {
-        if ($request->ajax()) {
-            $favData = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+            // if ($request->ajax()) {
+                
+                  $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+                  ->select(
+                        'auction_platform.name AS label',
+                         DB::raw("SUM((SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id)) as total")
+                  );
+
+
+                  if($request->has('platform_id') && $request->platform_id != ''){
+                    $data = $data->whereIn('auctions.platform_id',$request->platform_id);
+                  }
+
+
+                   $data = $data->groupBy('auction_platform.id', 'auction_platform.name')
+                   ->get();
+
+                    $colors = ['#9b5de5','#00bbf9','#00f5d4','#ef233c'];
+                    $res = [];
+                   
+                    foreach ($data as $value) {
+
+                        $randomKey = array_rand($colors);
+                        $color = $colors[$randomKey];
+                        
+                        array_push($res,[
+                            "color" => $color,
+                            "label" => $value['label'],
+                            "total" => $value['total'],
+                            "borderColor" => "red",
+                            "backgroundColor" => "red",
+                        ]);
+
+                    }
+
+                return response()->json([
+                    'colors' => array_column($res,'color'),
+                    'labels' => array_column($res,'label'),
+                    'total' => array_column($res,'total'),
+                    'data' => $res,
+                ]);
+
+            // }
+    }
+
+
+        public function previousLots(Request $request)
+    {
+                // if ($request->ajax()) {
+                    
+                $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
                 ->select(
                     'auction_platform.name AS auction_platform_name',
                     'auctions.auction_type',
-                    DB::raw("( SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Reserve not met') as reauction"),
-                    DB::raw("( SELECT COUNT(*)  FROM vehicles  WHERE vehicles.auction_id = auctions.id ) as total_lots"),
-                )
-                ->get()
-                ->map(function ($auction) {
-                    return [
-                        $auction->auction_platform_name,
-                        $auction->auction_type,
-                        $auction->total_lots,
-                        $auction->values ?? '🔥',
-                        $auction->reauction,
-                    ];
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'On Sale') as onSale"),
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Provisional') as onProvisional"),
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Reserve not met') as onReserve"),
+                );
+
+                if($request->has('platform_id') && $request->platform_id != ''){
+                    // dd($request->platform_id);
+                    $data = $data->whereIn('auction_platform.id',$request->platform_id);
+                }
+
+                $data = $data->get()->map(function($row){
+                    return $row;
                 });
 
-            return response()->json(['data' => $favData]);
-        }
+                return response()->json([
+                    'data' => $data,
+                ]);
+
+                // }
+
     }
 
+
+       public function upComingVehicles(Request $request)
+    {
+
+            //Base Query
+            $query = Vehicle::leftjoin('make','make.id','=','vehicles.make_id')
+            ->leftjoin('model','model.id','=','vehicles.model_id')
+            ->leftjoin('model_variant','model_variant.id','=','vehicles.variant_id');
+
+            // Count total BEFORE limit/offset
+            $total = $query->count(); 
+
+            //Results
+            $results = (clone $query)
+                ->limit(10)
+                ->select([
+                 'vehicles.*',
+                 'make.name as make_name',
+                 'model.name as model_name',
+                 'model_variant.name as variant_name',
+                ])
+                ->get()
+                ->map(function ($item) {
+                    
+                    return [
+                        'id' => $item->id,
+                        'make_name' => $item->make_name,
+                        'model_name' => $item->model_name,
+                        'variant_name' =>  $item->variant_name,
+                        'mileage' => $item->mileage,
+                        'report' => $item->inspection_report,
+                        'auto_boli' => 0,
+                    ];
+
+                });
+
+            return response()->json([
+                'data'         => $results,
+                'total'        => $total,
+            ]);
+
+
+            return response()->json($data, 200);
+
+    }
+
+
+
+
+      public function getValuation(Request $request)
+    {
+
+              $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+                ->select(
+                    'auction_platform.name AS auction_platform_name',
+                    'auctions.auction_type',
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'On Sale') as onSale"),
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Provisional') as onProvisional"),
+                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Reserve not met') as onReserve"),
+                );
+
+                if($request->has('platform_id') && $request->platform_id != ''){
+                    // dd($request->platform_id);
+                    $data = $data->whereIn('auction_platform.id',$request->platform_id);
+                }
+
+                $data = $data->get()->map(function($row){
+                    return $row;
+                });
+
+                return response()->json([
+                    'data' => $data,
+                ]);
+
+    }
+
+
+
+
+    
+
+
+
+
+
+
+    
 
     
 
