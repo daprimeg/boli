@@ -75,8 +75,9 @@
      <div class="collapse navbar-collapse" id="navbarNav">
   <ul class="navbar-nav mx-auto text-center">
     <li class="nav-item">
-      <a class="nav-link" href="index.html">Auction Solutions</a>
-    </li>
+  <a class="nav-link" href="{{ url('/autionshadule') }}">Auction Solutions</a>
+</li>
+
 
     <li class="nav-item">
       <a class="nav-link" href="{{url('/features')}}">Features</a>
@@ -220,9 +221,7 @@
 
 </li>
 
-    <li class="nav-item">
-      <a class="nav-link" href="TodayAuc.html">Today's Auc</a>
-    </li>
+    
     <li class="nav-item">
       <a class="nav-link" href="Find.html">Find Here</a>
     </li>

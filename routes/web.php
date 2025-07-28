@@ -74,6 +74,8 @@ Route::get('/register', [AuthController::class, 'register']);
 
 Route::post('/register_submit', [AuthController::class, 'register_submit']);
 
+Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
+
 
 
 
