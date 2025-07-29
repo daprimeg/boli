@@ -19,6 +19,46 @@ use Illuminate\Support\Facades\Auth;
 class InterestController extends Controller
 {
 
+    public function myintrest(Request $request)
+    {
+
+        $data = Interest::where("user_id", Auth::user()->id)
+        ->get()
+        ->map(function ($row) {
+            return $row;
+        });
+
+        return response()->json([
+         'data' => $data,
+        ],200);
+
+    }
+
+       public function setintrest($id)
+    {
+
+            $model = Interest::find($id);
+            if($model){
+
+                Interest::where("user_id", Auth::user()->id)->update(['status' => 0]);
+                Interest::where("id",$id)->update(['status' => 1]);
+
+                  return response()->json([
+                    'message' => "Intrest Updated",
+                    'data' => $model->toArray(),
+                 ],200);
+
+            }else{
+
+                return response()->json([
+                'message' => "Intrest Not Found",
+                ],401);
+
+            }
+                  
+    }
+
+
     public function index(Request $request)
     {
 
@@ -77,7 +117,7 @@ class InterestController extends Controller
                       $row->model_name,
                       $row->variant_name,
                       $row->platform_name,
-                      $row->year_form.' - '.$row->year_to, 
+                      $row->year_from.' - '.$row->year_to, 
                       $row->mileage_from.' - '.$row->mileage_to, 
                       $row->cc_from.' - '.$row->cc_to, 
                       $html,
@@ -174,7 +214,7 @@ class InterestController extends Controller
             'variant_id' =>  $request->variant_id,
             'platform_id' =>  $request->platform_id,
             'year_from' =>  $request->year_from,
-            'year_to' =>  $request->year_from,
+            'year_to' =>  $request->year_to,
             'mileage_from' =>  $request->mileage_from,
             'mileage_to' =>  $request->mileage_to,
             'transmission' =>  $request->transmission,
@@ -272,7 +312,7 @@ class InterestController extends Controller
             'variant_id' =>  $request->variant_id,
             'platform_id' =>  $request->platform_id,
             'year_from' =>  $request->year_from,
-            'year_to' =>  $request->year_from,
+            'year_to' =>  $request->year_to,
             'mileage_from' =>  $request->mileage_from,
             'mileage_to' =>  $request->mileage_to,
             'transmission' =>  $request->transmission,

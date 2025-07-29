@@ -306,6 +306,8 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
             // Route::view('/interest', 'user/interest')->name('interest');
 
+            Route::get('/interest/myintrest', [InterestController::class,'myintrest']);
+            Route::get('/interest/setintrest/{id}', [InterestController::class,'setintrest']);
             Route::resource('/interest',InterestController::class);
 
             // Route::get('interests', [InterestController::class, 'index'])->name('interests.index');        // List all interests

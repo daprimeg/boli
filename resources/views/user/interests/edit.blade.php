@@ -95,12 +95,12 @@
                                             <select name="year_from" class="form-select" >
                                                 <option value="">From</option>
                                                 @foreach($years as $year)
-                                                    <option @if($model->year_to == $year) selected @endif value="{{$year}}">{{$year}}</option>
+                                                    <option @if($model->year_from == $year) selected @endif value="{{$year}}">{{$year}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="box w-100">
-                                            <select name="year_from" class="form-select" >
+                                            <select name="year_to" class="form-select" >
                                                 <option value="">To</option>
                                                 @foreach($years as $year)
                                                     <option @if($model->year_to == $year) selected @endif value="{{ $year }}">{{ $year }}</option>

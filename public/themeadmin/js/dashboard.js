@@ -1,53 +1,8 @@
 
+const global = {
+    intrest:{}
+};
 
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-
-        const interestButtonsWrapper = document.getElementById('interest-buttons-wrapper');
-        const addInterestButton = document.getElementById('add-interest-button');
-
-        let newInterestCount = 0;
-        const maxTotalInterestButtons = 10;
-
-        if (interestButtonsWrapper && addInterestButton) {
-            addInterestButton.addEventListener('click', function () {
-                const currentInterestButtons = Array.from(interestButtonsWrapper.querySelectorAll('.interest-button'));
-
-                if (currentInterestButtons.length < maxTotalInterestButtons) {
-                    newInterestCount++;
-                    const newButton = document.createElement('button');
-                    newButton.className = 'btn  text-black rounded-3 fw-medium shadow-sm border-1 interest-button flex-shrink-0';
-                    newButton.textContent = `New Interest ${newInterestCount}`;
-
-                    interestButtonsWrapper.appendChild(newButton);
-                }
-
-                if (interestButtonsWrapper.querySelectorAll('.interest-button').length >= maxTotalInterestButtons) {
-                    addInterestButton.disabled = true;
-                    addInterestButton.classList.remove('btn-outline-secondary');
-                    addInterestButton.classList.add('btn-secondary', 'opacity-50');
-                }
-            });
-
-            interestButtonsWrapper.addEventListener('click', function (event) {
-                const clicked = event.target.closest('.interest-button');
-                if (!clicked || clicked.id === 'add-interest-button') return;
-
-                document.querySelectorAll('.interest-button').forEach(btn => {
-                    btn.classList.remove('active', 'btn-primary');
-                    if (!btn.classList.contains('btn-outline-secondary')) {
-                        btn.classList.add('bg-dark-blue-3', 'text-secondary', 'border-0');
-                    }
-                });
-
-                clicked.classList.add('active', 'btn-primary');
-                clicked.classList.remove('bg-dark-blue-3', 'text-secondary', 'border-0');
-            });
-        }
-
-});
 
 // new Chart( document.getElementById('valuationChart').getContext('2d'), {
 //   type: 'line',
@@ -74,52 +29,93 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  function toggleChart(button) {
-    const chartSection = button.closest('.info-card').querySelector('.chart-section');
-    const isVisible = chartSection.style.display !== 'none';
+//   function toggleChart(button) {
+//     const chartSection = button.closest('.info-card').querySelector('.chart-section');
+//     const isVisible = chartSection.style.display !== 'none';
 
-    chartSection.style.display = isVisible ? 'none' : 'block';
-    button.textContent = isVisible ? '+' : '− ';
-  }
+//     chartSection.style.display = isVisible ? 'none' : 'block';
+//     button.textContent = isVisible ? '+' : '− ';
+//   }
 
 
 // Chart.js - Line chart
-  const priceChart = new Chart(document.getElementById('priceChart').getContext('2d'), {
-    type: 'line',
-    data: {
-      labels: ['May', 'June', 'July'],
-      datasets: [{
-        label: 'Average Price',
-        data: [21000, 22000, 22600],
-        backgroundColor: 'rgba(0, 123, 255, 0.2)',
-        borderColor: '#007bff',
-        borderWidth: 2,
-        fill: true,
-        tension: 0.3,
-        pointRadius: 4,
-        pointBackgroundColor: '#007bff'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: false,
-          ticks: {
-            callback: value => `£${value}`
-          }
+//   const priceChart = new Chart(document.getElementById('priceChart').getContext('2d'), {
+//     type: 'line',
+//     data: {
+//       labels: ['May', 'June', 'July'],
+//       datasets: [{
+//         label: 'Average Price',
+//         data: [21000, 22000, 22600],
+//         backgroundColor: 'rgba(0, 123, 255, 0.2)',
+//         borderColor: '#007bff',
+//         borderWidth: 2,
+//         fill: true,
+//         tension: 0.3,
+//         pointRadius: 4,
+//         pointBackgroundColor: '#007bff'
+//       }]
+//     },
+//     options: {
+//       responsive: true,
+//       scales: {
+//         y: {
+//           beginAtZero: false,
+//           ticks: {
+//             callback: value => `£${value}`
+//           }
+//         }
+//       },
+//       plugins: {
+//         legend: { display: true }
+//       }
+//     }
+//   });
+
+
+
+    //LoadIntrest________________________________________
+
+        const Intrest = {
+         intrest:{}
+        };
+
+
+        Intrest.setIntrest = function(id){
+
+            $.ajax({
+                url:path+"/interest/setintrest/"+id,
+                dataType: "json",
+                success: function (response) {
+                    global.intrest = response.data;
+                    Intrest.loadIntrest();
+                    global.lookbestauction();
+                }
+            });
+            
         }
-      },
-      plugins: {
-        legend: { display: true }
-      }
-    }
-  });
+
+        Intrest.loadIntrest = function (){
+
+            $("#interest-buttons-wrapper").html('');
+            $.ajax({
+                url:path+"/interest/myintrest",
+                dataType: "json",
+                success: function (response) {
+                    response.data.forEach(element => {
+                    
+                        $("#interest-buttons-wrapper").append(`<button onClick="Intrest.setIntrest(${element.id})" class="btn btn-primary rounded-3 fw-medium border-solid interest-button flex-shrink-0 waves-effect waves-light ${element.status == '1' ? 'active' : ''}" 
+                        style="color: rgb(236, 229, 229) !important; ">${element.title}</button>`);
+
+                    });
+                }
+            });
+
+        }
 
 
 
     // getTotalAuctions____________________________________________________________________________
-    function getTotalAuctions() {
+    global.getTotalAuctions = function () {
 
         $.ajax({
             url:path+"/dashboard/getTotalAuctions",
@@ -143,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // getOnlineAuctions____________________________________________________________________________________
-    function getOnlineAuctions() {
+    global.getOnlineAuctions = function () {
         
         $.ajax({
             url:path+"/dashboard/getOnlineAuctions",
@@ -178,8 +174,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // getTimeAuctions_______________________________________________________________________________________
-    function getTimeAuctions() {
-        
+    global.getTimeAuctions = function () {
+    
         $.ajax({
             url:path+"/dashboard/getTimeAuctions",
             dataType: "json",
@@ -212,7 +208,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
  
     // upComingVehicles___________________________________________________________________________
-    function upComingVehicles() {
+    global.upComingVehicles = function () {
+
         $.ajax({
             url: path + "/dashboard/upComingVehicles",
             dataType: "json",
@@ -245,8 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
     // vehicleStates_____________________________________________________________________
-    function vehicleStates() {
-    
+    global.vehicleStates = function () {
         $.ajax({
             url:path+"/dashboard/vehicleStates",
             dataType: "json",
@@ -260,18 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 $(".vehicleStates .not_sold").text(remaining);
                 $(".vehicleStates .done").text(rows);
 
-                
-                // $('.total_auctions').text(response.total_auctions);
-                // $('.online_auctions').text(response.online_auctions);
-                // $('.time_auctions').text(response.time_auctions);
-                // $('.inprogress_auctions').text(response.inprogress_auctions);
-                // $('.inprogress_vehicles').text(response.inprogress_vehicles);
-                // $('.onsale_vehicles').text(response.onsale_vehicles);
-                // $('.total_vehicles').text(response.total_vehicles);
-                // $('.provisional_vehicles').text(response.provisional_vehicles);
-                // $('.duplicate_vehicles').text(response.duplicate_vehicles);
-                // $('.sold_vehicles').text(response.sold_vehicles);
-
             }
         });
     }
@@ -280,9 +264,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // lookbestauction_________________________________________________________________________________________
 
       let lookbestchartInstance;
-
-      function lookbestauction() {
-
+      global.lookbestauction = function () {
+      
         $.ajax({
         url: path + "/dashboard/lookbestauction",
         dataType: "json",
@@ -293,9 +276,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     let lookbestauction = $("#lookbestauction");
                     let chart = lookbestauction.find(".chart")[0].getContext('2d');
-                  
-
-                 
 
                     if (lookbestchartInstance) {
                         lookbestchartInstance.destroy();
@@ -345,7 +325,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                         });
 
-                        console.log(response.data);
                         
                        lookbestauction.find('.labels-container').html('');
                        response.data.forEach(element => {
@@ -371,7 +350,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
     // getPreviousLots_________________________________________________________________________________________
-    function previousLots() {
+    global.previousLots = function () {
+    
         $.ajax({
             url: path + "/dashboard/previousLots",
             dataType: "json",
@@ -405,7 +385,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     // upComingVehicles_________________________________________________________________________________________
-    function upComingVehicles() {
+    global.upComingVehicles = function () {
+    
         $.ajax({
             url: path + "/dashboard/upComingVehicles",
             dataType: "json",
@@ -433,8 +414,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-      // upComingVehicles_________________________________________________________________________________________
-    function getValuation() {
+      // getValuation_____________________________________________________________
+    global.getValuation = function () {
         $.ajax({
             url: path + "/dashboard/getValuation",
             dataType: "json",
@@ -497,19 +478,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function onStart() {
- 
-        getTotalAuctions();
-        getOnlineAuctions();
-        getTimeAuctions();
-        vehicleStates();
 
+            //Dashboard Overview
+            global.getTotalAuctions();
+            global.getOnlineAuctions();
+            global.getTimeAuctions();
+            global.vehicleStates();
 
-        lookbestauction();
-        previousLots();
-        upComingVehicles();
-        getValuation();
+            //Dashboard Intrest
+            global.lookbestauction();
+            global.previousLots();
+            global.upComingVehicles();
+            global.getValuation();
+
+            Intrest.loadIntrest();
+            // loadIntrest();
         
-
     }
 
 

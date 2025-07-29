@@ -10,7 +10,7 @@
         <!-- New buttons will be appended here -->
     </div>
     <!-- Add Button fixed at the end -->
-    <button class="btn btn-outline-secondary rounded-3 fw-medium shadow-sm d-flex align-items-center interest-button "
+    <a href="{{url('/interest/create')}}" class="btn btn-outline-secondary rounded-3 fw-medium shadow-sm d-flex align-items-center interest-button "
         id="add-interest-button">
         <svg class="text-secondary" style="width: 16px; height: 16px;" fill="none" stroke="currentColor"
             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +19,7 @@
             </path>
         </svg>
         <span class="ms-1">Add</span>
-    </button>
+      </a>
 </div>
       
 <div class="row g-6"> 
