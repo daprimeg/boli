@@ -168,15 +168,71 @@
       color: red;
     }
 
+
+      .dashboard-card {
+            background-color: #252836;
+            border-radius: 16px;
+            border: none;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+       
+        /* Ring chart */
+        
+        .Ring-chart-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        
+        .progress-ring {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .segment {
+            position: absolute;
+            width: 20px;
+            height: 35px;
+            border-radius: 4px;
+            transform-origin: 9px 140px;
+        }
+        
+        .center-content {
+            position: absolute;
+            top: 0%;
+            left: 35%;
+            text-align: center;
+        }
+       
+        
+       .select2-selection{
+          background: #0F1C2C !important;
+          display: flex !important;
+          border: 1px solid #1d2938 !important;
+            overflow-y: hidden;
+           height: 33px;
+       }
+
+       .select2-container--default .select2-results__option--selected{
+        background: var(--bs-primary)
+       }
+      .select2-container--default .select2-selection--multiple .select2-selection__choice{
+        background-color: transparent !important;  
+       }
   
 </style>
 @endsection
 @section('content')
 
     <div style="background:var(--bs-navbar-bg);" class=""  >
-      <div class="div pt-5" style="background-image: url({{asset('/public/themeadmin/images/backgrounds/Dots.png')}})" >
+      <div class="" style="padding: 60px 60px; background-image: url({{asset('/public/themeadmin/images/backgrounds/Dots.png')}})" >
 
-           <div class="container-fluid text-white mb-6" >
+           <div class=" text-white mb-6" >
                 <div class="row g-4">
                   <!-- Left: Welcome + Tabs -->
                   <div class="col-lg-8 align-self-end">
@@ -198,7 +254,7 @@
                             </li>
                         </ul> --}}
 
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                               <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Overview</button>
                             </li>
@@ -218,13 +274,18 @@
                                   border-radius: 16px !important;
                                ">
                               <div class="">
-                                    <h5 class="">Refer & Earn</h5>
-                                    <p class="">
+                                    <h5 class="mb-0 " style="font-weight: 700">Refer & Earn</h5>
+                                    <p class="text-black" style="font-weight: 800">
                                         Use Refer & Earn modal to encourage your exiting 
                                         customers refer their friends & colleague.
                                     </p>
                               </div>
-                              <div class="dotstats-box"><div class="dotstats"></div></div>
+                              <div class="dot-box"
+                                 style="width: 100px; height: 50px; background-color: rgba(0, 0, 0, 0.466); border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-left: 10px; ">
+                                 <div class="dot"
+                                     style=" width: 30px;  height: 30px; background-color: black;  border-radius: 4px;">
+                                 </div>
+                              </div>
                         </div>
 
                   </div>
@@ -235,14 +296,16 @@
     </div>
 
 
-   <div class="container-fluid" >
+   <div class="container-fluid " style="background-color: #0F1C2C;">
 
-      <div class="tab-content" id="myTabContent">
+      <div class="tab-content " id="myTabContent">
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            @include('user.dashboard.intrest')
+           @include('user.dashboard.overview')
           </div>
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            @include('user.dashboard.overview')
+            @include('user.dashboard.intrest')
+
+       
           </div>
       </div>
 
