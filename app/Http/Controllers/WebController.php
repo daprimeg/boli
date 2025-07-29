@@ -26,6 +26,10 @@ class WebController extends Controller
     {
         return view('web.pricing');
     }
+    public function AutionShadule ()
+    {
+        return view('web.AutionShadule');
+    }
 
 
     

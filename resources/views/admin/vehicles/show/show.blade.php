@@ -129,9 +129,10 @@
             /* rgba(15, 28, 44, 0) 20%,  */
             rgba(15, 28, 44, 0) 100%
         ),
-        url('{{ asset('/public/theme/assets/Dots.png') }}');
-    background-size: cover;
-    background-position: center;
+        url('{{ asset('/public/theme/assets/autoboli.png') }}');
+    background-size: contain;
+    
+    background-position: top center; /* 👈 Image upar center ho jayegi */
     background-repeat: no-repeat;
 }
 
