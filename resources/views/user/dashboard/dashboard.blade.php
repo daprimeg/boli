@@ -168,7 +168,7 @@
       border: none;
       font-size: 1.2rem;
       cursor: pointer;
-      color: red;
+      color: inherit;
     }
 
 
