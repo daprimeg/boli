@@ -1,4 +1,4 @@
-<div class=" rounded-3 p-4 d-flex align-items-center justify-content-between gap-3 mb-5" style="background-color: #006aee" id="interest-buttons-container">
+<div class=" p-4 d-flex align-items-center justify-content-between gap-3 mb-5 mx-0" style="background-color: #006aee; position: relative; top:  -60px;   " id="interest-buttons-container"  >
     <div class="d-flex align-items-center gap-3 overflow-x-auto flex-nowrap" id="interest-buttons-wrapper" style="max-width: 620px; color: black">
            <span class=" small fw-medium me-2 flex-shrink-0">Select Interest</span>
         <button class="btn btn-primary rounded-3 fw-medium border-solid interest-button active flex-shrink-0" style="color: rgb(236, 229, 229) !important;"
@@ -17,13 +17,13 @@
 </div>
       
 
-<div class="row g-6"> 
+<div class="row g-6 " style="padding: 0rem 4rem"> 
     <div class="col-md-12">
 
       @include('user.dashboard.infocard')
       
        <br><br>
-      <div class="row g-4">
+      <div class="row g-4" style="margin-top: -90px;">
         
         <div class="col-md-8 "  >
             <div id="lookbestauction" class="card text-white p-4 rounded-4 shadow-sm h-100">
@@ -47,7 +47,7 @@
                       </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="labels-container">
+                    <div class="labels-container row">
                       
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                                       </div>
                                   </div>
 
-                                  <div class="rows">
+                                  <div class="rows" >
 
 
                                   </div>
@@ -101,7 +101,7 @@
           <!-- Left Side: Stats -->
          
           <br><br>
-          <div class="row">
+          <div class="row" style="margin-top: -20px;">
 
 
             <!-- Left Side: Stats -->

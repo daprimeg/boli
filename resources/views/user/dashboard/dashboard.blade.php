@@ -254,7 +254,9 @@
           font-size: 1rem;
           color: #aaa;
         }
-  
+        .tab-content:not(.doc-example-content){
+          padding: 0;
+        }
 </style>
 @endsection
 @section('content')
@@ -326,10 +328,10 @@
     </div>
 
 
-   <div class="container-fluid " style="background-color: #0F1C2C;">
+   <div class=" " style="background-color: #0F1C2C; ">
 
       <div class="tab-content " id="myTabContent">
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab" style="padding: 0rem 4rem; ">
            @include('user.dashboard.overview')
           </div>
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">

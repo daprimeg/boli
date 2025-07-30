@@ -350,10 +350,12 @@ const global = {
                        lookbestauction.find('.labels-container').html('');
                        response.data.forEach(element => {
                               lookbestauction.find('.labels-container').append(`
-                                 <div style="display:flex;align-items:center;margin-bottom:4px;">
-                                    <div style="width:12px;height:12px;background:${element.color};margin-right:8px;"></div>
-                                    <span>${element.label}</span>
+                                 <div class = "col-6" style="display:flex;align-items:center;margin-bottom:50px; text-align:left; ">
+                                 <div style="width:12px;height:12px;background:${element.color};margin-right:8px; border-radius: 50% "></div>
+                                    <div class = "col-6" style="display:flex;flex-direction: column;">
+                                    <span style ="width: 150px !important;">${element.label}</span>
                                     <span class="px-2" >(${element.total})</span>
+                                    <div>
                                 </div>
                              `);
                        }); 

@@ -3,13 +3,13 @@
                  <div class="card  h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
                      <div class="card-body pb-1">
                          <div class="d-flex align-items-center mb-2">
-                             <div class="avatar d-flex align-items-center mb-3">
-                                 <div class="box"
-                                 style="height: 30px;width:30px ;background-color: var(--bs-primary); border-radius:4px ;box-shadow: 0px 0px 5px 8px #003164;
-                                 -webkit-box-shadow: 0px 0px 5px 8px #003164;
-                                 -moz-box-shadow: 0px 0px 5px 8px #003164;">
-
-                             </div>
+                              <div class="avatar">
+                                  <div class="dot-box"
+                                 style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px; ">
+                                 <div class="dot"
+                                     style=" width: 30px;  height: 30px; background-color: #0d6efd;  border-radius: 50%; ">
+                                 </div>
+                              </div>
                              </div>
                              <h4 class="mb-0 ms-2"><span class="total_auctions">0</span></h4>
                          </div>
