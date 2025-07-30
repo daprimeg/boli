@@ -448,13 +448,12 @@ const global = {
             },
             success: function (response) {
            
-
                 $('.getValuation .rows').html('');
                 response.data.forEach(res => {
 
-                        $('.getValuation .rows').append(`<div class="info-card">
-                            <div data-values="${res.price_month_1},${res.price_month_2},${res.price_month_3}" 
-                               data-labels="${response.labels}" data-price="${res.avg_price}"  class="auction-item">
+                    $('.getValuation .rows').append(`<div class="info-card">
+                            <div data-percent="${res.percent}" data-values="${res.price_month_1},${res.price_month_2},${res.price_month_3}" 
+                            data-labels="${response.labels}" data-price="${res.avg_price}"  class="auction-item">
                                 <div class="logo-text">
                                     <img src="${path+"/public/themeadmin/autobolidp.png"}" />
                                     <div>
@@ -462,14 +461,14 @@ const global = {
                                     <small class="text-muted">${res.platform_name}</small>
                                     </div>
                                 </div>
-                                <div class="change down">
-                                    <button  class="toggle-btn minus-icon">+</button>
+                                <div style="color:${res.percent > 0 ? 'green' :'red'}" class="change">
+                                    ${res.icon}
+                                    <button class="toggle-btn minus-icon">+</button>
                                 </div>
                             </div>
+                            <div class="chart-containers"></div>
+                    </div>`);
 
-                            <div class="chart-containers">
-                            </div>
-                        </div>`);
                 });
 
             }
@@ -484,14 +483,20 @@ const global = {
       
         $('.getValuation .chart-containers').html('');
 
-        debugger
-
         let parent = $(this).parent();
         let price = $(this).data('price');
+        let percent = $(this).data('percent');
         let labels = $(this).data('labels').split(",")
         let values = $(this).data('values').split(",").map((p) => parseFloat(p) || 0);
-
-    
+        
+        let icon = "";
+        if (percent > 0) {
+        icon = `<span style="color: green;">&#9650; ${percent.toFixed(1)}%</span>`;
+        } else if (percent < 0) {
+            icon = `<span style="color: red;">&#9660; ${Math.abs(percent).toFixed(1)}%</span>`;
+        } else {
+            icon = `<span style="color: gray;">0%</span>`;
+        }
         
         parent.find('.chart-containers').html(`
             <div class="chart-section">
@@ -502,7 +507,7 @@ const global = {
                         <small class="text-muted">Average</small>
                     </div>
                     <div class="change up">
-                        <span class="me-1">▲</span> 5.8&amp;
+                        ${icon}
                     </div>
                     </div>
                     <div class="chart-placeholder">

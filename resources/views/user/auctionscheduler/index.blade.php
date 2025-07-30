@@ -160,7 +160,6 @@
                 });
                       
                   
-            
                 table.on('draw.dt', function () {
                     var info = table.page.info();
                     $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
@@ -220,9 +219,6 @@
                 }).on('change', function () {
                  
                 });
-
-
-
 
     });
     </script>

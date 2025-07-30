@@ -405,11 +405,8 @@ class DashboardController extends Controller
 
 
 
-
       public function getValuation(Request $request)
     {
-
-              
 
               DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
@@ -429,7 +426,6 @@ class DashboardController extends Controller
                     DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->subMonths(2)->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_1"),
                     DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->subMonths(1)->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_2"),
                     DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_3")
-
                );
 
                if($request->has('platform_id') && $request->platform_id != ''){
@@ -442,17 +438,42 @@ class DashboardController extends Controller
                     $data = $data->where('vehicles.model_id',$intrest->model_id);
                     $data = $data->where('vehicles.variant_id',$intrest->variant_id);
                }
+             
+              //Editing
+               $data = $data->get()->map(function($row){
+              
+                    $month2 = $row->price_month_2 ?? 0;
+                    $month3 = $row->price_month_3 ?? 0;
 
-                $data = $data->get()->map(function($row){
+             
+                    if($month2 == 0 && $month3 == 0){
+                        $percentageChange = 0;
+                    }elseif($month2 == 0){
+                        $percentageChange = 100;
+                    }else{
+                        $percentageChange = (($month2 - $month3) / $month2) * 100;
+                    }
+                    $row->percent = $percentageChange;
+
+
+                    if ($percentageChange > 0) {
+                        $row->icon = '<span style="color: green;">&#9650; '.number_format($percentageChange, 1).'%</span>';
+                    } elseif ($percentageChange < 0) {
+                        $row->icon = '<span style="color: red;">&#9660; '.number_format(abs($percentageChange), 1).'%</span>';
+                    } else {
+                        $row->icon = '<span style="color: gray;">0%</span>';
+                    }
+
                     return $row;
-                });
 
 
-                return response()->json([
-                    'labels' => [$month1, $month2, $month3],
-                    'data' => $data,
-                ]);
+            });
 
+
+            return response()->json([
+                'labels' => [$month1, $month2, $month3],
+                'data' => $data,
+            ]);
 
     }
 
