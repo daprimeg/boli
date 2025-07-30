@@ -70,7 +70,6 @@ class InterestController extends Controller
             $length = $request->input('length') ?? 10;
 
             $query = Interest::where("user_id", Auth::user()->id)
-            ->Leftjoin('auction_platform','auction_platform.id','=','interest.platform_id')
             ->Leftjoin('make','make.id','=','interest.make_id')
             ->Leftjoin('model','model.id','=','interest.model_id')
             ->Leftjoin('model_variant','model_variant.id','=','interest.variant_id');
@@ -81,7 +80,6 @@ class InterestController extends Controller
                     ->orWhere('interest.title', 'like', "%{$search}%")
                     ->orWhere('model.name', 'like', "%{$search}%")
                     ->orWhere('model_variant.name', 'like', "%{$search}%")
-                     ->orWhere('auction_platform.name', 'like', "%{$search}%")
                     ->orWhere('make.name', 'like', "%{$search}%");
                     // ->orWhere('users.companyName', 'like', "%{$search}%");
                 });
@@ -93,7 +91,6 @@ class InterestController extends Controller
                     'make.name as make_name',
                     'model.name as model_name',
                     'model_variant.name as variant_name',
-                    'auction_platform.name as platform_name',
             )
             ->orderBy('created_at','desc')
             ->offset($start)
@@ -116,7 +113,6 @@ class InterestController extends Controller
                       $row->make_name,
                       $row->model_name,
                       $row->variant_name,
-                      $row->platform_name,
                       $row->year_from.' - '.$row->year_to, 
                       $row->mileage_from.' - '.$row->mileage_to, 
                       $row->cc_from.' - '.$row->cc_to, 
@@ -185,7 +181,6 @@ class InterestController extends Controller
             'make_id' => 'required|integer|exists:make,id',
             'model_id' => 'required|integer|exists:model,id',
             'variant_id' => 'required|integer|exists:model_variant,id',
-            'platform_id' => 'nullable|integer|exists:auction_platform,id',
 
             'year_from' => 'nullable|integer',
             'year_to' => 'nullable|integer',
@@ -212,7 +207,6 @@ class InterestController extends Controller
             'make_id' =>  $request->make_id,
             'model_id' =>  $request->model_id,
             'variant_id' =>  $request->variant_id,
-            'platform_id' =>  $request->platform_id,
             'year_from' =>  $request->year_from,
             'year_to' =>  $request->year_to,
             'mileage_from' =>  $request->mileage_from,
@@ -284,7 +278,6 @@ class InterestController extends Controller
             'make_id' => 'required|integer|exists:make,id',
             'model_id' => 'required|integer|exists:model,id',
             'variant_id' => 'required|integer|exists:model_variant,id',
-            'platform_id' => 'nullable|integer|exists:auction_platform,id',
 
             'year_from' => 'nullable|integer',
             'year_to' => 'nullable|integer',
@@ -310,7 +303,6 @@ class InterestController extends Controller
             'make_id' =>  $request->make_id,
             'model_id' =>  $request->model_id,
             'variant_id' =>  $request->variant_id,
-            'platform_id' =>  $request->platform_id,
             'year_from' =>  $request->year_from,
             'year_to' =>  $request->year_to,
             'mileage_from' =>  $request->mileage_from,
@@ -330,15 +322,12 @@ class InterestController extends Controller
         return back()->with('success', 'Interest updated successfully');
 
     }
-
-
-
+    
     public function getModelsByMake(Request $request)
     {
         $models = VehicleModel::where('make_id', $request->make_id)->get();
         return response()->json($models);
     }
-
 
     public function getVariantsByModel(Request $request)
     {
@@ -348,22 +337,16 @@ class InterestController extends Controller
         return response()->json($variants);
     }
 
-    
-
     public function show(Interest $interest)
     {
         return view('user.interests.show', compact('interest'));
     }
 
-  
-
-
     public function destroy(Interest $interest)
     {
-        // dd('check');
-
         $interest->delete();
         return redirect('/interest')->with('success', 'interest Deleted Successfully ');
     }
 
+    
 }

@@ -89,8 +89,8 @@
     } 
     .info-card {
       border-radius: 8px;
-      margin-top: 20px;
-      padding: 20px;
+      /* margin-top: 20px; */
+      /* padding: 20px; */
       font-family: sans-serif;
 
     }
@@ -132,10 +132,13 @@
       border-radius: 8px;
       margin-top: 20px;
       padding: 20px;
-      display: none;
+      background: #0074ff1f;
     }
+
+    
+
     .chart-section h5 {
-      color: #a0aec0; /* Lighter grey for subtitle */
+      color: #a0aec0; 
     }
     .chart-placeholder {
       background-color: #2d3748; /* Darker blue for chart area */
@@ -224,6 +227,33 @@
       .select2-container--default .select2-selection--multiple .select2-selection__choice{
         background-color: transparent !important;  
        }
+
+
+
+        .vehicleStates #chart-container {
+          position: relative;
+          width: 300px;
+          height: 300px;
+        }
+
+        .vehicleStates #center-text {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          text-align: center;
+        }
+        
+        .vehicleStates #center-text h2 {
+          margin: 0;
+          font-size: 2rem;
+        }
+
+        .vehicleStates #center-text p {
+          margin: 0;
+          font-size: 1rem;
+          color: #aaa;
+        }
   
 </style>
 @endsection

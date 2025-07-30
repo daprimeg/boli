@@ -53,8 +53,7 @@
                                  <span class="text-heading fw-medium me-2"> <span
                                          class="inprogress_vehicles"></span></span>
                              </div>
-                             <a href=""> <span class="text-heading fw-medium me-0"
-                                     style="color: var(--bs-primary) !important;">view</span></a>
+                             {{-- <a href=""><span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a> --}}
                          </div>
                          </p>
                      </div>
@@ -80,11 +79,10 @@
                          <div class="d-flex justify-content-between">
                              <div>
 
-                                 <small class="text-body-secondary">Sold</small>
+                                 <small class="text-body-secondary">Sold:</small>
                                  <span class="text-heading fw-medium me-2"><span class="sold_vehicles"></span></span>
                              </div>
-                             <a href=""> <span class="text-heading fw-medium me-0"
-                                     style="color: var(--bs-primary) !important;">view</span></a>
+                             {{-- <a href=""><span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a> --}}
                          </div>
                          </p>
                      </div>
@@ -96,10 +94,8 @@
                      <div class="card-body pb-1">
                          <div class="d-flex align-items-center mb-2">
                              <div class="avatar ">
-                                 <div class="dot-box"
-                                 style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px; ">
-                                 <div class="dot"
-                                     style=" width: 30px;  height: 30px; background-color: #0d6efd;  border-radius: 50%;">
+                                 <div class="dot-box" style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px; ">
+                                 <div class="dot" style=" width: 30px;  height: 30px; background-color: #0d6efd;  border-radius: 50%;">
                                  </div>
                               </div>
 
@@ -110,13 +106,10 @@
                          <p class="mb-0">
                          <div class="d-flex justify-content-between">
                              <div>
-
-                                 <small class="text-body-secondary">Vehicles </small>
-                                 <span class="text-heading fw-medium me-2"><span
-                                         class="duplicate_vehicles"></span></span>
+                                 <small class="text-body-secondary">Vehicle:</small>
+                                 <span class="text-heading fw-medium me-2"><span class="duplicate_vehicles"></span></span>
                              </div>
-                             <a href=""> <span class="text-heading fw-medium me-0"
-                                     style="color: var(--bs-primary) !important;">view</span></a>
+                             {{-- <a href=""> <span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a> --}}
                          </div>
                          </p>
                      </div>

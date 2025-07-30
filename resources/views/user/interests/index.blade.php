@@ -34,6 +34,8 @@
       <div class="row g-6"> 
             <div class="col-md-12">
 
+                        
+
                  @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                   @endif
@@ -75,7 +77,6 @@
                                        <th>Make</th>
                                        <th>Model</th>
                                        <th>Variant</th>
-                                       <th>Auction</th>
                                        <th>Year</th>
                                        <th>Mileage</th>
                                        <th>CC</th>

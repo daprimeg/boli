@@ -116,12 +116,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3 col-md-4">
-                                    <label for="platform_id" class="form-label">Auction House</label>
-                                    <select name="platform_id" class="form-select platform" >
-                                      
-                                    </select>
-                                </div>
+                     
 
                                 <div class="col-12 pt-3">
                                     <h4 class="card-title ">Secondry</h4>

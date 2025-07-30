@@ -81,10 +81,11 @@ class DashboardController extends Controller
 
     
 
-     public function getTotalAuctions()
+     public function getTotalAuctions(Request $request)
     {
 
-        $data = Vehicle::leftJoin('auctions', 'vehicles.auction_id', '=', 'auctions.id')->select([
+        $data = Vehicle::leftJoin('auctions', 'vehicles.auction_id', '=', 'auctions.id')
+        ->select([
             DB::raw("COUNT(DISTINCT auctions.id) as total_auctions"),
              DB::raw("COUNT(DISTINCT CASE WHEN auctions.auction_type = 'Time Auction' THEN auctions.id END) as time_auctions"),
             DB::raw("COUNT(DISTINCT CASE WHEN auctions.status = 'In Progress' THEN auctions.id END) as inprogress_auctions"),
@@ -93,10 +94,21 @@ class DashboardController extends Controller
             DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'On Sale' THEN vehicles.id END) as onsale_vehicles"),
             DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Provisional' THEN vehicles.id END) as provisional_vehicles"),
             DB::raw("COUNT(*) - COUNT(DISTINCT vehicle_id) as duplicate_vehicles")
-        ])->first();
+        ]);
 
+
+        if($request->type == 'Intrest'){
+            $intrest = Auth::user()->intrest->where('status','1')->first();
+            if($intrest){
+                $data = $data->where('vehicles.make_id',$intrest->make_id);
+                $data = $data->where('vehicles.model_id',$intrest->model_id);
+                $data = $data->where('vehicles.variant_id',$intrest->variant_id);
+            }
+        }
+
+
+        $data = $data->first();
         $data['sold_vehicles'] =   $data['onsale_vehicles'] +  $data['provisional_vehicles'];
-
         return response()->json($data,200);
 
     }
@@ -111,6 +123,9 @@ class DashboardController extends Controller
             DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Provisional' THEN vehicles.id END) as provisional_vehicles"),
             DB::raw("COUNT(*) - COUNT(DISTINCT vehicle_id) as duplicate_vehicles")
         ])->first();
+
+
+
 
         $data['sold_vehicles'] =   $data['onsale_vehicles'] +  $data['provisional_vehicles'];
 
@@ -148,6 +163,7 @@ class DashboardController extends Controller
         return response()->json($data,200);
 
     }
+
 
           public function getTimeAuctions(Request $request)
     {
@@ -211,26 +227,26 @@ class DashboardController extends Controller
 
     public function timeAuctions(Request $request)
     {
-        if ($request->ajax()) {
-            $timeData = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
-                ->whereRaw("LOWER(auctions.auction_type) = 'time auction'")
-                ->select(
-                    'auction_platform.name AS auction_platform_name',
-                    'auctions.auction_type',
-                    DB::raw('(  SELECT COUNT(*)  FROM vehicles v  JOIN auctions a ON v.auction_id = a.id  WHERE a.platform_id = auctions.platform_id  ) as car_count'),
-                    'auctions.end_date'
-                )
-                ->get()
-                ->map(function ($auction) {
-                    return [
-                        $auction->auction_platform_name,
-                        $auction->car_count,
-                        $auction->end_date,
-                    ];
-                });
+            if ($request->ajax()) {
+                $timeData = Auctions::leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+                    ->whereRaw("LOWER(auctions.auction_type) = 'time auction'")
+                    ->select(
+                        'auction_platform.name AS auction_platform_name',
+                        'auctions.auction_type',
+                        DB::raw('(  SELECT COUNT(*)  FROM vehicles v  JOIN auctions a ON v.auction_id = a.id  WHERE a.platform_id = auctions.platform_id  ) as car_count'),
+                        'auctions.end_date'
+                    )
+                    ->get()
+                    ->map(function ($auction) {
+                        return [
+                            $auction->auction_platform_name,
+                            $auction->car_count,
+                            $auction->end_date,
+                        ];
+                    });
 
-            return response()->json(['data' => $timeData]);
-        }
+                return response()->json(['data' => $timeData]);
+            }
     }
 
 
@@ -239,10 +255,18 @@ class DashboardController extends Controller
             // if ($request->ajax()) {
                 
                   $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+                  ->join('vehicles','vehicles.auction_id','=','auctions.id')
                   ->select(
-                        'auction_platform.name AS label',
-                         DB::raw("SUM((SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id)) as total")
+                     'auction_platform.name AS label',
+                      DB::raw("COUNT(vehicles.id) as total")
                   );
+
+                  $intrest = Auth::user()->intrest->where('status','1')->first();
+                  if($intrest){
+                        $data = $data->where('vehicles.make_id',$intrest->make_id);
+                        $data = $data->where('vehicles.model_id',$intrest->model_id);
+                        $data = $data->where('vehicles.variant_id',$intrest->variant_id);
+                  }
 
 
                   if($request->has('platform_id') && $request->platform_id != ''){
@@ -284,19 +308,30 @@ class DashboardController extends Controller
 
         public function previousLots(Request $request)
     {
-                // if ($request->ajax()) {
+            // if ($request->ajax()) {
+
+                DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
                     
                 $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+                ->join('vehicles','vehicles.auction_id','=','auctions.id')
+                ->groupBy('auction_platform.id')
                 ->select(
                     'auction_platform.name AS auction_platform_name',
                     'auctions.auction_type',
-                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'On Sale') as onSale"),
-                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Provisional') as onProvisional"),
-                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Reserve not met') as onReserve"),
+                     DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'On Sale' THEN 1 END) as onSale"),
+                     DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Provisional' THEN 1 END) as onProvisional"),
+                     DB::raw("COUNT(CASE WHEN vehicles.bidding_status = 'Reserve not met' THEN 1 END) as onReserve")
                 );
 
+
+                $intrest = Auth::user()->intrest->where('status','1')->first();
+                if($intrest){
+                    $data = $data->where('vehicles.make_id',$intrest->make_id);
+                    $data = $data->where('vehicles.model_id',$intrest->model_id);
+                    $data = $data->where('vehicles.variant_id',$intrest->variant_id);
+                }
+
                 if($request->has('platform_id') && $request->platform_id != ''){
-                    // dd($request->platform_id);
                     $data = $data->whereIn('auction_platform.id',$request->platform_id);
                 }
 
@@ -307,6 +342,7 @@ class DashboardController extends Controller
                 return response()->json([
                     'data' => $data,
                 ]);
+
 
                 // }
 
@@ -320,6 +356,15 @@ class DashboardController extends Controller
             $query = Vehicle::leftjoin('make','make.id','=','vehicles.make_id')
             ->leftjoin('model','model.id','=','vehicles.model_id')
             ->leftjoin('model_variant','model_variant.id','=','vehicles.variant_id');
+
+
+            $intrest = Auth::user()->intrest->where('status','1')->first();
+            if($intrest){
+                $data = $query->where('vehicles.make_id',$intrest->make_id);
+                $data = $query->where('vehicles.model_id',$intrest->model_id);
+                $data = $query->where('vehicles.variant_id',$intrest->variant_id);
+            }
+
 
             // Count total BEFORE limit/offset
             $total = $query->count(); 
@@ -364,27 +409,50 @@ class DashboardController extends Controller
       public function getValuation(Request $request)
     {
 
-              $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
-                ->select(
-                    'auction_platform.name AS auction_platform_name',
-                    'auctions.auction_type',
-                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'On Sale') as onSale"),
-                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Provisional') as onProvisional"),
-                    DB::raw("(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id AND vehicles.bidding_status = 'Reserve not met') as onReserve"),
-                );
+              
 
-                if($request->has('platform_id') && $request->platform_id != ''){
-                    // dd($request->platform_id);
+              DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
+              $month1 = now()->subMonths(2)->format('M Y'); // e.g. May 2025
+              $month2 = now()->subMonths(1)->format('M Y'); // e.g. Jun 2025
+              $month3 = now()->format('M Y');  
+
+              $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+               ->join('vehicles', 'vehicles.auction_id', '=', 'auctions.id')
+               ->groupBy('auction_platform.id')  
+               ->select(
+                    'auction_platform.name AS platform_name',
+                    DB::raw("COUNT(vehicles.id) as Total"),
+                    DB::raw("MIN(vehicles.last_bid) as min_price"),
+                    DB::raw("MAX(vehicles.last_bid) as max_price"),
+                    DB::raw("AVG(vehicles.last_bid) as avg_price"),
+                    DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->subMonths(2)->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_1"),
+                    DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->subMonths(1)->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_2"),
+                    DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_3")
+
+               );
+
+               if($request->has('platform_id') && $request->platform_id != ''){
                     $data = $data->whereIn('auction_platform.id',$request->platform_id);
-                }
+               }
+
+               $intrest = Auth::user()->intrest->where('status','1')->first();
+               if($intrest){
+                    $data = $data->where('vehicles.make_id',$intrest->make_id);
+                    $data = $data->where('vehicles.model_id',$intrest->model_id);
+                    $data = $data->where('vehicles.variant_id',$intrest->variant_id);
+               }
 
                 $data = $data->get()->map(function($row){
                     return $row;
                 });
 
+
                 return response()->json([
+                    'labels' => [$month1, $month2, $month3],
                     'data' => $data,
                 ]);
+
 
     }
 
