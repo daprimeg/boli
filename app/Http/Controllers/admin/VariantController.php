@@ -18,7 +18,8 @@ class VariantController extends Controller
   {
 
         $search = $request->input('q');
-        $models = ModelVariant::where('name', 'like', "%$search%")
+        $models = ModelVariant::where('model_id',$request->model_id) 
+            ->where('name', 'like', "%$search%")
             ->select('id', 'name as text')
             ->limit(20)
             ->get();

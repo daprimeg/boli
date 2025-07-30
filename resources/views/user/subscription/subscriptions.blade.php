@@ -21,7 +21,7 @@
       <div class="row">
           <div class="col-md-6">
             
-            @if(!$current)
+            {{-- @if(!$current) --}}
             <div class="card mb-6">
                 <h5 class="card-header">Subscribe Plan</h5>
                 <div class="card-body">
@@ -46,8 +46,8 @@
 
                     <form id="creditCardForm" method="post" action="{{url('/subscriptions_submit')}}" class="row g-6">
                         @csrf
+
                         <input type="hidden" name="payment_method" value="" />
-                        
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label w-100" for="paymentCard">Plan</label>
@@ -60,7 +60,6 @@
                             </div>
                             <span></span>
                         </div>
-
                         <div class="col-md-12">
                             <label class="form-label w-100" for="paymentCard">Card Number</label>
                             <div class="pt-3 payment-card">
@@ -73,11 +72,10 @@
                         <div class="col-12 mt-6 text-center">
                             <button type="submit" class="btn btn-primary me-3">Submit</button>
                         </div>
-
                     </form>
                 </div>
              </div>
-             @endif
+             {{-- @endif --}}
 
           </div>
 

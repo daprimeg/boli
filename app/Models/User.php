@@ -44,4 +44,9 @@ class User extends Authenticatable  // This should extend Authenticatable
     {
     return $this->belongsToMany(News::class, 'news_user_pins')->withTimestamps();
     }
+
+    public function intrest()
+    {
+     return $this->hasMany(Interest::class,'user_id');
+    }
 }

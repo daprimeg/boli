@@ -1,6 +1,7 @@
 
 const global = {
-    intrest:{}
+    intrest:{},
+    tab:'overview'
 };
 
 
@@ -39,37 +40,7 @@ const global = {
 
 
 // Chart.js - Line chart
-//   const priceChart = new Chart(document.getElementById('priceChart').getContext('2d'), {
-//     type: 'line',
-//     data: {
-//       labels: ['May', 'June', 'July'],
-//       datasets: [{
-//         label: 'Average Price',
-//         data: [21000, 22000, 22600],
-//         backgroundColor: 'rgba(0, 123, 255, 0.2)',
-//         borderColor: '#007bff',
-//         borderWidth: 2,
-//         fill: true,
-//         tension: 0.3,
-//         pointRadius: 4,
-//         pointBackgroundColor: '#007bff'
-//       }]
-//     },
-//     options: {
-//       responsive: true,
-//       scales: {
-//         y: {
-//           beginAtZero: false,
-//           ticks: {
-//             callback: value => `£${value}`
-//           }
-//         }
-//       },
-//       plugins: {
-//         legend: { display: true }
-//       }
-//     }
-//   });
+
 
 
 
@@ -87,8 +58,14 @@ const global = {
                 dataType: "json",
                 success: function (response) {
                     global.intrest = response.data;
+
                     Intrest.loadIntrest();
                     global.lookbestauction();
+                    global.previousLots();
+                    global.upComingVehicles();
+                    global.getValuation();
+                    global.getTotalAuctions();
+
                 }
             });
             
@@ -117,9 +94,13 @@ const global = {
     // getTotalAuctions____________________________________________________________________________
     global.getTotalAuctions = function () {
 
+        
         $.ajax({
             url:path+"/dashboard/getTotalAuctions",
             dataType: "json",
+             data:{
+               type: $('#myTab .nav-link.active').text(),
+            },
             success: function (response) {
 
                 $('.total_auctions').text(response.total_auctions);
@@ -135,11 +116,16 @@ const global = {
 
             }
         });
+
     }
 
 
     // getOnlineAuctions____________________________________________________________________________________
     global.getOnlineAuctions = function () {
+
+   
+        
+
         
         $.ajax({
             url:path+"/dashboard/getOnlineAuctions",
@@ -167,7 +153,8 @@ const global = {
         });
     }
     $('.getOnlineAuctions .platform').change(() => {
-        getOnlineAuctions();
+        
+        global.getOnlineAuctions();
     });
 
 
@@ -201,7 +188,7 @@ const global = {
         });
     }
     $('.getTimeAuctions .platform').change(() => {
-        getTimeAuctions();
+        global.getTimeAuctions();
     });
 
 
@@ -234,7 +221,7 @@ const global = {
     }
 
     $('.upComingVehicles .platform').change(() => {
-        upComingVehicles();
+        global.upComingVehicles();
     });
 
 
@@ -242,6 +229,7 @@ const global = {
     
 
     // vehicleStates_____________________________________________________________________
+    let vehicleStatesChart = "";
     global.vehicleStates = function () {
         $.ajax({
             url:path+"/dashboard/vehicleStates",
@@ -255,6 +243,39 @@ const global = {
                 $(".vehicleStates .provisional").text(response.provisional_vehicles);
                 $(".vehicleStates .not_sold").text(remaining);
                 $(".vehicleStates .done").text(rows);
+                $(".vehicleStates .total_vehicle").text(response.total_vehicles);
+
+                    let chart = $(".vehicleStates #donutCharts")[0].getContext('2d');
+                    if (vehicleStatesChart) {
+                        vehicleStatesChart.destroy();
+                    }
+
+               vehicleStatesChart = new Chart(chart,{
+                    type: 'doughnut',
+                    data: {
+                      labels: ['Sold','Not Sold'],
+                        datasets: [{
+                            data: [response.total_vehicles,remaining],
+                            backgroundColor:["#007BFF","#3A3A3A",],
+                            borderWidth: 2,
+                            borderColor: '#0B1B2A',
+                            hoverOffset: 2
+                        }]
+                    },
+                    options: {
+                    cutout: '75%',
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                    }
+                });
+
+
+
+
+                
 
             }
         });
@@ -342,11 +363,10 @@ const global = {
     }
 
     $('#lookbestauction .platform').change(() => {
-        lookbestauction();
+        global.lookbestauction();
     });
 
    
-
     
 
     // getPreviousLots_________________________________________________________________________________________
@@ -378,7 +398,7 @@ const global = {
     }
 
     $('.previousLots .platform').change(() => {
-        previousLots();
+        global.previousLots();
     });
 
 
@@ -416,6 +436,10 @@ const global = {
 
       // getValuation_____________________________________________________________
     global.getValuation = function () {
+        
+         $('.getValuation .rows').html('');
+        
+
         $.ajax({
             url: path + "/dashboard/getValuation",
             dataType: "json",
@@ -428,51 +452,120 @@ const global = {
                 $('.getValuation .rows').html('');
                 response.data.forEach(res => {
 
-                    $('.getValuation .rows').append(`
-                        <div class="info-card">
-                            <div class="auction-item">
+                        $('.getValuation .rows').append(`<div class="info-card">
+                            <div data-values="${res.price_month_1},${res.price_month_2},${res.price_month_3}" 
+                               data-labels="${response.labels}" data-price="${res.avg_price}"  class="auction-item">
                                 <div class="logo-text">
-                                <img src="" alt="BCA ">
-                                <div>
-                                <div class="price">£22,600</div>
-                                <small class="text-muted">${res.auction_platform_name}</small>
+                                    <img src="${path+"/public/themeadmin/autobolidp.png"}" />
+                                    <div>
+                                    <div class="price">£${res.min_price} - £${res.max_price}</div>
+                                    <small class="text-muted">${res.platform_name}</small>
+                                    </div>
+                                </div>
+                                <div class="change down">
+                                    <button  class="toggle-btn minus-icon">+</button>
                                 </div>
                             </div>
-                            <div class="change down">
-                                <button class="toggle-btn minus-icon" onclick="toggleChart(this)">+</button>
+
+                            <div class="chart-containers">
                             </div>
-                            </div>
-                            <div class="chart-section">
-                                <h5><span class="badge rounded-circle bg-primary me-2">&nbsp;</span>Past 3 months</h5>
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="price me-2">£22,600</div>
-                                    <small class="text-muted">Average</small>
-                                </div>
-                                <div class="change up">
-                                    <span class="me-1">▲</span> 5.8&amp;
-                                </div>
-                                </div>
-                                <div class="chart-placeholder">
-                                <canvas id="priceChart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
-                                </div>
-                            </div>
-                    </div>
-                    `);
+                        </div>`);
                 });
-
-
-                // $(".upComingVehicles .vehicles_count").text(response.total +" Vehicles");
 
             }
         });
     }
 
+    $('.getValuation .platform').change(() => {
+        global.getValuation();
+    });
+
+    $(document).on('click', '.getValuation .auction-item', function () {
+      
+        $('.getValuation .chart-containers').html('');
+
+        debugger
+
+        let parent = $(this).parent();
+        let price = $(this).data('price');
+        let labels = $(this).data('labels').split(",")
+        let values = $(this).data('values').split(",").map((p) => parseFloat(p) || 0);
+
+    
+        
+        parent.find('.chart-containers').html(`
+            <div class="chart-section">
+                    <h5><span class="badge rounded-circle bg-primary me-2">&nbsp;</span>Past 3 months</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="price me-2">£${price}</div>
+                        <small class="text-muted">Average</small>
+                    </div>
+                    <div class="change up">
+                        <span class="me-1">▲</span> 5.8&amp;
+                    </div>
+                    </div>
+                    <div class="chart-placeholder">
+                    <canvas  height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas>
+                    </div>
+            </div>`);
+
+                  const priceChart = new Chart(parent.find('.chart-containers canvas')[0].getContext('2d'), {
+                        type: 'line',
+                        data: {
+                          labels: labels,
+                          datasets: [{
+                            label: 'Average Price',
+                            data: values,
+                            backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                            borderColor: '#007bff',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#007bff'
+                          }]
+                        },
+                        options: {
+                          responsive: true,
+                          scales: {
+                            y: {
+                              beginAtZero: false,
+                              ticks: {
+                                callback: value => `£${value}`
+                              }
+                            }
+                          },
+                          plugins: {
+                            legend: { display: true }
+                          }
+                        }
+                    });
+        
+        // alert('clicked!');
+    });
+
+    
+
+
 
     
   
+  $('#myTab .nav-link').click(function (e) { 
+    
+            global.getTotalAuctions();
+            global.getOnlineAuctions();
+            global.getTimeAuctions();
+            global.vehicleStates();
 
+            //Dashboard Intrest
+            global.lookbestauction();
+            global.previousLots();
+            global.upComingVehicles();
+            global.getValuation();
+            Intrest.loadIntrest();
 
+  });
 
     
 
