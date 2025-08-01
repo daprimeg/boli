@@ -31,6 +31,7 @@ class CenterController extends Controller
         ->get();
 
         return response()->json(['results' => $models]);
+
   }
 
 
@@ -43,20 +44,17 @@ class CenterController extends Controller
             $start = $request->input('start') ?? 0;
             $length = $request->input('length') ?? 10;
 
-            $query = AuctionCenter::join('auction_platform','auction_platform.id','=','auction_center.auction_platform_id');
-
+            $query = AuctionCenter::query();
             if(!empty($search)) {
                 $query->where(function ($q) use ($search) {
                     $q->where('auction_center.id', 'like', "%{$search}%")
-                     ->orWhere('auction_center.name', 'like', "%{$search}%")
-                     ->orWhere('auction_platform.name', 'like', "%{$search}%");
+                     ->orWhere('auction_center.name', 'like', "%{$search}%");
                 });
             }
 
             $totalData = clone $query;
             $data = $query->select([
                 'auction_center.*',
-                'auction_platform.name AS center_name'
             ])
             ->orderBy('created_at','desc')
             ->offset($start)
@@ -73,7 +71,6 @@ class CenterController extends Controller
                   return [
                       $item->id,
                       $item->name,
-                      $item->center_name,
                       $item->created_at,
                       $item->updated_at,
                       $html,
@@ -103,12 +100,10 @@ class CenterController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'auction_platform_id' => 'required|integer|exists:auction_platform,id',
         ]);
 
         AuctionCenter::create([
             'name' => $request->name,
-            'auction_platform_id' => $request->auction_platform_id,
             'created_at' => Carbon::now(),
             'updated_at' => NULL,
         ]);
@@ -129,18 +124,16 @@ class CenterController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'auction_platform_id' => 'required|integer|exists:auction_platform,id',
         ]);
 
-        $model =  AuctionCenter::findOrFail($id);
-
+        $model = AuctionCenter::findOrFail($id);
         $model->update([
             'name' => $request->name,
-            'auction_platform_id' => $request->auction_platform_id,
             'updated_at' => Carbon::now(),
         ]);
 
         return redirect('/admin/masters/centers')->with('success', 'Center Updated successfully.');
+
     }
 
 
@@ -153,9 +146,7 @@ class CenterController extends Controller
             return redirect('/admin/masters/centers')->with('warning','Cannot Delete Exist In Vehicle');
         }
 
-    
         $model->delete();
-
         return redirect('/admin/masters/centers')->with('success', 'Deleted successfully.');
 
     }

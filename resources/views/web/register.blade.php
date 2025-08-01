@@ -262,7 +262,7 @@
                             </div>
 
                             <!-- File Upload Section -->
-                            <div class="mb-4" style="width:400px;">
+                            <div class=" mb-4" style="width:400px;">
                                 <label class="form-label fw-bold text-white">
                                     Upload ID <span class="text-danger">*</span>
                                 </label>
@@ -278,7 +278,7 @@
                                 <small class="text-muted ">Upload must be in .jpg, .png or .pdf format.</small>
                             </div>
 
-                            <div class="mb-5">
+                            <div class="d-none mb-5">
                                 <h2 class="mb-4 text-white">Proof
                                     <div class="border-bottom border-primary" style="width: 100px; height: 3px; margin-top: 5px"></div>
                                 </h2>
@@ -310,33 +310,6 @@
                                 </div>
                             </div>
 
-                            <div class="mb-5">
-                                <h2 class="mb-4 text-white">Plan Details
-                                    <div class="border-bottom border-primary" style="width: 100px; height: 3px; margin-top: 5px"></div>
-                                </h2>
-
-                                <div class="plans">
-                                    <label class="form-label text-white" for="plan_id">Subscription Plan</label>
-                                    <select class="form-control" name="plan_id" >
-                                        <option value="">Select Plan</option>
-                                        @foreach ($plans as $item)
-                                            <option @if(request()->plan_id == $item->id) selected @endif value="{{$item->id}}">{{$item->plan_name}} - £ {{$item->price}} / month</option>
-                                        @endforeach
-                                    </select>
-                                    <small class="error error-plan_id text-danger"></small>
-                                </div>
-                                <div class="pt-3 payment-card " >
-                                      <div class="form-group">
-                                            <label class="form-label text-white">Card Info</label> 
-                                            <div id="card-element"></div>
-                                            <div id="card-errors" style="color: red;"></div>
-                                      </div>
-                                </div>
-                            </div>
-
-                            <!-- Stripe Card Element -->
-                   
-
                             <div class="mb-4">
                                 <p class="text-muted">
                                     By submitting this form, you are accepting the
@@ -360,45 +333,10 @@
 @endsection
 @section('js')
 
-   <script src="https://js.stripe.com/v3/"></script>
+   
    <script>
 
-
     $(document).ready(function () {
-
-        let stripe = Stripe("{{ env('STRIPE_PUBLISHABLE_KEY') }}");
-        let elements = stripe.elements();
-        let card = elements.create('card');
-        card.mount('#card-element');
-
-
-        async function checkpayment(){
-            
-            $('#card-errors').text('');
-            
-            let response = await stripe.createPaymentMethod({
-                type: 'card',
-                card: card,
-            });
-
-            if(response.error){
-                $('input[name=payment_method]').val('');
-                $('#card-errors').text(response.error.message); 
-                return false;
-            }else{
-                $('input[name=payment_method]').val(response.paymentMethod.id);
-                return true;   
-            }
-
-        }
-
-        $('select[name=plan_id]').change(function (e) { 
-            if($(this).val() == 2){
-                $('.payment-card').hide();
-            }else{
-                $('.payment-card').show();
-            }
-        }).trigger('change');
 
             
         $('.register-form').on('submit', async function (e) {
@@ -407,18 +345,7 @@
 
                 $(`.error`).text('');
                 $('button[type=submit]').prop('disabled', true);
-
-                if($('select[name=plan_id]').val() != 2){
-                    let res = await checkpayment();
-                    if(!res){
-                        alert('Please Enter Card Details');
-                        $('button[type=submit]').prop('disabled', false);
-                        return false;
-                        
-                    }
-                }
-
-    
+                $('button[type=submit]').text('Loading');
 
                 let form = $(this)[0];
                 let formData = new FormData(form);
@@ -431,28 +358,28 @@
                     contentType: false,
                     success: function (response) {
                         
-                        console.log(response);
+                        // console.log(response);
                         alert("Form submitted successfully!");
                         window.location.href = "{{url('/dashboard')}}";
                         $('button[type=submit]').prop('disabled', false);
+                        $('button[type=submit]').text("Submit Application");
 
                     },
                     error: function (xhr) {
 
                         if(xhr?.responseJSON?.errors){
                             $.each(xhr.responseJSON.errors, function (key, messages) {
-                                $(`.error-${key}`).text(messages);
-                                
+                                $(`.error-${key}`).text(messages);                    
                             });
                         }else{
                             alert(xhr?.responseJSON?.message);
                         }   
                         $('button[type=submit]').prop('disabled', false);
+                        $('button[type=submit]').text("Submit Application");
+
+                        
                     }
                 });
-
-
-
             });
 
         });

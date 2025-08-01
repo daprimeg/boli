@@ -73,166 +73,163 @@
         </button>
 
      <div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav mx-auto text-center">
-    <li class="nav-item">
-  <a class="nav-link" href="{{ url('/autionshadule') }}">Auction Solutions</a>
-</li>
+        <ul class="navbar-nav mx-auto text-center">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url('/autionshadule') }}">Auction Solutions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url('/features')}}">Features</a>
+          </li>
 
+              <!-- Explore Dropdown -->
+              <!-- Explore Mega Dropdown -->
+          <li class="nav-item dropdown position-static">
+            <a class="nav-link dropdown-toggle" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Explore
+            </a>
+          <div class="dropdown-menu w-100 mt-0 border-0 shadow"
+              style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: rgba(18, 18, 18, 0.57) !important; "
+              aria-labelledby="exploreDropdown">
+          <div class="container py-3" 
+              style="background: var(--background-color); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 43% !important;">
+                <div class="row">
+                  <div class="col-md-4 ">
+                    <div class="expore-megemenu">
+                      <div class="d-flex">
+                        <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+                        <h6 class=" text-white ">Resorese</h6>
+                      </div>
+                      <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
 
-    <li class="nav-item">
-      <a class="nav-link" href="{{url('/features')}}">Features</a>
-    </li>
+                    </div>
 
-    <!-- Explore Dropdown -->
-    <!-- Explore Mega Dropdown -->
-<li class="nav-item dropdown position-static">
-  <a class="nav-link dropdown-toggle" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Explore
-  </a>
- <div class="dropdown-menu w-100 mt-0 border-0 shadow"
-     style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: rgba(18, 18, 18, 0.57) !important; "
-     aria-labelledby="exploreDropdown">
- <div class="container py-3" 
-     style="background: var(--background-color); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 43% !important;">
-      <div class="row">
-        <div class="col-md-4 ">
-          <div class="expore-megemenu">
-            <div class="d-flex">
-              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
-              <h6 class=" text-white ">Resorese</h6>
+                    <div class="expore-megemenu mt-3">
+                      <div class="d-flex">
+                        <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+                        <h6 class=" text-white ">Resorese</h6>
+                      </div>
+                      <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                  <div class="expore-megemenu">
+                      <div class="d-flex">
+                        <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+                        <h6 class=" text-white ">Resorese</h6>
+                      </div>
+                      <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+                    </div>
+
+                    <div class="expore-megemenu mt-3">
+                      <div class="d-flex">
+                        <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+                        <h6 class=" text-white ">Resorese</h6>
+                      </div>
+                      <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="expore-megemenu">
+                      <div class="d-flex">
+                        <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+                        <h6 class=" text-white ">Resorese</h6>
+                      </div>
+                      <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+                    </div>
+
+                    <div class="expore-megemenu mt-3">
+                      <div class="d-flex">
+                        <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
+                        <h6 class=" text-white ">Resorese</h6>
+                      </div>
+                      <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
+
+          </li>
+
+          <!-- Resources Mega Dropdown -->
+          <li class="nav-item dropdown position-static">
+            <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Resources
+            </a>
+              <div class="dropdown-menu w-100 mt-0 border-0 shadow"
+              style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: #000e2038 !important; "
+              aria-labelledby="exploreDropdown">
+                <div class="container py-3" 
+                    style="background: var(--background-color); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 40% !important;">
+                      <div class="row mb-3">
+                    
+                    <!-- Learn Section -->
+                    <div class="col-md-4">
+                      <h5 style="color: white;">Learn</h5>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Guidance</a></p>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">how to use</a></p>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Best auction</a></p>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Find valuation</a></p>
+                    </div>
+
+                    <!-- Discover Section -->
+                    <div class="col-md-4">
+                      <h5 style="color: WHITE;">Discover</h5>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Blog</a></p>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">News</a></p>
+                      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Trader Experience</a></p>
+                      {{-- <p><span style="color: white;">📘</span></p> --}}
+                    </div>
+
+                    <!-- Slider Placeholder -->
+                      <div class="col-md-4">
+                          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                          <div class="carousel-inner">
+                            <div class="carousel-item active">
+                              <img src="public/theme/fav.png" class="d-block w-75" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                              <img src="public/theme/fav.png" class="d-block w-75" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                              <img src="public/theme/fav.png" class="d-block w-75" alt="...">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+              
+                    <div class="d-flex justify-content-end  py-2 " style="position: relative; top: 40px; border-radius: 8px; background-color: #0e1b2b !important; border-top: 1px solid grey; ">
+                      <a href="#" style="color: white; text-decoration: none; "><span style="color: white;">📘</span> Download</a>
+                      <a href="#" style="color: white; text-decoration: none; padding-left: 18px;"><span style="color: white;">📘</span> About us</a>
+                      <a href="#" style="color: white; text-decoration: none; padding-left: 18px;"><span style="color: white;">📘</span> Contact us</a>
+                  </div>
+                </div>
+              
+                </div>
+              </div>
+            </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="Find.html">Find Here</a>
+          </li>
+        </ul>
+
+              <div class="d-flex align-items-center justify-content-center mt-3 mt-lg-0">
+                @if(Auth::check())
+                    <a class="btn me-2 text-light" href="{{url('/dashboard')}}">My Account</a>
+                @else
+                    <a class="btn me-2 text-light" href="{{url('/login')}}">Sign In</a>
+                    <a class="btn btn-get-started text-white" href="{{url('/register')}}">Get Started</a>
+                @endif
+              </div>
 
           </div>
-
-           <div class="expore-megemenu mt-3">
-            <div class="d-flex">
-              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
-              <h6 class=" text-white ">Resorese</h6>
-            </div>
-            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
-
-          </div>
-        </div>
-        <div class="col-md-4">
-         <div class="expore-megemenu">
-            <div class="d-flex">
-              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
-              <h6 class=" text-white ">Resorese</h6>
-            </div>
-            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
-
-          </div>
-
-           <div class="expore-megemenu mt-3">
-            <div class="d-flex">
-              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
-              <h6 class=" text-white ">Resorese</h6>
-            </div>
-            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
-
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="expore-megemenu">
-            <div class="d-flex">
-              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
-              <h6 class=" text-white ">Resorese</h6>
-            </div>
-            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
-
-          </div>
-
-           <div class="expore-megemenu mt-3">
-            <div class="d-flex">
-              <i class="fa-brands fa-medapps" style="padding-right: 10px"></i>
-              <h6 class=" text-white ">Resorese</h6>
-            </div>
-            <p style="font-size: 12px; margin-bottom: 0px !important;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae, autem. Debitis, libero?</p>
-
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
-
-</li>
-
-<!-- Resources Mega Dropdown -->
-<li class="nav-item dropdown position-static">
-  <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Resources
-  </a>
-    <div class="dropdown-menu w-100 mt-0 border-0 shadow"
-     style="position: fixed; left:-19px; top: 60px; height: 100%; z-index: 21000; background: #000e2038 !important; "
-     aria-labelledby="exploreDropdown">
- <div class="container py-3" 
-     style="background: var(--background-color); border: 1px solid var(--items-border-colur) !important; border-radius: 4px; width: 40% !important;">
-       <div class="row mb-3">
-    
-    <!-- Learn Section -->
-    <div class="col-md-4">
-      <h5 style="color: white;">Learn</h5>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Guidance</a></p>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">how to use</a></p>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Best auction</a></p>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Find valuation</a></p>
-    </div>
-
-    <!-- Discover Section -->
-    <div class="col-md-4">
-      <h5 style="color: WHITE;">Discover</h5>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Blog</a></p>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">News</a></p>
-      <p><span style="color: white;">📘</span> <a href="#" style="color: white; text-decoration: none;">Trader Experience</a></p>
-      {{-- <p><span style="color: white;">📘</span></p> --}}
-    </div>
-
-    <!-- Slider Placeholder -->
-    <div class="col-md-4">
-  <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="public/theme/fav.png" class="d-block w-75" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="public/theme/fav.png" class="d-block w-75" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="public/theme/fav.png" class="d-block w-75" alt="...">
-    </div>
-  </div>
-  
-</div>
-
-    </div>
-
-    
-    <div class="d-flex justify-content-end  py-2 " style="position: relative; top: 40px; border-radius: 8px; background-color: #0e1b2b !important; border-top: 1px solid grey; ">
-    <a href="#" style="color: white; text-decoration: none; "><span style="color: white;">📘</span> Download</a>
-    <a href="#" style="color: white; text-decoration: none; padding-left: 18px;"><span style="color: white;">📘</span> About us</a>
-    <a href="#" style="color: white; text-decoration: none; padding-left: 18px;"><span style="color: white;">📘</span> Contact us</a>
-  </div>
-  </div>
-  
-    </div>
-    
-  </div>
-
-</li>
-
-    
-    <li class="nav-item">
-      <a class="nav-link" href="Find.html">Find Here</a>
-    </li>
-  </ul>
-
-  <div class="d-flex align-items-center justify-content-center mt-3 mt-lg-0">
-    <img src="{{asset('/public/theme/assets/Screenshot.png')}}" class="rounded-circle me-2" height="30" width="30"/>
-    <a class="btn me-2 text-light" href="{{url('/login')}}">Sign In</a>
-    <a class="btn btn-get-started text-white" href="{{url('/register')}}">Get Started</a>
-  </div>
-</div>
-      </div>
 </nav> 
 

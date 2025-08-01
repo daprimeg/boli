@@ -56,7 +56,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <div class="row pt-5">
                             <div class="col-md-8">
                                 <select style="max-width:200px;padding:5px;"  name="length" class="">
@@ -71,12 +70,12 @@
                               <input style="max-width: 300px"  placeholder="Search.." type="text" class="d-inline form-control" name="search"  />
                             </div>
                         </div>
-
                         <div class="pt-5 table-responsive text-nowrap">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Image</th>
                                         <th>Name</th>
                                         <th>Created at</th>
                                         <th>Updated at</th>
@@ -84,7 +83,6 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-
                                 </tbody>
                             </table>
                         </div>

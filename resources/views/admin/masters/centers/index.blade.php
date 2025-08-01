@@ -74,7 +74,6 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <th>Plateform</th>
                                         <th>Created at</th>
                                         <th>Updated at</th>
                                         <th>Actions</th>

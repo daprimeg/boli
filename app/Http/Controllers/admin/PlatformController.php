@@ -62,6 +62,7 @@ class PlatformController extends Controller
 
                   return [
                       $item->id,
+                      "<img style='width:50px;height:50px;' src='".asset('/public/uploads/platforms/'.$item->image)."' />",
                       $item->name,
                       $item->created_at,
                       $item->updated_at,
@@ -91,17 +92,28 @@ class PlatformController extends Controller
 
          $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image',
         ]);
 
-        AuctionPlatform::create([
+        $model = AuctionPlatform::create([
             'name' => $request->name,
             'created_at' => Carbon::now(),
             'updated_at' => NULL,
         ]);
 
-
-        return redirect('/admin/masters/platforms')->with('success', 'Platform created successfully.');
+        
+        if($request->file('image')) {
+            $fileName = time() . '__ff__' . $request->file('image')->getClientOriginalName();
+            $filePath = public_path('uploads/platforms');
+            $request->file('image')->move($filePath, $fileName);
+            $model->image = $fileName;
+            $model->save();
+        }
+        
+        
+        return redirect('/admin/masters/platforms')->with('success', 'Platform created successfully..');
     }
+
 
     public function edit($id)
     {
@@ -114,12 +126,29 @@ class PlatformController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image',
         ]);
 
         $model = AuctionPlatform::findOrFail($id);
         $model->update($request->all());
 
+        if($request->file('image')) {
+
+            // Remove existing thumbnail if it exists
+            if ($model->image && file_exists(public_path('uploads/' . $model->image))) {
+                unlink(public_path('uploads/' . $model->image));
+            }
+
+            $fileName = time() . '__ff__' . $request->file('image')->getClientOriginalName();
+            $filePath = public_path('uploads/platforms');
+            $request->file('image')->move($filePath, $fileName);
+            $model->image = $fileName;
+            $model->save();
+            
+        }
+
         return redirect('/admin/masters/platforms')->with('success', 'Platform updated successfully.');
+
     }
 
 

@@ -85,7 +85,7 @@
             </li>
             
             <li class="menu-item {{ request()->is('profilesetting*') || request()->is('changepassword*')  ? 'active' : '' }}">
-              <a href="{{ route('profile.edit') }}" class="menu-link">
+              <a href="{{url('/account-setting/profile')}}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-settings"></i>
                 <div data-i18n="Setting">Setting</div>
               </a>

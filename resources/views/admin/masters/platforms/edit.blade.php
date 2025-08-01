@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{url('/admin/masters/platforms/'.$model->id)}}" method="POST">
+                    <form action="{{url('/admin/masters/platforms/'.$model->id)}}" method="POST" enctype="multipart/form-data" >
                         @csrf
                         @method('PUT')
                         
@@ -49,6 +49,17 @@
                                     <label class="form-label">Name</label>
                                     <input type="text" name="name" class="form-control" value="{{ old('name',$model->name) }}" required />
                                 </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Image</label>
+                                    <input  type="file" name="image" class="form-control" required />
+                                </div>
+                                @if($model->image)
+                                    <a href="{{asset('/public/uploads/platforms/'.$model->image)}}" target="_blank">
+                                        <img class="pt-3" style="width:50px;height:50px;" src="{{asset('/public/uploads/platforms/'.$model->image)}}" />
+                                    </a>
+                                @endif
                             </div>
                         </div>
 

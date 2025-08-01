@@ -42,26 +42,14 @@
                     <form action="{{url('/admin/masters/centers/'.$model->id)}}" method="POST">
                         @csrf
                         @method('PUT')
-                        
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Name</label>
                                     <input type="text" name="name" class="form-control" value="{{ old('name',$model->name) }}" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">Center <span class="text-danger">*</span></label>
-                                    <select name="auction_platform_id" class="form-control center" required >
-                                        @if($model->platform)
-                                        <option value="{{$model->auction_platform_id}}">{{$model->platform->name}}</option>
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
                         </div>
-
                         <div class="text-center pt-5" >
                             <button type="submit" class="btn btn-primary">Update</button>
                         </div>

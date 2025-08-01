@@ -41,25 +41,30 @@
                         </div>
                     </div>
                     <div class="card-body">
-                           <form action="{{url('/admin/masters/platforms')}}" method="POST" enctype="multipart/form-data">
-                                @csrf
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                                        </div>
+                        <form action="{{url('/admin/masters/platforms')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="text-center pt-5" > 
-                                            <button class="btn btn-primary">Save</button>
-                                        </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Image</label>
+                                        <input  type="file" name="image" class="form-control" required />
                                     </div>
-                                </div>                            
-                            </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="text-center pt-5" > 
+                                        <button class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </form>
                     </div>
                 </div>
             </div>

@@ -199,7 +199,7 @@
                         dataType: 'json',
                     }
                 }).on('change', function () {
-                    $('select[name=center_id]').val(null).trigger('change');
+                    // $('select[name=center_id]').val(null).trigger('change');
                 });
 
 
@@ -212,7 +212,7 @@
                         data: function (params) {
                             return {
                                 q: params.term,
-                                platform_id: $('select[name=platform_id]').val()
+                                // platform_id: $('select[name=platform_id]').val()
                             };
                         }
                     }
