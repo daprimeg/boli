@@ -64,9 +64,13 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 Route::get('/', [WebController::class,'index']);
-Route::get('/feautres', [WebController::class,'feautres']);
+Route::get('/features', [WebController::class,'features']);
 
 Route::get('/pricing', [WebController::class,'pricing']);
+
+Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
+
+Route::get('/exploreevery', [WebController::class, 'ExploreEvery']);
 
 Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
@@ -75,7 +79,6 @@ Route::get('/register', [AuthController::class, 'register']);
 
 Route::post('/register_submit', [AuthController::class, 'register_submit']);
 
-Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
 
 
 
@@ -258,6 +261,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
             Route::resource('associate-users', \App\Http\Controllers\AssociateUserController::class);
 
+            Route::match(['get', 'post'],'/checkout', [AuthController::class,'checkout']);
+       
+
             // User Dashboard & Pages
             Route::get('/dashboard',[DashboardController::class,'dashboard'])->name('dasahbord');
             Route::get('/dashboard/online', [DashboardController::class, 'onlineAuctions']);
@@ -335,17 +341,18 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::view('/platformwise', 'user/platformwise')->name('platformwise');
             Route::view('/search', 'user/search')->name('search');
 
-            Route::get('/checkout', [CheckoutController::class, 'index'])->name('user.checkout.index');
-            Route::post('/checkout', [CheckoutController::class, 'store'])->name('user.checkout.store');
+            // Route::get('/checkout', [CheckoutController::class, 'index'])->name('user.checkout.index');
+            // Route::post('/checkout', [CheckoutController::class, 'store'])->name('user.checkout.store');
 
             // Route::get('/checkout/{id?}', [CheckoutController::class, 'index'])->name('checkout.index');
             // Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
 
-            // Profile Settings
-            Route::get('/profilesetting', [ProfileSettingController::class, 'edit'])->name('profile.edit');
-            Route::post('/profilesetting/update', [ProfileSettingController::class, 'update'])->name('profile.update');
-            Route::post('/changepassword', [ProfileSettingController::class, 'changePassword'])->name('profile.changePassword');
-            Route::get('/changepassword', [ProfileSettingController::class, 'editSecuritySettings'])->name('profile.editSecuritySettings');
+            // account-setting
+
+            Route::match(['get', 'post'],'/account-setting/profile', [ProfileSettingController::class,'profile']);
+            Route::match(['get', 'post'],'/account-setting/changePassword', [ProfileSettingController::class, 'changePassword']);
+            Route::match(['get', 'post'],'/account-setting/billing', [ProfileSettingController::class, 'billing']);
+            
 
             Route::get('/userprofile', [AlertController::class, 'userAlerts'])->name('profile.userprofile');
 

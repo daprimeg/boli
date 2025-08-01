@@ -21,10 +21,249 @@ use Stripe\Stripe;
 class AuthController extends Controller
 {
 
-   
 
-    private function AccountCreate($request){
+    public function checkout(Request $request){
 
+         if($request->isMethod('post')){
+
+                // dd($request->all());
+
+              $validator = Validator::make($request->all(),
+                [
+                    "first_name" => 'required|string',
+                    "last_name" => 'required|string',
+                    "phone" => 'required|string',
+                    "country" => 'required|string',
+                    "state" => 'required|string',
+                    "city" => 'required|string',
+                    "zip_code" => 'required|string',
+                    "address" => 'required|string',
+                ],[],
+                [
+                    "first_name" => 'First Name',
+                    "last_name" => 'Last Name',
+                    "phone" => 'Phone',
+                    "country" => 'Country',
+                    "state" => 'State',
+                    "city" => 'City',
+                    "zip_code" => 'Zip Code',
+                    "address" => 'Address',
+                ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Request Failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $plan = Plan::find($request->plan_id);
+            if(!$plan){
+                return response()->json([
+                    'message' => 'Plan Not Found',
+                ], 422);
+            }
+
+
+      
+            if($plan->id == 2){
+
+                $transactionId = "";
+                $this->planCreate($transactionId,$plan,$request);
+                return response()->json([
+                    'message' => 'Registration and payment successful.',
+                ], 201);
+
+            }
+
+
+            if(!$request->payment_method){
+                return response()->json([
+                    'message' => 'Add Payment Details',
+                ], 422);
+            }
+
+            Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+            try {
+                
+                    $intent = PaymentIntent::create([
+                        'amount' => round($plan->price * 100),
+                        'currency' => 'gbp',
+                        'automatic_payment_methods' => [
+                            'enabled' => true,
+                            'allow_redirects' => 'never',
+                        ],
+                        'confirm' => true,
+                        'payment_method' => $request->payment_method
+                    ]);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    "message" => $e->getMessage(),
+                ],500);
+            }
+
+
+
+            if ($intent->status == 'succeeded') {
+
+                    $transactionId = $intent->latest_charge;
+                    $this->planCreate($transactionId,$plan,$request);
+                    return response()->json([
+                        'message' => 'Registration and payment successful.',
+                    ], 201);
+
+            } elseif ($intent->status == 'requires_action' && $intent->next_action->type == 'use_stripe_sdk') {
+
+                    return response()->json([
+                        "message" => "Additional authentication is required (e.g. 3D Secure).",
+                    ],500);
+
+            } else {
+                    
+                    $errorMessage = $intent->last_payment_error->message ?? 'Payment failed or incomplete.';
+                    return response()->json([
+                        'message' => $errorMessage,
+                        'status' => $intent->status,
+                    ], 500);
+            }
+                
+                
+            return response()->json([
+                'message' => 'Successfull',
+            ], 200);
+
+        }
+        // _____________________________________________
+
+
+        $plans = Plan::all();
+        return view('web.checkout',compact('plans'));
+
+    }
+
+
+    private function planCreate($transactionId,$plan,$request){
+
+
+            $user = Auth::user();
+            $startDate = now();
+            $expiryDate = now()->addMonths($plan->duration_value);
+        
+            $membership = Membership::create([
+                'user_id' => $user->id,
+                'plan_id' => $plan->id,
+                'membership_start_date' => $startDate,
+                'membership_expiry_date' => $expiryDate,
+                'membership_status' => 'Pending',
+                'membership_type' => 'monthly',
+            ]);
+
+            MembershipPayment::create([
+                'membership_id' => $membership->id,
+                'payment_date' => now(),
+                'payment_method' => 'stripe',
+                'transaction_id' => $transactionId,
+                'charge_id' => $transactionId,
+                'payer_id' => $transactionId ,
+                'amount' => $plan->price,
+                'currency' => 'GBP',
+                'payment_status' => 'Completed',
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'phone' => $request->phone,
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city,
+                'zip_code' => $request->zip_code,
+                'address' => $request->address,
+            ]);
+
+            $membership->update(['membership_status' => 'Active']);
+            
+
+    }
+
+
+      public function register(Request $request)
+    {
+
+        if(Auth::check()) {
+          return redirect('/dashboard')->with('message', 'You are already logged in.');
+        }
+
+        $plans = Plan::where('status',1)->orderBy('sort_by')->get();
+
+        return view('web.register',compact('plans'));
+    }
+
+
+    // Registration
+    public function register_submit(Request $request)
+    {
+            if(Auth::check()) {
+              return redirect('/dashboard')->with('message', 'You are already logged in.');
+            }
+
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string',
+                'companyName' => 'required|string|max:255',
+                'companyAddress1' => 'required|string|max:255',
+                'companyAddress2' => 'required|string|max:255',
+                'townCity' => 'required|string|max:255',
+                'country' => 'required|string|max:255',
+                'postcode' => 'required|string|max:255',
+                'telephone' => 'required|string|max:255',
+                'businessType' => 'required|string|max:255',
+                'companyReg' => 'required|string|max:255',
+                'website' => 'required|url',
+                'businessEmail' => 'required|string|email|max:255|unique:users',
+                'motorTradeInsurance' => 'required|string|max:255',
+                'vatNumber' => 'required|string|max:255',
+                
+                'firstName' => 'required|string|max:255',
+                'surname' => 'required|string|max:255',
+                'title' => 'required|string|max:255',
+                'jobTitle' => 'required|string|max:255',
+
+                'phone' => 'required|string|max:255',
+                'personalEmail' => 'required|string|email|max:255|unique:users',      
+                'uploadID' => 'required|file|mimes:jpg,png,pdf|max:4096',
+          
+            ],[],
+            [
+            'companyName' => 'Company Name',
+            'companyAddress1' => 'Address Line 1',
+            'companyAddress2' => 'Address Line 2',
+            'townCity' => 'Town or City',
+            'country' => 'Country',
+            'postcode' => 'Postcode',
+            'telephone' => 'Telephone Number',
+            'businessType' => 'Business Type',
+            'companyReg' => 'Company Registration Number',
+            'website' => 'Company Website',
+            'businessEmail' => 'Business Email',
+            'motorTradeInsurance' => 'Motor Trade Insurance',
+            'vatNumber' => 'VAT Number',
+            'firstName' => 'First Name',
+            'surname' => 'Surname',
+            'title' => 'Title',
+            'jobTitle' => 'Job Title',
+            'password' => 'Password',
+            
+            'phone' => 'Phone Number',
+            'personalEmail' => 'Personal Email',
+            'password' => 'Password',
+            'uploadID' => 'Upload ID',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Request Failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
 
             $user = new User();
 
@@ -53,7 +292,6 @@ class AuthController extends Controller
             $user->user_type = 0;
             $user->status = 1;
 
-            $plainPassword = rand(100000, 999999);
             $user->password = FacadesHash::make($request->password);
             
             if ($request->file('avatar')) {
@@ -80,83 +318,42 @@ class AuthController extends Controller
                 // $user->save();
             }
 
-            if ($request->file('motorTradeProof')) {
-                // Remove existing thumbnail if it exists
-                if ($user->motorTradeProof && file_exists(public_path('uploads/' . $user->motorTradeProof))) {
-                    unlink(public_path('uploads/' . $user->motorTradeProof));
-                }
-                $fileName = time() . '__ff__' . $request->file('motorTradeProof')->getClientOriginalName();
-                $filePath = public_path('uploads/motorTradeProof');
-                $request->file('motorTradeProof')->move($filePath, $fileName);
-                $user->motorTradeProof = $fileName;
-                // $user->save();
-            }
+            // if ($request->file('motorTradeProof')) {
+            //     // Remove existing thumbnail if it exists
+            //     if ($user->motorTradeProof && file_exists(public_path('uploads/' . $user->motorTradeProof))) {
+            //         unlink(public_path('uploads/' . $user->motorTradeProof));
+            //     }
+            //     $fileName = time() . '__ff__' . $request->file('motorTradeProof')->getClientOriginalName();
+            //     $filePath = public_path('uploads/motorTradeProof');
+            //     $request->file('motorTradeProof')->move($filePath, $fileName);
+            //     $user->motorTradeProof = $fileName;
+            //     // $user->save();
+            // }
 
-            if ($request->file('addressProof')) {
-                // Remove existing thumbnail if it exists
-                if ($user->addressProof && file_exists(public_path('uploads/' . $user->addressProof))) {
-                    unlink(public_path('uploads/' . $user->addressProof));
-                }
-                $fileName = time() . '__ff__' . $request->file('addressProof')->getClientOriginalName();
-                $filePath = public_path('uploads/addressProof');
-                $request->file('addressProof')->move($filePath, $fileName);
-                $user->addressProof = $fileName;
-                // $user->save();
-            }
+            // if ($request->file('addressProof')) {
+            //     // Remove existing thumbnail if it exists
+            //     if ($user->addressProof && file_exists(public_path('uploads/' . $user->addressProof))) {
+            //         unlink(public_path('uploads/' . $user->addressProof));
+            //     }
+            //     $fileName = time() . '__ff__' . $request->file('addressProof')->getClientOriginalName();
+            //     $filePath = public_path('uploads/addressProof');
+            //     $request->file('addressProof')->move($filePath, $fileName);
+            //     $user->addressProof = $fileName;
+            //     // $user->save();
+            // }
 
             $user->save();
 
-            return $user;
+            Auth::login($user);
 
-    }
-
-    private function planCreate($user,$transactionId,$plan,$request){
-
-           
-            $startDate = now();
-            $expiryDate = now()->addMonths($plan->duration_value);
-        
-            $membership = Membership::create([
-                'user_id' => $user->id,
-                'plan_id' => $plan->id,
-                'membership_start_date' => $startDate,
-                'membership_expiry_date' => $expiryDate,
-                'membership_status' => 'Pending',
-                'membership_type' => 'monthly',
-            ]);
-
-            MembershipPayment::create([
-                'membership_id' => $membership->id,
-                'payment_date' => now(),
-                'payment_method' => 'stripe',
-                'transaction_id' => $transactionId,
-                'charge_id' => $transactionId,
-                'payer_id' => $transactionId ,
-                'amount' => $plan->price,
-                'currency' => 'GBP',
-                'payment_status' => 'Completed',
-            ]);
-
-            $membership->update(['membership_status' => 'Active']);
+            return response()->json([
+              'message' => 'Account Registration Complete',
+            ], 201);
 
     }
 
 
-      public function register(Request $request)
-    {
-
-        if(Auth::check()) {
-          return redirect('/dashboard')->with('message', 'You are already logged in.');
-        }
-
-        $plans = Plan::where('status',1)->orderBy('sort_by')->get();
-
-        return view('web.register',compact('plans'));
-    }
-
-
-    // Registration
-    public function register_submit(Request $request)
+    public function register_submit1(Request $request)
     {
         if(Auth::check()) {
           return redirect('/dashboard')->with('message', 'You are already logged in.');
@@ -212,8 +409,6 @@ class AuthController extends Controller
             'jobTitle' => 'Job Title',
             'password' => 'Password',
             'plan_id' => 'Plan',
-            
-
             'phone' => 'Phone Number',
             'personalEmail' => 'Personal Email',
             'password' => 'Password',
@@ -319,6 +514,7 @@ class AuthController extends Controller
 
 
     }
+
 
     
 

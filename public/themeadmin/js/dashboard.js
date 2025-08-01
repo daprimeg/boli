@@ -80,8 +80,8 @@ const global = {
                 success: function (response) {
                     response.data.forEach(element => {
                     
-                        $("#interest-buttons-wrapper").append(`<button onClick="Intrest.setIntrest(${element.id})" class="btn btn-primary rounded-3 fw-medium border-solid interest-button flex-shrink-0 waves-effect waves-light ${element.status == '1' ? 'active' : ''}" 
-                        style="color: rgb(236, 229, 229) !important; ">${element.title}</button>`);
+                        $("#interest-buttons-wrapper").append(`<button onClick="Intrest.setIntrest(${element.id})" class="text-black btn rounded-3 fw-medium border-solid interest-button flex-shrink-0 waves-effect waves-light ${element.status == '1' ? 'active' : ''}" 
+                        style=" !important; border: 1px solid var(--bs-b-color); ">${element.title}</button>`);
 
                     });
                 }
@@ -350,10 +350,12 @@ const global = {
                        lookbestauction.find('.labels-container').html('');
                        response.data.forEach(element => {
                               lookbestauction.find('.labels-container').append(`
-                                 <div style="display:flex;align-items:center;margin-bottom:4px;">
-                                    <div style="width:12px;height:12px;background:${element.color};margin-right:8px;"></div>
-                                    <span>${element.label}</span>
-                                    <span class="px-2" >(${element.total})</span>
+                                 <div class = "col-6" style="display:flex;align-items:center;margin-bottom:50px; text-align:left; ">
+                                 <div style="width:12px;height:12px;background:${element.color};margin-right:8px; border-radius: 50% "></div>
+                                    <div class = "col-6" style="display:flex;flex-direction: column;">
+                                    <span style ="width: 150px !important; font-size: var(--font-p1);color: gray;">${element.label}</span>
+                                    <span class="px-2" style="font-size: var(--font-h5);" >(${element.total})</span>
+                                    <div>
                                 </div>
                              `);
                        }); 
@@ -458,7 +460,7 @@ const global = {
                                     <img src="${path+"/public/themeadmin/autobolidp.png"}" />
                                     <div>
                                     <div class="price">£${res.min_price} - £${res.max_price}</div>
-                                    <small class="text-muted">${res.platform_name}</small>
+                                    <small class="text-muted" style="font-size: var(--font-p1)">${res.platform_name}</small>
                                     </div>
                                 </div>
                                 <div style="color:${res.percent > 0 ? 'green' :'red'}" class="change">

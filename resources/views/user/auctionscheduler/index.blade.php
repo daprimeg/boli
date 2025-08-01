@@ -11,7 +11,6 @@
 
    .auction-tabs a{
       border: 1px solid var(--bs-border-color);
-      background-color: var(--bs-paper-bg);
    }
 
    
@@ -21,11 +20,11 @@
    }
 
    .auction-tabs .active:hover{
-      color: white!important;
+      color: var(--bs-heading-color)!important;
    }
 
    .auction-tabs .active:focus{
-      color: white!important;
+      color: var(--bs-heading-color)!important;
    }
    .dataTables_length {
     display: none !important;
@@ -59,23 +58,32 @@
     .centers span{
         display: block;
         padding: 2px;
-        background: #000f21;
-        color: #0073e5;
+        color: var(--bs-heading-color);
         margin: 1px 2px;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+        background:var(--bs-primary) !important;
+        border: none !important;
+        opacity: 1 !important;
+        color: var(--bs-heading-color) !important
 
+     }
+
+     .tb-data-fonts tr td{
+          font-size: var(--font-p1) !important;
+        }
    
 </style>
 @endsection
 @section('content')
-    <div class="container-fluid ">
+    <div class="container-fluid" style="background: #0f1c2c; height: 100%;">
         <div class="row" style="padding-top: 50px" >
             <div class="col-md-12">
                  @if(session('success'))
                      <div class="alert alert-success">{{ session('success') }}</div>
                  @endif
             </div>
-            <div class="col-12 pb-2">
+            <div class="col-12">
                 <div class="row">
                        <div class="col-lg-12 col-xl-2 py-2">
                             <div class="form-group">
@@ -91,13 +99,13 @@
                         </div>
                         <div class="col-12 col-sm-6 col-xl-4 align-self-center py-2">
                                 <div class="d-flex align-items-center">
-                                    <span class="pageinfo" style="font-size: 15px; padding-right: 6px; "></span>
                                     <select style="max-width:200px;padding:3px; "  name="length" class="">
                                         <option value="10">10</option>
                                         <option value="100">100</option>
                                         <option value="200">200</option>
                                         <option value="500">500</option>
                                     </select>
+                                    <span class="pageinfo" style="font-size: 15px; padding-left: 6px; "></span>
                                 </div>
                         </div>
                         <div class="col-12 col-sm-6 col-xl-4 py-2">
@@ -115,22 +123,22 @@
                         </div>
                 </div>
             </div>
-            <div class="col-12 pt-5">
+            <div class="col-12 ">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive text-nowrap">
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Platform</th>
-                                        <th>Center</th>
-                                        <th>Total Vehicles</th>
-                                        <th>Time</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th style="font-size: var(--font-p2) !important;">Platform</th>
+                                        <th style="font-size: var(--font-p2) !important;">Center</th>
+                                        <th style="font-size: var(--font-p2) !important;">Total Vehicles</th>
+                                        <th style="font-size: var(--font-p2) !important;">Time</th>
+                                        <th style="font-size: var(--font-p2) !important;">Status</th>
+                                        <th style="font-size: var(--font-p2) !important;">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-border-bottom-0"></tbody>
+                                <tbody class="table-border-bottom-0 tb-data-fonts"></tbody>
                             </table>
                         </div>
                     </div>
@@ -199,7 +207,7 @@
                         dataType: 'json',
                     }
                 }).on('change', function () {
-                    $('select[name=center_id]').val(null).trigger('change');
+                    // $('select[name=center_id]').val(null).trigger('change');
                 });
 
 
@@ -212,7 +220,7 @@
                         data: function (params) {
                             return {
                                 q: params.term,
-                                platform_id: $('select[name=platform_id]').val()
+                                // platform_id: $('select[name=platform_id]').val()
                             };
                         }
                     }

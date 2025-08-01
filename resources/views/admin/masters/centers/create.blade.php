@@ -44,18 +44,11 @@
                     <div class="card-body">
                         <form action="{{url('/admin/masters/centers')}}" method="POST" enctype="multipart/form-data">
                             @csrf
-
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="form-label">Name</label>
                                         <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label">Center <span class="text-danger">*</span></label>
-                                        <select name="auction_platform_id" class="form-control platform" required></select>
                                     </div>
                                 </div>
                             </div>

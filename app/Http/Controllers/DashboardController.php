@@ -124,9 +124,6 @@ class DashboardController extends Controller
             DB::raw("COUNT(*) - COUNT(DISTINCT vehicle_id) as duplicate_vehicles")
         ])->first();
 
-
-
-
         $data['sold_vehicles'] =   $data['onsale_vehicles'] +  $data['provisional_vehicles'];
 
         return response()->json($data,200);
@@ -343,7 +340,6 @@ class DashboardController extends Controller
                     'data' => $data,
                 ]);
 
-
                 // }
 
     }
@@ -356,7 +352,6 @@ class DashboardController extends Controller
             $query = Vehicle::leftjoin('make','make.id','=','vehicles.make_id')
             ->leftjoin('model','model.id','=','vehicles.model_id')
             ->leftjoin('model_variant','model_variant.id','=','vehicles.variant_id');
-
 
             $intrest = Auth::user()->intrest->where('status','1')->first();
             if($intrest){
@@ -418,7 +413,7 @@ class DashboardController extends Controller
                ->join('vehicles', 'vehicles.auction_id', '=', 'auctions.id')
                ->groupBy('auction_platform.id')  
                ->select(
-                    'auction_platform.name AS platform_name',
+                   'auction_platform.name AS platform_name',
                     DB::raw("COUNT(vehicles.id) as Total"),
                     DB::raw("MIN(vehicles.last_bid) as min_price"),
                     DB::raw("MAX(vehicles.last_bid) as max_price"),
@@ -428,9 +423,11 @@ class DashboardController extends Controller
                     DB::raw("AVG(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '" . now()->format('Y-m') . "' THEN vehicles.last_bid END) AS price_month_3")
                );
 
+
                if($request->has('platform_id') && $request->platform_id != ''){
                     $data = $data->whereIn('auction_platform.id',$request->platform_id);
                }
+
 
                $intrest = Auth::user()->intrest->where('status','1')->first();
                if($intrest){
@@ -439,13 +436,13 @@ class DashboardController extends Controller
                     $data = $data->where('vehicles.variant_id',$intrest->variant_id);
                }
              
+
               //Editing
                $data = $data->get()->map(function($row){
               
                     $month2 = $row->price_month_2 ?? 0;
                     $month3 = $row->price_month_3 ?? 0;
 
-             
                     if($month2 == 0 && $month3 == 0){
                         $percentageChange = 0;
                     }elseif($month2 == 0){
@@ -454,7 +451,6 @@ class DashboardController extends Controller
                         $percentageChange = (($month2 - $month3) / $month2) * 100;
                     }
                     $row->percent = $percentageChange;
-
 
                     if ($percentageChange > 0) {
                         $row->icon = '<span style="color: green;">&#9650; '.number_format($percentageChange, 1).'%</span>';
@@ -465,8 +461,6 @@ class DashboardController extends Controller
                     }
 
                     return $row;
-
-
             });
 
 
@@ -479,17 +473,5 @@ class DashboardController extends Controller
 
 
 
-
-    
-
-
-
-
-
-
-    
-
-    
-
-
 }
+

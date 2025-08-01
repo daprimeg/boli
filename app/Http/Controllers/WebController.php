@@ -14,11 +14,11 @@ class WebController extends Controller
         return view('web.home');
     }
 
-    public function feautres()
+    public function features()
     {
 
     
-        return view('web.feautres');
+        return view('web.features');
     }
     
 
@@ -30,7 +30,11 @@ class WebController extends Controller
     {
         return view('web.AutionShadule');
     }
-
+    public function ExploreEvery ()
+    {
+        return view('web.ExploreEvery');
+    }
+  
 
     
 }
