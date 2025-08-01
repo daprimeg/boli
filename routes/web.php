@@ -38,6 +38,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
+use App\Http\Controllers\ReauctionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebController;
@@ -284,24 +285,28 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
             Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
-
             
-
+            
+            
             Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
-        
-
+            
+            
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
-
-
+            
+            
             
             Route::view('/upcoming', 'user/upcoming')->name('upcoming');
-
+            
             Route::view('/auctioncalender', 'user/auctioncalender')->name('auctioncalender');
-
+            
             Route::view('/auctiondetail', 'user/auctiondetail')->name('auctiondetail');
             Route::view('/futureauction', 'user/futureauction')->name('futureauction');
             Route::view('/timeauction', 'user/timeauction')->name('timeauction');
-
+            
+            // Reauction
+            Route::get('/reauction', [ReauctionController::class,'index'])->name('reauction');
+            Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
+ 
 
 
 
