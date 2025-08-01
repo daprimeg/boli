@@ -139,13 +139,7 @@ class AlertController extends Controller
     }
 
 
-    public function userAlerts()
-    {
-        $alerts = Alert::with('user')->get(); // fetch all alerts for all users
-    
-        return view('user.profile.userprofile', compact('alerts'));
-    }
-    
+ 
     
 
 

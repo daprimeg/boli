@@ -213,14 +213,13 @@
                                 <tbody class="py-5" >
                                     @if(count($membership) > 0)
                                         @foreach ($membership as $key => $item)
-                                    
                                             <tr>
                                                 <td>{{$item->id}}</td>
                                                 <td>{{$item->created_at}}</td>
                                                 <td>{{$item->plan->plan_name}}</td>
                                                 <td>{{date('d-M-Y',strtotime($item->membership_start_date))}}</td>
                                                 <td>{{date('d-M-Y',strtotime($item->membership_expiry_date))}}</td>
-                                                <td>{{$item->payment->amount}} {{$item->payment->currency}}</td>
+                                                <td>@if($item->payment) {{$item->payment->amount}} {{$item->payment->currency}} @endif</td>
                                                 <td>
                                                     @if($current && $current->id == $item->id)
                                                         <span class="badge bg-secondary">Active</span>
@@ -249,11 +248,7 @@
                     </div>
                 </div>
 
-
-                {{-- col --}}
             </div>
-
-
         </div>
     </div>
 @endsection

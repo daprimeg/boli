@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\Alert;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Auction;
@@ -15,6 +17,16 @@ use Illuminate\Support\Facades\Hash;
 class ProfileSettingController extends Controller
 {
 
+
+    
+    public function userProfile()
+    {
+        $alerts = Alert::with('user')->get(); // fetch all alerts for all users
+    
+        return view('user.account-setting.userprofile', compact('alerts'));
+    }
+    
+    
 
     // Show the profile form
     public function profile(Request $request)

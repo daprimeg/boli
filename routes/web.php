@@ -42,6 +42,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebController;
 use App\Http\Middleware\CheckUserStatus;
+use App\Http\Middleware\IsAdmin;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
@@ -246,12 +247,6 @@ Route::post('/stripe/webhook', [WebhookController::class, 'handleStripeWebhook']
 
 
 
-Route::middleware('auth')->group(function () {
-
-    Route::get('/subscriptions', [SubscriptionController::class,'subscriptions']);
-    Route::post('/subscriptions_submit', [SubscriptionController::class,'subscriptions_submit']);
-
-});
 
 
 // User Authenticated Routes
@@ -259,9 +254,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
     
 
             Route::resource('associate-users', \App\Http\Controllers\AssociateUserController::class);
-
             Route::match(['get', 'post'],'/checkout', [AuthController::class,'checkout']);
-       
 
             // User Dashboard & Pages
             Route::get('/dashboard',[DashboardController::class,'dashboard'])->name('dasahbord');
@@ -281,12 +274,6 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
             Route::get('/dashboard/upComingVehicles', [DashboardController::class, 'upComingVehicles']);
             Route::get('/dashboard/getValuation', [DashboardController::class, 'getValuation']);
-            
-
-            
-
-            
-
 
             Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
@@ -294,12 +281,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             
 
             Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
-        
-
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
 
 
-            
             Route::view('/upcoming', 'user/upcoming')->name('upcoming');
 
             Route::view('/auctioncalender', 'user/auctioncalender')->name('auctioncalender');
@@ -310,24 +294,12 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
 
 
-
             Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
             // Route::view('/interest', 'user/interest')->name('interest');
 
             Route::get('/interest/myintrest', [InterestController::class,'myintrest']);
             Route::get('/interest/setintrest/{id}', [InterestController::class,'setintrest']);
             Route::resource('/interest',InterestController::class);
-
-            // Route::get('interests', [InterestController::class, 'index'])->name('interests.index');        // List all interests
-            // Route::get('interests/create', [InterestController::class, 'create'])->name('interests.create'); // Show form to create
-            // Route::post('interests/store', [InterestController::class, 'store'])->name('interests.store');   // Handle storing
-            // Route::get('interests/{interest}/edit', [InterestController::class, 'edit'])->name('interests.edit');  // Show form to edit
-            // Route::post('interests/{interest}/update', [InterestController::class, 'update'])->name('interests.update'); // Handle updating
-            // Route::delete('interests/{interest}/delete', [InterestController::class, 'destroy'])->name('interests.destroy'); // Handle delete
-            // Route::get('/get-models-by-make', [InterestController::class, 'getModelsByMake'])->name('get.models.by.make');
-            // Route::get('/get-variants-by-model', [InterestController::class, 'getVariantsByModel'])->name('get.variants.by.model');
-
-
 
             Route::view('/gellery', 'user/gellery')->name('gellery');
             Route::view('/comparevehicles', 'user/comparevehicles')->name('comparevehicles');
@@ -336,12 +308,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::view('/platformwise', 'user/platformwise')->name('platformwise');
             Route::view('/search', 'user/search')->name('search');
 
-            // Route::get('/checkout', [CheckoutController::class, 'index'])->name('user.checkout.index');
-            // Route::post('/checkout', [CheckoutController::class, 'store'])->name('user.checkout.store');
-
-            // Route::get('/checkout/{id?}', [CheckoutController::class, 'index'])->name('checkout.index');
-            // Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-
+    
             // account-setting
 
             Route::match(['get', 'post'],'/account-setting/profile', [ProfileSettingController::class,'profile']);
@@ -349,7 +316,8 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::match(['get', 'post'],'/account-setting/billing', [ProfileSettingController::class, 'billing']);
             
 
-            Route::get('/userprofile', [AlertController::class, 'userAlerts'])->name('profile.userprofile');
+            Route::get('/userprofile', [ProfileSettingController::class, 'userprofile']);
+
 
             // Ticket Management
             Route::get('/createticket', [TicketController::class, 'create'])->name('ticket.create');
@@ -368,182 +336,181 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
 
 
+   // Admin Routes
+   Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
 
-// Admin Routes
-Route::prefix('admin')->group(function () {
-
-    //Profile
-    Route::view('/importcsv', 'admin/datamanagement/importcsv');
-    Route::view('/scrappinglogs', 'admin/datamanagement/scrappinglogs');
-    Route::view('/datascrapereview', 'admin/datamanagement/datascrapereview');
-    Route::view('/rolepermission', 'admin/securitysetting/rolepermission');
-    Route::view('/backuprestore', 'admin/securitysetting/backuprestore');
-    Route::view('/activitylog', 'admin/securitysetting/activitylog');
-    Route::view('/mostsearch', 'admin/reportsanalytics/mostsearch');
-    Route::view('/auctionperformancereport', 'admin/reportsanalytics/auctionperformancereport');
-    Route::view('/realtimeuseractivity', 'admin/reportsanalytics/realtimeuseractivity');
-    Route::view('/customemailtemplate', 'admin/alerts/customemailtemplate');
-
-
-    //Masters
-    Route::get('/masters/platforms/getPlatforms', [PlatformController::class,'getPlatforms']);
-    Route::resource('masters/platforms',PlatformController::class);
-
-    Route::get('/masters/centers/getCenters', [CenterController::class,'getCenters']);
-    Route::resource('masters/centers',CenterController::class);
-
-    Route::get('/masters/colours/getColours', [ColorController::class,'getColours']);
-    Route::resource('masters/colours',ColorController::class);
-
-    Route::get('/masters/bodytypes/getBodyTypes', [BodyTypeController::class,'getBodyTypes']);
-    Route::resource('masters/bodytypes',BodyTypeController::class);
-
-    Route::get('/masters/vehicletypes/getVehicleTypes', [VehicleTypeController::class, 'getVehicleTypes']);
-    Route::resource('masters/vehicletypes',VehicleTypeController::class);
-    
-    Route::get('/masters/makes/getMakes', [MakeController::class, 'getMakes']);
-    Route::resource('masters/makes',MakeController::class);
-
-    Route::get('/masters/models/getModels', [ModelController::class, 'getModels']);
-    Route::resource('/masters/models',ModelController::class);
-
-    Route::get('/masters/variants/getVariants', [VariantController::class, 'getVariants']);
-    Route::resource('/masters/variants',VariantController::class);
-
-    
-    //Auctions
-    Route::prefix('auctions')->group(function () {
-
-        Route::get('/getAuction', [AuctionController::class, 'getAuctions']);
-        Route::get('/', [AuctionController::class, 'index']);
-        Route::get('/viewCsv/{id}', [AuctionController::class,'viewCsv']);
-        Route::get('/create', [AuctionController::class, 'create']);
-    
-        Route::post('/', [AuctionController::class, 'store']);
-        Route::get('/{auction}/edit', [AuctionController::class, 'edit']);
-        Route::put('/{auction}', [AuctionController::class, 'update']);
-        Route::delete('/{auction}', [AuctionController::class, 'destroy']);
-    
-        Route::get('/ajax/get', [AuctionController::class, 'getAjaxData']);
-        Route::get('/ajax/platform/{id}/centers', [AuctionController::class,'getCentersByPlatform']);
-    });
+        //Profile
+        Route::view('/importcsv', 'admin/datamanagement/importcsv');
+        Route::view('/scrappinglogs', 'admin/datamanagement/scrappinglogs');
+        Route::view('/datascrapereview', 'admin/datamanagement/datascrapereview');
+        Route::view('/rolepermission', 'admin/securitysetting/rolepermission');
+        Route::view('/backuprestore', 'admin/securitysetting/backuprestore');
+        Route::view('/activitylog', 'admin/securitysetting/activitylog');
+        Route::view('/mostsearch', 'admin/reportsanalytics/mostsearch');
+        Route::view('/auctionperformancereport', 'admin/reportsanalytics/auctionperformancereport');
+        Route::view('/realtimeuseractivity', 'admin/reportsanalytics/realtimeuseractivity');
+        Route::view('/customemailtemplate', 'admin/alerts/customemailtemplate');
 
 
-    //Plans
-    Route::prefix('plans')->group(function () {
-        Route::get('/', [PlanController::class, 'index']);
-        Route::get('/create', [PlanController::class, 'create']);
-        Route::post('/store', [PlanController::class, 'store']);
-        Route::put('/update/{plan}', [PlanController::class, 'update']);
+        //Masters
+        Route::get('/masters/platforms/getPlatforms', [PlatformController::class,'getPlatforms']);
+        Route::resource('masters/platforms',PlatformController::class);
 
-        Route::get('/{plan}/edit', [PlanController::class, 'edit']);
-       
-        Route::delete('/{plan}', [PlanController::class, 'destroy']);
-        Route::get('/ajax/get', [PlanController::class, 'getAjaxData']);
-    });
+        Route::get('/masters/centers/getCenters', [CenterController::class,'getCenters']);
+        Route::resource('masters/centers',CenterController::class);
 
+        Route::get('/masters/colours/getColours', [ColorController::class,'getColours']);
+        Route::resource('masters/colours',ColorController::class);
 
-    //Tickets
-    Route::prefix('tickets')->group(function () {
-        Route::get('/', [TicketsController::class, 'index']);
-        Route::get('/{id}', [TicketsController::class, 'show']);
-        Route::post('/{id}/reply', [TicketsController::class, 'reply']);
-        Route::post('/{id}/update', [TicketsController::class, 'updateStatus']);
-    });
+        Route::get('/masters/bodytypes/getBodyTypes', [BodyTypeController::class,'getBodyTypes']);
+        Route::resource('masters/bodytypes',BodyTypeController::class);
 
-
-    //Membership
-    Route::prefix('memberships')->group(function () {
-        Route::get('/', [MembershipController::class, 'index']);
-        Route::get('/create', [MembershipController::class, 'create']);
-        Route::post('/store', [MembershipController::class, 'store']);
-        Route::post('/fetch-user', [MembershipController::class, 'fetchUser']);
-        Route::get('/{id}/edit', [MembershipController::class, 'edit']);
-        Route::post('/{id}/update', [MembershipController::class, 'update']);
-        Route::post('/{id}/destroy', [MembershipController::class, 'destroy']);
-    });
-
-
-    // Blog Categories (CRUD)
-    Route::prefix('blogcategories')->group(function () {
-        Route::get('/', [BlogCategoryController::class, 'index']);
-        Route::get('/create', [BlogCategoryController::class, 'create']);
-        Route::post('/', [BlogCategoryController::class, 'store']);
-        Route::get('/{blogcategory}/edit', [BlogCategoryController::class, 'edit']);
-        Route::put('/{blogcategory}', [BlogCategoryController::class, 'update']);
-        Route::delete('/{blogcategory}', [BlogCategoryController::class, 'destroy']);
-    });
-
-
-    // Blogs (CRUD with AJAX)
-    Route::middleware('auth')->prefix('blogs')->name('blogs.')->group(function () {
-        Route::get('/', [AdminBlogController::class, 'index']);
-        Route::get('/create', [AdminBlogController::class, 'create']);
-        Route::post('/store', [AdminBlogController::class, 'store']);
-        Route::get('/{slug}', [AdminBlogController::class, 'show']);
-        Route::get('/{blog}/edit', [AdminBlogController::class, 'edit']);
-        Route::put('/{blog}', [AdminBlogController::class, 'update']);
-        Route::delete('/{blog}', [AdminBlogController::class, 'destroy']);
-        Route::post('/upload-image', [AdminBlogController::class, 'uploadImage']);
-    });
-
-
-    //Vehicles
-    Route::get('/vehicles', [AVehicleController::class,'index']);
-    Route::get('/vehicles/create', [AVehicleController::class,'create']);
-    Route::post('/vehicles/store', [AVehicleController::class, 'store']);
-    Route::get('/vehicles/edit/{id}', [AVehicleController::class,'edit']);
-    Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
-    Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
-    Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
-    // Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
-    // Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
+        Route::get('/masters/vehicletypes/getVehicleTypes', [VehicleTypeController::class, 'getVehicleTypes']);
+        Route::resource('masters/vehicletypes',VehicleTypeController::class);
         
-    
+        Route::get('/masters/makes/getMakes', [MakeController::class, 'getMakes']);
+        Route::resource('masters/makes',MakeController::class);
 
-    //News
-    Route::prefix('news')->name('admin.news.')->group(function () {
-        Route::get('/', [AdminNewscrudController::class, 'index']);
-        Route::post('/', [AdminNewscrudController::class, 'store']);
-        Route::get('/create', [AdminNewscrudController::class, 'create']);
+        Route::get('/masters/models/getModels', [ModelController::class, 'getModels']);
+        Route::resource('/masters/models',ModelController::class);
+
+        Route::get('/masters/variants/getVariants', [VariantController::class, 'getVariants']);
+        Route::resource('/masters/variants',VariantController::class);
+
         
-        Route::get('/{news}/edit', [AdminNewscrudController::class, 'edit']);
-        Route::put('/{news}', [AdminNewscrudController::class, 'update']);
-        Route::delete('/{news}', [AdminNewscrudController::class, 'destroy']);
-    });
+        //Auctions
+        Route::prefix('auctions')->group(function () {
+
+            Route::get('/getAuction', [AuctionController::class, 'getAuctions']);
+            Route::get('/', [AuctionController::class, 'index']);
+            Route::get('/viewCsv/{id}', [AuctionController::class,'viewCsv']);
+            Route::get('/create', [AuctionController::class, 'create']);
+        
+            Route::post('/', [AuctionController::class, 'store']);
+            Route::get('/{auction}/edit', [AuctionController::class, 'edit']);
+            Route::put('/{auction}', [AuctionController::class, 'update']);
+            Route::delete('/{auction}', [AuctionController::class, 'destroy']);
+        
+            Route::get('/ajax/get', [AuctionController::class, 'getAjaxData']);
+            Route::get('/ajax/platform/{id}/centers', [AuctionController::class,'getCentersByPlatform']);
+        });
 
 
-    //Alerts
-    Route::prefix('alerts')->middleware('auth')->name('alerts.')->group(function () {
-        Route::get('/', [AlertController::class, 'index'])->name('index');
-        Route::get('/create', [AlertController::class, 'create'])->name('create');
-        Route::post('/store', [AlertController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [AlertController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AlertController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AlertController::class, 'destroy'])->name('destroy');
-        Route::get('/ajax/data', [AlertController::class, 'ajaxData'])->name('ajax');
-    });
+        //Plans
+        Route::prefix('plans')->group(function () {
+            Route::get('/', [PlanController::class, 'index']);
+            Route::get('/create', [PlanController::class, 'create']);
+            Route::post('/store', [PlanController::class, 'store']);
+            Route::put('/update/{plan}', [PlanController::class, 'update']);
+
+            Route::get('/{plan}/edit', [PlanController::class, 'edit']);
+        
+            Route::delete('/{plan}', [PlanController::class, 'destroy']);
+            Route::get('/ajax/get', [PlanController::class, 'getAjaxData']);
+        });
 
 
-    //Users
-    Route::get('users', [UserController::class, 'index']);
-    Route::get('users-data', [UserController::class, 'getData']);
-    Route::get('users/create', [UserController::class, 'create']);
-    Route::post('users/store', [UserController::class, 'store']);
-    Route::get('users/{id}/edit', [UserController::class, 'edit']);
-    Route::post('users/{id}/update', [UserController::class, 'update']);
-    Route::get('users/{id}/delete', [UserController::class, 'destroy']);
-    Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus']);
-
-    // Admin Authentication
-    Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
-    Route::get('/profile', [AdminAuthController::class, 'profile']);
+        //Tickets
+        Route::prefix('tickets')->group(function () {
+            Route::get('/', [TicketsController::class, 'index']);
+            Route::get('/{id}', [TicketsController::class, 'show']);
+            Route::post('/{id}/reply', [TicketsController::class, 'reply']);
+            Route::post('/{id}/update', [TicketsController::class, 'updateStatus']);
+        });
 
 
+        //Membership
+        Route::prefix('memberships')->group(function () {
+            Route::get('/', [MembershipController::class, 'index']);
+            Route::get('/create', [MembershipController::class, 'create']);
+            Route::post('/store', [MembershipController::class, 'store']);
+            Route::post('/fetch-user', [MembershipController::class, 'fetchUser']);
+            Route::get('/{id}/edit', [MembershipController::class, 'edit']);
+            Route::post('/{id}/update', [MembershipController::class, 'update']);
+            Route::post('/{id}/destroy', [MembershipController::class, 'destroy']);
+        });
 
-    Route::get('/', [AdminAuthController::class, 'showLoginForm']);
-    Route::post('/login', [AdminAuthController::class, 'login']);
-    Route::post('/logout', [AdminAuthController::class, 'logout']);
+
+        // Blog Categories (CRUD)
+        Route::prefix('blogcategories')->group(function () {
+            Route::get('/', [BlogCategoryController::class, 'index']);
+            Route::get('/create', [BlogCategoryController::class, 'create']);
+            Route::post('/', [BlogCategoryController::class, 'store']);
+            Route::get('/{blogcategory}/edit', [BlogCategoryController::class, 'edit']);
+            Route::put('/{blogcategory}', [BlogCategoryController::class, 'update']);
+            Route::delete('/{blogcategory}', [BlogCategoryController::class, 'destroy']);
+        });
+
+
+        // Blogs (CRUD with AJAX)
+        Route::middleware('auth')->prefix('blogs')->name('blogs.')->group(function () {
+            Route::get('/', [AdminBlogController::class, 'index']);
+            Route::get('/create', [AdminBlogController::class, 'create']);
+            Route::post('/store', [AdminBlogController::class, 'store']);
+            Route::get('/{slug}', [AdminBlogController::class, 'show']);
+            Route::get('/{blog}/edit', [AdminBlogController::class, 'edit']);
+            Route::put('/{blog}', [AdminBlogController::class, 'update']);
+            Route::delete('/{blog}', [AdminBlogController::class, 'destroy']);
+            Route::post('/upload-image', [AdminBlogController::class, 'uploadImage']);
+        });
+
+
+        //Vehicles
+        Route::get('/vehicles', [AVehicleController::class,'index']);
+        Route::get('/vehicles/create', [AVehicleController::class,'create']);
+        Route::post('/vehicles/store', [AVehicleController::class, 'store']);
+        Route::get('/vehicles/edit/{id}', [AVehicleController::class,'edit']);
+        Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
+        Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
+        Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
+        // Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
+        // Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
+            
+        
+
+        //News
+        Route::prefix('news')->name('admin.news.')->group(function () {
+            Route::get('/', [AdminNewscrudController::class, 'index']);
+            Route::post('/', [AdminNewscrudController::class, 'store']);
+            Route::get('/create', [AdminNewscrudController::class, 'create']);
+            
+            Route::get('/{news}/edit', [AdminNewscrudController::class, 'edit']);
+            Route::put('/{news}', [AdminNewscrudController::class, 'update']);
+            Route::delete('/{news}', [AdminNewscrudController::class, 'destroy']);
+        });
+
+
+        //Alerts
+        Route::prefix('alerts')->middleware('auth')->name('alerts.')->group(function () {
+            Route::get('/', [AlertController::class, 'index'])->name('index');
+            Route::get('/create', [AlertController::class, 'create'])->name('create');
+            Route::post('/store', [AlertController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [AlertController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [AlertController::class, 'update'])->name('update');
+            Route::delete('/{id}', [AlertController::class, 'destroy'])->name('destroy');
+            Route::get('/ajax/data', [AlertController::class, 'ajaxData'])->name('ajax');
+        });
+
+
+        //Users
+        Route::get('users', [UserController::class, 'index']);
+        Route::get('users-data', [UserController::class, 'getData']);
+        Route::get('users/create', [UserController::class, 'create']);
+        Route::post('users/store', [UserController::class, 'store']);
+        Route::get('users/{id}/edit', [UserController::class, 'edit']);
+        Route::post('users/{id}/update', [UserController::class, 'update']);
+        Route::get('users/{id}/delete', [UserController::class, 'destroy']);
+        Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus']);
+
+        // Admin Authentication
+        Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
+        Route::get('/profile', [AdminAuthController::class, 'profile']);
+
+
+
+        Route::get('/', [AdminAuthController::class, 'showLoginForm']);
+        Route::post('/login', [AdminAuthController::class, 'login']);
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
 
 });
 

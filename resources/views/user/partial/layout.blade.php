@@ -457,7 +457,7 @@ table.dataTable tbody th, table.dataTable tbody td {
 
             <!-- Cards -->
             <li class="menu-item">
-              <a href="{{ route('profile.userprofile') }}" class="menu-link">
+              <a href="{{ url('/userprofile') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-id"></i>
                 <div data-i18n="Your Profile">Your Profile</div>
               </a>

@@ -493,16 +493,16 @@
                     href="javascript:void(0);"
                     data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                          <img src="{{ optional(Auth::user())->avatar ? asset('/public/uploads/avatar/'. Auth::user()->avatar) : asset('assets/img/avatars/default.png') }}" alt class="rounded-circle" />
+                          <img src="{{asset('/public/uploads/avatar/'. Auth::user()->avatar)}}" alt class="rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item mt-0" @if(Auth::user()->user_type == 1)  href="{{URL::to('/profile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
+                      <a class="dropdown-item mt-0" @if(Auth::user()->user_type == 1)  href="{{URL::to('/userprofile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
                         <div class="d-flex align-items-center">
                           <div class="flex-shrink-0 me-2">
                             <div class="avatar avatar-online">
-                               <img src="{{ optional(Auth::user())->avatar ? asset('/public/uploads/avatar/'. Auth::user()->avatar) : asset('assets/img/avatars/default.png') }}" alt class="rounded-circle" />
+                               <img src="{{asset('/public/uploads/avatar/'. Auth::user()->avatar)}}" class="rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
@@ -516,21 +516,21 @@
                       <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" @if(Auth::user()->user_type == 1)  href="{{URL::to('/profile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
+                      <a class="dropdown-item" @if(Auth::user()->user_type == 1)  href="{{URL::to('/userprofile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
                         <i class="icon-base ti tabler-user me-3 icon-md"></i
                         ><span class="align-middle">My Profile</span>
                       </a>
                     </li>
                     @if(Auth::user()->user_type != 1) 
                     <li>
-                      <a class="dropdown-item" href="{{URL::to('/profilesetting')}}">
+                      <a class="dropdown-item" href="{{URL::to('/account-setting/profilesetting')}}">
                         <i class="icon-base ti tabler-settings me-3 icon-md"></i
                         ><span class="align-middle">Settings</span>
                       </a>
                     </li>
                     @endif
                     <li>
-                      <a class="dropdown-item" href="{{url('/billingplan')}}">
+                      <a class="dropdown-item" href="{{url('/account-setting/billing')}}">
                         <span class="d-flex align-items-center align-middle">
                           <i class="flex-shrink-0 icon-base ti tabler-file-dollar me-3 icon-md"></i
                           ><span class="flex-grow-1 align-middle">Billing</span>

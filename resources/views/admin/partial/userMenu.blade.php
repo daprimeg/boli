@@ -7,32 +7,28 @@
                 </a>
             </li>
 
-            <li class="menu-item">
+            <li class="menu-item {{ request()->is('auctionfinder*') ? 'active' : '' }}">
               <a href="{{ route('auctionfinder') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>
                 <div data-i18n="Auction Finder">Auction Finder</div>
               </a>
             </li>
 
-            <li class="menu-item">              
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-pointer-heart"></i>
-                <div data-i18n="Interest">Interest</div>
+            <li class="menu-item {{ request()->is('reauction*') ? 'active open' : '' }}">
+              <a href="{{ URL::to('/reauction') }}" class="menu-link" >
+                <i class="menu-icon icon-base ti tabler-calendar-repeat"></i>
+                <div data-i18n="Reauction">Reauction</div>
               </a>
-              <ul class="menu-sub">
-                    <li class="menu-item">
-                        <a href="{{ url('/interest') }}" class="menu-link">
-                            <div data-i18n="My Interest">My Interest</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{url('/interest/create') }}" class="menu-link">
-                            <div data-i18n="Create Interest">Create Interest</div>
-                        </a>
-                    </li>
-                </ul>
             </li>
-            <li class="menu-item">
+
+            <li class="menu-item {{ request()->is('interest*') ? 'active' : '' }}">
+              <a href="{{ url('/interest') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-pointer-heart"></i>
+                <div data-i18n="Interest">My Interest</div>
+              </a>
+            </li>
+
+            <li class="menu-item {{ request()->is('auctionscheduler*') ? 'active' : '' }}">
               <a href="{{ URL::to('/auctionscheduler') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>
                 <div data-i18n="Auction Scheduler">Auction Schduler</div>
@@ -62,8 +58,8 @@
               </ul>
             </li>
 
-            <li class="menu-item {{ request()->is('subscriptions*') ? 'active' : '' }}">
-              <a href="{{url('/subscriptions')}}" class="menu-link">
+            <li class="menu-item {{ request()->is('account-setting/billing*') ? 'active' : '' }}">
+              <a href="{{url('/account-setting/billing')}}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-id"></i>
                 <div data-i18n="Billing Plan">Billing Plan</div>
               </a>
@@ -78,13 +74,13 @@
 
             <!-- Cards -->
             <li class="menu-item {{ request()->is('userprofile*') ? 'active' : '' }}">
-              <a href="{{ route('profile.userprofile') }}" class="menu-link">
+              <a href="{{ url('userprofile') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-id"></i>
                 <div data-i18n="Your Profile">Your Profile</div>
               </a>
             </li>
             
-            <li class="menu-item {{ request()->is('profilesetting*') || request()->is('changepassword*')  ? 'active' : '' }}">
+            <li class="menu-item {{ request()->is('account-setting/profile*')  ? 'active' : '' }}">
               <a href="{{url('/account-setting/profile')}}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-settings"></i>
                 <div data-i18n="Setting">Setting</div>
