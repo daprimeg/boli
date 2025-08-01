@@ -276,12 +276,11 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/dashboard/upComingVehicles', [DashboardController::class, 'upComingVehicles']);
             Route::get('/dashboard/getValuation', [DashboardController::class, 'getValuation']);
 
+            Route::get('/auction-finder/{id}', [AuctionFinderController::class, 'vehicle']);
+            
             Route::get('/auctionfinder', [AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
-            
-            
             Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
-
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
             
         
