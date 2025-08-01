@@ -14,12 +14,7 @@
               </a>
             </li>
 
-            <li class="menu-item {{ request()->is('reauction*') ? 'active open' : '' }}">
-              <a href="{{ URL::to('/reauction') }}" class="menu-link" >
-                <i class="menu-icon icon-base ti tabler-calendar-repeat"></i>
-                <div data-i18n="Reauction">Reauction</div>
-              </a>
-            </li>
+            
 
             <li class="menu-item {{ request()->is('interest*') ? 'active' : '' }}">
               <a href="{{ url('/interest') }}" class="menu-link">
@@ -28,10 +23,17 @@
               </a>
             </li>
 
+            <li class="menu-item {{ request()->is('reauction*') ? 'active open' : '' }}">
+              <a href="{{ URL::to('/reauction') }}" class="menu-link" >
+                <i class="menu-icon icon-base ti tabler-calendar-repeat"></i>
+                <div data-i18n="Reauction">Reauction</div>
+              </a>
+            </li>
+
             <li class="menu-item {{ request()->is('auctionscheduler*') ? 'active' : '' }}">
               <a href="{{ URL::to('/auctionscheduler') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>
-                <div data-i18n="Auction Scheduler">Auction Schduler</div>
+                <div data-i18n="Auction Scheduler">Auction Scheduler</div>
               </a>
             </li>
 
