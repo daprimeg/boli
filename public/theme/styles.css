@@ -47,7 +47,8 @@ body {
   margin: 0 12px;
   font-weight: 500;
   font-family: var(--font-family) !important;
-  padding-bottom: 5px
+  padding-bottom: 5px;
+  font-size:  var(--font-p1);
 }
 
 /* nave link hover */

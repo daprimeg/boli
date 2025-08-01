@@ -63,9 +63,13 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 Route::get('/', [WebController::class,'index']);
-Route::get('/feautres', [WebController::class,'feautres']);
+Route::get('/features', [WebController::class,'features']);
 
 Route::get('/pricing', [WebController::class,'pricing']);
+
+Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
+
+Route::get('/exploreevery', [WebController::class, 'ExploreEvery']);
 
 Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
@@ -74,7 +78,6 @@ Route::get('/register', [AuthController::class, 'register']);
 
 Route::post('/register_submit', [AuthController::class, 'register_submit']);
 
-Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
 
 
 

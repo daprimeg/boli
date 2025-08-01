@@ -1,12 +1,13 @@
 <div class="row g-6">  
-     <div class="col-md-12">
+     <div class="col-md-12" style="margin-top: -40px; margin-bottom: 30px">
         @include('user.dashboard.infocard')
          <br><br>
 
 
-         <div class="row" style=" margin-top: -80px;">
+         <div class="row" style="margin-top: -16px;">
              <div class="getOnlineAuctions col-md-6 col-12">
-                 <div class="card h-100">
+                 <div class="card h-100" style="margin-right: 10px;
+">
                      <div class="card-header">
                          <div class="row">
                              <div class="col-md-6">
@@ -22,14 +23,14 @@
                      <div class="table-responsive">
                          <table class="table table-borderless border-top" id="onlineAuctionsTable">
                              <thead class="border-bottom">
-                                 <tr>
-                                     <th>Platform</th>
-                                     <th>Total Auction</th>
-                                     <th>Remaining</th>
-                                     <th>Lots</th>
+                                 <tr  >
+                                     <th  style="font-size: var(--font-p2) !important;" >Platform</th>
+                                     <th style="font-size: var(--font-p2) !important;" >Total Auction</th>
+                                     <th style="font-size: var(--font-p2) !important;" >Remaining</th>
+                                     <th style="font-size: var(--font-p2) !important;" >Lots</th>
                                  </tr>
                              </thead>
-                             <tbody class="rows">
+                             <tbody class="rows tb-data-fonts" >
 
                              </tbody>
                          </table>
@@ -41,15 +42,15 @@
              <div class="col-md-6 vehicleStates"
                  style="background-color: #000f21; padding: 30px; border-radius: 10px; ">
                  <div style="margin-bottom: 60px; ">
-                  <h4 class="pb-0 mb-0">Vehicle Statistics </h4>
+                  <h5 class="pb-0 mb-0">Vehicle Statistics </h5>
                        <span class="mt-0 pt-0" style=" font-size: 16px; font-weight: normal; color: #ccc; padding-top: -4px;">Today</span>
                      </div>
                  
                  <div class="row">
-                    <div class="col-6" style="">
+                    <div class="col-5" style="">
                      <div style="margin-bottom: 60px">
 
-                        <h2 class="mb-0">254</h2>
+                        <h3 class="mb-0">254</h3>
                         <span>Remaining</span>
                      </div>
 
@@ -61,7 +62,7 @@
                                  </div>
                               </div>
                              <span >
-                                 <span style="font-size: 25px; color: white;">Sold </span> <br>
+                                 <span style="font-size: var(--font-h6); color: white;">Sold </span> <br>
                                  <span class="sold"></span>
                              </span>
                          </div>
@@ -73,7 +74,7 @@
                                  </div>
                               </div>
                              <span>
-                                 <span class="" style="font-size: 25px; color:white;">Provisional </span><br>
+                                 <span class="" style="font-size: var(--font-h6); color:white;">Provisional </span><br>
                                  <span class="provisional"></span>
                              </span>
                          </div>
@@ -85,7 +86,7 @@
                                  </div>
                               </div>
                              <span>
-                                 <span style="font-size: 25px; color: white ; ">Not Sold </span><br>
+                                 <span style="font-size: var(--font-h6); color: white ; ">Not Sold </span><br>
                                  <span class="not_sold"></span>
                              </span>
                          </div>
@@ -94,8 +95,8 @@
                      <div id="chart-container">
                         <canvas id="donutCharts"></canvas>
                         <div id="center-text">
-                            <p>Total</p>
-                            <h2 class="total_vehicle">0</h2>
+                            <h4 class="total_vehicle mb-0">0</h4>
+                            <p>Done</p>
                         </div>
                     </div>
 
@@ -126,12 +127,12 @@
                          <table class="table table-borderless border-top">
                              <thead class="border-bottom">
                                  <tr>
-                                     <th>Platform</th>
-                                     <th>Total</th>
-                                     <th>End Time</th>
+                                     <th style="font-size: var(--font-p2) !important;">Platform</th>
+                                     <th style="font-size: var(--font-p2) !important;">Total</th>
+                                     <th style="font-size: var(--font-p2) !important;">End Time</th>
                                  </tr>
                              </thead>
-                             <tbody class="rows">
+                             <tbody class="rows tb-data-fonts">
                              </tbody>
                          </table>
                      </div>

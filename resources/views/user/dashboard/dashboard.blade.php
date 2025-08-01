@@ -68,8 +68,8 @@
     /* Styles for active interest button */
     .interest-button.active {
       background-color: #090a0c !important; /* Bootstrap primary blue */
-      border-color: #000000 !important;
-      color: white;
+      /* border-color: #000000 !important; */
+      color: white !important;
     }
 
     /* Ensure the scrollable wrapper has a defined height if needed, or relies on content */
@@ -113,7 +113,7 @@
       margin-right: 10px;
     }
     .auction-item .price {
-      font-size: 1.2rem;
+      font-size: var(--font-h6);
       font-weight: bold;
     }
     .auction-item .change {
@@ -232,8 +232,8 @@
 
         .vehicleStates #chart-container {
           position: relative;
-          width: 300px;
-          height: 300px;
+          width: 360px;
+          height: 360px;
         }
 
         .vehicleStates #center-text {
@@ -254,25 +254,73 @@
           font-size: 1rem;
           color: #aaa;
         }
-  
+        .tab-content:not(.doc-example-content){
+          padding: 0;
+        }
+      
+        .dashbord .nav-tabs .active{
+
+          /* border-bottom: 4px solid var(--bs-primary); */
+          padding-bottom: 10px;
+          color: white !important;
+           box-shadow: none !important;
+           border: none!important;
+
+        }
+      
+        .dashbord .nav-link:hover{
+
+      
+          color: white !important;
+
+        }
+         
+        .dashbord .nav-tabs:hover .active:hover{
+
+          /* border-bottom: 4px solid var(--bs-primary); */
+          /* padding-bottom: 0px; */
+          color: white !important;
+          box-shadow: none !important;
+
+
+        }
+        .nav-tabs .active .borders{
+
+          border-bottom: 3px solid var(--bs-primary)!important;
+            padding-top: 0px !important;
+    display: block;
+    width: 53px;
+    /* padding: 0px 0px; */
+    margin: auto;
+    padding-top: 5px !important;
+}
+        
+        .tb-data-fonts tr td{
+          font-size: var(--font-p1) !important;
+        }
+
+
 </style>
 @endsection
 @section('content')
 
-    <div style="background:var(--bs-navbar-bg);" class=""  >
+    <div style="background:var(--bs-navbar-bg);" class="dashbord"  >
       <div class="" style="padding: 60px 60px; background-image: url({{asset('/public/themeadmin/images/backgrounds/Dots.png')}})" >
 
            <div class=" text-white mb-6" >
-                <div class="row g-4">
+                <div class="row g-4" style="margin-bottom:50px ;">
                   <!-- Left: Welcome + Tabs -->
                   <div class="col-lg-8 align-self-end">
-                        <h2 class="h4 fw-semibold">
-                            Welcome back, <span class="text-primary fw-bold">Mr {{ auth()->user()->firstName ?? 'User' }}!</span>
-                        </h2>
+                    <div class="d-flex align-items-center ">
 
-                        <div class="mt-2 bg-secondary bg-opacity-25 p-2 rounded text-white-50 w-75">
+                      <h6 class=" fw-semibold ">
+                        Welcome back, <h5 class="text-primary fw-bold ms-3 mt-1">Mr {{ auth()->user()->firstName ?? 'User' }}!</hh5>
+                      </h6>
+                    </div>
+
+                        <p class="mt-2 p-3 rounded text-white-50 w-75" style="backdrop-filter: blur(5px); background-color: var(--tra-primary-colr)!important; ">
                             Choose the best plan for your needs.
-                        </div>
+                        </p>
 
                         <!-- Tabs -->
                         {{-- <ul class="nav nav-tabs mt-4 border-bottom border-secondary">
@@ -284,14 +332,23 @@
                             </li>
                         </ul> --}}
 
-                        <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs mt-5" id="myTab" role="tablist"  style="border-bottom: 1px solid var(--bs-border-color)!important ; padding-top: 10px ">
+
                             <li class="nav-item" role="presentation">
-                              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Overview</button>
+                              <button class="d-block nav-link active" style="font-size: var(--font-p1); font-weight: var(--font-weight-semibold); margin-bottom: -10px !important" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                 <span class="d-block " >Overview</span> 
+                                 <span class="borders mt-0" ></span>
+                              </button>
+                             
                             </li>
                             <li class="nav-item" role="presentation">
-                              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Intrest</button>
+                              <button class="d-block nav-link" style="font-size: var(--font-p1); font-weight: var(--font-weight-semibold)  ; margin-bottom: -10px !important"  id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                                  <span class="d-block" >Intrest</span> 
+                                 <span class="borders mt-0" style="" ></span>
+                                </button>
                             </li>
-                        </ul>
+                            
+                          </ul>
                   </div>
 
                   <!-- Right: Refer & Earn Card -->
@@ -326,13 +383,13 @@
     </div>
 
 
-   <div class="container-fluid " style="background-color: #0F1C2C;">
+   <div class=" " style="background-color: #0F1C2C; ">
 
       <div class="tab-content " id="myTabContent">
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab" style="padding: 0rem 4rem; ">
            @include('user.dashboard.overview')
           </div>
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="tab-pane fade" id="profile"  role="tabpanel" aria-labelledby="profile-tab">
             @include('user.dashboard.intrest')
 
        
