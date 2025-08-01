@@ -69,6 +69,9 @@
 
      }
 
+     .tb-data-fonts tr td{
+          font-size: var(--font-p1) !important;
+        }
    
 </style>
 @endsection
@@ -127,15 +130,15 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Platform</th>
-                                        <th>Center</th>
-                                        <th>Total Vehicles</th>
-                                        <th>Time</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th style="font-size: var(--font-p2) !important;">Platform</th>
+                                        <th style="font-size: var(--font-p2) !important;">Center</th>
+                                        <th style="font-size: var(--font-p2) !important;">Total Vehicles</th>
+                                        <th style="font-size: var(--font-p2) !important;">Time</th>
+                                        <th style="font-size: var(--font-p2) !important;">Status</th>
+                                        <th style="font-size: var(--font-p2) !important;">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-border-bottom-0"></tbody>
+                                <tbody class="table-border-bottom-0 tb-data-fonts"></tbody>
                             </table>
                         </div>
                     </div>
