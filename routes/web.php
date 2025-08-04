@@ -301,6 +301,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             
             // Reauction
             Route::get('/reauction', [ReauctionController::class,'index'])->name('reauction');
+            Route::get('/reauction/interest', [ReauctionController::class,'interest'])->name('reauction-interest');
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
  
 

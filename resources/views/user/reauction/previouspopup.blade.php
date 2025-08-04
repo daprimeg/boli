@@ -7,14 +7,11 @@
             <div class="modal-body">
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               <div class="text-center mb-6">
-                <h4 class="mb-2">Vehicle Auction History</h4>
-                <p class="text-muted">Details of previous auction appearances </p>
+                  <h4 class="mb-2">Vehicle Auction History</h4>
+                  <h4 class="mb-2 vehicleName"> </h4>
               </div> 
 
-              <div class="text-center mb-6">
-                <h4 class="mb-2 vehicleName"></h4>
-                <p class="text-muted redNumber"></p>
-              </div> 
+
             <div class="table-responsive">
                 <table class="table table-bordered table-hover text-center">
                   <thead class="">

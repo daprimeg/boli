@@ -49,6 +49,7 @@ class AVehicleController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('vehicles.title', 'like', "%{$search}%")
                     ->orWhere('vehicle_type.name', 'like', "%{$search}%")
+                    ->orWhere('vehicles.reg', 'like', "%{$search}%")
                     ->orWhere('make.name', 'like', "%{$search}%")
                     ->orWhere('model.name', 'like', "%{$search}%")
                     ->orWhere('model_variant.name', 'like', "%{$search}%")
@@ -77,6 +78,15 @@ class AVehicleController extends Controller
     }
     if ($request->has('auction_id') && $request->auction_id != '') {
         $query->where('auction_id',  $request->auction_id);
+    }
+    if ($request->has('make_id') && $request->make_id != '') {
+        $query->where('vehicles.make_id',  $request->make_id);
+    }
+    if ($request->has('model_id') && $request->model_id != '') {
+        $query->where('vehicles.model_id',  $request->model_id);
+    }
+    if ($request->has('variants_id') && $request->variants_id != '') {
+        $query->where('vehicles.variant_id',  $request->variants_id);
     }
             
 
@@ -119,6 +129,7 @@ class AVehicleController extends Controller
                   return [
                       $Vehicle->id,
                       $Vehicle->auction_name,
+                      $Vehicle->reg,
                       $Vehicle->title,
                       '<img style="width:50px;" src="'.$Vehicle->getImage().'" />',
                       $Vehicle->vehicle_name ?? 'N/A',
@@ -129,6 +140,8 @@ class AVehicleController extends Controller
                       $Vehicle->year,
                       $Vehicle->color_name,
                       $Vehicle->center_name,
+                      $Vehicle->last_bid,
+                      $Vehicle->bidding_status,
                     //   $Vehicle->fuel_type,
                     //   $Vehicle->mileage,
                     //   $Vehicle->transmission,

@@ -199,13 +199,16 @@
                                     <div class="row custom-nav">
                                         <div class="col-md-4 mt-2">
                                             <div class="nav-item">
-                                                <input type="checkbox" name="" id="">
-                                                <label>Inprogress</label>
+                                                <input type="checkbox" id="inprogress_check">
+                                                <label for="inprogress_check">Inprogress</label>
                                             </div>
+
                                         </div>
+
                                         <div class="col-md-4 text-center">
-                                            <input type="text" class="form-control" placeholder="Search by Reg" />
+                                            <input type="text" name="search" class="form-control" placeholder="Search by Reg" />
                                         </div>
+
                                       <div class="col-md-4 text-end mt-1">
                                             <div class="row custom-dropdown">
                                                 <div class="col-md-12">
@@ -213,12 +216,26 @@
                                                         <button class="custom-btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                             Select Interest
                                                         </button>
-                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                            <li><a class="dropdown-item" href="#">Option 1</a></li>
-                                                            <li><a class="dropdown-item" href="#">Option 2</a></li>
-                                                            <li><a class="dropdown-item" href="#">Option 3</a></li>
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="interestDropdown">
+                                                            <li>
+                                                                    <a class="dropdown-item" data-id="">
+                                                                        Select Interest
+                                                                    </a>
+                                                                </li>
+                                                            @forelse($interests as $interest)
+                                                                <li>
+                                                                    <a class="dropdown-item" href="#" data-id="{{ $interest->id }}">
+                                                                        {{ $interest->title }}
+                                                                    </a>
+                                                                </li>
+                                                            @empty
+                                                                <li><span class="dropdown-item text-muted">No interests found</span></li>
+                                                            @endforelse
                                                         </ul>
                                                     </div>
+
+                                                    <input type="hidden" id="selected_interest_id" value="">
+
                                                 </div>
                                             </div>
                                         </div>
@@ -258,29 +275,50 @@
 
 @section('js')
     <script>
-$(document).ready(function () {
-             let table = $('#blogTable').DataTable({
-                    processing: true,
-                    ordering:false,
-                    serverSide: true,
-                    ajax: "{{ url('/reauction') }}",
-                });
+            $(document).ready(function () {
+                        let table = $('#blogTable').DataTable({
+                                processing: true,
+                                ordering:false,
+                                serverSide: true,
+                                ajax:{
+                                    url: "{{ url('/reauction') }}",
+                                    data: function (d) {
+                                        d.inprogress_check = $('#inprogress_check').is(':checked') ? 1 : 0;
+                                        d.interest_id = $('#selected_interest_id').val();
+                                    }
+                                }
+                                
+                            
+                            });
 
-                table.on('draw.dt', function () {
-                    var info = table.page.info();
-                    $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
-                });
+                            table.on('draw.dt', function () {
+                                var info = table.page.info();
+                                $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
+                            });
 
-                $("input[name='search']").on('keyup change', function () {
-                    table.search(this.value).draw();
-                });
+                            $("input[name='search']").on('keyup change', function () {
+                                table.search(this.value).draw();
+                            });
 
-                $("select[name='length']").on('change', function () {
-                    const length = $(this).val();
-                    table.page.len(length).draw();
-                }).trigger('change');
- 
-});
+                            $("select[name='length']").on('change', function () {
+                                const length = $(this).val();
+                                table.page.len(length).draw();
+                            }).trigger('change');
+                            $('#inprogress_check').on('change', function () {
+                                table.ajax.reload();
+                            });
+                            $('#interestDropdown').on('click', '.dropdown-item', function (e) {
+                                e.preventDefault();
+                                const selectedId = $(this).data('id');
+                                $('#selected_interest_id').val(selectedId);
+                                $('#dropdownMenuButton').text($(this).text()); 
+                                table.ajax.reload();
+                            });
+
+
+                    
+            
+            });
   
 
                
@@ -303,8 +341,11 @@ $(document).on('click', '.PreviousBtnRec', function () {
             }
 
           
-            $('.vehicleName').text(response[0].name + ' - ' + response[0].variant);
-            $('.redNumber').text(response[0].reg).css('color', 'red');
+           
+           $('.vehicleName').html(
+                response[0].name + ' - ' + response[0].variant + ' - ' +
+                '<small class="text-danger" style="font-size: 80%;">' + reg + '</small>'
+            );
 
        
             $('#vehicleModalTableBody').empty();
@@ -345,6 +386,70 @@ $(document).on('click', '.PreviousBtnRec', function () {
     });
 
 
-
     </script>
+
+    <script>
+    $(document).ready(function () {
+    $.ajax({
+        url: '{{ route('reauction-interest') }}',
+        method: 'GET',
+        dataType: 'json',
+        success: function (interests) {
+            let html = '';
+
+            interests.forEach(function (interest, index) {
+                html += `
+                        <div class="col-auto" style="min-width: 250px;">
+                            <div class="card h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
+                                <div class="card-body pb-1 text-start">
+                                    <div class="d-flex align-items-start mb-2">
+                                        <div class="avatar d-flex align-items-start mb-3">
+                                            <div class="box" style="height: 30px; width: 30px; background-color: var(--bs-primary); border-radius: 4px; box-shadow: 0px 0px 5px 8px #003164;"></div>
+                                        </div>
+                                        <h5 class="mb-0 ms-2">
+                                            <span class="auction-count" data-primary="${interest.primary_count}" data-secondary="${interest.secondary_count}">
+                                                ${interest.primary_count}
+                                            </span>
+                                        </h5>
+                                    </div>
+                                    <p class=" text-start">
+                                        <span class="total_auctions">${interest.title}</span>
+                                    </p>
+                                    <p class="mb-0 text-start">
+                                        <span class="text-heading fw-medium me-2 online_auctions">
+                                            <input type="checkbox" class="secondary-toggle">
+                                        </span>
+                                        <small class="text-body-secondary">Include Secondary</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+            });
+
+            $('#scrollableRow').html(html);
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            $('#scrollableRow').html('<p class="text-danger">Failed to load interests.</p>');
+        }
+    });
+
+    $(document).on('change', '.secondary-toggle', function () {
+        const $card = $(this).closest('.card-body');
+        const $count = $card.find('.auction-count');
+        const primary = $count.data('primary');
+        const secondary = $count.data('secondary');
+
+        if ($(this).is(':checked')) {
+            $count.text(secondary);
+        } else {
+            $count.text(primary);
+        }
+    });
+});
+
+</script>
+
 @endsection
