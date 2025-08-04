@@ -54,13 +54,6 @@ class AdminAuthController extends Controller
         return redirect()->route('/admin')->with('message', 'Logged out successfully');
     }
 
-        public function profile()
-    {
-        $alerts = Alert::with('user')->get(); // fetch all alerts for all users
-    
-        return view('user.profile.userprofile', compact('alerts'));
-    }
-
   
     
 

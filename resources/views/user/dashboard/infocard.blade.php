@@ -54,7 +54,7 @@
                                  <span class="text-heading fw-medium me-2"> <span
                                          class="inprogress_vehicles"></span></span>
                              </div>
-                             <a href=""><span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a>
+                             {{-- <a href=""><span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a> --}}
                          </div>
                          </p>
                      </div>
@@ -83,7 +83,7 @@
                                  <small class="text-body-secondary">Sold:</small>
                                  <span class="text-heading fw-medium me-2"><span class="sold_vehicles"></span></span>
                              </div>
-                             <a href=""><span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a>
+                             {{-- <a href=""><span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a> --}}
                          </div>
                          </p>
                      </div>
@@ -110,7 +110,7 @@
                                  <small class="text-body-secondary">Vehicle:</small>
                                  <span class="text-heading fw-medium me-2"><span class="duplicate_vehicles"></span></span>
                              </div>
-                             <a href=""> <span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a>
+                             {{-- <a href=""> <span class="text-heading fw-medium me-0" style="color: var(--bs-primary) !important;">view</span></a> --}}
                          </div>
                          </p>
                      </div>

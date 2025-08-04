@@ -14,18 +14,27 @@ use Illuminate\Support\Facades\URL;
 class VariantController extends Controller
 {
 
-     public function getVariants(Request $request)
-  {
-
+    public function getVariants(Request $request)
+    {
         $search = $request->input('q');
-        $models = ModelVariant::where('model_id',$request->model_id) 
-            ->where('name', 'like', "%$search%")
-            ->select('id', 'name as text')
-            ->limit(20)
-            ->get();
+
+        $query = ModelVariant::query();
+
+        if ($request->filled('model_id')) {
+            $query->where('model_id', $request->model_id);
+        }
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
+
+        $models = $query->select('id', 'name as text')
+                        ->limit(20)
+                        ->get();
 
         return response()->json(['results' => $models]);
-  }
+    }
+
 
  
    public function index(Request $request)

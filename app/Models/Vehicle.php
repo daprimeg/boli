@@ -107,6 +107,16 @@ class Vehicle extends Model
         return $this->belongsTo(Year::class, 'year_id');
     }
 
+    public function previousAuction()
+    {
+
+        $id = $this->id;
+        $reg = $this->reg;
+
+        return Vehicle::whereNot('id',$id)->orderBy('start_date')->where('reg',$reg)->first();
+
+    }
+
 
 
 

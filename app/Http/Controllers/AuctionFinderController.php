@@ -303,279 +303,191 @@ class AuctionFinderController extends Controller
     }
 
 
-
-public function filter(Request $request)
-{
-    $vehicleTypes = $request->input('vehicle_types', []);
-    $makeIds = $request->input('make_ids', []);
-    $modelIds = $request->input('model_ids', []);
-    $variantIds = $request->input('variant_ids', []);
-    $yearIds = $request->input('year_ids', []);
-    $auctionName = $request->input('auction_name');
-    $dateRange = $request->input('date_range');
-
-    $transmission = $request->input('transmission', []);
-    $fuelType = $request->input('fuel_type', []);
-    $doors = $request->input('doors' , []);
-    $seats = $request->input('seats' ,[]);
-    $cc = $request->input('cc', []);
-
-    $colorId = $request->input('color_ids', []);
-    $grade = $request->input('grades', []);
-    $v5 = $request->input('v5');
-    $formerKeepers = $request->input('former_keepers', []);
-    $numberOfServices = $request->input('number_of_services', []);
-
-    $mileageFrom = $request->input('mileage_from');
-    $mileageTo = $request->input('mileage_to');
-
-    $ageFrom = $request->input('vehicle_age_from');
-    $ageTo = $request->input('vehicle_age_to');
-
-
-    $CleanFrom = $request->input('cap_clean_from');
-    $CleanTo = $request->input('cap_clean_to');
-
-    $query = AutoBasic::with([
-        'auction',
-        'autoLegal',
-        'autoPrice',
-        'autoAdvance',
-        'make',
-        'model',
-        'variant',
-        'year'
-    ]);
-
-    // Filters on AutoBasic
-    if (!empty($vehicleTypes)) {
-        $query->whereIn('body_type_id', $vehicleTypes);
-    }
-
-    if (!empty($makeIds)) {
-        $query->whereIn('make_id', $makeIds);
-    }
-
-
-
-    if (!empty($modelIds)) {
-        $query->whereIn('model_id', $modelIds);
-    }
-
-    if (!empty($variantIds)) {
-        $query->whereIn('variant_id', $variantIds);
-    }
-
-    if (!empty($yearIds)) {
-        $query->whereIn('year_id', $yearIds);
-    }
-
-    if (!empty($transmission)) {
-        $query->where('transmission', $transmission);
-    }
-
-    if (!empty($fuelType)) {
-        $query->where('fuel_type', $fuelType);
-    }
-
-    if (!empty($doors)) {
-        $query->where('doors', $doors);
-    }
-
-    if (!empty($seats)) {
-        $query->where('seats', $seats);
-    }
-
-    if (!empty($cc)) {
-        $query->where('cc',  $cc);
-    }
-
-    if ($mileageFrom || $mileageTo) {
-    $query->whereHas('autoLegal', function ($q) use ($mileageFrom, $mileageTo) {
-        if ($mileageFrom) {
-            $q->where('mileage', '>=', $mileageFrom);
-        }
-        if ($mileageTo) {
-            $q->where('mileage', '<=', $mileageTo);
-        }
-    });
-    }
-
-
-    if ($CleanFrom || $CleanTo) {
-    $query->whereHas('autoPrice', function ($q) use ($CleanFrom, $CleanTo) {
-        if ($CleanFrom) {
-            $q->where('cap_clean', '>=', $CleanFrom);
-        }
-        if ($CleanTo) {
-            $q->where('cap_clean', '<=', $CleanTo);
-        }
-    });
-    }
-
-
-
-if (!empty($ageFrom) || !empty($ageTo)) {
-    $query->when(true, function ($q) use ($ageFrom, $ageTo) {
-        $q->join('auto_legal', 'auto_basic.id', '=', 'auto_legal.id')
-          ->select('auto_basic.*', 'auto_legal.dor');
-
-        if (!empty($ageFrom)) {
-            $fromDate = \Carbon\Carbon::now()->subMonths($ageFrom)->startOfDay();
-            $q->where('auto_legal.dor', '<=', $fromDate->format('Y-m-d'));
+    public function vehicle($id)
+    {
+        
+        $vehicle = Vehicle::where('id',$id)->first();
+        if(!$vehicle){
+            return back()->with('error','Vehicle Not Found');
         }
 
-        if (!empty($ageTo)) {
-            $toDate = \Carbon\Carbon::now()->subMonths($ageTo)->endOfDay();
-            $q->where('auto_legal.dor', '>=', $toDate->format('Y-m-d'));
-        }
+        $auctionsPlatform = AuctionPlatform::all();
+        $colors = DB::table('color')->where('id', $vehicle->color_id)->first();
+        $biddingHistoryArray = json_decode($vehicle->bidding_history, true);
 
-        $q->distinct();
-    });
-}
+        $data = [
+            'vehicle' => $vehicle,
+            'colors' => $colors,
+            'auctionsPlatform' => $auctionsPlatform,
+            'biddingHistoryArray' => $biddingHistoryArray,
+        ];
+        
+        return view('user.auctionfinder.vehicle.index',$data);
 
-
-
-    // Filters on Auction
-    if (!empty($auctionName)) {
-        $query->whereHas('auction', function ($q) use ($auctionName) {
-            $q->where('platform_id', $auctionName);
-        });
     }
 
-    if (!empty($dateRange)) {
-        $query->whereHas('auction', function ($q) use ($dateRange) {
-            $date = now();
-            switch ($dateRange) {
-                case 'today':
-                    $q->whereDate('auction_date', $date->toDateString());
-                    break;
-                case 'yesterday':
-                    $q->whereDate('auction_date', $date->subDay()->toDateString());
-                    break;
-                case 'last_week':
-                    $q->whereBetween('auction_date', [now()->subWeek(), now()]);
-                    break;
-                case 'last_month':
-                    $q->whereBetween('auction_date', [now()->subMonth(), now()]);
-                    break;
-                case 'past_3_months':
-                    $q->whereBetween('auction_date', [now()->subMonths(3), now()]);
-                    break;
+
+
+
+
+    public function getRelatedVehicle(Request $request,$id)
+    {
+
+            $vehicle = Vehicle::where('id',$id)->orderBy('start_date','desc')->first();
+            if(!$vehicle){
+                return response()->json([
+                    "message" => "Vehicle Not Found",
+                ],401);
             }
-        });
-    }
 
-    // Filters on AutoAdvance
-    if (!empty($colorId)) {
-        $query->whereHas('autoAdvance', function ($q) use ($colorId) {
-            $q->whereIn('color_id', $colorId);
-        });
-    }
+            DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
+            $perPage = (int) $request->input('length', 10);
+            $page = (int) $request->input('page', 1);
+            $offset = ($page - 1) * $perPage;
 
 
-    // if (!empty($grade)) {
-    //     $query->whereHas('autoAdvance', function ($q) use ($grade) {
-    //         $q->whereIn('grade', $grade);
-    //     });
-    // }
+            //Base Query
+            $query = Vehicle::join('auctions','auctions.id','=','vehicles.auction_id')
+            ->join('auction_platform','auction_platform.id','=','auctions.platform_id')
+            ->join('make','make.id','=','vehicles.make_id')
+            ->join('model','model.id','=','vehicles.model_id')
+            ->join('model_variant','model_variant.id','=','vehicles.variant_id')
+            ->where('vehicles.make_id',$vehicle->make_id)
+            ->where('vehicles.model_id',$vehicle->model_id)
+            ->where('vehicles.variant_id',$vehicle->variant_id);
+
+            
+            if($request->has('platform') && $request->platform != ''){
+                 $query->where('auctions.platform_id',$request->platform);
+            }
+            
+            $dateRange = $request->date_range ? $request->date_range : 'past_3_months';
+            if($request->has('date_range') && $request->date_range != '') {
+
+                $now = \Carbon\Carbon::now();
+                $fromDate = match ($dateRange) {
+                    'today' => $now->copy()->startOfDay(),
+                    'yesterday' => $now->copy()->subDay()->startOfDay(),
+                    'last_week' => $now->copy()->subWeek(),
+                    'last_month' => $now->copy()->subMonth(),
+                    'past_3_months' => $now->copy()->subMonths(3),
+                    default => $now->copy()->subMonths(3),
+                };
+
+                $toDate = $now->copy()->endOfDay();
+                $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+
+            }
 
 
-if (!empty($colorId)) {
-$query->when(!empty($colorId), function ($q) use ($colorId) {
-    $gradeArray = is_array($colorId) ? $colorId : [$colorId];
-    $q->join('auto_advance', 'auto_basic.id', '=', 'auto_advance.id')
-      ->select('auto_basic.*', 'auto_advance.color_id')
-      ->whereIn('auto_advance.color_id', $colorId)
-      ->distinct();
-      
-});
+            // Count total BEFORE limit/offset
+            $total = $query->count(); 
 
-}
+            //Results
+            $results = (clone $query)
+                ->offset($offset)
+                ->limit($perPage)
+                ->select([
+                 'vehicles.*',
+                 'auction_platform.name as platform_name',
+                 'auctions.auction_date as auction_date',
+                 'make.name as make_name',
+                 'model.name as model_name',
+                 'model_variant.name as variant_name',
+                ])
+                ->groupBy('vehicles.reg')
+                ->get()
+                ->map(function ($item) {
 
+                    $image = explode(',',$item->images);
 
+                    return [
+                        'id' => $item->id,
+                        'platform_name' => $item->platform_name,
+                        'make_name' => $item->make_name,
+                        'model_name' => $item->model_name,
+                        'variant_name' =>  $item->variant_name,
+                        'date' =>  $item->start_date,
+                        'image' =>  $image ? $image[0] : '',
+                    ];
 
-if (!empty($grade)) {
-$query->when(!empty($grade), function ($q) use ($grade) {
-    $gradeArray = is_array($grade) ? $grade : [$grade];
-    $q->join('auto_advance', 'auto_basic.id', '=', 'auto_advance.id')
-      ->select('auto_basic.*', 'auto_advance.grade')
-      ->whereIn('auto_advance.grade', $gradeArray)
-      ->distinct();
-      
-});
+                });
 
-}
+            return response()->json([
+                // 'toDate' =>  $toDate,
+                // 'fromDate' =>  $fromDate,
+                'offset' => $offset,
+                'data'         => $results,
+                'total'        => $total,
+                'per_page'     => $perPage,
+                'current_page' => $page,
+                'last_page'    => ceil($total / $perPage),
+            ]);
 
-
-
-if (!empty($formerKeepers)) {
-$query->when(!empty($formerKeepers), function ($q) use ($formerKeepers) {
-    $gradeArray = is_array($formerKeepers) ? $formerKeepers : [$formerKeepers];
-    $q->join('auto_legal', 'auto_basic.id', '=', 'auto_legal.id')
-      ->select('auto_basic.*', 'auto_legal.former_keepers')
-      ->whereIn('auto_legal.former_keepers', $gradeArray)
-      ->distinct();
-      
-});
-
-}
-
-
-if (!empty($numberOfServices)) {
-$query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
-    $gradeArray = is_array($numberOfServices) ? $numberOfServices : [$numberOfServices];
-    $q->join('auto_legal', 'auto_basic.id', '=', 'auto_legal.id')
-      ->select('auto_basic.*', 'auto_legal.number_of_services')
-      ->whereIn('auto_legal.number_of_services', $gradeArray)
-      ->distinct();
-      
-});
-
-}
-
-
-
-
-//  dd($query->toSql(), $query->getBindings());
-
-
-
-
-    // Filters on AutoLegal
-    if (!empty($v5)) {
-        $query->whereHas('autoLegal', function ($q) use ($v5) {
-            $q->where('v5', $v5);
-        });
-    }
-
-    if (!empty($formerKeepers)) {
-        $query->whereHas('autoLegal', function ($q) use ($formerKeepers) {
-            $q->where('former_keepers', $formerKeepers);
-        });
-    }
-
-    if (!empty($numberOfServices)) {
-        $query->whereHas('autoLegal', function ($q) use ($numberOfServices) {
-            $q->where('number_of_services', $numberOfServices);
-        });
+    
     }
 
 
-    // Then you can run the query
-    $vehicles = $query->get();
+       public function getPlatformVehicle(Request $request)
+    {
+
+
+            $month3 = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m');
+            $month2 = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m');
+            $month1 = Carbon::now()->startOfMonth()->format('Y-m');
+            $data = AuctionPlatform::join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+                    ->join('vehicles','vehicles.auction_id','=','auctions.id')
+                    ->select(
+                        'auction_platform.name AS label',
+                        DB::raw("SUM(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '{$month3}' THEN 1 ELSE 0 END) as month3"),
+                        DB::raw("SUM(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '{$month2}' THEN 1 ELSE 0 END) as month2"),
+                        DB::raw("SUM(CASE WHEN DATE_FORMAT(auctions.auction_date, '%Y-%m') = '{$month1}' THEN 1 ELSE 0 END) as month1")
+                    );
+              
+                    if($request->has('platform_id') && $request->platform_id != ''){
+                        $data = $data->whereIn('auctions.platform_id',$request->platform_id);
+                    }
+            
+
+              $data =  $data->groupBy('auction_platform.id', 'auction_platform.name')
+                    ->get();
+           
+                $labels = [];
+                $colors = [];
+                $res = [];
+                $cc = ['#9b5de5','#00bbf9','#00f5d4','#ef233c']; 
+                
+                foreach ($data as $key => $value) {
+
+                    Auctions::where('platform_id',$value->id)->first();
+                    $randomKey = array_rand($cc);
+                    $labels[$key] = $value['label'];
+                    $colors[$key] = $cc[$randomKey];
+                    
+                    array_push($res,[
+                        "name" => $value['label'],
+                        "data" => [$value['month1'],$value['month2'],$value['month3']],
+                    ]);
+
+                }
+
+
+                return response()->json([
+                    "labels" =>  $labels,
+                    "colors" => $colors,
+                    "data" => $res,
+                ],200);
+
+    }
+
+
+  
 
 
 
 
-    $html = view('partials.vehicle_table', compact('vehicles'))->render();
-
-    return response()->json(['html' => $html]);
-}
-
-
-
- public function auctionScheduler(Request $request){
+    public function auctionScheduler(Request $request){
 
             if ($request->ajax()) {
                 // $search = $request->input('search.value');
