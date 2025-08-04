@@ -4,7 +4,7 @@
         .pricing-card {
             background-color: #000f2170 !important;
             border: 1px solid var(--items-border-colur) !important;
-            height: 80vh !important;
+            margin-top: 16px;
             transition: .5s;
         }
 
@@ -18,10 +18,10 @@
             border: 1px solid var(--text-color) !important;
             position: relative;
             border-radius: 10px;
-            height: 85vh !important;
-            padding: 20px 0px;
             transition: all 0.8s ease;
-            top: -20px;
+                        margin-top: 0px !important;
+
+           
         }
 
 
@@ -37,10 +37,10 @@
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--items-border-colur), var(--text-color)) !important;
+            background: var(--text-color) !important;
             border: none !important;
             padding: 6px 12px !important;
-            font-size: 12px !important;
+            font-size: var(--font-p2) !important;
         }
 
         .price-original {
@@ -99,9 +99,9 @@
         }
 
         .btn-primary-custom {
-            background: var(--text-color) !important;
+            background: white  !important;
             border: 1px solid var(--items-border-colur) !important;
-            color: white !important;
+            color: black !important;
         }
 
         .inline-bottom-border {
@@ -192,8 +192,21 @@
             /* Ya apni background color rakhain */
             z-index: 10000 !important;
         }
-        ul li{
-            text-decoration: none !important    ;
+        .cinoe{
+            display: flex;
+            margin: 10px !important;
+            gap: 10px;
+        }
+        .chek{
+            height: 20px ;
+            border-radius: 50%;
+            width: 20px;
+            display: flex;
+            justify-content: center !important;
+            align-items: center !important;
+            background: var(--text-color) !important;
+            padding: 13px !important;
+
         }
 
         @media screen and (max-width: 560px) {
@@ -215,7 +228,7 @@
         style="padding-top: 6rem !important; background-color: var(--items-background) !important;">
 
 
-        <div class="pb-12 container text-white">
+        <div class="pb-12 container text-white" style="margin: 60px auto">
             <h2 class="">Flexible plans
                 for AI content creators</h2>
             <p>Choose
@@ -235,34 +248,34 @@
                                         class="price-period">/month</span></div>
                             </div>
                             <a href="{{ url('/register?plan_id=2') }}" class="btn btn-get-starteds mb-4"
-                                style="border: 1px solid var(--items-border-colur); color: #ccc;">Get
+                                style="border: 1px solid white; color: #ccc;">Get
                                 Started</a>
                         </div>
-                        <div class="d-flex align-items-center mb-4 border-top border-bottom px-4 py-2"
+                      <div class="border-top border-bottom text-center py-3 px-4"
                             style="border-color:var(--items-border-colur) !important;">
-                            <i class="bi bi-lightning-charge text-warning me-2"></i>
-                            <span class="credits-info">40 credits <span class="price-period">/day</span></span>
-                            <i class="bi bi-info-circle ms-2 text-muted"></i>
+                            <i class="bi bi-lightning-charge text-warning mb-2"></i>
+
+                            <p class="billing-info mb-2">For small dealers.</p>
                         </div>
-                        <ul class="mx-4 py-4 " style="color: white; text-decoration: none">
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                        <ul class=" py-4 " style="color: white; text-decoration: none">
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
 
@@ -289,29 +302,29 @@
 
                             <p class="billing-info mb-2">For small dealers.</p>
                         </div>
-                        <ul  class="mx-4 py-4 " style="color: white">
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                        <ul class=" py-4 " style="color: white">
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
 
@@ -323,7 +336,7 @@
                 <div class="" style="width: 25%;">
                     <div class="card pricing-card pricing-card-popular h-100">
                         <span class="badge popular-badge"><i class="bi bi-lightning-fill me-1"></i>Most popular</span>
-                        <div class="px-4 pt-4">
+                        <div class="px-4" style=" padding-top: 40px !important;">
                             <h6 class="text-white mb-3 ">Plus</h6>
                             <div class="d-flex align-items-center">
 
@@ -339,37 +352,37 @@
 
                             <p class="billing-info mb-2">For medium-sized businesses.</p>
                         </div>
-                        <ul class="mx-4 py-4 " style="color: white">
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                        <ul class=" py-4 " style="color: white">
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
 
@@ -396,29 +409,29 @@
 
                             <p class="billing-info mb-2">For larger operations.</p>
                         </div>
-                        <ul class="mx-4 py-4 " style="color: white;">
-                            <li style="position: relative; padding-left: 25px;text-decoration: none !important ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                        <ul class=" py-4 " style="color: white">
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li style="position: relative; padding-left: 25px; ">
-                              <span class="material-symbols-outlined check-icon" style="background: var(--text-color); color: white; border-radius: 50%">check_circle</span>
+                            <li  class="cinoe" >
+                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
 
@@ -430,6 +443,11 @@
 
 
         <div class="container py-5">
+           <h5  style="color: white; margin-top: 80px; margin-bottom: 50px;">Compare features and model access across all plans
+
+</h5>
+
+
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="pricing-table-container">
@@ -629,7 +647,7 @@
 
                                     <!-- Category -->
                                     <tr>
-                                        <th class="category-header">Image Generator</th>
+                                        <th  class="category-header">Image Generator</th>
                                         <td>
                                            
                                         </td>

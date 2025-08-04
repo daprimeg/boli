@@ -54,7 +54,7 @@
 </style>
 <nav class="navbar navbar-expand-lg custom-navbar  navbar-dark" style="font-family: var(--font-family); ">
     <div id="navbar" class="container-fluid py-3"
-        style="position: fixed; top:0px; left: 4px; background: var(--background-color) !important; z-index: 400000">
+        style="position: fixed; top:0px; left: 4px; background: var(--background-color) !important; z-index: 400000; padding: 0px 50px">
         <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
             <img src="{{ asset('/public/theme/assets/nave-icon.png') }}" alt="Logo" class="me-2" />
         </a>
