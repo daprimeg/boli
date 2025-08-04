@@ -523,7 +523,7 @@
                     </li>
                     @if(Auth::user()->user_type != 1) 
                     <li>
-                      <a class="dropdown-item" href="{{URL::to('/account-setting/profilesetting')}}">
+                      <a class="dropdown-item" href="{{URL::to('/account-setting/profile')}}">
                         <i class="icon-base ti tabler-settings me-3 icon-md"></i
                         ><span class="align-middle">Settings</span>
                       </a>
@@ -534,9 +534,8 @@
                         <span class="d-flex align-items-center align-middle">
                           <i class="flex-shrink-0 icon-base ti tabler-file-dollar me-3 icon-md"></i
                           ><span class="flex-grow-1 align-middle">Billing</span>
-                          <span class="flex-shrink-0 badge bg-danger d-flex align-items-center justify-content-center"
-                            >4</span
-                          >
+                          
+                        
                         </span>
                       </a>
                     </li>

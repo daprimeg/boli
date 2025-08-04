@@ -70,8 +70,9 @@
                             <img src="{{ $vehicle->getImages()[0] }}" id="mainImage" class="rounded"
                                 style="width: 100%; height: 100%; object-fit: cover !important; "
                                 alt="Vehicle Main Image" data-bs-toggle="modal" data-bs-target="#imageModal">
-                    </div>
-                    @endif
+                        @endif
+                      </div>
+                
                     {{-- Thumbnails --}}
 
 

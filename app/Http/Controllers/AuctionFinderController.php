@@ -330,10 +330,10 @@ class AuctionFinderController extends Controller
 
 
 
-    public function getRelatedVehicle(Request $request,$reg)
+    public function getRelatedVehicle(Request $request,$id)
     {
 
-            $vehicle = Vehicle::where('reg',$reg)->orderBy('start_date','desc')->first();
+            $vehicle = Vehicle::where('id',$id)->orderBy('start_date','desc')->first();
             if(!$vehicle){
                 return response()->json([
                     "message" => "Vehicle Not Found",

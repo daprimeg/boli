@@ -19,7 +19,7 @@
             <li class="menu-item {{ request()->is('interest*') ? 'active' : '' }}">
               <a href="{{ url('/interest') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-pointer-heart"></i>
-                <div data-i18n="Interest">My Interest</div>
+                <div data-i18n="My Interest">My Interest</div>
               </a>
             </li>
 

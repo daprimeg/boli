@@ -143,25 +143,11 @@ class ProfileSettingController extends Controller
         ->whereDate('membership_start_date', '<=', now())
         ->whereDate('membership_expiry_date', '>=', now())
         ->first();
-
-        
-        
-            // if($request->isMethod('post')) {
-
-          
-
-            //         return back()->with('success', 'Password changed successfully.');
-            // }
-
-
+    
         return view('user.account-setting.billing', compact('user','membership','plans','current'));
     }
 
-
     
-
-    
-
     public function editSecuritySettings()
     {
         $userLoginLogs = UserLogin::where('user_id', auth()->id())
