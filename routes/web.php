@@ -72,6 +72,7 @@ Route::get('/pricing', [WebController::class,'pricing']);
 Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
 
 Route::get('/exploreevery', [WebController::class, 'ExploreEvery']);
+Route::get('/compair', [WebController::class, 'compairaution']);
 
 Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
