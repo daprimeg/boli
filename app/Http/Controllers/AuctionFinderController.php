@@ -657,7 +657,7 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
 
                         // ✅ Add status badge with color
                         $statusColor = match (strtolower($auction->status)) {
-                            'planned'   => 'danger',
+                            'planned'   => 'danger-red',
                             'in progress' => 'warning',
                             'update' => 'success',
                             'cancel'    => 'primary',
@@ -678,9 +678,9 @@ $query->when(!empty($numberOfServices), function ($q) use ($numberOfServices) {
                             "<span class='text-primary' >".$auction->platform_name ?? 'N/A'."</span>",
                             $centers,
                             $auction->car_count,
-                            "<span>".date('d-m-Y',strtotime($auction->auction_date))."</span><br><span>".date('h:s A',strtotime($auction->auction_date))."</span>",
+                            "<span>".date('d-m-Y',strtotime($auction->auction_date))."</span > <br> <span  style='font-size: var(--font-p2) !important;'>".date('h:s A',strtotime($auction->auction_date))."</span>",
                             $statusBadge ?? '-',
-                            '<a href="'.$view.'" class="btn btn-sm btn-primary">View</a> 
+                            '<a href="'.$view.'" class="btn btn-sm btn-primary"  style="  font-size: var(--font-p2) !important;">View</a> 
                             '
                         ];
                     });

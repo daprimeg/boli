@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,500,0,0&icon_names=check_circle" />
     <link rel="icon" type="image/x-icon" href="{{ asset('public/theme/fav.png')}}" />
     <link href="{{asset('/public/theme/css/bootstrap.css')}}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('/public/theme/styles.css')}}" />
@@ -148,15 +149,19 @@
   
    @yield('js')
   <script>
- window.addEventListener("scroll", function () {
+window.addEventListener("scroll", function () {
   const navbar = document.getElementById("navbar");
 
   if (window.scrollY > 50) {
-    navbar.style.background = "var(--items-background)";
-    // navbar.style.border = "2px solid var(--items-background)";
+    navbar.style.background = "rgba(15, 28, 44, 0.8)";
+    navbar.style.backdropFilter = "blur(7px)"; // ✅ Correct camelCase
+    navbar.style.borderBottom = "1px solid var( --items-border-colur)"; // ✅ border at bottom
+
   } else {
     navbar.style.background = "var(--background-color)";
     navbar.style.border = "none";
+
+    
   }
 });
 

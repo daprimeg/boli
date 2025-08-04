@@ -46,27 +46,11 @@
         border-radius: 4px;
         transition: .5s
     }
+    .btn-hover-getstarted:hover{
+        background: var(--text-color) !important;
+    }
 
-    /* Add inside your existing <style> tag */
-    /* .dropdown-menu {
-  background-color: var(--items-background) !important;
-  backdrop-filter: blur(4px) !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-}
-
-.dropdown-item {
-  color: white;
-  padding: 8px 16px;
-} */
-
-
-
-    /* .dropdown-menu h6 {
-  color: #ffffff;
-  font-weight: 600;
-  margin-bottom: 10px;
-} */
+    
 </style>
 <nav class="navbar navbar-expand-lg custom-navbar  navbar-dark" style="font-family: var(--font-family); ">
     <div id="navbar" class="container-fluid py-3"
@@ -93,6 +77,12 @@
                     <a class="nav-link {{ Request::is('features') ? 'active' : '' }}"
                         href="{{ url('/features') }}">Features</a>
                 </li>
+
+                 <li class="nav-item">
+                    <a class="nav-link {{ Request::is('/pricing') ? 'active' : '' }}"
+                        href="{{ url('/pricing') }}">Pricing</a>
+                </li>
+
 
                 <!-- Explore Dropdown -->
                 <!-- Explore Mega Dropdown -->
@@ -295,7 +285,7 @@
                     <a class="btn me-2 text-light" href="{{url('/dashboard')}}">My Account</a>
                 @else
                     <a class="btn me-2 text-light" href="{{url('/login')}}">Sign In</a>
-                    <a class="btn btn-get-started text-white" href="{{url('/register')}}">Get Started</a>
+                    <a class="btn btn-get-started text-white btn-hover-getstarted" href="{{url('/register')}}">Get Started</a>
                 @endif
             </div>
         </div>
