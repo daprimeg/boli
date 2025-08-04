@@ -145,21 +145,15 @@
                            <nav aria-label="pagination">
                                  <ul class="pagination">
 
-                           
-
                                  </ul>
                            </nav>
                      </div>
                </div>
-
             </div>
          </div>
       </div>
-
-
 </div>
 @endsection
-
 @section('js')
    <script>
             $(document).ready(function () {

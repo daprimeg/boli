@@ -118,11 +118,13 @@
         background-color: #1e3a8a !important; /* Tailwind blue-800 */
         border: 2px solid #3b82f6;
     }
-        .vehicle-detail-page{
 
-       
-       
-        }   
+    .vehicle-detail-page{
+
+    
+    
+    }
+
     .showblade-bg-img-dot {
     background: 
         linear-gradient(to top, 
@@ -133,10 +135,9 @@
         ),
         url('{{ asset('/public/theme/assets/autoboli.png') }}');
     background-size: contain;
-    
     background-position: top center; /* 👈 Image upar center ho jayegi */
     background-repeat: no-repeat;
-}
+    }
 
 
   .nav-tabs .nav-link {
@@ -230,34 +231,35 @@
 
 @section('content')
 <div class="sider vehicle-detail-page" style="padding-left: 0px; padding-right: 14px">
-        <div class="d-flex">
-                @include('user.auctionfinder.vehicle.sidebar')
-                <div class=" py-5 showblade-bg-img-dot " style="width: calc(100% - 281px); ">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-left: 60px;">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Vehicle Details</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Vehicle Valuation</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content p-0" id="myTabContent" >
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <div id="tabContent">
-                                    @include('user.auctionfinder.vehicle.vehicle_details') 
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    @include('user.auctionfinder.vehicle.vehicle_valuation') 
+    <div class="d-flex">
+            @include('user.auctionfinder.vehicle.sidebar')
+            <div class=" py-5 showblade-bg-img-dot " style="width: calc(100% - 281px); ">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-left: 60px;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Vehicle Details</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Vehicle Valuation</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-0" id="myTabContent" >
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div id="tabContent">
+                                @include('user.auctionfinder.vehicle.vehicle_details') 
                             </div>
                         </div>
-                </div>
-        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                @include('user.auctionfinder.vehicle.vehicle_valuation') 
+                        </div>
+                    </div>
+            </div>
+    </div>
 </div>
 @endsection
 @section('js')
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         function loadTabFromButton(button) {
             const url = button.getAttribute('data-url');
@@ -279,9 +281,6 @@
                 });
         }
     </script>
-
-
-
     <script>
          document.addEventListener('DOMContentLoaded', function () {
                     // Initialize Swiper
@@ -328,183 +327,254 @@
             });
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   
   <script>
     $(function() {
 
-            $.ajax({
-                type: "get",
-                url: "{{url('/auctionfinder/data')}}",
-                data: {
-                    length:50,
-                    page:1,
-                    date_range:'past_3_months',
-                    display_type:'auction',
-                },
-                dataType: "json",
-                success: function (response) {
-                    $('.total_count').text(response.total);
-                    console.log(response);
+        const filterSidebar = {
+            el:$(".filters-sidebar"),
+        };
 
-                    response.data.forEach(element => {
+        filterSidebar.load = function(){
+
+             filterSidebar.el.find('.vehicle-list > div').html(`<p class="text-center">Loading..</p>`);
+
+                $.ajax({
+                    type: "get",
+                    url: "{{url('/auction-finder/getRelatedVehicle/')}}"+"/"+"{{$vehicle->reg}}",
+                    data: {
+                        length:15,
+                        page:1,
+                        platform: filterSidebar.el.find('.platform').val(),
+                        date_range: filterSidebar.el.find('#date_range').val(),
+                    },
+                    dataType: "json",
+                    success: function (response) {
+
+                        filterSidebar.el.find('.total_count').text(response.total);
+                        filterSidebar.el.find('.vehicle-list > div').html('');
+
+                        response.data.forEach(element => {
+                
+                            filterSidebar.el.find('.vehicle-list > div').append(`
+                                <div class="vehicle-card mb-4 border-top" style="border-radius: 2px;">
+                                <button type="button" class="btn btn1 btn-primary w-100 dropdown-toggle text-start  collapsed waves-effect waves-light" style="justify-content: space-between; font-weight: 300; border-color:#44485e; box-shadow: none;" data-bs-toggle="collapse" data-bs-target="#vehicle-${element.id}" aria-controls="vehicle-${element.id}">
+                                    <div class="text-left"> 
+                                        <p class="m-0" style="text-align: left; font-size: 15px;">${element.make_name}</p>
+                                        <p class="m-0" style="text-align: left; font-size: 15px;"> Astra 2013</p>
+                                    </div>
+                                </button>
+                            <a href="${element.id}">  
+                                <div class="collapse" style="padding: 17px; padding-top: 0px;" id="vehicle-${element.id}">
+                                <div class="">
+                                    <div class="mb-2" style="  text-decoration: none;">
+                                        <button type="button" class="pickup-badge btn border my-2 " style="font-size: 15px; background-color: var();border: 1px solid var(--bs-primary) !important; color: var(--bs-heading-color)">${element.platform_name}</button>
+                                        <span class="ms-2">${element.date}</span>
+                                    </div>        
+                                    <img src="${element.image}" alt="Vehicle Image" class="vehicle-image mb-2" style="border-radius: 10px; max-width: 100%; height: 100%; display: block; margin-right: auto;">
+                                    </div> 
+                            </div></a>
+                            </div>`);
+                        });
+
+                    }
+                });
+
+        }
+
+            filterSidebar.el.find('.platform').change(() => {
+                filterSidebar.load();
+            });
             
-                        $('.vehicle-list > div').append(`
-                            <div class="vehicle-card mb-4 border-top" style="border-radius: 2px;">
-                            <button class="btn btn1 btn-primary w-100 dropdown-toggle text-start  collapsed waves-effect waves-light" type="button" style="justify-content: space-between; font-weight: 300; border-color:#44485e; box-shadow: none;" data-bs-toggle="collapse" data-bs-target="#vehicle-3117" aria-controls="vehicle-3117">
-                                <div class="text-left"> 
-                                    <p class="m-0" style="text-align: left; font-size: 15px; ">${element.make_name}</p>
-                                    <p class="m-0" style="text-align: left; font-size: 15px;  "> Astra 2013</p>
-                                </div>
-                            </button>
-                         <a href="${element.id}">  
-                             <div class="collapse" style="padding: 17px; padding-top: 0px;" id="vehicle-3117">
-                               <div class="">
-                                <div class="mb-2" style="  text-decoration: none;">
-                                    <button class="pickup-badge btn border my-2 " style="font-size: 15px; background-color: var();border: 1px solid var(--bs-primary) !important; color: var(--bs-heading-color)">Manheim Auction</button>
-                                    <span class="ms-2">1/8/2025_15:09</span>
-                                </div>        
-                                <img src="https://www1.bcaimage.com/Document?DocType=VehicleImage&amp;width=600&amp;docId=611866168" alt="Vehicle Image" class="vehicle-image mb-2" style="border-radius: 10px; max-width: 100%; height: 100%; display: block; margin-right: auto;">
-                                </div> 
-                           </div></a>
-                        </div>`);
-
-                    });
-
-                    // $('.vehicle-list > div').html('');
-                    
-                }
+            filterSidebar.el.find('#date_range').change(() => {
+                filterSidebar.load();
             });
 
 
-            const options = {
-                            chart: {
-                                type: 'area',
-                                height: 350,
-                                background: '#0b1d2a',
-                                toolbar: {
-                                    show: false
-                                }
-                            },
-                            colors: ['#00E396', '#008FFB'], // green & blue
-                            dataLabels: {
-                                enabled: false
-                            },
-                            stroke: {
-                                curve: 'smooth',
-                                width: 2
-                            },
-                            series: [
-                                {
-                                    name: "CCA",
-                                    data: [12000, 13500, 13000, 14000]
-                                },
-                                {
-                                    name: "BCA",
-                                    data: [12300, 12800, 12500, 13200]
-                                }
-                            ],
-                            xaxis: {
-                                categories: ['Jan', 'Feb', 'Mar', 'April'],
-                                labels: {
-                                    style: {
-                                    colors: '#ccc'
-                                    }
-                                }
-                            },
-                            yaxis: {
-                                labels: {
-                                    formatter: val => `£${val.toLocaleString()}`,
-                                    style: {
-                                        colors: '#ccc'
-                                    }
-                                }
-                            },
-                            tooltip: {
-                            theme: 'dark'
-                            },
-                            legend: {
-                                position: 'top',
-                                labels: {
-                                    colors: '#fff'
-                                }
-                            },
-                            fill: {
-                                type: 'gradient',
-                                gradient: {
-                                    shade: 'dark',
-                                    opacityFrom: 0.5,
-                                    opacityTo: 0.2,
-                                }
-                            },
-                            grid: {
-                            borderColor: '#333'
-                            }
-                        };
+            filterSidebar.load();
 
-                        const chart = new ApexCharts(document.querySelector("#charts"), options);
-                        chart.render();
-       }); 
+    }); 
 </script>
 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                    // Initialize Swiper
-                    const swiper = new Swiper('.mySwiper', {
-                        slidesPerView: 4,
-                        spaceBetween: 10,
-                        breakpoints: {
-                            640: { slidesPerView: 5 },
-                            768: { slidesPerView: 6 },
-                        }
-                    });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Swiper
+            const swiper = new Swiper('.mySwiper', {
+                slidesPerView: 4,
+                spaceBetween: 10,
+                breakpoints: {
+                    640: { slidesPerView: 5 },
+                    768: { slidesPerView: 6 },
+                }
+            });
 
-                    // Handle click on main image to open modal
-                    const mainImage = document.getElementById('mainImage');
-                    const modalImage = document.getElementById('modalImage');
+            // Handle click on main image to open modal
+            const mainImage = document.getElementById('mainImage');
+            const modalImage = document.getElementById('modalImage');
 
-                    if (mainImage) {
-                        mainImage.addEventListener('click', function () {
-                            if (modalImage) {
-                                modalImage.src = this.src;
-                            }
-                        });
+            if (mainImage) {
+                mainImage.addEventListener('click', function () {
+                    if (modalImage) {
+                        modalImage.src = this.src;
                     }
+                });
+            }
 
-                    // Image array and index for cycling
-                    const imageUrls = @json($vehicle->getImages());
-                    let currentMainIndex = 0;
+            // Image array and index for cycling
+            const imageUrls = @json($vehicle->getImages());
+            let currentMainIndex = 0;
 
-                    function cycleMainImage() {
-                        currentMainIndex = (currentMainIndex + 1) % imageUrls.length;
-                        if (mainImage && modalImage) {
-                            mainImage.src = imageUrls[currentMainIndex];
-                            modalImage.src = imageUrls[currentMainIndex];
-                        }
-                    }
+            function cycleMainImage() {
+                currentMainIndex = (currentMainIndex + 1) % imageUrls.length;
+                if (mainImage && modalImage) {
+                    mainImage.src = imageUrls[currentMainIndex];
+                    modalImage.src = imageUrls[currentMainIndex];
+                }
+            }
 
-                    // Set main image on thumbnail click
-                    window.setMainImage = function (src) {
-                        if (mainImage && modalImage) {
-                            mainImage.src = src;
-                            modalImage.src = src;
-                        }
-                    };
-                    });
-            </script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+            // Set main image on thumbnail click
+            window.setMainImage = function (src) {
+                if (mainImage && modalImage) {
+                    mainImage.src = src;
+                    modalImage.src = src;
+                }
+            };
+        });
+  </script>
+ 
+  <script>
 
+        $(document).ready(function () {
+            $('.menu-button').trigger('click');
+        });
 
+  </script>
 
   <script>
 
-    $(document).ready(function () {
-         $('.menu-button').trigger('click');
+    let currentMainIndex = 0;
+    const mainImage = document.getElementById('mainImage');
+    const imageUrls = @json($vehicle->getImages());
+
+    document.getElementById('mainImage')?.addEventListener('click', function() {
+        document.getElementById('modalImage').src = this.src;
     });
 
-   
+    function changeMainImage(src) {
+        document.getElementById('mainImage').src = src;
+        document.getElementById('modalImage').src = src;
+
+    }
+
+    function cycleMainImage() {
+        currentMainIndex = (currentMainIndex + 1) % imageUrls.length;
+        mainImage.src = imageUrls[currentMainIndex];
+        openModalSwiper(currentMainIndex);
+    }
 
 
-  </script>
+    function setMainImage(imageUrl) {
+        const mainImage = document.getElementById('mainImage');
+        mainImage.src = imageUrl;
+    }
+
+</script>
+
+
+
+
+<script>
+
+     const trade_history_graph = {
+        el:$('.trade_history_graph'),
+     };
+
+
+     trade_history_graph.getTrade = function(){
+
+
+            $.ajax({
+                type: "GET",
+                url: "{{url('/auction-finder/getPlatformVehicle')}}",
+                data: {
+                   platform_id: trade_history_graph.el.find('.platform').val() 
+                },
+                dataType: "json",
+                success: function (response) {
+
+                    
+                    console.log(response);
+
+                           const options = {
+                                chart: {
+                                    type: 'area',
+                                    height: 350,
+                                    background: '#0b1d2a',
+                                    toolbar: {
+                                        show: false
+                                    }
+                                },
+                                colors: response.colors,
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                stroke: {
+                                    curve: 'smooth',
+                                    width: 2
+                                },
+                                series: response.data,
+                                xaxis: {
+                                    categories: ['Jan', 'Feb', 'Mar'],
+                                    labels: {
+                                        style: {
+                                          colors: '#ccc'
+                                        }
+                                    }
+                                },
+                                yaxis: {
+                                    labels: {
+                                        formatter: val => `£${val.toLocaleString()}`,
+                                        style: {
+                                            colors: '#ccc'
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                theme: 'dark'
+                                },
+                                legend: {
+                                    position: 'top',
+                                    labels: {colors: '#fff'}
+                                },
+                                fill: {
+                                    type: 'gradient',
+                                    gradient: {
+                                        shade: 'dark',
+                                        opacityFrom: 0.5,
+                                        opacityTo: 0.2,
+                                    }
+                                },
+                                grid:{
+                                    borderColor: '#333'
+                                    }
+                            };
+
+                            const chart = new ApexCharts(trade_history_graph.el.find("#charts")[0],options);
+                            chart.render();
+
+                }
+            });
+
+     }
+
+
+     trade_history_graph.el.find(".platform").change(function(){
+          trade_history_graph.getTrade();
+     });
+
+
+     trade_history_graph.getTrade();
+
+</script>
 @endsection
 
 

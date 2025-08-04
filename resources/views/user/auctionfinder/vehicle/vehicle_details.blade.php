@@ -99,20 +99,20 @@
                         <ul style="list-style: none;  padding-left: 0px; font-size: 15px; padding-top: 6px !important;">
                             <li>
                                 <span style="color: #d4d4d4;">Inspection</span><br>
-                                <button class="btn btn-primary "
+                                <a target="_blank" href="{{$vehicle->inspection_report}}" class="btn btn-primary "
                                     style="padding: 3px 10px; border-radius: 5px !important;   font-size: 14px;   font-weight: 100;"
-                                    onclick="btn">View Report</button>
+                                    onclick="btn">View Report</a>
                             </li>
                         </ul>
                     </div>
                     <div class="col-md-3">
                         <ul style="list-style: none;  padding-left: 0px; font-size: 15px; padding-top: 6px !important;">
                             <li>
-                                <span style="color: #d4d4d4;">Inspection</span><br>
-                                <button class="btn btn-primary  "
+                                <span style="color: #d4d4d4;">Other</span><br>
+                                <a target="_blank" href="{{$vehicle->other_report}}" class="btn btn-primary  "
                                     style="padding: 3px 10px;  border-radius: 5px !important;  font-size: 14px;   font-weight: 100;"
                                     onclick="btn">
-                                    View Report </button>
+                                    View Report </a>
                             </li>
                         </ul>
                     </div>
@@ -196,10 +196,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 
 
@@ -352,16 +348,6 @@
 
 
 
-        {{-- @foreach ($fields as $id => $label)
-                          <div class="col-md-3 mb-3">
-                            <label class="field-label" for="{{ $id }}">{{ $label }}</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="{{ $id }}" name="{{ $id }}">
-                                <label class="form-check-label" for="{{ $id }}">Toyota</label>
-                            </div>
-                        </div> --}}
-
-
         {{-- Additional Information --}}
         <h4 class="mt-4">Additional Information</h4>
         <hr style="border-color: #44485e;">
@@ -414,9 +400,9 @@
                     <label class="form-check-label disc" for="engine_runs">{{ $vehicle->engine_runs }}</label>
                 </div>
             </div>
-
         </div>
     </div>
+
 
     {{-- Right Column (Service History Box) --}}
     <div class="col-md-4">
@@ -517,6 +503,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     {{-- Left Column (Overview, Additional Info, Features) --}}
     <div class="col-md-5" style=" margin: 0px 70px">
@@ -525,14 +512,9 @@
         <div class="row">
             <div>
                 <ul class="row" style="list-style: none; padding-left: 0;">
-                    {{-- <li class="col-4 mb-2">{{ $vehicle->features }}</li> --}}
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
+                    @foreach (explode(',',$vehicle->features) as $item)
+                        <li class="col-4 mb-2">{{$item}}</li>
+                    @endforeach
                 </ul>
             </div>
         </div>
@@ -544,46 +526,13 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="row" style="list-style: none; padding-left: 0;">
-                    {{-- <li class="col-4 mb-2">{{ $vehicle->features }}</li> --}}
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
-                    <li class="col-4 mb-2">farmer keeper</li>
+                    @foreach (explode(',',$vehicle->equipment) as $item)
+                        <li class="col-4 mb-2">{{$item}}</li>
+                    @endforeach
                 </ul>
             </div>
         </div>
     </div>
 </div>
-<script>
-    document.getElementById('mainImage')?.addEventListener('click', function() {
-        document.getElementById('modalImage').src = this.src;
-    });
-
-    function changeMainImage(src) {
-        document.getElementById('mainImage').src = src;
-        document.getElementById('modalImage').src = src;
-
-    }
 
 
-    let currentMainIndex = 0;
-    const mainImage = document.getElementById('mainImage');
-    const imageUrls = @json($vehicle->getImages());
-
-    function cycleMainImage() {
-        currentMainIndex = (currentMainIndex + 1) % imageUrls.length;
-        mainImage.src = imageUrls[currentMainIndex];
-
-        // Also open modal at this index
-        openModalSwiper(currentMainIndex);
-    }
-
-
-    function setMainImage(imageUrl) {
-        const mainImage = document.getElementById('mainImage');
-        mainImage.src = imageUrl;
-    }
-</script>
