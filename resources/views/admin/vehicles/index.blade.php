@@ -91,6 +91,30 @@
                                                 </select>
                                         </div>
                                    </div>
+                                  <div class="col-md-4 py-3">
+                                        <div class="form-group">
+                                        <label class="form-label" for="make_id">Make</label>
+                                                <select name="make_id" id="make_id" class="form-control make" required>
+                                               
+                                                </select>
+                                        </div>
+                                   </div>
+                                  <div class="col-md-4 py-3">
+                                        <div class="form-group">
+                                        <label class="form-label" for="model_id">Model</label>
+                                                <select name="model_id" id="model_id" class="form-control model" required>
+                                               
+                                                </select>
+                                        </div>
+                                   </div>
+                                  <div class="col-md-4 py-3">
+                                        <div class="form-group">
+                                        <label class="form-label" for="variants_id">Variants</label>
+                                                <select name="variants_id" id="variants_id" class="form-control variants" required>
+                                               
+                                                </select>
+                                        </div>
+                                   </div>
                                    <div class="col-md-4 pt-8" > 
                                 <button type="button" id="searchBtn" class="btn btn-primary">Search</button>
                             </div>
@@ -121,6 +145,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Auction ID</th>
+                                        <th>REG ID</th>
                                         <th>Title</th>
                                         <th>Images</th>
                                         <th>Vehicle Type </th>
@@ -131,6 +156,8 @@
                                         <th>Year</th>
                                         <th>Color</th>
                                         <th>Center</th>
+                                        <th>last Bid</th>
+                                        <th>Bidding Status</th>
                                         {{-- <th>Feul Type</th>
                                         <th>Transmission</th>
                                         <th>Milage</th>
@@ -161,6 +188,9 @@
                             d.center_id = $('#center_id').val();
                             d.auction_type = $('#auction_type').val();
                             d.auction_id = $('#auction_id').val();
+                            d.make_id = $('#make_id').val();
+                            d.model_id = $('#model_id').val();
+                            d.variants_id = $('#variants_id').val();
                             
                         }
                     }

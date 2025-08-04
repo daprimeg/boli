@@ -70,31 +70,14 @@
         </div>
 
         <div class="row">
-   <div class="container mt-5">
-    <div class="text-center">
-        <div class="row flex-nowrap overflow-hidden overflow-y: hidden;" id="scrollableRow" style="scroll-behavior: smooth;">
-            @for ($i = 0; $i < 10; $i++)
-                <div class="col-auto" style="min-width: 250px;">
-                    <div class="card h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
-                        <div class="card-body pb-1">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="avatar d-flex align-items-center mb-3">
-                                    <div class="box" style="height: 30px;width:30px ;background-color: var(--bs-primary); border-radius:4px ;box-shadow: 0px 0px 5px 8px #003164;"></div>
-                                </div>
-                             <h4 class="mb-0 ms-2"><span class="total_auctions">4</span></h4>
-                            </div>
-                            <p class="mb-1">Total Auctions</p>
-                            <p class="mb-0">
-                            <span class="text-heading fw-medium me-2 online_auctions"><input type="checkbox"></span>
-                            <small class="text-body-secondary">include secondary</small>
-                            </p>
-                        </div>
+            <div class="container mt-5">
+                <div class="text-center">
+                    <div class="row flex-nowrap overflow-hidden" id="scrollableRow" style="scroll-behavior: smooth;">
+                    
                     </div>
                 </div>
-         
-        @endfor
-    </div>
-    </div>
+            </div>
+
     
 </div>
 </div>

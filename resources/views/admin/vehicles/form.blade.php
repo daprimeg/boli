@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                     <label class="form-label">yaer</label>
+                                     <label class="form-label">Year</label>
                                       <input type="text" name="year" class="form-control" value="{{ old('year', $vehicle->year ?? '') }}">
                             </div>
 <div class="col-md-4">
