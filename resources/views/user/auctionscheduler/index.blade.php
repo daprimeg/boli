@@ -10,7 +10,7 @@
    }
 
    .auction-tabs a{
-      border: 1px solid var(--bs-border-color);
+      border: 1px solid #1b2737;
    }
 
    
@@ -65,19 +65,42 @@
         background:var(--bs-primary) !important;
         border: none !important;
         opacity: 1 !important;
-        color: var(--bs-heading-color) !important
+        color: var(--bs-heading-color) !important;
+       font-size: var(--font-p1) !important;
 
+
+     }
+
+     .costome-slect .select2-selection__rendered{
+        background: #0f1c2c !important;
+     }
+     .costome-slect .select2-selection__rendered{
+        background: #0f1c2c !important;
      }
 
      .tb-data-fonts tr td{
           font-size: var(--font-p1) !important;
+          color:  var(--bs-body-color) !important;
+
+
+        }
+     .tb-data-fonts .badge {
+          font-size: var(--font-p2) !important;
+          /* color:  var(--bs-body-color) !important; */
+          color: black;
+        }
+        .bg-danger-red{
+            background: red !important;
+        }
+        .centers span {
+            color:var(--bs-body-color) !important;
         }
    
 </style>
 @endsection
 @section('content')
     <div class="container-fluid" style="background: #0f1c2c; height: 100%;">
-        <div class="row" style="padding-top: 50px" >
+        <div class="row  container-fluid" style="padding-top: 20px" >
             <div class="col-md-12">
                  @if(session('success'))
                      <div class="alert alert-success">{{ session('success') }}</div>
@@ -86,20 +109,20 @@
             <div class="col-12">
                 <div class="row">
                        <div class="col-lg-12 col-xl-2 py-2">
-                            <div class="form-group">
+                            <div class="form-group costome-slect">
                                 <select name="platform_id" id="platform_id" class="form-control platform " >
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-12 col-xl-2 py-2">
-                            <div class="form-group">
+                            <div class="form-group costome-slect">
                                 <select name="center_id" id="center_id" class="form-control center">
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-xl-4 align-self-center py-2">
                                 <div class="d-flex align-items-center">
-                                    <select style="max-width:200px;padding:3px; "  name="length" class="">
+                                    <select style="padding:3px; background:#0f1c2c;border:  1px solid var(--bs-b-color) !important;  border-radius: 4px;"  name="length" class="">
                                         <option value="10">10</option>
                                         <option value="100">100</option>
                                         <option value="200">200</option>
@@ -123,22 +146,23 @@
                         </div>
                 </div>
             </div>
-            <div class="col-12 ">
+            <div class="col-12">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive text-nowrap">
-                            <table class="table">
+                    <div class="card-body" style="padding: 10px ">
+                        <div class="table-responsive text-nowrap" style="border-color: #1b2737 !important;">
+                            <table class="table" style="border-color: #1b2737 !important;">
                                 <thead>
-                                    <tr>
-                                        <th style="font-size: var(--font-p2) !important;">Platform</th>
-                                        <th style="font-size: var(--font-p2) !important;">Center</th>
-                                        <th style="font-size: var(--font-p2) !important;">Total Vehicles</th>
+                                    <tr >
+                                        <th style="font-size: var(--font-p2) !important; ">Platform</th>
+                                        <th style="font-size: var(--font-p2) !important; ">Center</th>
+                                        <th style="font-size: var(--font-p2) !important; ">Total Vehicles</th>
                                         <th style="font-size: var(--font-p2) !important;">Time</th>
-                                        <th style="font-size: var(--font-p2) !important;">Status</th>
-                                        <th style="font-size: var(--font-p2) !important;">Action</th>
+                                        <th style="font-size: var(--font-p2) !important; ;">Status</th>
+                                        <th style="font-size: var(--font-p2) !important; ">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-border-bottom-0 tb-data-fonts"></tbody>
+
+                                <tbody class="table-border-bottom-0 tb-data-fonts" style="border-color: #1b2737"></tbody>
                             </table>
                         </div>
                     </div>

@@ -374,26 +374,21 @@
                                     </div>
                                     {{-- row --}}
 
-                                    <input type="hidden" name="plan_id" value="" />
+                                    <input type="hidden" name="plan_id" value="{{request()->id}}" />
 
                                  </div>
                               </div>
                                 <div class="mt-4 text-center">
-                                    <button type="submit" class="btn btn-primary">
-                                        Submit
-                                    </button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
                         </div>
 
-    
-                        </div>
+                       </div>
                     </div>
                 </div>
 
-                <?php 
-                  $id = 3;
-                ?>
+             
 
                 <!-- Order Summary Card -->
                 <div class="col-12 col-lg-4" style="background-color: #000f21 !important; padding: 25px 30px; border-radius: 18px;">
@@ -421,7 +416,6 @@
                                         </label>
                                     @endforeach
 
-                                    
                                 </div>
                                   <small class="error error-plan_id text-danger"></small>
                                 <div style="border-top: 2px dashed grey; margin-bottom: 25px;"></div>
@@ -474,6 +468,12 @@
    <script>
     $(document).ready(function () {
 
+       
+        
+
+    
+
+
 
     
         let stripe = Stripe("{{ env('STRIPE_PUBLISHABLE_KEY') }}");
@@ -500,8 +500,11 @@
             }
         }
 
-        function planCalculation(id){
 
+
+        //Plans JS
+
+        function planCalculation(id){
                 let element = $(`.plan-option[data-plan='${id}']`);
                 let price = element.data('price');
                 $(".plan-option").removeClass("selectedPlan");
@@ -509,15 +512,29 @@
                 $(".base-price").text('£'+price);
                 $("input[name=plan_id]").val(id);
                 $("input[name=plan_id]").trigger('change');
-
         }
 
-     
         $('.plan-option').click(function (e){
-        
                 let id = $(this).data('plan');
                 planCalculation(id);
-        })
+        });
+
+        $("input[name=plan_id]").change(function (e) { 
+            if($(this).val() == 2){
+                $(".payment_div").hide();
+            }else{
+                $(".payment_div").show();
+            }    
+        });
+
+
+        let planId = $("input[name=plan_id]").val();
+        if(planId){
+            planCalculation(planId);
+        }
+
+
+
 
        
         $('.register-form').on('submit', async function (e) {
@@ -585,22 +602,7 @@
         });
 
 
-        let planId = $("input[name=plan_id]").val();
-        if(planId){
-            planCalculation(planId);
-        }
-
-        $("input[name=plan_id]").change(function (e) { 
-
-            if($(this).val() == 2){
-                $(".payment_div").hide();
-            }else{
-                $(".payment_div").show();
-            }
-            
-        }).trigger('change');
-
-           
+    
             const selected = document.getElementById("selectedOption");
             const options = document.getElementById("optionList");
 
@@ -631,6 +633,9 @@
                     fileName.textContent = this.files.length > 0 ? this.files[0].name : 'No file chosen.';
                 });
             });
+
+
+      
 
     </script>
 @endsection

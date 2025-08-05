@@ -129,6 +129,11 @@ class WebController extends Controller
         return view('web.ExploreEvery');
     }
   
+    public function compairaution ()
+    {
+        return view('web.compairaution');
+    }
+  
 
     
 }

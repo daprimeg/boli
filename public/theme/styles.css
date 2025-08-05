@@ -15,7 +15,66 @@
   --items-background: #0f1c2c;
   --items-border-colur: #263240;
   --font-family: "Inter", sans-serif;
+  --dimtext: #E1E3E6;
+
+
+
+  --font-h1: 65px;
+  --font-h2: 48px;
+  --font-h3: 40px;
+  --font-h4: 32px;
+  --font-h5: 24px;
+  --font-h6: 20px;
+
+  --font-p1:16px;
+  --font-p2:14px;
+  --font-p3:12px;
+
+
+   --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 800;
 }
+
+
+
+
+
+
+
+h1{
+  font-size: var(--font-h1);
+  font-weight: var(--font-weight-bold);
+}
+h2 {
+  font-size: var(--font-h2);
+    font-weight: var(--font-weight-bold);
+}
+h3 {
+  font-size: var(--font-h3);
+    font-weight: var(--font-weight-bold);
+}
+h4 {
+  font-size: var(--font-h4);
+  font-weight: var(--font-weight-semibold);
+}
+h5 {
+  font-size: var(--font-h5);
+  font-weight: var(--font-weight-semibold);
+}
+h6 {
+  font-size: var(--font-h6);
+  font-weight: var(--font-weight-semibold);
+}
+p{
+  font-size: var(--font-p1);
+  color: var(--dimtext)
+}
+
+
+
+
+
 
 
 
