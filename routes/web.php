@@ -53,6 +53,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleModel;
 use App\Models\VehicleType;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -358,5 +359,22 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
    // Admin Routes
    require __DIR__.'/admin.php';
 
-   
+
+    Route::get('mail',function(){
+
+
+        $data = [
+            'name' => 'Test User',
+            'link' => 'https://example.com/reset-password'
+        ];
+
+        Mail::send('emails.password_reset',$data,function ($mesage) use($data) {
+
+            $mesage->from("man411210@gmail.com","Test"); 
+            $mesage->to("iamowaisazam@gmail.com","test")->subject('Email Verification');
+
+        });
+
+
+    });
 

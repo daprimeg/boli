@@ -9,7 +9,7 @@
     <p>Click the link below to reset your password:</p>
 
     <p>
-        <a href="{{ $resetLink }}">{{ $resetLink }}</a>
+        <a href="">sd</a>
     </p>
 
     <p>If you didn’t request a password reset, no action is required.</p>
