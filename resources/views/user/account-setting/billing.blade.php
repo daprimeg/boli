@@ -51,7 +51,6 @@ use Carbon\Carbon;
                     $remainingDays = max(0, $remainingDays);
                         $usedPercentage = ($totalDays > 0) ? round((($totalDays - $remainingDays) / $totalDays) * 100) : 0;
 
-
                 ?>
                
                     <div class="card mb-6">
@@ -110,9 +109,9 @@ use Carbon\Carbon;
                                 <div class="col-xl mb-md-0">
                                         <div class="card border rounded shadow-none">
                                             <div class="card-body pt-12 p-5">
-                                            <div class="mt-3 mb-5 text-center">
+                                            {{-- <div class="mt-3 mb-5 text-center">
                                                 <img src="../../assets/img/illustrations/page-pricing-basic.png" alt="Basic Image" height="120">
-                                            </div>
+                                            </div> --}}
                                             <h4 class="card-title text-center text-capitalize mb-1">{{$item->plan_name}}</h4>
                                             <p class="text-center mb-5">{{$item->short_desc}}</p>
                                             <div class="text-center h-px-50">
@@ -130,10 +129,10 @@ use Carbon\Carbon;
                                                 <li class="mb-4">Basic form creation tools</li>
                                                 <li class="mb-0">Up to 2 subdomains</li>
                                             </ul>
-                                            @if($current->plan->id == $item->id)
-                                                <a href="{{url('/checkout')}}" class="btn btn-label-success d-grid w-100 waves-effect">Your Current Plan</a>
+                                            @if(isset($current) && $current->plan->id == $item->id)
+                                                <a href="{{url('/checkout')}}?id={{$item->id}}" class="btn btn-label-success d-grid w-100 waves-effect">Your Current Plan</a>
                                             @else
-                                                <a href="{{url('/checkout')}}" class="btn btn-label-primary d-grid w-100 waves-effect">Select Plan</a>
+                                                <a href="{{url('/checkout')}}?id={{$item->id}}" class="btn btn-label-primary d-grid w-100 waves-effect">Select Plan</a>
                                             @endif
                                         </div>
                                     </div>
@@ -197,7 +196,7 @@ use Carbon\Carbon;
                                         @else
                                             <tr>
                                                 <td colspan="7" class="text-center" >
-                                                    <a class="btn btn-primary" href="{{url('check')}}">No Record</a>
+                                                    <a class="" href="{{url('checkout')}}">No Record Purchase Plan</a>
                                                 </td>
                                             </tr>
                                         @endif
