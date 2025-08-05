@@ -80,7 +80,8 @@ Route::post('/login_submit', [AuthController::class, 'login_submit']);
 Route::get('/register', [AuthController::class, 'register']);
 
 Route::post('/register_submit', [AuthController::class, 'register_submit']);
-
+Route::get('/forgot-password', [AuthController::class, 'forgotpassword']);
+Route::get('/forgot-passwordd', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
 
 
 
@@ -317,7 +318,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/reauction', [ReauctionController::class,'index'])->name('reauction');
             Route::get('/reauction/interest', [ReauctionController::class,'interest'])->name('reauction-interest');
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
- 
+            Route::get('/autionshadule', [WebController::class, 'AutionShadule'])->name('autionshadule');
+
+
 
 
             Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');

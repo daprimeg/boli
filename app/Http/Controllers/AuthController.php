@@ -18,6 +18,10 @@ use PhpParser\Node\Stmt\TryCatch;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -587,18 +591,30 @@ class AuthController extends Controller
     }
 
 
-    public function sendResetLinkEmail(Request $request)
+     public function sendResetLinkEmail(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,personalEmail',
+        // $request->validate([
+        //     'email' => 'required|email|exists:users,personalEmail',
+        // ]);
+
+        $email = $request->email;
+        $token = Str::random(64);
+        DB::table('password_reset_tokens')->where('email', $email)->delete();
+
+        DB::table('password_reset_tokens')->insert([
+            'email' => $email,
+            'token' => $token,
+            'created_at' => Carbon::now()
         ]);
 
-        $status = Password::sendResetLink(
-            $request->only('personalEmail')
-        );
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))
-            : back()->withErrors(['personalEmail' => __($status)]);
+        $resetLink = url('/reset-password-form?token=' . $token . '&email=' . urlencode($email));
+
+        // Mail::raw("Click the link to reset your password: $resetLink", function ($message) use ($email) {
+        //     $message->to($email)
+        //         ->subject('Reset Password');
+        // });
+
+        return response()->json(['message' => 'Reset link sent successfully!']);
     }
 }
