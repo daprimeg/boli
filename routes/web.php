@@ -81,7 +81,9 @@ Route::get('/register', [AuthController::class, 'register']);
 
 Route::post('/register_submit', [AuthController::class, 'register_submit']);
 Route::get('/forgot-password', [AuthController::class, 'forgotpassword']);
-Route::get('/forgot-passwordd', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password-form', [AuthController::class, 'resetpasswordvalidation']);
+Route::post('/reset-password-submit', [AuthController::class, 'resetpasswordsubmit'])->name('reset.password.submit');
 
 
 
