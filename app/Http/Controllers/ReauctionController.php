@@ -161,7 +161,9 @@ public function index(Request $request)
     $interests = Interest::where('user_id', $userId)->get();
     $auctionPlatform = AuctionPlatform::pluck('name');
     $auctionCenter = AuctionCenter::pluck('name');
-    return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests'));
+    $today = Carbon::today();
+    $vehicleCountToday = Vehicle::whereDate('created_at', $today)->count();
+    return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests','vehicleCountToday'));
 }
 
 

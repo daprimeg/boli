@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\TryCatch;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -580,5 +581,24 @@ class AuthController extends Controller
 
     }
 
+    public function forgotpassword()
+    {
+        return view('user.forgetPassword.forgetPassword');
+    }
 
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,personalEmail',
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('personalEmail')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('status', __($status))
+            : back()->withErrors(['personalEmail' => __($status)]);
+    }
 }

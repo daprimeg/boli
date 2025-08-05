@@ -3,7 +3,7 @@
     <div class="d-flex flex-column flex-md-row justify-content-center align-items-center header-section mt-5 ps-md-10 ps-0 text-center text-md-start">
             <div style="max-width:75px" class="w-100">
                 <div class="stats-card">
-                    <h2 style="font-size: 38px;" class="stats-number">56</h2>
+                    <h2 style="font-size: 38px;" class="stats-number">{{$vehicleCountToday}}</h2>
                     <p class="stats-label">Today</p>
                 </div>
             </div>

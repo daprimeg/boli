@@ -61,7 +61,12 @@
                                  <input type="text" name="name" value="{{ old('name', $auction->name) }}" class="form-control" required>
                               </div>
                            </div>
-
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label class="form-label" >Unique id <span class="text-danger" >*</span></label>
+                                 <input type="text" name="id" value="{{ old('id',$auction->table_id) }}" class="form-control" required>
+                              </div>
+                           </div> 
                            <div class="col-md-4">
                               <div class="form-group ">
                                  <label class="form-label" for="platform_id">Platform</label>

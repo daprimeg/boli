@@ -1,7 +1,7 @@
 @extends('web.partial.layout')
 
 @section('css')
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
  <style>
         .autionshadular {
         position: relative;
@@ -90,6 +90,7 @@
         .status-in-progress {
             background-color: #dc2626;
             color: white;
+            font-size: 10px;
         }
         
         .status-planned {
@@ -117,22 +118,22 @@
 
   <div class="autionshadular">
 <div class="py-5">
-    <h2 class="text-white mt-5 container">Auction Shadul</h2>
+    <h2 class="text-white mt-5 container">Auction Schedule</h2>
 
 
    
   <!-- Nav tabs -->
   <ul class="nav nav-tabs border-0 mt-4 container " id="customTabs">
-    <li class="nav-item">
+    {{-- <li class="nav-item">
       <button class="nav-link active border-primary bg-transparent border-0 "  data-bs-toggle="tab" data-bs-target="#tab1">
         First Tab
       </button>
-    </li>
-    <li class="nav-item">
+    </li> --}}
+    {{-- <li class="nav-item">
       <button class="nav-link  bg-transparent border-0" data-bs-toggle="tab" data-bs-target="#tab2">
         Second Tab
       </button>
-    </li>
+    </li> --}}
   </ul>
 
   <!-- Tab content -->
@@ -141,30 +142,51 @@
  <div class="d-flex gap-4 align-items-center text-white my-4 container">
 
       <!-- Platform Dropdown -->
-      <div class="dropdown">
-        <span style="color: #ccc; font-weight: 500;">Platform:</span>
-        <button class=" dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-          style="color: #0d6efd; background: transparent; border: none ; font-weight: 600; padding: 0;">
-          BCA
-        </button>
-        <ul class="dropdown-menu" style="background-color: #1a2533;">
-          <li><a class="dropdown-item text-white" href="#">BCA</a></li>
-          <li><a class="dropdown-item text-white" href="#">BS</a></li>
-          <li><a class="dropdown-item text-white" href="#">BSc</a></li>
-        </ul>
-      </div>
+        <div class="dropdown me-3">
+            <span style="color: #ccc; font-weight: 500;">Platform:</span>
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                style="color: #0d6efd; background: transparent; border: none; font-weight: 600; padding: 0;">
+                Select Platform
+            </button>
+                <ul class="dropdown-menu" style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
+                    @foreach ($platforms as $platform)
+                        <li>
+                            <a class="dropdown-item text-white platform-option" href="#" data-id="{{ $platform->id }}">
+                                {{ $platform->name }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+        </div>
 
-      <!-- Center Dropdown -->
-      <div class="dropdown">
-        <span style="color: #ccc; font-weight: 500;">Center:</span>
+        <!-- Center Dropdown -->
+        <div class="dropdown">
+            <span style="color: #ccc; font-weight: 500;">Center:</span>
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                style="color: #0d6efd; background: transparent; border: none; font-weight: 600; padding: 0;">
+                Select Center
+            </button>
+            <ul class="dropdown-menu" style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
+                @foreach ($centers as $center)
+                    <li>
+                        <a class="dropdown-item text-white center-option" href="#" data-id="{{ $center->id }}">
+                            {{ $center->name }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
+  
+    <div class="dropdown">
+        <span style="color: #ccc; font-weight: 500;">Status:</span>
         <button class=" dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
           style="color: #0d6efd; background: transparent; border: none ; font-weight: 600; padding: 0;">
           Center
         </button>
         <ul class="dropdown-menu" style="background-color: #1a2533;">
-          <li><a class="dropdown-item text-white" href="#">Center A</a></li>
-          <li><a class="dropdown-item text-white" href="#">Center B</a></li>
-          <li><a class="dropdown-item text-white" href="#">Center C</a></li>
+          <li><a class="dropdown-item text-white" href="#" data-id="all">All</a></li>
+          <li><a class="dropdown-item text-white" href="#" data-id="in_Progress"> In Progress </a></li>
         </ul>
       </div>
 
@@ -178,242 +200,49 @@
             <div class=" ">
                 <!-- Tabs Navigation -->
                 <div class="tabs-container d-flex flex-wrap gap-1 container">
-                    <button class="custom-tab active flex-fill" onclick="switchTab(this, 'daytab1')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                    
-                    <button class="custom-tab flex-fill" onclick="switchTab(this, 'daytab2')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                    
-                    <button class="custom-tab flex-fill" onclick="switchTab(this, 'daytab3')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                    
-                    <button class="custom-tab flex-fill" onclick="switchTab(this, 'daytab4')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                    
-                    <button class="custom-tab flex-fill" onclick="switchTab(this, 'daytab5')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                    
-                    <button class="custom-tab flex-fill" onclick="switchTab(this, 'daytab6')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                    
-                    <button class="custom-tab flex-fill" onclick="switchTab(this, 'daytab7')" style="display: flex; flex-direction: column; align-items: center;">
-                        <span>Today</span>
-                        <div class="tab-numbers d-flex justify-content-between w-100">
-                            <span>6</span>
-                            <span>6541</span>
-                        </div>
-                    </button>
-                </div>
+                        @foreach ($days as $index => $day)
+                            <button 
+                                class="custom-tab flex-fill {{ $index === 0 ? 'active' : '' }}" 
+                                data-date="{{ $day['date'] }}"
+                                style="display: flex; flex-direction: column; align-items: center;"
+                            >
+                                <span>{{ $day['label'] }}</span>
+                                <div class="tab-numbers d-flex justify-content-between w-100">
+                                    <span>{{ $day['display'] }}</span>
+                                    <span>{{ $day['count'] }}</span>
+                                </div>
+                            </button>
+                        @endforeach
+                    </div>
+
+
                 
                 <!-- Tab Content -->
                 <div class="tab-content-area">
                     <div id="daytab1" class="day-tab-pane active" >
                        <div style="background-color: #1a2533; padding: 40px 0px; ">
 
-  <div class="container" >
-        <div class="table-responsive" style="border-radius: 10px !important;  border: 1px solid var(--items-border-colur);">
-            <table class="table table-dark-custom text-white" style="background-color: var(--background-color) !important; " >
-                <thead >
-                    <tr style="background-color: var(--background-color) !important; ">
-                        <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Platform</th>
-                        <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Center</th>
-                        <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Total Vehicles</th>
-                        <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Time</th>
-                        <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Status</th>
-                        <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham, Bristol, Thurleigh</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham, Bristol, Thurleigh</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham, Bristol, Thurleigh</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-planned">Planned</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">CCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-planned">Planned</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">CCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-in-progress">In Progress</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="platform-text">BCA</td>
-                        <td>Birmingham</td>
-                        <td>225</td>
-                        <td>14/8/2025_10:00</td>
-                        <td>
-                            <span class="status-badge status-cancel">Cancel</span>
-                        </td>
-                        <td>
-                            <a href="#" class="action-link">View/Alert/</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-</div>
+                        <div class="container" >
+                                <div class="table-responsive" style="border-radius: 10px !important;  border: 1px solid var(--items-border-colur);">
+                                    <table id="auctionTable" class="table table-dark-custom text-white" style="background-color: var(--background-color) !important; " >
+                                        <thead >
+                                            <tr style="background-color: var(--background-color) !important; ">
+                                                <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Platform</th>
+                                                <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Center</th>
+                                                <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Vehicles</th>
+                                                <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Time</th>
+                                                <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Status</th>
+                                                <th scope="col" style="background-color: var(--background-color) !important; border-bottom: 1px solid var(--items-border-colur);">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div id="daytab2" class="day-tab-pane" style="display: none;">
-                        <h3 class="fw-semibold mb-3">Tab 2 - Today</h3>
-                        <p class="text-muted mb-0">Content for the second tab. Each tab can have different content and functionality.</p>
-                    </div>
-                    
-                    <div id="daytab3" class="day-tab-pane" style="display: none;">
-                        <h3 class="fw-semibold mb-3">Tab 3 - Today</h3>
-                        <p class="text-muted mb-0">Third tab content goes here. The gradient effect makes the active tab stand out beautifully.</p>
-                    </div>
-                    
-                    <div id="daytab4" class="day-tab-pane" style="display: none;">
-                        <h3 class="fw-semibold mb-3">Tab 4 - Today</h3>
-                        <p class="text-muted mb-0">Fourth tab content with responsive design that works on all devices.</p>
-                    </div>
-                    
-                    <div id="daytab5" class="day-tab-pane" style="display: none;">
-                        <h3 class="fw-semibold mb-3">Tab 5 - Today</h3>
-                        <p class="text-muted mb-0">Fifth tab content showcasing the smooth transition effects.</p>
-                    </div>
-                    
-                    <div id="daytab6" class="day-tab-pane" style="display: none;">
-                        <h3 class="fw-semibold mb-3">Tab 6 - Today</h3>
-                        <p class="text-muted mb-0">Sixth tab content with Bootstrap styling and custom CSS.</p>
-                    </div>
-                    
-                    <div id="daytab7" class="day-tab-pane" style="display: none;">
-                        <h3 class="fw-semibold mb-3">Tab 7 - Today</h3>
-                        <p class="text-muted mb-0">Seventh tab content completing the full set of tabs with gradient styling.</p>
-                    </div>
-                </div>
-
                 
             </div>
         </div>
@@ -423,9 +252,9 @@
 
 
 
-    <div class="tab-pane fade" id="tab2">
+    {{-- <div class="tab-pane fade" id="tab2">
       <h4>Second Tab Content</h4>
-    </div>
+    </div> --}}
   </div>
 
 
@@ -439,40 +268,87 @@
 @endsection
 
 @section('js')
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    let selectedPlatform = '';
+    let selectedCenter = '';
+    let selectedStatus = '';
+  let selectedDate = '{{ \Carbon\Carbon::today()->format("Y-m-d") }}'; 
+    function loadAuctions() {
+        $.ajax({
+            url: '{{ url('autionshadule') }}',
+            method: 'GET',
+            data: {
+                platform_id: selectedPlatform,
+                center_id: selectedCenter,
+                status: selectedStatus,
+                date: selectedDate
+            },
+            dataType: 'json',
+            success: function (response) {
+                let tbody = $('#auctionTable tbody');
+                tbody.empty();
 
-      <script>
-  const tabs = document.querySelectorAll('#customTabs .nav-link');
+                $.each(response.data, function (index, item) {
+                    let row = `
+                        <tr>
+                            <td>${item.platform}</td>
+                            <td>${item.center}</td>
+                            <td>${item.total_vehicles}</td>
+                            <td>${item.time}</td>
+                            <td>${item.status}</td>
+                            <td>${item.action}</td>
+                        </tr>`;
+                    tbody.append(row);
+                });
+            },
+            error: function (xhr) {
+                console.error("Failed to load data:", xhr);
+            }
+        });
+    }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('border-primary')); // Remove from all
-      tab.classList.add('border-primary'); // Add to clicked one
+    $('.platform-option').click(function (e) {
+        e.preventDefault();
+        selectedPlatform = $(this).data('id');
+        $(this).closest('.dropdown').find('button').text($(this).text());
+        loadAuctions();
     });
-  });
 
-
-
-
-        <!-- sdds -->
-   
-  function switchTab(clickedTab, tabId) {
-    const allTabs = document.querySelectorAll('.custom-tab');
-    allTabs.forEach(tab => tab.classList.remove('active'));
-    clickedTab.classList.add('active');
-
-    const allTabPanes = document.querySelectorAll('.day-tab-pane');
-    allTabPanes.forEach(pane => {
-      pane.style.display = 'none';
-      pane.classList.remove('active');
+    $('.center-option').click(function (e) {
+        e.preventDefault();
+        selectedCenter = $(this).data('id');
+        $(this).closest('.dropdown').find('button').text($(this).text());
+        loadAuctions();
     });
 
-    const selectedTab = document.getElementById(tabId);
-    selectedTab.style.display = 'block';
-    selectedTab.classList.add('active');
-  }
+    $('.dropdown-menu a[data-id]').click(function (e) {
+        if ($(this).closest('.dropdown').find('span').text() === "Status:") {
+            e.preventDefault();
+            selectedStatus = $(this).data('id');
+            $(this).closest('.dropdown').find('button').text($(this).text());
+            loadAuctions();
+        }
+    });
 
+        $('.custom-tab').click(function () {
+            $('.custom-tab').removeClass('active');
+            $(this).addClass('active');
+
+            selectedDate = $(this).data('date'); 
+            loadAuctions(); 
+        });
+
+    loadAuctions();
+});
 
 </script>
+
+
+
+
+
 
 @endsection
 
