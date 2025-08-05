@@ -22,9 +22,9 @@
      @yield('content')
    
      
-    <footer class="bg-dark text-light py-5"
-      style="background: linear-gradient(170deg, #000f21 50%, #0080ff4b 100%);font-family: var(--font-family);">
-      <div style="border-top: 1px solid #263240; border-bottom: 1px solid #263240">
+    <footer class=""
+      style="background:var(--background-color);font-family: var(--font-family); border-top: 1px solid var(--items-border-colur)">
+      {{-- <div style="border-top: 1px solid #263240; border-bottom: 1px solid #263240">
         <div class="container p-4 rounded-4 mb-5">
           <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0 me-5">
@@ -52,93 +52,91 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
 
       <div class="container">
-        <div class="mb-5">
-          <h1 class="fw-bold display-4 pt-5">AUTOBOLI Ltd</h1>
-          <p class="lead text-secondary">
+        <div class="" style="width: 60%; padding: 100px 0px; color: var(--white-text)" >
+          <h4 class=" ">AUTOBOLI Ltd</h4>
+          <p class="lead" style="font-size: var(--font-p2)">
             Helping dealers, exporters, and traders buy smarter with real-time
             auction data from across the UK & Japan.
-          </p>
-          <p class="text-white-50 fw-semibold">
+          
             Save money, reduce risk, and grow your automotive business — all in
             one platform.
-          </p>
+            </p>  
         </div>
 
 
-          <div class="container py-5">
-            <div class="row text-white">
+          <div class="container ">
+            <div class=" text-white">
               <!-- Section: Explore -->
-              <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">AutoBoli</h6>
-              </div>
-              <div class="col-12 col-md-10 mb-3">
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">about us</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">customer</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">community</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Affiliate & Referrals</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">News</a></li> 
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Brand</a></li> 
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Bidding </a></li> 
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Roadmap </a></li> 
+              <div class="d-flex  align-items-center  " style="flex-wrap: wrap; gap: 50px; margin-bottom: 10px;">
+                <h6  style="font-size: var(--font-p1)">AutoBoli</h6>
+                <ul class="list-inline " style="display: flex; flex-wrap: wrap" >
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >about us</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >customer</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >community</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Affiliate & Referrals</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >News</a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Brand</a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Bidding </a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Roadmap </a></li> 
                 </ul>
               </div>
 
               <!-- Section: Learn -->
-              <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">Learn</h6>
-              </div>
-              <div class="col-12 col-md-10 mb-3">
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li>
+              <div class="d-flex  align-items-center mb-3 " style="flex-wrap: wrap; gap: 70px">
+                <h6   style="font-size: var(--font-p1)">Learn</h6>
+                <ul class="list-inline mb-0"  style="display: flex; flex-wrap: wrap">
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
                 </ul>
               </div>
 
-                <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">Resources </h6>
-              </div>
-              <div class="col-12 col-md-10 mb-3">
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Guidance</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Explore</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">featuristic panels</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">blog</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">support</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">vin search </a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">find auc</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">vahicle value</a></li>
+                
+              
+              <div class="d-flex  align-items-center  mb-3   " style="flex-wrap: wrap; gap: 30px">
+                <h6   style="font-size: var(--font-p1)">Resources </h6>   
+                <ul class="list-inline mb-0" style="display: flex; flex-wrap: wrap">
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Guidance</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Explore</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >featuristic panels</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >blog</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >support</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >vin search </a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >find auc</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >vahicle value</a></li>
                 </ul>
               </div>
 
-              <div class="col-12 col-md-2 mb-3">
-                <h6 class="fw-semibold">Connect </h6>
-              </div>
-              <div class="col-12 col-md-10 mb-3">
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Facbook</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">insta</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">tiktok</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">x</a></li>
-                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none">Actions</a></li> --}}
+              
+                
+             
+              <div class="d-flex  align-items-center  mb-3   " style="flex-wrap: wrap; gap: 45px">
+                <h6   style="font-size: var(--font-p1)">Connect </h6>
+                <ul class="list-inline mb-0" style="display: flex; flex-wrap: wrap">
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Facbook</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >insta</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >tiktok</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >x</a></li>
+                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li> --}}
                 </ul>
               </div>
             </div>
           </div>
-        <div class="pt-4">
-          <p class="mb-1 text-white-50">
+
+        <div style="padding: 50px 0px">
+          <p class="mb-1 " style="font-size:var(--font-p3)">
             © AUTOBOLI Ltd 2025. All rights reserved.
           </p>
-          <p class="mb-0 text-white-50">
+          <p class="mb-0 " style="font-size:var(--font-p3)">
             Proudly built & hosted with secure infrastructure in the UK & EU.
           </p>
         </div>
+
       </div>
     </footer> 
   </body>
@@ -159,7 +157,7 @@ window.addEventListener("scroll", function () {
 
   } else {
     navbar.style.background = "var(--background-color)";
-    navbar.style.border = "none";
+
 
     
   }

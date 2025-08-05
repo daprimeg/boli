@@ -10,12 +10,13 @@
 :root {
   --text-color: #0080ff;
   --white-text: #ffff;
-  --nave-text-color: #c2c2c2;
+  --nave-text-color: #b2c0ce;
   --background-color: #000f21;
+  --background-color2:#1a2533;
   --items-background: #0f1c2c;
   --items-border-colur: #263240;
   --font-family: "Inter", sans-serif;
-  --dimtext: #E1E3E6;
+  --dimtext: #b2c0ce;
 
 
 
@@ -117,12 +118,26 @@ body {
 .nav-link:hover,
 .nav-link.active {
   color: var(--white-text) !important;
+  border-bottom: 1px solid var(--text-color) ;
+
+
 }
 
 
 /* nave border bottom */
-.nav-link.active::after {
+/* .nav-link.active::after {
   content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-color);
+  bottom: 0; 
+  left: 0;
+}
+ */
+
+.nav-link.actives::after {
+  /* content: ""; */
   position: absolute;
   width: 100%;
   height: 2px;
@@ -130,7 +145,6 @@ body {
   bottom: 0; /* or -2px if needed */
   left: 0;
 }
-
 
 
 .btn-outline-light {
@@ -144,7 +158,9 @@ body {
 }
 /* nave get started */
 .btn-get-started {
-  border: 2px solid var(--text-color) !important;
+  border: 1px solid var(--text-color) !important;
+  border-radius: 2px !important;
+  font-weight: var(--font-weight-medium);
 }
 
 
@@ -183,7 +199,7 @@ body {
   }
 
   .dropdown-item:hover {
-    background-color: var(--text-color) !important; /* hover effect */
+      background-color: var(--text-color) !important; /* hover effect */
   }
 
   .nav-link.dropdown-toggle {
