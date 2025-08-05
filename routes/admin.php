@@ -11,7 +11,7 @@ use App\Http\Controllers\admin\PlanController;
 use App\Http\Controllers\admin\MembershipController;
 use App\Http\Controllers\admin\TicketsController;
 use App\Http\Controllers\admin\AuctionController;
-use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\admin\VehicleController;
 use App\Http\Controllers\admin\BodyTypeController;
 use App\Http\Controllers\admin\CenterController;
 use App\Http\Controllers\admin\ColorController;
@@ -20,7 +20,7 @@ use App\Http\Controllers\admin\ModelController;
 use App\Http\Controllers\admin\PlatformController;
 use App\Http\Controllers\admin\VariantController;
 use App\Http\Controllers\admin\VehicleTypeController;
-use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\admin\BlogController as AdminBlogController;
 use App\Http\Middleware\IsAdmin;
 
 Route::get('/admin', [AdminAuthController::class, 'showLoginForm']);
