@@ -23,8 +23,15 @@ use App\Http\Controllers\admin\VehicleTypeController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Middleware\IsAdmin;
 
+Route::get('/admin', [AdminAuthController::class, 'showLoginForm']);
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm']);
+Route::post('/admin/login', [AdminAuthController::class, 'login']);
+
 
 Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
+
+    
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
 
         //Profile
         Route::view('/importcsv', 'admin/datamanagement/importcsv');
@@ -195,9 +202,7 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
 
 
 
-        Route::get('/', [AdminAuthController::class, 'showLoginForm']);
-        Route::post('/login', [AdminAuthController::class, 'login']);
-        Route::post('/logout', [AdminAuthController::class, 'logout']);
+    
 
 });
 
