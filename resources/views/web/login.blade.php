@@ -146,7 +146,7 @@
                         <label class="form-check-label text-white " for="rememberMe" style="cursor: pointer;">Remember me</label>
                     </div>
                     <a
-                        href="#"
+                        href="{{ route("forgotpassword") }}"
                         class="text-decoration-none"
                         style="color: var(--text-color)"
                         >Forgot Password?</a

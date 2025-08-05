@@ -416,10 +416,10 @@ $(document).on('click', '.PreviousBtnRec', function () {
                                         <span class="total_auctions">${interest.title}</span>
                                     </p>
                                     <p class="mb-0 text-start">
-                                        <span class="text-heading fw-medium me-2 online_auctions">
-                                            <input type="checkbox" class="secondary-toggle">
-                                        </span>
-                                        <small class="text-body-secondary">Include Secondary</small>
+                                        <label class="d-flex align-items-center cursor-pointer mb-0">
+                                            <input type="checkbox" class="secondary-toggle me-2">
+                                            <small class="text-body-secondary">Include Secondary</small>
+                                        </label>
                                     </p>
                                 </div>
                             </div>

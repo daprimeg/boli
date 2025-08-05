@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Validation\Rule;
 
 class AuctionController extends Controller
 {
@@ -163,6 +163,7 @@ class AuctionController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'id' => 'required|string|max:255|unique:auctions,table_id',
             'auction_date' => 'required|date',
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
@@ -178,6 +179,7 @@ class AuctionController extends Controller
 
             $auction = Auctions::create([
                 'name' => $request->name,
+                'table_id' => $request->id,
                 'auction_date' => $request->auction_date,
                 'end_date' => $request->end_date,
                 'auction_type' => $request->auction_type,
@@ -323,6 +325,12 @@ class AuctionController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'id' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('auctions', 'table_id')->ignore($auction->table_id, 'table_id'),
+            ],
             'auction_date' => 'required|date',
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
@@ -339,6 +347,7 @@ class AuctionController extends Controller
             // Update auction basic info
             $auction->update([
                 'name' => $request->name,
+                'table_id' => $request->id,
                 'auction_date' => $request->auction_date,
                 'end_date' => $request->end_date,
                 'auction_type' => $request->auction_type,
