@@ -613,7 +613,7 @@ class AuthController extends Controller
 
         $resetLink = url('/reset-password-form?token=' . $token . '&email=' . urlencode($email));
 
-        // Mail::to($email)->send(new PasswordResetMail($resetLink));
+        Mail::to($email)->send(new PasswordResetMail($resetLink));
         return response()->json(['message' => 'Reset link sent successfully!']);
     }
     
@@ -659,7 +659,7 @@ class AuthController extends Controller
         User::where('personalEmail', $request->email)
             ->update(['password' => FacadesHash::make($request->password)]);
 
-        // DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
         return response()->json(['message' => 'Password reset successfully!']);
     }

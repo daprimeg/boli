@@ -53,14 +53,24 @@
 .content-wrapper {
   padding-bottom: 0px !important;
 }
-
-   
+ .cover {
+      background: linear-gradient(
+          to right,
+          #010b16d8 40%,
+           #010b16  100%,
+          rgba(0, 0, 0, 0) 110%
+        ),
+        url("{{asset('/public/theme/assets/CarGroup.png')}}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
 </style>
   @yield('css')
   </head>
 <body style="--bs-scrollbar-width: 0px;">
 
-   <div class="authentication-wrapper authentication-cover" style="background-color: #000f21ee">
+   <div class="authentication-wrapper authentication-cover cover" >
     <a href="index.html" class="app-brand auth-cover-brand">
       <span class="app-brand-logo demo">
         <span class="text-primary">

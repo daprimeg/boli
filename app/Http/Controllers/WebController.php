@@ -134,6 +134,8 @@ class WebController extends Controller
         return view('web.compairaution');
     }
   
-
+    public function support(){
+        return view('web.support');
+    }
     
 }
