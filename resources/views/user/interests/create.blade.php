@@ -75,8 +75,8 @@
                                 </div>
                                 
                                 <div class="mb-3 col-md-4">
-                                    <label for="model_variant_id" class="form-label">Model Variant <span class="text-danger">*</span></label> <br>
-                                    <select name="variant_id" class="form-select form-control" required>
+                                    <label for="model_variant_id" class="form-label">Model Variant </label> <br>
+                                    <select name="variant_id" class="form-select form-control">
                                        
                                     </select>
                                 </div>

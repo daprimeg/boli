@@ -13,7 +13,13 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('public/theme/fav.png')}}" />
     <link href="{{asset('/public/theme/css/bootstrap.css')}}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('/public/theme/styles.css')}}" />
-
+    <link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
+<style>
+      #toast-container > .toast-success {
+        background-color: #53a6ff !important;
+        color: #000000 !important;
+    }
+</style>
      @yield('css')
   </head>
   <body>
@@ -144,6 +150,7 @@
   <script src="{{asset('/public/themeadmin/assets/js/jquery.js')}}"></script>
   <script src="{{asset('/public/theme/js/bootstrap.js')}}"></script>
   <script src="{{asset('/public/theme/app.js')}}"></script>
+  <script src="{{asset('public/theme/js/toastr.min.js')}}"></script>
   
    @yield('js')
   <script>

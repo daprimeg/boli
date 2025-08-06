@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Models\Vehicle;
@@ -22,8 +22,9 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
-class AVehicleController extends Controller
+class VehicleController extends Controller
 {
+
     public function index(Request $request)
     {
 
@@ -35,60 +36,59 @@ class AVehicleController extends Controller
             $length = $request->input('length') ?? 10;
          
            
-         $query = Vehicle::leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id')
-         ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
-         ->leftJoin('make', 'make.id', '=', 'vehicles.make_id')
-         ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
-         ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
-         ->leftJoin('auction_center', 'auction_center.id', '=', 'vehicles.center_id')
-         ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
-         ->leftJoin('color', 'color.id', '=', 'vehicles.color_id')
-         ;
+            $query = Vehicle::leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id')
+            ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
+            ->leftJoin('make', 'make.id', '=', 'vehicles.make_id')
+            ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
+            ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
+            ->leftJoin('auction_center', 'auction_center.id', '=', 'vehicles.center_id')
+            ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
+            ->leftJoin('color', 'color.id', '=', 'vehicles.color_id');
 
-             if (!empty($search)) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('vehicles.title', 'like', "%{$search}%")
-                    ->orWhere('vehicle_type.name', 'like', "%{$search}%")
-                    ->orWhere('vehicles.reg', 'like', "%{$search}%")
-                    ->orWhere('make.name', 'like', "%{$search}%")
-                    ->orWhere('model.name', 'like', "%{$search}%")
-                    ->orWhere('model_variant.name', 'like', "%{$search}%")
-                    ->orWhere('body_types.name', 'like', "%{$search}%")
-                    ->orWhere('vehicles.year', 'like', "%{$search}%")
-                    ->orWhere('auctions.name', 'like', "%{$search}%")
-                    ->orWhere('color.name', 'like', "%{$search}%");
-                });
+                if (!empty($search)) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('vehicles.title', 'like', "%{$search}%")
+                        ->orWhere('vehicle_type.name', 'like', "%{$search}%")
+                        ->orWhere('vehicles.reg', 'like', "%{$search}%")
+                        ->orWhere('make.name', 'like', "%{$search}%")
+                        ->orWhere('model.name', 'like', "%{$search}%")
+                        ->orWhere('model_variant.name', 'like', "%{$search}%")
+                        ->orWhere('body_types.name', 'like', "%{$search}%")
+                        ->orWhere('vehicles.year', 'like', "%{$search}%")
+                        ->orWhere('auctions.name', 'like', "%{$search}%")
+                        ->orWhere('color.name', 'like', "%{$search}%");
+                    });
 
+                }
+                // Example: Filtering by plan_type
+            if ($request->has('platform_id') && $request->platform_id != '') {
+                $query->where('auctions.platform_id',  $request->platform_id );
             }
             // Example: Filtering by plan_type
-    if ($request->has('platform_id') && $request->platform_id != '') {
-        $query->where('auctions.platform_id',  $request->platform_id );
-    }
-    // Example: Filtering by plan_type
-    
-
-  if ($request->has('center_id') && $request->center_id != '') {
-        $query->where('vehicles.center_id',  $request->center_id );
-    }
-
-
-    // Example: Filtering by plan_type
-    if ($request->has('auction_type') && $request->auction_type != '') {
-        $query->where('auctions.auction_type',  $request->auction_type);
-    }
-    if ($request->has('auction_id') && $request->auction_id != '') {
-        $query->where('auction_id',  $request->auction_id);
-    }
-    if ($request->has('make_id') && $request->make_id != '') {
-        $query->where('vehicles.make_id',  $request->make_id);
-    }
-    if ($request->has('model_id') && $request->model_id != '') {
-        $query->where('vehicles.model_id',  $request->model_id);
-    }
-    if ($request->has('variants_id') && $request->variants_id != '') {
-        $query->where('vehicles.variant_id',  $request->variants_id);
-    }
             
+
+            if ($request->has('center_id') && $request->center_id != '') {
+                $query->where('vehicles.center_id',  $request->center_id );
+            }
+
+
+            // Example: Filtering by plan_type
+            if ($request->has('auction_type') && $request->auction_type != '') {
+                $query->where('auctions.auction_type',  $request->auction_type);
+            }
+            if ($request->has('auction_id') && $request->auction_id != '') {
+                $query->where('auction_id',  $request->auction_id);
+            }
+            if ($request->has('make_id') && $request->make_id != '') {
+                $query->where('vehicles.make_id',  $request->make_id);
+            }
+            if ($request->has('model_id') && $request->model_id != '') {
+                $query->where('vehicles.model_id',  $request->model_id);
+            }
+            if ($request->has('variants_id') && $request->variants_id != '') {
+                $query->where('vehicles.variant_id',  $request->variants_id);
+            }
+                
 
                   
             $totalData = clone $query;
@@ -163,6 +163,8 @@ class AVehicleController extends Controller
     
         return view('admin.vehicles.index',[]);
     }
+
+
     // public function ajaxData(Request $request)
     // {
     //     if ($request->ajax()) {

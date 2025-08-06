@@ -50,7 +50,13 @@
                                  <label class="form-label" >Name <span class="text-danger" >*</span></label>
                                  <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
                               </div>
-                           </div>       
+                           </div>   
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label class="form-label" >Unique id <span class="text-danger" >*</span></label>
+                                 <input type="text" name="id" value="{{ old('id') }}" class="form-control" required>
+                              </div>
+                           </div>     
                            <div class="col-md-4">
                               <div class="form-group mb-3">
                                  <label class="form-label" for="platform_id">Auction Platform</label>
@@ -88,6 +94,7 @@
                                  <input type="datetime-local" name="end_date" value="{{ old('end_date') }}" class="form-control" />
                               </div>
                            </div>
+
                            <div class="col-md-4">
                                  <div class="form-group mb-3">
                                     <label class="form-label" for="csv_path">Upload CSV</label>

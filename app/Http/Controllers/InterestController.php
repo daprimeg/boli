@@ -180,7 +180,6 @@ class InterestController extends Controller
             'title' => 'required|string|max:255',
             'make_id' => 'required|integer|exists:make,id',
             'model_id' => 'required|integer|exists:model,id',
-            'variant_id' => 'required|integer|exists:model_variant,id',
 
             'year_from' => 'nullable|integer',
             'year_to' => 'nullable|integer',
@@ -277,7 +276,6 @@ class InterestController extends Controller
             'title' => 'required|string|max:255',
             'make_id' => 'required|integer|exists:make,id',
             'model_id' => 'required|integer|exists:model,id',
-            'variant_id' => 'required|integer|exists:model_variant,id',
 
             'year_from' => 'nullable|integer',
             'year_to' => 'nullable|integer',

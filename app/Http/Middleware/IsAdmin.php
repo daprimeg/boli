@@ -20,15 +20,20 @@ class IsAdmin
     {
 
         $auth = Auth::user();
+        if(Auth::check()){
+            if($auth->user_type == 0){
 
-        if($auth->user_type == 0){
-            if($request->ajax()){
-            
-            }else{
+                if($request->ajax()){
+                    
+                }else{
 
-                return redirect('/login')->with('error', 'Restricted');
+                    return redirect('/login')->with('error', 'Restricted');
+                }
+                
             }
         }
+        
+     
 
         return $next($request);
 

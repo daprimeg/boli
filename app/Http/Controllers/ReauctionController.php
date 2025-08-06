@@ -117,7 +117,7 @@ public function index(Request $request)
                 $deff = '<p class="text-danger" style="color:#570303;">Waiting</p>';
 
            $actions = '
-                <a href="' . url("/auction-finder/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
+                <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
                     <i class="fas fa-eye"></i>
                 </a>
                 <a class="btn btn-sm btn-danger" style="background-color:#570303 ; border-color: #8000;">
@@ -161,7 +161,9 @@ public function index(Request $request)
     $interests = Interest::where('user_id', $userId)->get();
     $auctionPlatform = AuctionPlatform::pluck('name');
     $auctionCenter = AuctionCenter::pluck('name');
-    return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests'));
+    $today = Carbon::today();
+    $vehicleCountToday = Vehicle::whereDate('created_at', $today)->count();
+    return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests','vehicleCountToday'));
 }
 
 

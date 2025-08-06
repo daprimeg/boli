@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\TryCatch;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
+use App\Mail\PasswordResetMail;
+use Symfony\Component\Mime\Part\TextPart;
+use Symfony\Component\Mime\Part\HtmlPart;
 
 class AuthController extends Controller
 {
@@ -579,6 +587,86 @@ class AuthController extends Controller
         }
 
     }
+
+    public function forgotpassword()
+    {
+        return view('user.forgetPassword.forgetPassword');
+    }
+
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,personalEmail',
+        ]);
+
+        $email = $request->email;
+        $token = Str::random(64);
+
+        DB::table('password_reset_tokens')->where('email', $email)->delete();
+
+        DB::table('password_reset_tokens')->insert([
+            'email' => $email,
+            'token' => $token,
+            'created_at' => Carbon::now()
+        ]);
+
+        $resetLink = url('/reset-password-form?token=' . $token . '&email=' . urlencode($email));
+
+        Mail::to($email)->send(new PasswordResetMail($resetLink));
+        return response()->json(['message' => 'Reset link sent successfully!']);
+    }
+    
+    public function resetpasswordvalidation(Request $request)
+    {
+        $token = $request->query('token');
+        $email = $request->query('email');
+
+        if (!$token || !$email) {
+            abort(400, 'Invalid reset link.');
+        }
+        $exists = DB::table('password_reset_tokens')
+            ->where('email', $email)
+            ->where('token', $token)
+            ->first();
+
+        if (!$exists) {
+            abort(403, 'This password reset link is invalid or has expired.');
+        }
+
+        return view('user.forgetPassword.resetfrom',compact('token', 'email'));
+     
+    }
+
+    public function resetpasswordsubmit(Request $request)
+    {
+        
+        $request->validate([
+            'email' => 'required|email|exists:users,personalEmail',
+            'token' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $tokenData = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->where('token', $request->token)
+            ->first();
+
+        if (!$tokenData) {
+            return response()->json(['message' => 'Invalid or expired token.'], 422);
+        }
+
+        User::where('personalEmail', $request->email)
+            ->update(['password' => FacadesHash::make($request->password)]);
+
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        return response()->json(['message' => 'Password reset successfully!']);
+    }
+
+
+
+   
 
 
 }

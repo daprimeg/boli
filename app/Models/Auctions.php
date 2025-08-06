@@ -10,6 +10,7 @@ class Auctions extends Model
 {
     protected $fillable = [
         'name',
+        'table_id',
         'auction_date',
         'end_date',
         'auction_type',

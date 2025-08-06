@@ -9,51 +9,26 @@ use App\Http\Controllers\ProfileSettingController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\WebhookController;
-use App\Http\Controllers\BlogCategoryController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\admin\AdminAuthController;
-use App\Http\Controllers\admin\AdminNewscrudController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\AlertController;
-use App\Http\Controllers\admin\PlanController;
-use App\Http\Controllers\admin\MembershipController;
-use App\Http\Controllers\admin\TicketsController;
-use App\Http\Controllers\admin\EmailTemplateController;
-use App\Http\Controllers\admin\AuctionController;
-use App\Http\Controllers\Admin\AVehicleController;
-use App\Http\Controllers\admin\BodyTypeController;
-use App\Http\Controllers\admin\CenterController;
-use App\Http\Controllers\admin\ColorController;
-use App\Http\Controllers\admin\MakeController;
-use App\Http\Controllers\admin\ModelController;
-use App\Http\Controllers\admin\PlatformController;
-use App\Http\Controllers\admin\VariantController;
-use App\Http\Controllers\admin\VehichleTypeController;
-use App\Http\Controllers\admin\VehicleTypeController;
-use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\PaymentController; // Import the controller
 use App\Http\Controllers\TestPaymentController;
 use App\Http\Controllers\UiSettingController;
 use App\Http\Controllers\FrontendController;
-use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
+use App\Http\Controllers\AuctionFinderDataController;
 use App\Http\Controllers\ReauctionController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebController;
 use App\Http\Middleware\CheckUserStatus;
-use App\Http\Middleware\IsAdmin;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
-use App\Models\Membership;
 use App\Models\ModelVariant;
 use App\Models\Vehicle;
 use App\Models\VehicleModel;
 use App\Models\VehicleType;
 use Carbon\Carbon;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,9 +55,13 @@ Route::post('/login_submit', [AuthController::class, 'login_submit']);
 Route::get('/register', [AuthController::class, 'register']);
 
 Route::post('/register_submit', [AuthController::class, 'register_submit']);
+Route::get('/forgot-password', [AuthController::class, 'forgotpassword']);
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password-form', [AuthController::class, 'resetpasswordvalidation']);
+Route::post('/reset-password-submit', [AuthController::class, 'resetpasswordsubmit'])->name('reset.password.submit');
 
-
-
+Route::get('/support', [WebController::class, 'support']);
+Route::post('/send-contact', [WebController::class, 'send']);
 
 
 Route::get('/uploading1', function (Request $request) {
@@ -292,23 +271,20 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/dashboard/getValuation', [DashboardController::class, 'getValuation']);
 
 
-            Route::get('/auction-finder/getPlatformVehicle',[AuctionFinderController::class,'getPlatformVehicle']);
-            Route::get('/auction-finder/getRelatedVehicle/{id}',[AuctionFinderController::class,'getRelatedVehicle']);
-            Route::get('/auction-finder/{id}', [AuctionFinderController::class, 'vehicle']);
             
-            
-            Route::get('/auctionfinder',[AuctionFinderController::class,'index'])->name('auctionfinder');
-            
-
-            Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
-            Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
+           
+            Route::get('/auction-finder/vehicle/{id}', [AuctionFinderController::class, 'vehicle']);
+            Route::get('/auction-finder',[AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
+
+            //Data
+            Route::get('/auction-finder/data/getRelatedVehicle/{id}',[AuctionFinderDataController::class,'getRelatedVehicle']);
+            Route::get('/auction-finder/data/auctionList', [AuctionFinderDataController::class,'auctionList']);
+            Route::get('/auction-finder/data/getPlatformVehicle',[AuctionFinderDataController::class,'getPlatformVehicle']);
             
         
             Route::view('/upcoming', 'user/upcoming')->name('upcoming');
-            
             Route::view('/auctioncalender', 'user/auctioncalender')->name('auctioncalender');
-            
             Route::view('/auctiondetail', 'user/auctiondetail')->name('auctiondetail');
             Route::view('/futureauction', 'user/futureauction')->name('futureauction');
             Route::view('/timeauction', 'user/timeauction')->name('timeauction');
@@ -317,7 +293,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/reauction', [ReauctionController::class,'index'])->name('reauction');
             Route::get('/reauction/interest', [ReauctionController::class,'interest'])->name('reauction-interest');
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
- 
+            Route::get('/autionshadule', [WebController::class, 'AutionShadule'])->name('autionshadule');
+
+
 
 
             Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
@@ -353,5 +331,22 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
    // Admin Routes
    require __DIR__.'/admin.php';
 
-   
+
+    Route::get('mail',function(){
+
+
+        $data = [
+            'name' => 'Test User',
+            'link' => 'https://example.com/reset-password'
+        ];
+
+        Mail::send('emails.password_reset',$data,function ($mesage) use($data) {
+
+            $mesage->from("man411210@gmail.com","Test"); 
+            $mesage->to("iamowaisazam@gmail.com","test")->subject('Email Verification');
+
+        });
+
+
+    });
 
