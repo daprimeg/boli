@@ -3,18 +3,42 @@
     const auctions = {
         filters:{
             page:1,
-            date_range:'past_3_months',
+            date:'past_3_months',
             display_type:'auction',
-             length:50,
+            length:50,
         },
        
-        
     };
-   
 
 
+    auctions.onLoad = function(){  
 
+        const params = new URLSearchParams(window.location.search);
+        for (const [key, value] of params.entries()) {
+            auctions.filters[key] = value;
+        }
 
+        if(auctions.filters.date){
+           $('select[name=date]').val(auctions.filters.date);
+        }
+
+        if(auctions.filters.length){
+           $('select[name=length]').val(auctions.filters.length);
+        }
+
+        console.log(auctions.filters);
+        
+
+        // if(auctions.filters.platform){
+        //    $('select[name=auction_name]').val(auctions.filters.platform);
+        //    $('select[name=auction_name]').trigger('change');
+        // }
+
+        
+
+        auctions.searchrecord();
+
+    }
 
 
     auctions.showHeadings = function(){  
@@ -113,36 +137,48 @@
 
 
     $('select[name=auction_name]').change(function (e) { 
-        auctions.filters.plateform_id = $(this).val();
-        filters.searchrecord();
+        const url = new URL(window.location.href);
+        url.searchParams.set('platform', $(this).val());
+        history.pushState({}, '', url);
+        auctions.onLoad();
     });
 
-    $('select[name=auction_name]').change(function (e) { 
-        auctions.filters.platform_id = $(this).val();
-        auctions.searchrecord();
-    });
 
     $('select[name=length]').change(function (e) { 
-        auctions.filters.length = $(this).val();
-        auctions.searchrecord();
+        const url = new URL(window.location.href);
+        url.searchParams.set('length', $(this).val());
+        history.pushState({}, '', url);
+        auctions.onLoad();
     });
 
-    $('select[name=date_range]').change(function (e) { 
-        auctions.filters.date_range = $(this).val();
-        filters.searchrecord();
+
+    $('select[name=date]').change(function (e) { 
+        const url = new URL(window.location.href);
+        url.searchParams.set('date', $(this).val());
+        history.pushState({}, '', url);
+        auctions.onLoad();
     });
+
 
     $('.display_type').click(function (e) { 
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('display_type', $(this).val());
+        history.pushState({}, '', url);
+
         $('.display_type').removeClass('active');
-        auctions.filters.display_type = $(this).data('id');
-        auctions.showHeadings();
-        auctions.searchrecord();
         $(this).addClass('active');
+        auctions.showHeadings();
+        auctions.onLoad();
     });
 
+
+
     $('.pagination').on('click', 'li', function() {
-        auctions.filters.page = $(this).data('id');
-        auctions.searchrecord();
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', $(this).data('id'));
+        history.pushState({}, '', url);
+        auctions.onLoad();
     });
 
     $('input[name="vehicle_types[]"]').change(function() {
@@ -156,11 +192,14 @@
 
 
     $('input[name="makes[]"]').change(function() {
+
         let selected = [];
         $('input[name="makes[]"]:checked').each(function () {
             selected.push($(this).val());
         });
         auctions.filters.makes = selected.toString();
+
+        
         auctions.searchrecord();
     });
 
@@ -286,8 +325,12 @@
         auctions.searchrecord();
     });
 
-    auctions.searchrecord();
+   
+ 
 
+
+
+    auctions.onLoad();
       
 
 });

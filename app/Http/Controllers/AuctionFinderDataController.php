@@ -32,7 +32,7 @@ class AuctionFinderDataController extends Controller
     public function auctionList(Request $request)
     {
 
-            $dateRange = $request->input('date_range');
+         
 
             $perPage = (int) $request->input('length', 10);
             $page = (int) $request->input('page', 1);
@@ -46,8 +46,8 @@ class AuctionFinderDataController extends Controller
             ->join('model_variant','model_variant.id','=','vehicles.variant_id');
 
             
-            if($request->has('platform_id') && $request->platform_id != ''){
-                 $query->where('auctions.platform_id',$request->platform_id);
+            if($request->has('platform') && $request->platform != ''){
+                 $query->where('auctions.platform_id',$request->platform);
             }
 
             if($request->has('vehicle_types') && $request->vehicle_types != ''){
@@ -126,23 +126,22 @@ class AuctionFinderDataController extends Controller
                 $query->whereBetween('vehicles.mileage', [$from, $to]);
             }
 
-        
-            if ($request->has('date_range') && $request->date_range != '') {
+            
+            $dateRange = $request->has('date') ? $request->date : 'past_3_months';
+            $now = \Carbon\Carbon::now();
+            $fromDate = match ($dateRange) {
+                'today' => $now->copy()->startOfDay(),
+                'yesterday' => $now->copy()->subDay()->startOfDay(),
+                'last_week' => $now->copy()->subWeek(),
+                'last_month' => $now->copy()->subMonth(),
+                'past_3_months' => $now->copy()->subMonths(3),
+                default => $now->copy()->subMonths(3),
+            };
 
-                $now = \Carbon\Carbon::now();
-                $fromDate = match ($dateRange) {
-                    'today' => $now->copy()->startOfDay(),
-                    'yesterday' => $now->copy()->subDay()->startOfDay(),
-                    'last_week' => $now->copy()->subWeek(),
-                    'last_month' => $now->copy()->subMonth(),
-                    'past_3_months' => $now->copy()->subMonths(3),
-                    default => $now->copy()->subMonths(3),
-                };
+            $toDate = $now->copy()->endOfDay();
+            $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
 
-                $toDate = $now->copy()->endOfDay();
-                $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
-
-            }
+            
 
 
             // Count total BEFORE limit/offset

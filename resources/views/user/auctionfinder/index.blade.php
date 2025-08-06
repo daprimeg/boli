@@ -86,7 +86,7 @@
                         </select>
                      </div>
                      <div class="invoice_status">
-                        <select id="date_range" name="date_range" class="form-select">
+                        <select name="date" class="form-select">
                            {{-- <option value="">Select Range</option> --}}
                            <option value="today">Today</option>
                            <option value="yesterday">Yesterday</option>
