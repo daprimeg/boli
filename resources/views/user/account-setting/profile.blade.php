@@ -1,7 +1,18 @@
 @extends('admin.partial.app')
 @push('title')Account Setting @endpush
 @section('content')
-
+        @section('css')
+    <style>
+        .form-control{
+            border-radius: var(--btn-border-radis);
+            color:var(--dimtext);
+        }
+        .form-control:hover{
+           border: 1px solid var(--bs-body-bg)!important; 
+           cursor: pointer;
+        }
+    </style>
+@endsection
    
     <div class="container-fluid pt-5">
         <div class="row">
@@ -36,18 +47,20 @@
                     </div>
                     <div class="card-body pt-2">
 
-                        <div class="row pb-5">
-                            <div class="col-md-3">
+                        <div class=" pb-5">
+                            <div >
                                 <img
                                     src="{{asset('/public/uploads/avatar/' . Auth::user()->avatar)}}"
                                     alt="user-avatar"
                                     class="d-block w-px-100 h-px-100 rounded"
+                                    style="height: 100%; aspect-ratio: 1 / 1; border:1px solid var(--bs-b-color)!important "
                                     id="uploadedAvatar" />
                             </div>
-                             <div class="col-md-9 align-self-center">
-                                <div class="button-wrapper">
-                                    <label for="upload" class="btn btn-primary me-3 mb-4" tabindex="0">
-                                        <span class="d-none d-sm-block">Upload new photo</span>
+
+                             <div class="">
+                                <div class="button-wrapper pt-4">
+                                    <label for="upload" class="btn  me-3 mb-4" tabindex="0"  style="background-color: var(--bs-body-bg)!important; border: 1px solid var(--bs-b-color);border-radius: var(--btn-border-radis)">
+                                        <span class="d-none d-sm-block">Update new photo</span>
                                         <i class="icon-base ti tabler-upload d-block d-sm-none"></i>
                                         <input
                                             type="file"
@@ -56,7 +69,7 @@
                                             class="account-file-input"
                                             hidden
                                             accept="image/png, image/jpeg" />
-                                        <div>Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                        <div></div>
                                 </div>
                             </div>
                         </div>
@@ -99,10 +112,10 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="country" class="form-label">Country</label>
-                                <select id="country" name="country" class="select2 form-select">
+                                <select  id="country" name="country" class="select2 form-select form-control">
                                     <option value="">Select</option>
                                     @foreach(['Australia','Bangladesh','Canada','France','Germany','India','United Kingdom','United States'] as $country)
-                                    <option value="{{ $country }}" {{ old('country', $user->country) == $country ? 'selected' : '' }}>{{ $country }}</option>
+                                    <option  value="{{ $country }}" {{ old('country', $user->country) == $country ? 'selected' : '' }}>{{ $country }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -127,8 +140,8 @@
                                 <input class="form-control" type="text" name="motorTradeInsurance" value="{{ old('motorTradeInsurance', $user->motorTradeInsurance) }}">
                             </div>
                             <div class="col-12 pt-5">
-                                <button type="submit" class="btn btn-primary me-3">Save changes</button>
-                                <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                                <button type="submit" class="btn btn-primary me-3" style="border-radius: var(--btn-border-radis)">Save changes</button>
+                                <button type="reset" class="btn btn-label-secondary" style="border-radius: var(--btn-border-radis)">Cancel</button>
                             </div>
                         </div>
                          
