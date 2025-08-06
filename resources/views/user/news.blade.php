@@ -44,6 +44,25 @@
             {
             background-color: #001020;
         }
+
+            .share-icon {
+        width: 36px;
+        height: 36px;
+        background-color: #3084ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 18px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .share-icon:hover {
+        background-color: #1d6cd6;
+        color: #ffffff;
+    }
     </style>
 @endsection
 
@@ -92,33 +111,38 @@
                                 <h4 style=" ">
                                     {{ $item->title }}
                                 </h4>
-                                <div style="display: flex; justify-content: flex-end !important; margin-bottom: 4px; ">
-                                    {{-- <div style="font-size: 14px; color: #c9d1d9;">Like: 12</div> --}}
-                                    <div
-                                        style="display: flex; gap: 10px; margin-right: 110px; margin-top: 20px; align-items: center">
-                                        share
-                                        <div
-                                            style="width: 30px; height: 30px; background-color: #3084ff; display: flex;justify-content: center; align-items: center">
-                                            <a href="https://x.com"><i style="font-size: 25px;"
-                                                    class="text-white fa-brands fa-x-twitter"></i> </a></div>
-                                        <div
-                                            style="width: 30px; height: 30px; background-color: #3084ff; display: flex;justify-content: center; align-items: center">
-                                            <a href="https://www.instagram.com"><i style="font-size: 25px;"
-                                                    class="text-white fa-brands fa-square-instagram"></i></a> </div>
-                                        <div
-                                            style="width: 30px; height: 30px; background-color: #3084ff; display: flex;justify-content: center; align-items: center">
-                                            <a href=" https://telegram.org/"><i style="font-size:25px;"
-                                                    class="text-white fa-brands fa-telegram"></i></a></div>
-                                    </div>
+                             <div class="d-flex justify-content-end mt-3 mb-3 me-5">
+                                <div class="d-flex align-items-center gap-3 share-box">
+                                    <span style="color: #ffffff; font-weight: 500; font-size: 14px;">Share:</span>
+
+                                        @php
+                                                $postUrl = urlencode(url('/news?id=' . $item->id)); 
+                                            @endphp
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $postUrl }}" target="_blank" class="share-icon">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+
+                                    <a href="https://twitter.com/intent/tweet?url={{ $postUrl }}" target="_blank" class="share-icon">
+                                        <i class="fab fa-x-twitter"></i>
+                                    </a>
+
+                                    <!-- WhatsApp -->
+                                    <a href="https://api.whatsapp.com/send?text={{ urlencode(Request::url()) }}" 
+                                    target="_blank" class="share-icon" title="Share on WhatsApp" 
+                                    style="color: #25D366; font-size: 20px;">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
                                 </div>
+                            </div>
+
+
                             </div>
 
                         </div>
 
 
-                        {{-- <img src="{{ asset('/public/uploads/news/' . $item->feature_image) }}"> --}}
                         <div class="col-4" style="background: #d1d5db00; height: 220px; width: 320px;">
-                            <img src="{{ asset('/public/theme/assets/largecar.jpg') }}"
+                            <img src="{{ asset('public/uploads/news/' . $item->feature_image) }}" 
                                 style="height: 100%; width: 100%; object-fit: cover">
                         </div>
                     </div>
@@ -127,17 +151,7 @@
 
                     <p style="line-height: 1.7; color: #d1d5db;margin-top: 30px;">{!! $item->description !!}</p>
 
-                    <form action="{{ route('news.togglePin', $item->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        <div class="d-flex align-items-center gap-3" style="margin-top: 20px;">
-                            <button
-                                class="btn btn-sm {{ $user->pinnedNews->contains($item->id) ? 'btn-danger' : 'btn-outline-primary' }}"
-                                style="padding: 6px 14px; font-size: 14px; border-radius: 4px;">
-                                {{ $user->pinnedNews->contains($item->id) ? 'Unpin' : 'Pin' }}
-                            </button>
-
-                        </div>
-                    </form>
+                   
                 </div>
             @endforeach
             <div id="news-placeholder" class="text-muted">
@@ -150,18 +164,24 @@
 
 @section('js')
     <script>
-        $(document).ready(function() {
-            $('.news-item').click(function() {
-                debugger
-                var id = $(this).data('id');
+$(document).ready(function() {
 
-                // Hide all
-                $('.news-full-content').hide();
-                $('#news-placeholder').hide();
+    $('.news-item').click(function() {
+        var id = $(this).data('id');
+        $('.news-full-content').hide();
+        $('#news-placeholder').hide();
+        $('.news-' + id).fadeIn();
+    });
 
-                // Show selected
-                $('.news-' + id).fadeIn();
-            });
-        });
+
+    let selectedId = "{{ $selectedId ?? '' }}";
+
+    if (selectedId) {
+        $('.news-item[data-id="' + selectedId + '"]').trigger('click');
+    } else {
+        $('.news-item').first().trigger('click');
+    }
+});
+
     </script>
 @endsection

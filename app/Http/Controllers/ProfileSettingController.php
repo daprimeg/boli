@@ -8,6 +8,7 @@ use App\Models\Auction;
 use App\Models\Membership;
 use App\Models\Plan;
 use App\Models\UserLogin;
+use App\Models\UserDevice;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -97,35 +98,33 @@ class ProfileSettingController extends Controller
 
     public function changePassword(Request $request)
     {
-
         $user = Auth::user();
 
-            if($request->isMethod('post')) {
+        if ($request->isMethod('post')) {
 
-                    $request->validate([
-                        'currentPassword' => 'required',
-                        'newPassword' => 'required|min:8|confirmed',
-                    ]);
+            $request->validate([
+                'currentPassword' => 'required',
+                'newPassword' => 'required|min:8|confirmed',
+            ]);
 
-                    if (!Hash::check($request->currentPassword, $user->password)) {
-                        return back()->withErrors(['currentPassword' => 'Current password is incorrect.']);
-                    }
-
-                    $user->password = Hash::make($request->newPassword);
-                    $user->save();
-
-                    return back()->with('success', 'Password changed successfully.');
+            if (!Hash::check($request->currentPassword, $user->password)) {
+                return back()->withErrors(['currentPassword' => 'Current password is incorrect.']);
             }
 
+            $user->password = Hash::make($request->newPassword);
+            $user->save();
 
-            $userLoginLogs = UserLogin::where('user_id', auth()->id())
-                            ->orderByDesc('login_at')
-                            ->limit(10)
-                            ->get();
+            return back()->with('success', 'Password changed successfully.');
+        }
 
+        $userDevices = UserDevice::where('user_id', $user->id)
+                        ->orderByDesc('logged_in_at')
+                        ->limit(10)
+                        ->get();
 
-            return view('user.account-setting.changePassword', compact('user'));
+        return view('user.account-setting.changePassword', compact('user', 'userDevices'));
     }
+
 
 
     public function billing(Request $request)

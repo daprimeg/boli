@@ -264,17 +264,17 @@
                             <!-- File Upload Section -->
                             <div class=" mb-4" style="width:400px;">
                                 <label class="form-label fw-bold text-white">
-                                    Upload ID <span class="text-danger">*</span>
+                                    Profile Image <span class="text-danger">*</span>
                                 </label>
 
                                 <div class="d-flex align-items-center" >
                                     <label class="sign-input">
                                         Select file (Max. 4MB)
-                                        <input name="uploadID" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
+                                        <input name="avatar" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf" hidden  />
                                     </label>
                                     <div id="fileName" class="text-light w-75 ms-3 ">No file chosen.</div>
                                 </div>
-                                    <small class="error error-uploadID text-danger"></small> </br>
+                                    <small class="error error-avatar text-danger"></small> </br>
                                 <small class="text-muted ">Upload must be in .jpg, .png or .pdf format.</small>
                             </div>
 
