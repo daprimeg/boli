@@ -93,54 +93,61 @@
          <div class="card mb-6">
         <h5 class="card-header">Recent Devices</h5>
         <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th class="">Browser</th>
-                <th class="">Device</th>
-                <th class="">Location</th>
-                <th class="">Recent Activities</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class=" "><i class="icon-base ti tabler-brand-windows icon-md align-top text-info me-2"></i>Chrome on Windows</td>
-                <td class="">HP Spectre 360</td>
-                <td class="">Switzerland</td>
-                <td class="">10, July 2021 20:07</td>
-              </tr>
-              <tr>
-                <td class=" "><i class="icon-base ti tabler-device-mobile icon-md  align-top text-danger me-2"></i>Chrome on iPhone</td>
-                <td class="">iPhone 12x</td>
-                <td class="">Australia</td>
-                <td class="">13, July 2021 10:10</td>
-              </tr>
-              <tr>
-                <td class=" "><i class="icon-base ti tabler-brand-android icon-md align-top text-success me-2"></i>Chrome on Android</td>
-                <td class="">Oneplus 9 Pro</td>
-                <td class="">Dubai</td>
-                <td class="">14, July 2021 15:15</td>
-              </tr>
-              <tr>
-                <td class=" "><i class="icon-base ti tabler-brand-apple icon-md align-top me-2"></i>Chrome on MacOS</td>
-                <td class="">Apple iMac</td>
-                <td class="">India</td>
-                <td class="">16, July 2021 16:17</td>
-              </tr>
-              <tr>
-                <td class=" "><i class="icon-base ti tabler-brand-windows icon-md align-top text-warning me-2"></i>Chrome on Windows</td>
-                <td class="">HP Spectre 360</td>
-                <td class="">Switzerland</td>
-                <td class="">20, July 2021 21:01</td>
-              </tr>
-              <tr class="border-transparent">
-                <td class=" "><i class="icon-base ti tabler-brand-android icon-md align-top text-success me-2"></i>Chrome on Android</td>
-                <td class="">Oneplus 9 Pro</td>
-                <td class="">Dubai</td>
-                <td class="">21, July 2021 12:22</td>
-              </tr>
-            </tbody>
-          </table>
+       <table class="table">
+    <thead>
+    <tr>
+        <th>Browser / Platform</th>
+        <th>Device</th>
+        <th>Location</th>
+        <th>Recent Activities</th>
+    </tr>
+</thead>
+<tbody>
+    @forelse ($userDevices as $device)
+        <tr>
+            <td>
+                {{-- Get platform icon --}}
+                @php
+                    $platform = strtolower($device->platform);
+                    $browser = strtolower($device->browser);
+
+                    $platformIcon = match(true) {
+                        str_contains($platform, 'windows') => 'tabler-brand-windows text-info',
+                        str_contains($platform, 'android') => 'tabler-brand-android text-success',
+                        str_contains($platform, 'iphone'), str_contains($platform, 'ios') => 'tabler-device-mobile text-danger',
+                        str_contains($platform, 'mac') => 'tabler-brand-apple text-secondary',
+                        default => 'tabler-world text-muted',
+                    };
+
+                    $browserIcon = match(true) {
+                        str_contains($browser, 'chrome') => 'tabler-brand-chrome text-warning',
+                        str_contains($browser, 'firefox') => 'tabler-brand-firefox text-orange',
+                        str_contains($browser, 'safari') => 'tabler-brand-safari text-primary',
+                        str_contains($browser, 'opera') => 'tabler-brand-opera text-danger',
+                        str_contains($browser, 'edge') => 'tabler-brand-edge text-info',
+                        str_contains($browser, 'internet explorer') => 'tabler-brand-internet-explorer text-secondary',
+                        default => 'tabler-device-desktop',
+                    };
+                @endphp
+
+                <i class="ti {{ $platformIcon }} me-1"></i>
+                <i class="ti {{ $browserIcon }} me-1"></i>
+                {{ ucfirst($device->browser) }} on {{ ucfirst($device->platform) }}
+            </td>
+
+            <td>{{ $device->device ?? 'Unknown Device' }}</td>
+            <td>{{ $device->location ?? 'Unknown Location' }}</td>
+            <td>{{ \Carbon\Carbon::parse($device->logged_in_at)->format('d, F Y H:i') }}</td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="4" class="text-center">No device history available.</td>
+        </tr>
+    @endforelse
+</tbody>
+
+</table>
+
         </div>
       </div>
     </div>
