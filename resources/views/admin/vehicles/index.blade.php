@@ -177,7 +177,12 @@
 
 @section('js')
     <script>
-            $(document).ready(function () {
+    $(document).ready(function () {
+
+        
+         
+        
+
              let table = $('#vehicleTable').DataTable({
                     processing: true,
                     serverSide: true,

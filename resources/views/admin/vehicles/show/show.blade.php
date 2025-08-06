@@ -137,38 +137,38 @@
 }
 
 
-  .nav-tabs .nav-link {
-    background-color: transparent;
-    border: none;
-    color: var(--bs-heading-color);
-    border-radius: 8px;
-    box-shadow: none;
-    margin-right: 5px;
-    transition: 0.3s ease;
-  }
+    .nav-tabs .nav-link {
+        background-color: transparent;
+        border: none;
+        color: var(--bs-heading-color);
+        border-radius: 8px;
+        box-shadow: none;
+        margin-right: 5px;
+        transition: 0.3s ease;
+    }
 
-  /* Your custom active style */
-  .nav-tabs .nav-link.active {
-    background-color: var(--bs-primary);
-    color: var(--bs-heading-color) !important;
-    border-radius: 8px;
-    box-shadow: none;
-  }
+    /* Your custom active style */
+    .nav-tabs .nav-link.active {
+        background-color: var(--bs-primary);
+        color: var(--bs-heading-color) !important;
+        border-radius: 8px;
+        box-shadow: none;
+    }
 
-  /* Optional: Hover effect */
-  .nav-tabs .nav-link:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
+    /* Optional: Hover effect */
+    .nav-tabs .nav-link:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
 
-  /* Optional: Remove tab bottom border */
-  .nav-tabs {
-    border-bottom: none;
-  }
+    /* Optional: Remove tab bottom border */
+    .nav-tabs {
+        border-bottom: none;
+    }
 
-        #chart{
-        max-width: 700px;
-        margin: 30px auto;
-        }
+    #chart{
+     max-width: 700px;
+     margin: 30px auto;
+    }
      
 </style>
 @endsection

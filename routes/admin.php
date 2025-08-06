@@ -11,7 +11,7 @@ use App\Http\Controllers\admin\PlanController;
 use App\Http\Controllers\admin\MembershipController;
 use App\Http\Controllers\admin\TicketsController;
 use App\Http\Controllers\admin\AuctionController;
-use App\Http\Controllers\Admin\AVehicleController;
+use App\Http\Controllers\admin\VehicleController;
 use App\Http\Controllers\admin\BodyTypeController;
 use App\Http\Controllers\admin\CenterController;
 use App\Http\Controllers\admin\ColorController;
@@ -20,11 +20,18 @@ use App\Http\Controllers\admin\ModelController;
 use App\Http\Controllers\admin\PlatformController;
 use App\Http\Controllers\admin\VariantController;
 use App\Http\Controllers\admin\VehicleTypeController;
-use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\admin\BlogController as AdminBlogController;
 use App\Http\Middleware\IsAdmin;
+
+Route::get('/admin', [AdminAuthController::class, 'showLoginForm']);
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm']);
+Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 
 Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
+
+    
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
 
         //Profile
         Route::view('/importcsv', 'admin/datamanagement/importcsv');
@@ -143,13 +150,13 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
 
 
         //Vehicles
-        Route::get('/vehicles', [AVehicleController::class,'index']);
-        Route::get('/vehicles/create', [AVehicleController::class,'create']);
-        Route::post('/vehicles/store', [AVehicleController::class, 'store']);
-        Route::get('/vehicles/edit/{id}', [AVehicleController::class,'edit']);
-        Route::put('/vehicles/update/{id}', [AVehicleController::class,'update']);
-        Route::delete('/vehicles/destroy/{id}', [AVehicleController::class,'destroy']);
-        Route::get('/vehicles/show/{id}', [AVehicleController::class, 'show']);
+        Route::get('/vehicles', [VehicleController::class,'index']);
+        Route::get('/vehicles/create', [VehicleController::class,'create']);
+        Route::post('/vehicles/store', [VehicleController::class, 'store']);
+        Route::get('/vehicles/edit/{id}', [VehicleController::class,'edit']);
+        Route::put('/vehicles/update/{id}', [VehicleController::class,'update']);
+        Route::delete('/vehicles/destroy/{id}', [VehicleController::class,'destroy']);
+        Route::get('/vehicles/show/{id}', [VehicleController::class, 'show']);
         // Route::get('/admin/vehicles/show/{id}/vehicle_details', [AVehicleController::class, 'vehicleDetails']);
         // Route::get('/admin/vehicles/show/{id}/vehicle_valuation', [AVehicleController::class, 'vehicleValuation']);
             
@@ -195,9 +202,7 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
 
 
 
-        Route::get('/', [AdminAuthController::class, 'showLoginForm']);
-        Route::post('/login', [AdminAuthController::class, 'login']);
-        Route::post('/logout', [AdminAuthController::class, 'logout']);
+    
 
 });
 

@@ -12,6 +12,8 @@ use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactMail;
 class WebController extends Controller
 {
 
@@ -136,6 +138,27 @@ class WebController extends Controller
   
     public function support(){
         return view('web.support');
+    }
+    public function send(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        Mail::to(env('ADMIN_EMAIL'))->send(new ContactMail(
+            $request->name,
+            $request->email,
+            $request->message,
+            $request->phone,
+            $request->country,
+            $request->city,
+            $request->postal_code,
+            $request->address,
+            $request->profession
+        ));
+
+        return response()->json(['status' => 'success', 'message' => 'Message sent successfully!']);
     }
     
 }

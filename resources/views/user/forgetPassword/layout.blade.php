@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/demo.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.css') }}" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
 <!-- Vendor -->
 <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/@form-validation/form-validation.css') }}">
 
@@ -65,6 +65,11 @@
       background-position: center;
       background-repeat: no-repeat;
     }
+
+        #toast-container > .toast-success {
+        background-color: #53a6ff !important;
+        color: #000000 !important;
+    }
 </style>
   @yield('css')
   </head>
@@ -93,7 +98,7 @@
     </div>
   </div>
         <script src="{{ asset('public/themeadmin/assets/js/jquery.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="{{asset('public/theme/js/toastr.min.js')}}"></script>
 
             @yield('js')
 </body>

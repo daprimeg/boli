@@ -9,51 +9,25 @@ use App\Http\Controllers\ProfileSettingController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\WebhookController;
-use App\Http\Controllers\BlogCategoryController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\admin\AdminAuthController;
-use App\Http\Controllers\admin\AdminNewscrudController;
-use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\admin\AlertController;
-use App\Http\Controllers\admin\PlanController;
-use App\Http\Controllers\admin\MembershipController;
-use App\Http\Controllers\admin\TicketsController;
-use App\Http\Controllers\admin\EmailTemplateController;
-use App\Http\Controllers\admin\AuctionController;
-use App\Http\Controllers\Admin\AVehicleController;
-use App\Http\Controllers\admin\BodyTypeController;
-use App\Http\Controllers\admin\CenterController;
-use App\Http\Controllers\admin\ColorController;
-use App\Http\Controllers\admin\MakeController;
-use App\Http\Controllers\admin\ModelController;
-use App\Http\Controllers\admin\PlatformController;
-use App\Http\Controllers\admin\VariantController;
-use App\Http\Controllers\admin\VehichleTypeController;
-use App\Http\Controllers\admin\VehicleTypeController;
-use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\PaymentController; // Import the controller
 use App\Http\Controllers\TestPaymentController;
 use App\Http\Controllers\UiSettingController;
 use App\Http\Controllers\FrontendController;
-use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
 use App\Http\Controllers\ReauctionController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\WebController;
 use App\Http\Middleware\CheckUserStatus;
-use App\Http\Middleware\IsAdmin;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Make;
-use App\Models\Membership;
 use App\Models\ModelVariant;
 use App\Models\Vehicle;
 use App\Models\VehicleModel;
 use App\Models\VehicleType;
 use Carbon\Carbon;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +60,7 @@ Route::get('/reset-password-form', [AuthController::class, 'resetpasswordvalidat
 Route::post('/reset-password-submit', [AuthController::class, 'resetpasswordsubmit'])->name('reset.password.submit');
 
 Route::get('/support', [WebController::class, 'support']);
-
+Route::post('/send-contact', [WebController::class, 'send']);
 
 
 Route::get('/uploading1', function (Request $request) {
@@ -359,5 +333,22 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
    // Admin Routes
    require __DIR__.'/admin.php';
 
-   
+
+    Route::get('mail',function(){
+
+
+        $data = [
+            'name' => 'Test User',
+            'link' => 'https://example.com/reset-password'
+        ];
+
+        Mail::send('emails.password_reset',$data,function ($mesage) use($data) {
+
+            $mesage->from("man411210@gmail.com","Test"); 
+            $mesage->to("iamowaisazam@gmail.com","test")->subject('Email Verification');
+
+        });
+
+
+    });
 
