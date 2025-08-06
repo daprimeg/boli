@@ -15,6 +15,7 @@ use App\Http\Controllers\UiSettingController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
+use App\Http\Controllers\AuctionFinderDataController;
 use App\Http\Controllers\ReauctionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebController;
@@ -269,23 +270,20 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/dashboard/getValuation', [DashboardController::class, 'getValuation']);
 
 
-            Route::get('/auction-finder/getPlatformVehicle',[AuctionFinderController::class,'getPlatformVehicle']);
-            Route::get('/auction-finder/getRelatedVehicle/{id}',[AuctionFinderController::class,'getRelatedVehicle']);
-            Route::get('/auction-finder/{id}', [AuctionFinderController::class, 'vehicle']);
             
-            
-            Route::get('/auctionfinder',[AuctionFinderController::class,'index'])->name('auctionfinder');
-            
-
-            Route::get('/auctionfinder/data', [AuctionFinderController::class,'data'])->name('auctionfinder.data');
-            Route::get('/auction-finder/filter', [AuctionFinderController::class,'filter'])->name('auction.filter');
+           
+            Route::get('/auction-finder/vehicle/{id}', [AuctionFinderController::class, 'vehicle']);
+            Route::get('/auction-finder',[AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
+
+            //Data
+            Route::get('/auction-finder/data/getRelatedVehicle/{id}',[AuctionFinderDataController::class,'getRelatedVehicle']);
+            Route::get('/auction-finder/data/auctionList', [AuctionFinderDataController::class,'auctionList']);
+            Route::get('/auction-finder/data/getPlatformVehicle',[AuctionFinderDataController::class,'getPlatformVehicle']);
             
         
             Route::view('/upcoming', 'user/upcoming')->name('upcoming');
-            
             Route::view('/auctioncalender', 'user/auctioncalender')->name('auctioncalender');
-            
             Route::view('/auctiondetail', 'user/auctiondetail')->name('auctiondetail');
             Route::view('/futureauction', 'user/futureauction')->name('futureauction');
             Route::view('/timeauction', 'user/timeauction')->name('timeauction');

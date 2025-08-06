@@ -7,8 +7,8 @@
                 </a>
             </li>
 
-            <li class="menu-item {{ request()->is('auctionfinder*') ? 'active' : '' }}">
-              <a href="{{ route('auctionfinder') }}" class="menu-link">
+            <li class="menu-item {{ request()->is('auction-finder*') ? 'active' : '' }}">
+              <a href="{{ url('/auction-finder') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>
                 <div data-i18n="Auction Finder">Auction Finder</div>
               </a>
