@@ -60,7 +60,8 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->
 Route::get('/reset-password-form', [AuthController::class, 'resetpasswordvalidation']);
 Route::post('/reset-password-submit', [AuthController::class, 'resetpasswordsubmit'])->name('reset.password.submit');
 
-
+Route::get('/support', [WebController::class, 'support']);
+Route::post('/send-contact', [WebController::class, 'send']);
 
 
 Route::get('/uploading1', function (Request $request) {
