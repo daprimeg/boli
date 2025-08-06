@@ -117,7 +117,7 @@ public function index(Request $request)
                 $deff = '<p class="text-danger" style="color:#570303;">Waiting</p>';
 
            $actions = '
-                <a href="' . url("/auction-finder/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
+                <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
                     <i class="fas fa-eye"></i>
                 </a>
                 <a class="btn btn-sm btn-danger" style="background-color:#570303 ; border-color: #8000;">

@@ -341,7 +341,7 @@
 
                 $.ajax({
                     type: "get",
-                    url: "{{url('/auction-finder/getRelatedVehicle/')}}"+"/"+"{{$vehicle->id}}",
+                    url: "{{url('/auction-finder/data/getRelatedVehicle/')}}"+"/"+"{{$vehicle->id}}",
                     data: {
                         length:15,
                         page:1,
