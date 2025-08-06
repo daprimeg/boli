@@ -75,7 +75,7 @@
                             </ul>
 
                              <div class="col-12 pt-5">
-                                <button type="submit" class="btn btn-primary me-3">Save changes</button>
+                                <button type="submit" class="btn btn-primary me-3" style="border-radius: var(--btn-border-radis)">Save changes</button>
                             </div>
 
                        </div>
@@ -86,5 +86,62 @@
 
 
         </div>
+
+
+
+
+         <div class="card mb-6">
+        <h5 class="card-header">Recent Devices</h5>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="">Browser</th>
+                <th class="">Device</th>
+                <th class="">Location</th>
+                <th class="">Recent Activities</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class=" "><i class="icon-base ti tabler-brand-windows icon-md align-top text-info me-2"></i>Chrome on Windows</td>
+                <td class="">HP Spectre 360</td>
+                <td class="">Switzerland</td>
+                <td class="">10, July 2021 20:07</td>
+              </tr>
+              <tr>
+                <td class=" "><i class="icon-base ti tabler-device-mobile icon-md  align-top text-danger me-2"></i>Chrome on iPhone</td>
+                <td class="">iPhone 12x</td>
+                <td class="">Australia</td>
+                <td class="">13, July 2021 10:10</td>
+              </tr>
+              <tr>
+                <td class=" "><i class="icon-base ti tabler-brand-android icon-md align-top text-success me-2"></i>Chrome on Android</td>
+                <td class="">Oneplus 9 Pro</td>
+                <td class="">Dubai</td>
+                <td class="">14, July 2021 15:15</td>
+              </tr>
+              <tr>
+                <td class=" "><i class="icon-base ti tabler-brand-apple icon-md align-top me-2"></i>Chrome on MacOS</td>
+                <td class="">Apple iMac</td>
+                <td class="">India</td>
+                <td class="">16, July 2021 16:17</td>
+              </tr>
+              <tr>
+                <td class=" "><i class="icon-base ti tabler-brand-windows icon-md align-top text-warning me-2"></i>Chrome on Windows</td>
+                <td class="">HP Spectre 360</td>
+                <td class="">Switzerland</td>
+                <td class="">20, July 2021 21:01</td>
+              </tr>
+              <tr class="border-transparent">
+                <td class=" "><i class="icon-base ti tabler-brand-android icon-md align-top text-success me-2"></i>Chrome on Android</td>
+                <td class="">Oneplus 9 Pro</td>
+                <td class="">Dubai</td>
+                <td class="">21, July 2021 12:22</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 @endsection

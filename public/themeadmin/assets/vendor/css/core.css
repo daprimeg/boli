@@ -193,6 +193,8 @@
   --bs-paper-bg: #000F21!important;
   --bs-b-color : #353F4C;
 
+  
+  --dimtext: #b2c0ce;
   --font-h1: 65px;
   --font-h2: 48px;
   --font-h3: 40px;
@@ -208,6 +210,8 @@
    --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 800;
+
+  --btn-border-radis: 2px;
 }
 
 *,
@@ -281,10 +285,11 @@ h5 {
 }
 h6 {
   font-size: var(--font-h6);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 p{
   font-size: var(--font-p1);
+  color: var(--dimtext);
 }
 
 
