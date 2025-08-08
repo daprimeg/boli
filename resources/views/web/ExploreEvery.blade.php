@@ -6,7 +6,36 @@
             font-family: var(--font-family) !important;
             overflow-x: hidden !important;
         }
+        .hero-bg {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            background-image: url({{ asset('/public/theme/assets/Dots.png') }});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
+        .over {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+        .img-wrapper {
+            background-color: var(--items-background) !important;
+            border: 1px solid rgba(255, 255, 255, 0.301);
+            border-radius: 12px;
+            padding: 15px !important;
+            height: 35vw !important;
+            transform: translate(20%) !important;
+            width: 45vw !important;
+            object-fit: cover !important;
+
+            box-shadow: -100px -82px 180px -145px var(--text-color);
+            -webkit-box-shadow: -100px -93px 180px -122px var(--text-color);
+            -moz-box-shadow: -100px -93px 180px -145px var(--text-color);
+        }
+        
         .explore-page-img-container {
             width: 100%;
             max-width: 600px;
@@ -62,15 +91,7 @@
 
 
 
-        .hero-bg {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            background-image: url({{ asset('/public/theme/assets/Dots.png') }});
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
+        
 
         .feature-list {
             z-index: 2 !important;
@@ -226,8 +247,8 @@
     </section>
 
     <div id="exploreNav" class="explore-nav  pt-3 shadow-sm">
-        <div class=" top-explore-bar d-flex justify-content-center gap-3 py-3"
-            style="background-color: var(--background-color); ">
+        <div class=" top-explore-bar d-flex justify-content-center gap-3 py-3 "
+            style="background-color: var(--background-color); flex-wrap: wrap; ">
             <a class="nav-link explore-link" href="#section1"> Dashboard</a>
             <a class="nav-link explore-link" href="#section2"> Finder</a>
             <a class="nav-link explore-link" href="#section3">Vehicle Valuation</a>

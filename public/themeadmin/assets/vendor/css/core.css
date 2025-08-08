@@ -195,6 +195,7 @@
 
   
   --dimtext: #b2c0ce;
+  --new-bs-bg: #0f1c2c;
   --font-h1: 65px;
   --font-h2: 48px;
   --font-h3: 40px;
@@ -237,7 +238,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+  background-color: var(--new-bs-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(47, 43, 61, 0);
 }

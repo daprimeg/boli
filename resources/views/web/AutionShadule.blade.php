@@ -111,6 +111,14 @@
         .action-link:hover {
             color: #ffffff;
         }
+       .menucoustome-scrolbar {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #007bff rgba(255, 255, 255, 0.137); /* thumb | track for Firefox */
+}
+
+
+
+
     </style>
 @endsection
 
@@ -148,7 +156,7 @@
                 style="color: #0d6efd; background: transparent; border: none; font-weight: 600; padding: 0;">
                 Select Platform
             </button>
-                <ul class="dropdown-menu" style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
+                <ul class="dropdown-menu menucoustome-scrolbar" style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
                     @foreach ($platforms as $platform)
                         <li>
                             <a class="dropdown-item text-white platform-option" href="#" data-id="{{ $platform->id }}">
@@ -166,7 +174,7 @@
                 style="color: #0d6efd; background: transparent; border: none; font-weight: 600; padding: 0;">
                 Select Center
             </button>
-            <ul class="dropdown-menu" style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
+            <ul class="dropdown-menu menucoustome-scrolbar" style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
                 @foreach ($centers as $center)
                     <li>
                         <a class="dropdown-item text-white center-option" href="#" data-id="{{ $center->id }}">
@@ -184,7 +192,7 @@
           style="color: #0d6efd; background: transparent; border: none ; font-weight: 600; padding: 0;">
           Center
         </button>
-        <ul class="dropdown-menu" style="background-color: #1a2533;">
+        <ul class="dropdown-menu menucoustome-scrolbar" style="background-color: #1a2533;">
           <li><a class="dropdown-item text-white" href="#" data-id="all">All</a></li>
           <li><a class="dropdown-item text-white" href="#" data-id="in_Progress"> In Progress </a></li>
         </ul>
