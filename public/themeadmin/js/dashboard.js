@@ -459,13 +459,13 @@ const global = {
                                 <div class="logo-text">
                                     <img src="${path+"/public/themeadmin/autobolidp.png"}" />
                                     <div>
-                                    <div class="price">£${res.min_price} - £${res.max_price}</div>
-                                    <small class="text-muted" style="font-size: var(--font-p1)">${res.platform_name}</small>
+                                    <div  class="price mb-1">£${res.min_price} - £${res.max_price}</div>
+                                    <small class="text-muted" style="background-color:#008cff3a ; padding:2px 8px; border-radius: var(--btn-border-radis); font-size: var(--font-p1);color: var(--dimtext)">${res.platform_name}</small>
                                     </div>
                                 </div>
-                                <div style="color:${res.percent > 0 ? 'green' :'red'}" class="change">
+                                <div style="color:${res.percent > 0 ? 'var(--bs-primary) !important' :'red'}" class="change">
                                     ${res.icon}
-                                    <button class="toggle-btn minus-icon">+</button>
+                                    <button class="toggle-btn minus-icon"></button>
                                 </div>
                             </div>
                             <div class="chart-containers"></div>
@@ -490,23 +490,31 @@ const global = {
         let percent = $(this).data('percent');
         let labels = $(this).data('labels').split(",")
         let values = $(this).data('values').split(",").map((p) => parseFloat(p) || 0);
-        
+              
+           // remove active from others
+    $('.info-card').removeClass('active');
+    // add active to current one
+    parent.addClass('active');
+
         let icon = "";
         if (percent > 0) {
-        icon = `<span style="color: green;">&#9650; ${percent.toFixed(1)}%</span>`;
+        icon = `<span style="color: var(--bs-primary); display: flex; align-items:center; font-size:var(--font-p1)"><i style=" font-size:var(--font-h4)" class="hgi hgi-stroke hgi-arrow-up-01"></i> ${percent.toFixed(1)}%</span>`;
         } else if (percent < 0) {
-            icon = `<span style="color: red;">&#9660; ${Math.abs(percent).toFixed(1)}%</span>`;
+            icon = `<spanstyle="color: red; display: flex; align-items:center; font-size:var(--font-p1)"><i style=" font-size:var(--font-h4)" class="hgi hgi-stroke hgi-arrow-down-01"></i> ${Math.abs(percent).toFixed(1)}%</span>`;
         } else {
             icon = `<span style="color: gray;">0%</span>`;
         }
         
         parent.find('.chart-containers').html(`
             <div class="chart-section">
-                    <h5><span class="badge rounded-circle bg-primary me-2">&nbsp;</span>Past 3 months</h5>
+                    <h5 style="color:var(--bs-white); ">Past 3 months</h5>
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex align-items-center">
-                        <div class="price me-2">£${price}</div>
-                        <small class="text-muted">Average</small>
+                    <div class="d-flex align-items-center; gap-3">
+                    <span ><i style="font-size:var(--font-h5); color:var(--bs-primary);" class="hgi hgi-stroke hgi-chart-average"></i></span>
+                        <div>
+                        <div style="font-size:var(--font-p1);" class="price me-2">£${price}</div>
+                        <small style="font-size:var(--font-p2);" class="text-muted">Average</small>
+                        </div>
                     </div>
                     <div class="change up">
                         ${icon}
@@ -518,39 +526,45 @@ const global = {
             </div>`);
 
                   const priceChart = new Chart(parent.find('.chart-containers canvas')[0].getContext('2d'), {
-                        type: 'line',
+                       type: 'line',
                         data: {
-                          labels: labels,
-                          datasets: [{
-                            label: 'Average Price',
+                            labels: labels,
+                            datasets: [{
+                            label: 'Average Pr',
                             data: values,
-                            backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                            backgroundColor: 'rgba(246, 251, 255, 0)',
                             borderColor: '#007bff',
-                            borderWidth: 2,
+                            borderWidth: 3,
                             fill: true,
-                            tension: 0.3,
-                            pointRadius: 4,
+                            lineTension: 0.1,
+                            // pointRadius: 0,
+                            
                             pointBackgroundColor: '#007bff'
-                          }]
+                            }],
+                        
                         },
-                        options: {
-                          responsive: true,
-                          scales: {
-                            y: {
-                              beginAtZero: false,
-                              ticks: {
-                                callback: value => `£${value}`
-                              }
-                            }
-                          },
-                          plugins: {
-                            legend: { display: true }
-                          }
-                        }
-                    });
-        
+    options: {
+        responsive: true,
+        scales: {
+        y: {
+            display: false, // ✅ hide Y axis
+            grid: { display: false }
+        },
+        x: {
+            display: false, // ✅ hide X axis
+            grid: { display: false }
+        }
+        },
+        plugins: {
+        legend: { display: false } // ✅ hide legend
+        }
+    }
+    
+    });
+         parent.find('.info-card').addClass('active');
         // alert('clicked!');
     });
+       
 
     
 

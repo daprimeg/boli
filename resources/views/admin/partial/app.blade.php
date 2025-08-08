@@ -10,6 +10,7 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 />
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,6 +129,48 @@
         .select2{
             width: 100%!important;
         }
+
+
+    .dropdown-menu-end .dropdown-item:hover{
+            border-radius: var(--btn-border-radis);
+      background-color: var(--new-bs-bg) !important;
+    }
+
+    .dropdown-item span{
+        color: var(--dimtext);
+        }
+    .dropdown-item .icon-base{
+        color: var(--dimtext);
+        }
+     .dropdown-menu-end .dropdown-item:hover span{
+        color: var(--bs-card-cap-color);
+        }
+    .dropdown-menu-end .dropdown-item:hover .icon-base{
+        color: var(--bs-primary);
+        }
+
+       .layout-menu .menu-item .menu-link{
+            border-radius: var(--btn-border-radis) !important;
+        }
+       
+        .menu-item a div {
+            font-size: var(--font-p1);
+            color: var(--dimtext);
+
+        }
+        .menu-item a i {
+            font-size: var(--font-p1);
+            color:  var(--bs-card-cap-color);
+        }
+        .menu-item a:hover div {
+            color:  var(--bs-heading-color);
+
+
+        }
+        .menu-item a:hover i {
+                    color: var(--bs-primary);
+
+        }
     </style>
     
     <link rel="icon" type="image/x-icon" href="{{ asset('public/themeadmin/autobolidp.png') }}" />
@@ -167,7 +210,7 @@
                     <div class="menu-inner-shadow"></div>
                     <ul class="menu-inner py-1">
                         <li class="menu-item">
-                            <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px;" data-i18n="Menu">Menu </div>
+                            <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px; font-size: var(--font-p2)" data-i18n="Menu">Menu </div>
                         </li>
                      
                         @include('admin.partial.adminMenu')

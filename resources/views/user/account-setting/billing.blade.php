@@ -23,7 +23,19 @@ use Carbon\Carbon;
         .li-chnge-color td {
             color: var(--dimtext);
             font-size: var(--font-p1)
+
         }
+
+        .popular-badge {
+            position: absolute;
+                top: -10px;
+                left: 50% ;
+                z-index: 9  ;
+            transform: translateX(-50%);
+            padding: 6px 12px !important;
+            font-size: var(--font-p2) !important;
+        }
+
     </style>
 @endsection
 @push('title')
@@ -135,11 +147,15 @@ use Carbon\Carbon;
                         {{-- <p class="text-center mb-0">All plans include 40+ advanced tools and features to boost your product. Choose the best plan to fit your needs.</p> --}}
                     </div>
                     <div class="card-body">
+                        
                         <div class="rounded-top">
+                            
                             <div class="row gy-6">
                                 @foreach ($plans as $item)
-                                    <div class="col-xl mb-md-0">
+                                    <div class="col-xl mb-md-0 position-relative">
+                                         <span class="badge popular-badge"><i class="bi bi-lightning-fill me-1"></i>Most popular</span>
                                         <div class="card border rounded shadow-none">
+                                            
                                             <div class="card-body pt-12 p-5">
                                                 {{-- <div class="mt-3 mb-5 text-center">
                                                 <img src="../../assets/img/illustrations/page-pricing-basic.png" alt="Basic Image" height="120">

@@ -9,7 +9,9 @@
         }
         .form-control:hover{
            border: 1px solid var(--bs-body-bg)!important; 
-           cursor: pointer;
+        }
+        .form-control:focus{
+          box-shadow: none;
         }
     </style>
 @endsection

@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\URL;
 class AuctionFinderDataController extends Controller
 {
 
+    
     public function auctionList(Request $request)
     {
 
@@ -46,83 +47,97 @@ class AuctionFinderDataController extends Controller
                  $query->where('auctions.platform_id',$request->platform);
             }
 
+
             if($request->has('type') && $request->type != ''){
                 $query->whereIn('vehicles.vehicle_id',explode(',',$request->type));
             }
 
-            if($request->has('makes') && $request->makes != ''){
-                $query->whereIn('vehicles.make_id',explode(',',$request->makes));
+
+            if($request->has('make') && $request->make != ''){
+                $query->whereIn('vehicles.make_id',explode(',',$request->make));
             }
 
-            if($request->has('models') && $request->models != ''){
-                $query->whereIn('vehicles.model_id',explode(',',$request->models));
+
+            if($request->has('model') && $request->model != ''){
+                $query->whereIn('vehicles.model_id',explode(',',$request->model));
             }
 
-            if($request->has('variants') && $request->variants != ''){
-                $query->whereIn('vehicles.variant_id',explode(',',$request->variants));
+
+            if($request->has('variant') && $request->variant != ''){
+                $query->whereIn('vehicles.variant_id',explode(',',$request->variant));
             }
 
-            if($request->has('years') && $request->years != ''){
+
+            if($request->has('year') && $request->year != ''){
                 $query->whereIn('vehicles.year',explode(',',$request->years));
             }
+
 
             if($request->has('transmission') && $request->transmission != ''){
                 $query->whereIn('vehicles.transmission',explode(',',$request->transmission));
             }
 
+
             if($request->has('fuel_type') && $request->fuel_type != ''){
                 $query->whereIn('vehicles.fuel_type',explode(',',$request->fuel_type));
             }
 
-            if($request->has('body_types') && $request->body_types != ''){
-                $query->whereIn('vehicles.body_id',explode(',',$request->body_types));
+
+            if($request->has('body') && $request->body != ''){
+                $query->whereIn('vehicles.body_id',explode(',',$request->body));
             }
 
-            if($request->has('body_types') && $request->body_types != ''){
-                $query->whereIn('vehicles.body_id',explode(',',$request->body_types));
+
+            if($request->has('color') && $request->color != ''){
+                $query->whereIn('vehicles.color_id',explode(',',$request->color));
             }
 
-            if($request->has('colors') && $request->colors != ''){
-                $query->whereIn('vehicles.color_id',explode(',',$request->colors));
+
+            if($request->has('doors') && $request->door != ''){
+                $query->whereIn('vehicles.doors',explode(',',$request->door));
             }
 
-            if($request->has('doors') && $request->doors != ''){
-                $query->whereIn('vehicles.doors',explode(',',$request->doors));
+
+            if($request->has('seat') && $request->seat != ''){
+                $query->whereIn('vehicles.seats',explode(',',$request->seat));
             }
 
-            if($request->has('seats') && $request->seats != ''){
-                $query->whereIn('vehicles.seats',explode(',',$request->seats));
+
+            if($request->has('grade') && $request->grade != ''){
+                $query->whereIn('vehicles.grades',explode(',',$request->grade));
             }
 
-            if($request->has('grades') && $request->grades != ''){
-                $query->whereIn('vehicles.grades',explode(',',$request->grades));
-            }
 
             if($request->has('v5') && $request->v5 != ''){
                 $query->whereIn('vehicles.v5',explode(',',$request->v5));
             }
 
+
             if($request->has('cc') && $request->cc != ''){
                 $query->whereIn('vehicles.cc',explode(',',$request->cc));
             }
 
-            if($request->has('former_keepers') && $request->former_keepers != ''){
-                $query->whereIn('vehicles.former_keepers',explode(',',$request->former_keepers));
+
+            if($request->has('former_keeper') && $request->former_keeper != ''){
+                $query->whereIn('vehicles.former_keepers',explode(',',$request->former_keeper));
             }
 
-            if($request->has('number_of_services') && $request->number_of_services != ''){
-                $query->whereIn('vehicles.no_of_services',explode(',',$request->number_of_services));
+
+            if($request->has('no_of_service') && $request->no_of_service != ''){
+                $query->whereIn('vehicles.no_of_services',explode(',',$request->no_of_service));
             }
 
-            if($request->has('mileage') && $request->mileage != ''){
 
-                $range = explode('-', $request->mileage);
-                $from = isset($range[0]) && is_numeric($range[0]) ? (int) $range[0] : 0;
-                $to = isset($range[1]) && is_numeric($range[1]) ? (int) $range[1] : 9999999;
-                $query->whereBetween('vehicles.mileage', [$from, $to]);
+            if($request->has('mileage_from') && $request->mileage_from != ''){
+                $query->where('vehicles.mileage', '=>', $request->mileage_from);
             }
 
-            
+
+            if($request->has('mileage_to') && $request->mileage_to != ''){
+                $query->where('vehicles.mileage', '<=', $request->mileage_to);
+            }
+
+
             $dateRange = $request->has('date') ? $request->date : 'past_3_months';
             $now = \Carbon\Carbon::now();
             $fromDate = match ($dateRange) {
@@ -137,46 +152,45 @@ class AuctionFinderDataController extends Controller
             $toDate = $now->copy()->endOfDay();
             $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
 
-            
             // Count total BEFORE limit/offset
             $total = $query->count(); 
 
             //Results
             $results = (clone $query)
-                ->offset($offset)
-                ->limit($perPage)
-                ->select([
-                 'vehicles.*',
-                 'auction_platform.name',
-                 'auctions.auction_date as auction_date',
-                 'make.name as make_name',
-                 'model.name as model_name',
-                 'model_variant.name as variant_name',
-                ])
-                ->get()
-                ->map(function ($item) {
-                    
-                    return [
-                        'id' => $item->id,
-                        'make_name' => $item->make_name,
-                        'model_name' => $item->model_name,
-                        'variant_name' =>  $item->variant_name,
-                        'year' => $item->year,
-                        'cc' => $item->cc,
-                        'mileage' => $item->mileage,
-                        'transmission' => $item->transmission,
-                        'auction_name' => $item->name,
-                        'auction_date' => date('d-M-Y',strtotime($item->auction_date)),
-                        'auction_time' => date('h:i A',strtotime($item->auction_date)),
-                        'last_bid' => $item->last_bid,
-                        'cap_clean' => $item->cap_clean ?? '',
-                        'cap_average' => $item->cap_average ?? '',
-                        'cap_below' => $item->cap_below ?? '',
-                        'autotrader_retail_value' => $item->autotrader_retail_value ?? '',
-                        'auto_boli' => 0,
-                    ];
+            ->offset($offset)
+            ->limit($perPage)
+            ->select([
+                'vehicles.*',
+                'auction_platform.name',
+                'auctions.auction_date as auction_date',
+                'make.name as make_name',
+                'model.name as model_name',
+                'model_variant.name as variant_name',
+            ])
+            ->get()
+            ->map(function ($item) {
+                
+                return [
+                    'id' => $item->id,
+                    'make_name' => $item->make_name,
+                    'model_name' => $item->model_name,
+                    'variant_name' =>  $item->variant_name,
+                    'year' => $item->year,
+                    'cc' => $item->cc,
+                    'mileage' => $item->mileage,
+                    'transmission' => $item->transmission,
+                    'auction_name' => $item->name,
+                    'auction_date' => date('d-M-Y',strtotime($item->auction_date)),
+                    'auction_time' => date('h:i A',strtotime($item->auction_date)),
+                    'last_bid' => $item->last_bid,
+                    'cap_clean' => $item->cap_clean ?? '',
+                    'cap_average' => $item->cap_average ?? '',
+                    'cap_below' => $item->cap_below ?? '',
+                    'autotrader_retail_value' => $item->autotrader_retail_value ?? '',
+                    'auto_boli' => 0,
+                ];
 
-                });
+            });
 
             return response()->json([
                 'toDate' =>  $toDate,
@@ -413,7 +427,7 @@ class AuctionFinderDataController extends Controller
     {
 
         $data = DB::table('vehicle_type')
-        ->join('vehicles', 'vehicles.body_id', '=', 'vehicle_type.id')
+        ->join('vehicles', 'vehicles.vehicle_id', '=', 'vehicle_type.id')
         ->select([
             'vehicle_type.id',
             'vehicle_type.name as label',
