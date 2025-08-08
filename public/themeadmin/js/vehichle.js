@@ -1,9 +1,7 @@
  $(document).ready(function () {
 
     const auctions = {
-        selected:{
-
-        },
+        selected:[],
         filters:{
             page:1,
             date:'past_3_months',
@@ -30,7 +28,6 @@
         }
 
         if(auctions.filters.mileage_from){
-            
            $('#mileage_from').val(auctions.filters.mileage_from);
         }
 
@@ -46,6 +43,17 @@
         });
 
         auctions.searchrecord();
+        auctions.renderActiveTags();
+
+    }
+
+
+    auctions.renderActiveTags = function(){  
+
+        $(`.tags`).html('');
+        auctions.selected.forEach(element => {
+            $(`.tags-${element.key}`).append(`<span class="badge mx-2">${element.label} X</span>`);
+        });
 
     }
 
@@ -168,11 +176,14 @@
 
     auctions.getVehicleTypes = function  () {      
 
+        auctions.selected.forEach(car => delete car.type);
+
          $.ajax({
             url: url+"/auction-finder/data/getVehicleTypes",
             method: "GET",
             success: function (response) {
 
+            
                 $("#collapseVehicleType").html('');
                 response.data.forEach(element => {
                     
@@ -181,6 +192,12 @@
                         let types = auctions.filters.type.split(',');
                         if(types.includes(String(element.id))) {
                             selected = 'checked';
+
+                            auctions.selected.push({
+                                key:'type',
+                                label:element.label,
+                                value:element.id
+                            });
                         }
                     }
 
@@ -197,6 +214,8 @@
 
                 });
 
+                auctions.renderActiveTags();
+
             },
             error: function (response) {
                 $("#collapseVehicleType").html('');
@@ -208,6 +227,8 @@
 
 
     auctions.getMakes = function  () {      
+
+         auctions.selected.forEach(car => delete car.make);
 
          $.ajax({
             url: url+"/auction-finder/data/getMakes",
@@ -222,6 +243,12 @@
                         let make = auctions.filters.make.split(',');
                         if(make.includes(String(element.id))) {
                             selected = 'checked';
+
+                            auctions.selected.push({
+                                key:'make',
+                                label:element.label,
+                                value:element.id
+                            });
                         }
                     }
 
@@ -237,6 +264,8 @@
                     </div>`);
                 });
 
+             
+                  auctions.renderActiveTags();
             },
             error: function (response) {
                 $("#collapseVehiclemake").html('');
@@ -726,6 +755,7 @@
 
     }
 
+    
     auctions.getFormerKeepers = function  () {      
 
          $.ajax({

@@ -1,13 +1,10 @@
   <!-- Vehicle Type Filter -->
       <div class="accordion-item border-bottom">
          <h2 class="accordion-header" id="headingVehicleType">
-            <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehicleType" aria-expanded="false" aria-controls="collapseVehicleType">
-            Vehicle Type
-            </button>
+            <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehicleType" aria-expanded="false" aria-controls="collapseVehicleType">Vehicle Type</button>
          </h2>
-         <div id="collapseVehicleType" class="accordion-collapse collapse show" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
-            
-         </div>
+         <div id="collapseVehicleType" class="accordion-collapse collapse show" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-type"></div>
       </div>
 
       <!-- Make Filter -->
@@ -17,9 +14,8 @@
             Make
             </button>
          </h2>
-         <div id="collapseVehiclemake" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
-        
-         </div>
+         <div id="collapseVehiclemake" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-make"></div>
       </div>
 
       <!-- Model Filter -->
@@ -29,9 +25,8 @@
             Model
             </button>
          </h2>
-         <div id="collapseVehiclemodel" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
-         
-         </div>
+         <div id="collapseVehiclemodel" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-model"></div>
       </div>
 
       <!-- Variant Filter -->
@@ -40,9 +35,8 @@
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiclevariant" aria-expanded="false" aria-controls="collapseVehicleType">Model Variant</button>
          </h2>
          <div id="collapseVehiclevariant" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
-            <div class="accordion-body py-1">
-            </div>
          </div>
+         <div class="tags tags-variant"></div>
       </div>
                      
       <!-- Years Filter -->
@@ -51,8 +45,8 @@
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehicleyear" aria-expanded="false" aria-controls="collapseVehicleType">Years</button>
          </h2>
          <div id="collapseVehicleyear" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
-            <div class="accordion-body py-1"></div>
          </div>
+         <div class="tags tags-year"></div>
       </div>
 
 
