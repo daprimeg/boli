@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\User;
+use App\Models\NewsCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,7 +25,8 @@ class AdminNewscrudController extends Controller
             $start = $request->input('start') ?? 0;
             $length = $request->input('length') ?? 10;
             
-            $query = News::Leftjoin('users', 'users.id', '=', 'news.created_by');
+            $query = News::Leftjoin('users', 'users.id', '=', 'news.created_by')
+            ->leftJoin('news_categories', 'news_categories.id', '=', 'news.category_id');
 
              if (!empty($search)) {
                 $query->where(function ($q) use ($search) {
@@ -38,7 +40,8 @@ class AdminNewscrudController extends Controller
             $data = $query->select(
                     'news.*',
                     'users.firstName',
-                    DB::raw('(SELECT COUNT(*) FROM news_user_pins WHERE news_user_pins.news_id = news.id) as pin_count')
+                    DB::raw('(SELECT COUNT(*) FROM news_user_pins WHERE news_user_pins.news_id = news.id) as pin_count'),
+                     'news_categories.name as category_name'
             )
             ->orderBy('created_at','desc')
             ->offset($start)
@@ -61,6 +64,7 @@ class AdminNewscrudController extends Controller
                   return [
                       $blog->id,
                       \Str::limit(strip_tags($blog->title), 40),
+                      \Str::limit(strip_tags($blog->category_name), 40),
                       $img,
                       \Str::limit(strip_tags($blog->description), 40),
                       $blog->created_at ? $blog->created_at->toDateTimeString() : '',
@@ -90,10 +94,23 @@ class AdminNewscrudController extends Controller
         return view('admin.news.create');
     }
 
+    public function getCategory(Request $request)
+        {
+            $search = $request->input('q');
+
+            $makes = NewsCategory::where('name', 'like', "%$search%")
+                ->select('id', 'name as text')
+                ->limit(20)
+                ->get();
+
+            return response()->json(['results' => $makes]);
+        }
+
     // Store new news
     public function store(Request $request) {
         $request->validate([
             'title' => 'required|max:255',
+            'newcat' => 'required|integer',
             'feature_image' => 'nullable|image',
             'description' => 'required',
             'date' => 'nullable|date'
@@ -101,6 +118,7 @@ class AdminNewscrudController extends Controller
 
         $news = new News();
         $news->title = $request->title;
+        $news->category_id = $request->newcat;
         $news->description = $request->description;
         $news->date = $request->date;
         $news->created_by = auth()->id();
@@ -135,12 +153,14 @@ class AdminNewscrudController extends Controller
 
         $request->validate([
             'title' => 'required|max:255',
+            'newcat' => 'required|integer',
             'feature_image' => 'nullable|image',
             'description' => 'required',
             'date' => 'nullable|date'
         ]);
 
         $news->title = $request->title;
+        $news->category_id = $request->newcat;
         $news->description = $request->description;
         $news->date = $request->date;
 

@@ -114,7 +114,7 @@
               </ul>
             </li>
         
-            <li class="menu-item {{ request()->is('admin/news*') || request()->is('admin/blogs*') || request()->is('admin/blogcategories*') ? 'active open' : '' }} ">
+            <li class="menu-item {{ request()->is('admin/news*') || request()->is('admin/blogs*') || request()->is('admin/blogcategories*') || request()->is('admin/ncategories*') ? 'active open' : ''  }} ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-contract"></i>
                 <div data-i18n="Content Management">Content Management</div>
@@ -133,6 +133,11 @@
                 <li class="menu-item {{ request()->is('admin/news*')  ? 'active' : '' }}">
                   <a href="{{ url('/admin/news') }}" class="menu-link">
                     <div data-i18n="News">News</div>
+                  </a>
+                </li>
+                <li class="menu-item {{ request()->is('admin/ncategories*')  ? 'active' : '' }}">
+                  <a href="{{ url('/admin/ncategories') }}" class="menu-link">
+                    <div data-i18n="News Categories">News Categories</div>
                   </a>
                 </li>
               </ul>

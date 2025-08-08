@@ -10,6 +10,7 @@ class News extends Model
 
     protected $fillable = [
         'title',
+        'category_id',
         'feature_image',
         'description',
         'date',
@@ -30,6 +31,8 @@ public function pinnedUsers()
         return $this->belongsTo(User::class, 'created_by');
     }
     
-
+  public function category() {
+        return $this->belongsTo(NewSCategory::class, 'category_id');
+    }
 
 }

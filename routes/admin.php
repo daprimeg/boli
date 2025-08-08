@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\admin\AdminAuthController;
 use App\Http\Controllers\admin\AdminNewscrudController;
+use App\Http\Controllers\admin\AdminNewsCategoryController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AlertController;
 use App\Http\Controllers\admin\PlanController;
@@ -64,13 +65,14 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
         
         Route::get('/masters/makes/getMakes', [MakeController::class, 'getMakes']);
         Route::resource('masters/makes',MakeController::class);
-
+        
         Route::get('/masters/models/getModels', [ModelController::class, 'getModels']);
         Route::resource('/masters/models',ModelController::class);
-
+        
         Route::get('/masters/variants/getVariants', [VariantController::class, 'getVariants']);
         Route::resource('/masters/variants',VariantController::class);
-
+        
+        Route::get('/masters/newcat/getnewscategory', [AdminNewscrudController::class, 'getCategory']);
         
         //Auctions
         Route::prefix('auctions')->group(function () {
@@ -172,6 +174,18 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
             Route::put('/{news}', [AdminNewscrudController::class, 'update']);
             Route::delete('/{news}', [AdminNewscrudController::class, 'destroy']);
         });
+
+        //News categories
+
+        Route::prefix('ncategories')->group(function () {
+            Route::get('/', [AdminNewsCategoryController::class, 'index']);
+            Route::get('/create', [AdminNewsCategoryController::class, 'create']);
+            Route::post('/', [AdminNewsCategoryController::class, 'store']);
+           Route::get('/{newsCategory}/edit', [AdminNewsCategoryController::class, 'edit']);
+            Route::put('/{newsCategory}', [AdminNewsCategoryController::class, 'update']);
+            Route::delete('/{newsCategory}', [AdminNewsCategoryController::class, 'destroy']);
+        });
+
 
 
         //Alerts

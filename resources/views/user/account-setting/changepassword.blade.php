@@ -96,7 +96,8 @@
        <table class="table">
     <thead>
     <tr>
-        <th>Browser / Platform</th>
+        <th>Platform</th>
+        <th>Browser</th>
         <th>Device</th>
         <th>Location</th>
         <th>Recent Activities</th>
@@ -105,8 +106,8 @@
 <tbody>
     @forelse ($userDevices as $device)
         <tr>
+            {{-- Platform --}}
             <td>
-                {{-- Get platform icon --}}
                 @php
                     $platform = strtolower($device->platform);
                     $browser = strtolower($device->browser);
@@ -131,20 +132,30 @@
                 @endphp
 
                 <i class="ti {{ $platformIcon }} me-1"></i>
-                <i class="ti {{ $browserIcon }} me-1"></i>
-                {{ ucfirst($device->browser) }} on {{ ucfirst($device->platform) }}
+                {{ ucfirst($device->platform) }}
             </td>
 
+            <td>
+                <i class="ti {{ $browserIcon }} me-1"></i>
+                {{ ucfirst($device->browser) }}
+            </td>
+
+     
             <td>{{ $device->device ?? 'Unknown Device' }}</td>
+
+       
             <td>{{ $device->location ?? 'Unknown Location' }}</td>
+
+    
             <td>{{ \Carbon\Carbon::parse($device->logged_in_at)->format('d, F Y H:i') }}</td>
         </tr>
     @empty
         <tr>
-            <td colspan="4" class="text-center">No device history available.</td>
+            <td colspan="5" class="text-center">No device history available.</td>
         </tr>
     @endforelse
 </tbody>
+
 
 </table>
 

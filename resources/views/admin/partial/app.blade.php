@@ -243,6 +243,14 @@
                         dataType: 'json'
                     }
                 });
+                $('.newcat').select2({
+                    placeholder: 'Select News Category',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/newcat/getnewscategory')}}",
+                        dataType: 'json'
+                    }
+                });
 
                 $('.model').select2({
                     placeholder: 'Select Model',
