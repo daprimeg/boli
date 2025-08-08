@@ -4,50 +4,52 @@
 <style>
  
 
-    .form-section,
+    /* .form-section,
     .faq-section {
-        padding: 2rem;
-        backdrop-filter: blur(2px);
-    }
+    } */
 .faq-section,
 .faq-section * {
     color: #ffffff !important;
+    font-size: var(--font-p1)
 }
 
 
 .faq-section a {
-    color: #63b3ed !important;
+    color: var(--text-color) !important;
     text-decoration: none;
 }
 
-.faq-section a:hover {
+/* .faq-section a:hover {
     text-decoration: underline;
     color: #2847d3 !important;
-}
+} */
     .form-label {
-        color: #8892b0;
-        font-size: 0.9rem;
+        color: var(--dimtext);
+        font-size: var(--font-p1);
         text-transform: uppercase;
         letter-spacing: 1px;
     }
 
     .form-control {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: #1a2533b0;
+        border: 1px solid var(--items-border-colur);
         border-radius: 5px;
         color: #ffffff;
+        backdrop-filter: blur(8px);
+
         padding: 0.75rem 1rem;
     }
 
     .form-control:focus {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: #4299e1;
-        box-shadow: 0 0 0 0.2rem rgba(66, 153, 225, 0.25);
-        color: #ffffff;
+        background: transparent;   
+        border-color: var(--text-color);
+        box-shadow: none;
+        /* box-shadow: 0 0 0 0.2rem rgba(66, 153, 225, 0.25); */
+        color: var(--white-text);
     }
 
     .form-control::placeholder {
-        color: #8892b0;
+        color: var(--nave-text-color);
     }
 
     .btn-primary {
@@ -64,7 +66,7 @@
 
     .btn-outline-secondary {
         border: 1px solid #8892b0;
-        color: #8892b0;
+        color: var(--dimtext);
         padding: 0.75rem 2rem;
         border-radius: 5px;
         background: transparent;
@@ -76,11 +78,7 @@
         color: #ffffff;
     }
 
-    .main-title {
-        font-size: 3rem;
-        font-weight: 300;
-        margin-bottom: 2rem;
-    }
+    
 
     .faq-item {
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -118,6 +116,7 @@
     .faq-content.show {
         max-height: 300px;
         opacity: 1;
+        font-size: var(--font-p2);
         padding: 1rem 1.5rem;
     }
 
@@ -130,7 +129,7 @@
     }
 
     .learn-more-link {
-        color: #4299e1;
+        color: var(--text-color);
         text-decoration: none;
     }
 
@@ -155,7 +154,7 @@
         background: #2d3748;
         border-radius: 10px;
         padding: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);    */
     }
 .cover {
     background: linear-gradient(
@@ -222,7 +221,7 @@
                
 
                 <div class="form-section">
-                     <h1 class="main-title" style="color: white">Contact Us</h1>
+                     <h2 class="main-title" style="color: white">Contact Us</h2>
                     <form id="contactForm">
                         @csrf
 
