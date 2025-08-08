@@ -496,7 +496,7 @@
                           <img src="{{asset('/public/uploads/avatar/'. Auth::user()->avatar)}}" alt class="rounded-circle" />
                     </div>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
+                  <ul class="dropdown-menu dropdown-menu-end"  style="border: 1px solid var(--bs-b-color);">
                     <li>
                       <a class="dropdown-item mt-0" @if(Auth::user()->user_type == 1)  href="{{URL::to('/userprofile')}}" @else href="{{URL::to('/userprofile')}}" @endif >
                         <div class="d-flex align-items-center">

@@ -90,14 +90,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="container mt-4 p-0">
 
                             <div
                                 class="valuation-header "style="background-color: #006aee !important; border-radius: 0px;">
                                 <div class="d-flex">
-                                    <div class="col-md-8 p-4">
-                                        <small class="text-muted" style="color: black;">Our price estim ates use
+                                    <div class="col-md-8 p-5 ">
+                                        <small class="text-muted px-5" style="color: black; font-size: var(--font-p1)">Our price estim ates use
                                             historical auction data and market trends to suggest likely values. <a
                                                 href="#" class=" text-decoration-none" style="color: black">Learn
                                                 more</a></small>

@@ -17,8 +17,8 @@
             
 
             <li class="menu-item {{ request()->is('interest*') ? 'active' : '' }}">
-              <a href="{{ url('/interest') }}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-pointer-heart"></i>
+              <a href="{{ url('/interest') }}" class="menu-link">    
+                <i class="menu-icon icon-base ti tabler-pointer-heart"></i>         
                 <div data-i18n="My Interest">My Interest</div>
               </a>
             </li>
@@ -38,7 +38,7 @@
             </li>
 
             <li  class="menu-item">
-              <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px;" data-i18n="Profile">Profile </div>
+              <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px; font-size: var(--font-p2)"  data-i18n="Profile">Profile </div>
             </li>
 
             <li class="menu-item {{ request()->is('tickethistory*') || request()->is('createticket*') || request()->is('ticket*') ? 'open' : '' }}">

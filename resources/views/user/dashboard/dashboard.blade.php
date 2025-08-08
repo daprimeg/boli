@@ -90,15 +90,42 @@
     .info-card {
       border-radius: 8px;
       /* margin-top: 20px; */
-      /* padding: 20px; */
       font-family: sans-serif;
 
     }
+   .info-card .toggle-btn {
+  transition: transform 0.4s ease;
+}
+
+.info-card.active .toggle-btn {
+  transform: rotate(180deg);
+}
+.info-card.active {
+margin-top: 20px;
+background: #0f1c2c;
+ padding-bottom: 20px;
+ 
+
+}
+
+.toggle-btn.minus-icon::before {
+  content: '+';
+  font-size: var(--font-h5);
+
+  display: inline-block;
+}
+
+.info-card.active .toggle-btn.minus-icon::before {
+  content: '-';
+  color: #ffffff !important;
+}
+
+
     .auction-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 15px 0;
+      padding: 15px 20px;
       border-bottom: 1px solid #2d3748; /* Slightly lighter border */
     }
     .auction-item:last-child {
@@ -122,17 +149,20 @@
       font-size: 1.1rem;
       font-weight: bold;
     }
-    .auction-item .change.up {
-      color: #28a745; /* Green for up */
+    .auction-item .change span{
+     color: var(--bs-primary) !important; /* Green for up */
+
     }
+    
     .auction-item .change.down {
       color: #dc3545; /* Red for down */
     }
     .chart-section {
       border-radius: 8px;
+      margin: 10px;
       margin-top: 20px;
       padding: 20px;
-      background: #0074ff1f;
+      background: rgba(0, 140, 255, 0.226);
     }
 
     
@@ -141,7 +171,7 @@
       color: #a0aec0; 
     }
     .chart-placeholder {
-      background-color: #2d3748; /* Darker blue for chart area */
+      background-color:transparent !important; /* Darker blue for chart area */
       height: 200px; /* Placeholder height */
       margin-top: 15px;
       border-radius: 5px;
@@ -166,7 +196,6 @@
     .toggle-btn {
       background: none;
       border: none;
-      font-size: 1.2rem;
       cursor: pointer;
       color: inherit;
     }
@@ -314,12 +343,13 @@
                     <div class="d-flex align-items-center ">
 
                       <h6 class=" fw-semibold ">
-                        Welcome back, <h5 class="text-primary fw-bold ms-3 mt-1">Mr {{ auth()->user()->firstName ?? 'User' }}!</hh5>
+                        Welcome back, <h5 class="text-primary fw-bold ms-3 mt-1">Mr {{ auth()->user()->firstName ?? 'User' }}!</h5>
                       </h6>
                     </div>
 
                         <p class="mt-2 p-3 rounded text-white-50 w-75" style="backdrop-filter: blur(5px); background-color: var(--tra-primary-colr)!important; ">
                             Choose the best plan for your needs.
+                            <i class="hgi hgi-stroke hgi-sharp hgi-arrow-up-01"></i>
                         </p>
 
                         <!-- Tabs -->
@@ -387,7 +417,7 @@
 
       <div class="tab-content " id="myTabContent">
           <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab" style="padding: 0rem 4rem; ">
-           @include('user.dashboard.overview')
+            @include('user.dashboard.overview')
           </div>
           <div class="tab-pane fade" id="profile"  role="tabpanel" aria-labelledby="profile-tab">
             @include('user.dashboard.intrest')
