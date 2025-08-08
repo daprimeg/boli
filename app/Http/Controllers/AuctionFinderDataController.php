@@ -27,12 +27,8 @@ use Illuminate\Support\Facades\URL;
 class AuctionFinderDataController extends Controller
 {
 
-    
-
     public function auctionList(Request $request)
     {
-
-         
 
             $perPage = (int) $request->input('length', 10);
             $page = (int) $request->input('page', 1);
@@ -50,8 +46,8 @@ class AuctionFinderDataController extends Controller
                  $query->where('auctions.platform_id',$request->platform);
             }
 
-            if($request->has('vehicle_types') && $request->vehicle_types != ''){
-                $query->whereIn('vehicles.vehicle_id',explode(',',$request->vehicle_types));
+            if($request->has('type') && $request->type != ''){
+                $query->whereIn('vehicles.vehicle_id',explode(',',$request->type));
             }
 
             if($request->has('makes') && $request->makes != ''){
@@ -142,8 +138,6 @@ class AuctionFinderDataController extends Controller
             $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
 
             
-
-
             // Count total BEFORE limit/offset
             $total = $query->count(); 
 
@@ -155,7 +149,6 @@ class AuctionFinderDataController extends Controller
                  'vehicles.*',
                  'auction_platform.name',
                  'auctions.auction_date as auction_date',
-
                  'make.name as make_name',
                  'model.name as model_name',
                  'model_variant.name as variant_name',
@@ -197,11 +190,6 @@ class AuctionFinderDataController extends Controller
             ]);
 
     }
-
-
- 
-
-
 
 
 
@@ -252,7 +240,6 @@ class AuctionFinderDataController extends Controller
 
                 $toDate = $now->copy()->endOfDay();
                 $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
-
             }
 
 
@@ -299,15 +286,11 @@ class AuctionFinderDataController extends Controller
                 'current_page' => $page,
                 'last_page'    => ceil($total / $perPage),
             ]);
-
-    
     }
 
 
        public function getPlatformVehicle(Request $request)
     {
-
-
             $month3 = Carbon::now()->subMonths(2)->startOfMonth()->format('Y-m');
             $month2 = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m');
             $month1 = Carbon::now()->startOfMonth()->format('Y-m');
@@ -347,22 +330,306 @@ class AuctionFinderDataController extends Controller
 
                 }
 
-
                 return response()->json([
                     "labels" =>  $labels,
                     "colors" => $colors,
                     "data" => $res,
                 ],200);
+    }
+
+
+
+     public function getYears(Request $request)
+    {
+        $data = Vehicle::select('year As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('year')
+            ->where('year' , '!=', '')
+            ->groupBy('year')
+            ->orderByDesc('year')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
 
     }
 
 
-  
+      public function getTransmissions(Request $request)
+    {
+
+        $data = Vehicle::select('transmission As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('transmission')
+            ->where('transmission', '!=', '')
+            ->groupBy('transmission')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data,
+        ],200);
+
+    }
+
+    
+      public function getFuelType(Request $request)
+    {
+
+         $data = Vehicle::select('fuel_type As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('fuel_type')
+            ->where('fuel_type', '!=', '')
+            ->groupBy('fuel_type')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+
+       public function getBodyType(Request $request)
+    {
+
+        $data = DB::table('body_types')
+        ->join('vehicles', 'vehicles.body_id', '=', 'body_types.id')
+        ->select([
+            'body_types.id',
+            'body_types.name as label',
+            DB::raw('COUNT(vehicles.id) as count')
+        ])
+        ->groupBy('body_types.id','body_types.name')
+        ->orderBy('count','desc')
+        ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+        public function getVehicleTypes(Request $request)
+    {
+
+        $data = DB::table('vehicle_type')
+        ->join('vehicles', 'vehicles.body_id', '=', 'vehicle_type.id')
+        ->select([
+            'vehicle_type.id',
+            'vehicle_type.name as label',
+            DB::raw('COUNT(vehicles.id) as count')
+        ])
+        ->groupBy('vehicle_type.id','vehicle_type.name')
+        ->orderBy('count','desc')
+        ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+    
+       public function getMakes(Request $request)
+    {
+
+        $data = DB::table('make')
+        ->join('vehicles', 'vehicles.make_id', '=', 'make.id')
+        ->select([
+            'make.id',
+            'make.name as label',
+            DB::raw('COUNT(vehicles.id) as count')
+        ])
+        ->groupBy('make.id','make.name')
+        ->orderBy('count','desc')
+        ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+        public function getModels(Request $request)
+    {
+
+        $data = DB::table('model')
+        ->join('vehicles', 'vehicles.model_id', '=', 'model.id')
+        ->select([
+            'model.id',
+            'model.name as label',
+            DB::raw('COUNT(model.id) as count')
+        ])
+        ->groupBy('model.id','model.name')
+        ->orderBy('count','desc')
+        ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+        public function getVariants(Request $request)
+    {
+
+        $data = DB::table('model_variant')
+        ->join('vehicles', 'vehicles.variant_id', '=', 'model_variant.id')
+        ->select([
+            'model_variant.id',
+            'model_variant.name as label',
+            DB::raw('COUNT(vehicles.id) as count')
+        ])
+        ->groupBy('model_variant.id','model_variant.name')
+        ->orderBy('count','desc')
+        ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+
+       public function getColors(Request $request)
+    {
+
+        $data = DB::table('color')
+        ->join('vehicles', 'vehicles.color_id', '=', 'color.id')
+        ->select([
+            'color.id',
+            'color.name as label',
+            DB::raw('COUNT(vehicles.id) as count')
+        ])
+        ->groupBy('color.id','color.name')
+        ->orderBy('count','desc')
+        ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+         public function getDoors(Request $request)
+    {
+
+         $data = Vehicle::select('doors As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('doors')
+            ->where('doors', '!=', '')
+            ->groupBy('doors')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+
+        public function getSeats(Request $request)
+    {
+          $data = Vehicle::select('seats As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('seats')
+            ->where('seats', '!=', '')
+            ->groupBy('seats')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
 
 
 
+        public function getGrade(Request $request)
+    {
 
-   
+           $data = Vehicle::select('grade As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('grade')
+            ->where('grade', '!=', '')
+            ->groupBy('grade')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+
+        public function getV5(Request $request)
+    {
+
+         $data = Vehicle::select('v5 As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('v5')
+            ->where('v5', '!=', '')
+            ->groupBy('v5')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+
+        public function getEngineSize(Request $request)
+    {
+
+         $data = Vehicle::select('cc As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('cc')
+            ->where('cc', '!=', '')
+            ->groupBy('cc')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+
+
+        public function getFormerKeepers(Request $request)
+    {
+
+        $data = Vehicle::select('former_keepers As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('former_keepers')
+            ->where('former_keepers', '!=', '')
+            ->groupBy('former_keepers')
+            ->orderByDesc('count')
+            ->get();
+
+
+        return response()->json([
+            "data" => $data
+        ],200);
+
+    }
+
+        public function getNoOfservices(Request $request)
+    {
+
+          $data = Vehicle::select('no_of_services As label', \DB::raw('COUNT(*) as count'))
+            ->whereNotNull('no_of_services')
+            ->where('no_of_services', '!=', '')
+            ->groupBy('no_of_services')
+            ->orderByDesc('count')
+            ->get();
+
+        return response()->json([
+            "data" => $data
+        ],200);
+    }
+
+
 
 
 }

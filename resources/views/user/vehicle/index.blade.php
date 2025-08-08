@@ -232,7 +232,7 @@
 @section('content')
 <div class="sider vehicle-detail-page" style="padding-left: 0px; padding-right: 14px">
     <div class="d-flex">
-            @include('user.auctionfinder.vehicle.sidebar')
+            @include('user.vehicle.sidebar')
             <div class=" py-5 showblade-bg-img-dot " style="width: calc(100% - 281px); ">
                     <ul class="nav nav-tabs" id="myTab" role="tablist" style="padding-left: 60px;">
                         <li class="nav-item" role="presentation">
@@ -245,11 +245,11 @@
                     <div class="tab-content p-0" id="myTabContent" >
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div id="tabContent">
-                                @include('user.auctionfinder.vehicle.vehicle_details') 
+                                @include('user.vehicle.vehicle_details') 
                             </div>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                @include('user.auctionfinder.vehicle.vehicle_valuation') 
+                                @include('user.vehicle.vehicle_valuation') 
                         </div>
                     </div>
             </div>
