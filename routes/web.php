@@ -281,6 +281,24 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/auction-finder/data/getRelatedVehicle/{id}',[AuctionFinderDataController::class,'getRelatedVehicle']);
             Route::get('/auction-finder/data/auctionList', [AuctionFinderDataController::class,'auctionList']);
             Route::get('/auction-finder/data/getPlatformVehicle',[AuctionFinderDataController::class,'getPlatformVehicle']);
+
+            Route::get('/auction-finder/data/getVehicleTypes', [AuctionFinderDataController::class,'getVehicleTypes']);
+            Route::get('/auction-finder/data/getMakes', [AuctionFinderDataController::class,'getMakes']);
+            Route::get('/auction-finder/data/getModels', [AuctionFinderDataController::class,'getModels']);
+            Route::get('/auction-finder/data/getVariants', [AuctionFinderDataController::class,'getVariants']);
+            Route::get('/auction-finder/data/getYears', [AuctionFinderDataController::class,'getYears']);
+            Route::get('/auction-finder/data/getTransmissions', [AuctionFinderDataController::class,'getTransmissions']);
+            Route::get('/auction-finder/data/getFuelType', [AuctionFinderDataController::class,'getFuelType']);
+            Route::get('/auction-finder/data/getBodyType', [AuctionFinderDataController::class,'getBodyType']);
+            Route::get('/auction-finder/data/getColors', [AuctionFinderDataController::class,'getColors']);
+            Route::get('/auction-finder/data/getDoors', [AuctionFinderDataController::class,'getDoors']);
+            Route::get('/auction-finder/data/getSeats', [AuctionFinderDataController::class,'getSeats']);
+            Route::get('/auction-finder/data/getGrade', [AuctionFinderDataController::class,'getGrade']);
+            Route::get('/auction-finder/data/getV5', [AuctionFinderDataController::class,'getV5']);
+            Route::get('/auction-finder/data/getEngineSize', [AuctionFinderDataController::class,'getEngineSize']);
+            Route::get('/auction-finder/data/getFormerKeepers', [AuctionFinderDataController::class,'getFormerKeepers']);
+            Route::get('/auction-finder/data/getNoOfservices', [AuctionFinderDataController::class,'getNoOfservices']);
+            
             
         
             Route::view('/upcoming', 'user/upcoming')->name('upcoming');
@@ -329,24 +347,22 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
 
    // Admin Routes
-   require __DIR__.'/admin.php';
+    require __DIR__.'/admin.php';
 
 
     Route::get('mail',function(){
 
+            $data = [
+                'name' => 'Test User',
+                'link' => 'https://example.com/reset-password'
+            ];
 
-        $data = [
-            'name' => 'Test User',
-            'link' => 'https://example.com/reset-password'
-        ];
+            Mail::send('emails.password_reset',$data,function ($mesage) use($data) {
 
-        Mail::send('emails.password_reset',$data,function ($mesage) use($data) {
+                $mesage->from("man411210@gmail.com","Test"); 
+                $mesage->to("iamowaisazam@gmail.com","test")->subject('Email Verification');
 
-            $mesage->from("man411210@gmail.com","Test"); 
-            $mesage->to("iamowaisazam@gmail.com","test")->subject('Email Verification');
-
-        });
-
+            });
 
     });
 

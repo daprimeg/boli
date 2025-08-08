@@ -78,15 +78,17 @@
                      <option value="500">500</option>
                   </select>
                   <span class="show_pagging" style="padding-left: 5px"></span>
+
+                  <span class="params" ></span>
                </div>
                <div class="col-md-6">
                   <div class="d-flex justify-content-end">
                      <div class="invoice_status">
-                        <select id="auction_name" name="auction_name" class="form-select platform">
+                        <select id="auction_name" name="auction_name" class="form-select">
                         </select>
                      </div>
                      <div class="invoice_status">
-                        <select id="date_range" name="date_range" class="form-select">
+                        <select name="date" class="form-select">
                            {{-- <option value="">Select Range</option> --}}
                            <option value="today">Today</option>
                            <option value="yesterday">Yesterday</option>

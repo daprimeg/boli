@@ -32,6 +32,7 @@ class AuctionFinderController extends Controller
 
         $platforms = AuctionPlatform::all();
         $vehicles = [];
+        
 
         $vehicleTypes = VehicleType::withCount(['vehicle as total'])->whereHas('vehicle')->get();
 
@@ -151,7 +152,7 @@ class AuctionFinderController extends Controller
             'biddingHistoryArray' => $biddingHistoryArray,
         ];
         
-        return view('user.auctionfinder.vehicle.index',$data);
+        return view('user.vehicle.index',$data);
 
     }
 

@@ -10,20 +10,11 @@ class NewsController extends Controller
 {
     public function index(Request $request)
     {
-        $user = Auth::user();
-
-        $pinnedOnly = $request->get('pinned');
-
-        $news = News::with('pinnedUsers');
-
-        if ($pinnedOnly) {
-            $news->whereHas('pinnedUsers', fn($q) => $q->where('user_id', $user->id));
-        }
-
-        $news = $news->latest()->get();
-
-        return view('user.news', compact('news', 'user'));
+        $news = News::orderBy('id', 'desc')->get();
+        $selectedId = $request->get('id'); 
+        return view('user.news', compact('news', 'selectedId'));
     }
+
 
     public function togglePin($id)
     {
