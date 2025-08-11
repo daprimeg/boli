@@ -1,7 +1,14 @@
- $(document).ready(function () {
+
 
     const auctions = {
-        selected:[],
+        selected:{
+            type:[],
+            body:[],
+            color:[],
+            make:[],
+            model:[],
+            vairant:[],
+        },
         filters:{
             page:1,
             date:'past_3_months',
@@ -35,6 +42,7 @@
            $('#mileage_to').val(auctions.filters.mileage_to);
         }
 
+        
         $(".params").text('');
         Object.entries(auctions.filters).forEach(([key, value]) => {
             if(value){
@@ -50,12 +58,130 @@
 
     auctions.renderActiveTags = function(){  
 
-        $(`.tags`).html('');
-        auctions.selected.forEach(element => {
-            $(`.tags-${element.key}`).append(`<span class="badge mx-2">${element.label} X</span>`);
-        });
+            $(`.tags`).html('');
+
+            $(`.tags-make`).html('');
+            Object.entries(auctions.selected.make).forEach(([key, value]) => {
+                 $(`.tags-make`).append(`<span data-key="make" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
+            });
+
+            $(`.tags-model`).html('');
+            if(auctions.selected.model){
+                Object.entries(auctions.selected.model).forEach(([key, value]) => {         
+                    $(`.tags-model`).append(`<span data-key="model" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
+                });
+            }
+
+            $(`.tags-variant`).html('');
+            if(auctions.selected.variant){
+                Object.entries(auctions.selected.variant).forEach(([key, value]) => {           
+                    $(`.tags-variant`).append(`<span data-key="variant" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
+                });
+            }
+
+            $(`.tags-body`).html('');
+            Object.entries(auctions.selected.body).forEach(([key, value]) => {
+                 $(`.tags-body`).append(`<span data-key="body" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
+            });
+
+            $(`.tags-type`).html('');
+            Object.entries(auctions.selected.type).forEach(([key, value]) => {
+                 $(`.tags-type`).append(`<span data-key="type" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
+            });
+
+            $(`.tags-color`).html('');
+            Object.entries(auctions.selected.color).forEach(([key, value]) => {
+                 $(`.tags-color`).append(`<span data-key="color" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
+            });
+
+         
+
+
+            //Filters
+
+            $(`.tags-year`).html('');
+            if(auctions.filters.year){
+                auctions.filters.year.split(',').forEach((value) => {
+                    $(`.tags-year`).append(`<span data-key="year" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-fuel_type`).html('');
+            if(auctions.filters.fuel_type){
+                auctions.filters.fuel_type.split(',').forEach((value) => {
+                    $(`.tags-fuel_type`).append(`<span data-key="fuel_type" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-transmission`).html('');
+            if(auctions.filters.transmission){
+                auctions.filters.transmission.split(',').forEach((value) => {
+                    $(`.tags-transmission`).append(`<span data-key="transmission" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            
+            $(`.tags-door`).html('');
+            if(auctions.filters.door){
+                auctions.filters.door.split(',').forEach((value) => {
+                    $(`.tags-door`).append(`<span data-key="door" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-seat`).html('');
+            if(auctions.filters.seat){
+                auctions.filters.seat.split(',').forEach((value) => {
+                    $(`.tags-seat`).append(`<span data-key="seat" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-grade`).html('');
+            if(auctions.filters.grade){
+                auctions.filters.grade.split(',').forEach((value) => {
+                    $(`.tags-grade`).append(`<span data-key="grade" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-v5`).html('');
+            if(auctions.filters.v5){
+                auctions.filters.v5.split(',').forEach((value) => {
+                    $(`.tags-v5`).append(`<span data-key="v5" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-cc`).html('');
+            if(auctions.filters.cc){
+                auctions.filters.cc.split(',').forEach((value) => {
+                    $(`.tags-cc`).append(`<span data-key="cc" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            $(`.tags-former_keeper`).html('');
+            if(auctions.filters.former_keeper){
+                auctions.filters.former_keeper.split(',').forEach((value) => {
+                    $(`.tags-former_keeper`).append(`<span data-key="former_keeper" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+
+            $(`.tags-no_of_service`).html('');
+            if(auctions.filters.no_of_service){
+                auctions.filters.no_of_service.split(',').forEach((value) => {
+                    $(`.tags-no_of_service`).append(`<span data-key="no_of_service" data-value="${value}" class="badge mx-2">${value}X</span>`);
+                });
+            }
+
+            if(auctions.filters.mileage_from){
+              $('.tags-mileage_range').html(`<span class="badge mx-2">${auctions.filters.mileage_from} - ${auctions.filters.mileage_to}</span>`);
+            }
+
+            if(auctions.filters.mileage_to){
+              $('.tags-mileage_range').html(`<span class="badge mx-2">${auctions.filters.mileage_from} - ${auctions.filters.mileage_to}</span>`);
+            }
 
     }
+
+    
 
 
     auctions.showHeadings = function(){  
@@ -162,8 +288,7 @@
 
                 $("select[name=auction_name]").html('<option value="">Select</option>');
                 response.results.forEach(element => {
-
-                         $("select[name=auction_name]").append(`<option ${auctions.filters.platform == element.id ? 'selected' : ''} value="${element.id}">${element.text}</option>`);
+                   $("select[name=auction_name]").append(`<option ${auctions.filters.platform == element.id ? 'selected' : ''} value="${element.id}">${element.text}</option>`);
                 }); 
             },
             error: function (response) {
@@ -176,7 +301,7 @@
 
     auctions.getVehicleTypes = function  () {      
 
-        auctions.selected.forEach(car => delete car.type);
+        auctions.selected.type = [];
 
          $.ajax({
             url: url+"/auction-finder/data/getVehicleTypes",
@@ -192,12 +317,7 @@
                         let types = auctions.filters.type.split(',');
                         if(types.includes(String(element.id))) {
                             selected = 'checked';
-
-                            auctions.selected.push({
-                                key:'type',
-                                label:element.label,
-                                value:element.id
-                            });
+                            auctions.selected.type.push({id:element.id,title:element.label}); 
                         }
                     }
 
@@ -205,7 +325,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="type[]" value="${element.id}" id="type_${element.id}">
+                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="type[]" value="${element.id}" id="type_${element.id}">
                                 <label class="form-check-label" for="type_${element.id}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -215,10 +335,10 @@
                 });
 
                 auctions.renderActiveTags();
-
             },
             error: function (response) {
                 $("#collapseVehicleType").html('');
+                auctions.selected.type = []
             },
          });
 
@@ -226,9 +346,10 @@
 
 
 
+
     auctions.getMakes = function  () {      
 
-         auctions.selected.forEach(car => delete car.make);
+         auctions.selected.make = [];
 
          $.ajax({
             url: url+"/auction-finder/data/getMakes",
@@ -243,12 +364,7 @@
                         let make = auctions.filters.make.split(',');
                         if(make.includes(String(element.id))) {
                             selected = 'checked';
-
-                            auctions.selected.push({
-                                key:'make',
-                                label:element.label,
-                                value:element.id
-                            });
+                            auctions.selected.make.push({id:element.id,title:element.label});                           
                         }
                     }
 
@@ -256,7 +372,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="make[]" value="${element.id}" id="make_${element.id}">
+                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="make[]" value="${element.id}" id="make_${element.id}">
                                 <label class="form-check-label" for="make_${element.id}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -264,23 +380,30 @@
                     </div>`);
                 });
 
-             
                   auctions.renderActiveTags();
+                   auctions.getModels();
             },
             error: function (response) {
                 $("#collapseVehiclemake").html('');
+                  auctions.selected.make = [];
             },
          });
 
     }
 
 
-     auctions.getModels = function  () {      
 
+
+    auctions.getModels = function  () {      
+
+        
+        auctions.selected.model = []; 
          $.ajax({
-            url: url+"/auction-finder/data/getModels",
+            url: url+"/auction-finder/data/getModels?make_id="+auctions.filters.make,
             method: "GET",
             success: function (response) {
+                debugger
+                
 
                 $("#collapseVehiclemodel").html('');
                 response.data.forEach(element => {
@@ -290,6 +413,7 @@
                         let model = auctions.filters.model.split(',');
                         if(model.includes(String(element.id))) {
                             selected = 'checked';
+                            auctions.selected.model.push({id:element.id,title:element.label}); 
                         }
                     }
 
@@ -297,7 +421,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="model[]" value="${element.id}" id="model_${element.id}">
+                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="model[]" value="${element.id}" id="model_${element.id}">
                                 <label class="form-check-label" for="model_${element.id}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -305,21 +429,28 @@
                     </div>`);
                 });
 
+                auctions.getVariants();
+
             },
             error: function (response) {
                 $("#collapseVehiclemodel").html('');
+                auctions.selected.model = []; 
             },
          });
 
     }
 
 
+
     auctions.getVariants = function  () {      
 
+        auctions.selected.variant = [];
+
          $.ajax({
-            url: url+"/auction-finder/data/getVariants",
+            url: url+"/auction-finder/data/getVariants?model_id="+auctions.filters.model,
             method: "GET",
             success: function (response) {
+                
 
                 $("#collapseVehiclevariant").html('');
                 response.data.forEach(element => {
@@ -330,6 +461,8 @@
                         let variant = auctions.filters.variant.split(',');
                         if(variant.includes(String(element.id))) {
                             selected = 'checked';
+                            auctions.selected.variant.push({id:element.id,title:element.label}); 
+                            
                         }
                     }
 
@@ -337,7 +470,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="variant[]" value="${element.id}" id="variant_${element.id}">
+                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="variant[]" value="${element.id}" id="variant_${element.id}">
                                 <label class="form-check-label" for="variant_${element.id}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -348,6 +481,7 @@
             },
             error: function (response) {
                 $("#collapseVehiclevariant").html('');
+                auctions.selected.variant = [];
             },
          });
 
@@ -458,7 +592,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="fuel_type[]" value="${element.label}" id="fuel_type_${element.label}">
+                                <input ${selected}  class="form-check-input me-1" type="checkbox" name="fuel_type[]" value="${element.label}" id="fuel_type_${element.label}">
                                 <label class="form-check-label" for="fuel_type_${element.label}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -478,6 +612,8 @@
 
      auctions.getBodyType = function  () {      
 
+        auctions.selected.body = []; 
+
          $.ajax({
             url: url+"/auction-finder/data/getBodyType",
             method: "GET",
@@ -491,6 +627,8 @@
                         let body = auctions.filters.body.split(',');
                         if(body.includes(String(element.id))) {
                             selected = 'checked';
+                            auctions.selected.body.push({id:element.id,title:element.label}); 
+
                         }
                     }
 
@@ -498,7 +636,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="body[]" value="${element.id}" id="body_${element.id}">
+                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="body[]" value="${element.id}" id="body_${element.id}">
                                 <label class="form-check-label" for="body_${element.id}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -510,6 +648,8 @@
             },
             error: function (response) {
                 $("#collapseVehiclebody").html('');
+                auctions.selected.body = [];
+
             },
          });
 
@@ -518,6 +658,8 @@
 
 
     auctions.getColors = function  () {      
+
+        auctions.selected.color = [];
 
          $.ajax({
             url: url+"/auction-finder/data/getColors",
@@ -532,6 +674,7 @@
                         let color = auctions.filters.color.split(',');
                         if(color.includes(String(element.id))) {
                             selected = 'checked';
+                            auctions.selected.color.push({id:element.id,title:element.label}); 
                         }
                     }
 
@@ -539,7 +682,7 @@
                     <div class="accordion-body py-1">
                         <div class="form-check d-flex justify-content-between align-items-center">
                             <div>
-                                <input ${selected} class="form-check-input me-1" type="checkbox" name="color[]" value="${element.id}" id="color_${element.id}">
+                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="color[]" value="${element.id}" id="color_${element.id}">
                                 <label class="form-check-label" for="color_${element.id}">${element.label}</label>
                             </div>
                             <span class="badge bg-light text-muted">${element.count}</span>
@@ -550,6 +693,7 @@
             },
             error: function (response) {
                 $("#collapseVehiclecolor").html('');
+                auctions.selected.color = [];
             },
          });
 
@@ -755,7 +899,7 @@
 
     }
 
-    
+
     auctions.getFormerKeepers = function  () {      
 
          $.ajax({
@@ -834,9 +978,6 @@
     }
 
 
-  
-
-
     $('select[name=auction_name]').change(function (e) { 
         const url = new URL(window.location.href);
         url.searchParams.set('platform', $(this).val());
@@ -883,9 +1024,14 @@
 
     $(document).on('change', 'input[name="type[]"]', function () {
 
+        auctions.selected.type = [];
         let selected = [];
         $('input[name="type[]"]:checked').each(function () {
             selected.push($(this).val());
+            auctions.selected.type.push({
+                id:$(this).val(),
+                title:$(this).data('name')
+            })
         });
 
         const url = new URL(window.location.href);
@@ -898,9 +1044,14 @@
 
     $(document).on('change','input[name="body[]"]', function () {
 
+           auctions.selected.body = [];
            let selected = [];
             $('input[name="body[]"]:checked').each(function () {
                 selected.push($(this).val());
+                auctions.selected.body.push({
+                    id:$(this).val(),
+                    title:$(this).data('name')
+                })
             });
             const url = new URL(window.location.href);
             url.searchParams.set('body', selected.toString());
@@ -912,9 +1063,14 @@
 
     $(document).on('change','input[name="make[]"]', function () {
 
+        auctions.selected.make = [];
         let selected = [];
         $('input[name="make[]"]:checked').each(function () {
             selected.push($(this).val());
+            auctions.selected.make.push({
+                id:$(this).val(),
+                title:$(this).data('name')
+            })
         });
 
         const url = new URL(window.location.href);
@@ -922,25 +1078,40 @@
         history.pushState({}, '', url);
         auctions.onLoad();
 
+         auctions.getModels();
     });
 
+
     $(document).on('change','input[name="model[]"]', function () {
+            
+            auctions.selected.model = [];
             let selected = [];
             $('input[name="model[]"]:checked').each(function () {
                 selected.push($(this).val());
+                 auctions.selected.model.push({
+                    id:$(this).val(),
+                    title:$(this).data('name')
+                 })
             });
 
             const url = new URL(window.location.href);
             url.searchParams.set('model', selected.toString());
             history.pushState({}, '', url);
             auctions.onLoad();
+
+            auctions.getVariants();
     });
 
     
     $(document).on('change','input[name="variant[]"]', function () {
-        let selected = [];
+            let selected = [];
+             auctions.selected.variant = [];
             $('input[name="variant[]"]:checked').each(function () {
                 selected.push($(this).val());
+                 auctions.selected.variant.push({
+                    id:$(this).val(),
+                    title:$(this).data('name')
+                 });
             });
 
             const url = new URL(window.location.href);
@@ -948,6 +1119,7 @@
             history.pushState({}, '', url);
             auctions.onLoad();
     });
+
 
     $(document).on('change','input[name="year[]"]', function () {
         let selected = [];
@@ -988,9 +1160,15 @@
 
 
      $(document).on('change','input[name="color[]"]', function () {
+        
         let selected = [];
+        auctions.selected.color = [];
         $('input[name="color[]"]:checked').each(function () {
             selected.push($(this).val());
+            auctions.selected.color.push({
+              id:$(this).val(),
+              title:$(this).data('name'),
+            });
         });
 
         const url = new URL(window.location.href);
@@ -1090,6 +1268,102 @@
     });
 
 
+     $(document).on('click','.tags span', function () {
+
+        
+
+            let key = $(this).data('key');
+            let value = $(this).data('value');
+
+            switch (key) {
+                case 'type':
+                    $("#collapseVehicleType").find(`input[value=${value}]`).trigger('click');
+                    break;
+                case 'make':
+                   $("#collapseVehiclemake").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'model':
+                   $("#collapseVehiclemodel").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'variant':
+                   $("#collapseVehiclevariant").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'year':
+                   $("#collapseVehicleyear").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'transmission':
+                   $("#collapseTransmission").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'fuel_type':
+                   $("#collapsefuel").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'body':
+                   $("#collapseVehiclebody").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'color':
+                   $("#collapseVehiclecolor").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'door':
+                   $("#collapsedoor").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'seat':
+                   $("#collapseseats").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'grade':
+                   $("#collapsegrade").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'v5':
+                   $("#collapsev5").find(`input[value=${value}]`).trigger('click');
+                break;
+                case 'cc':
+                    
+                   $("#collapsecc").find(`input[value="${value}"]`).trigger('click');
+                break;
+                case 'former_keeper':
+                    
+                   $("#collapseformer_keepers").find(`input[value=${value}]`).trigger('click');
+
+                break;
+                case 'no_of_service':
+                   $("#collapsenumber_of_services").find(`input[value=${value}]`).trigger('click');
+                break;
+            
+                default:
+
+                    break;
+            }
+
+
+         
+
+
+            // let current = auctions.filters[key];
+            // if (current) {
+            //     let valuesArray = current.split(',').filter(v => v != value);
+            //     if (valuesArray.length) {
+            //         auctions.filters[key] = valuesArray.join(',');
+            //     } else {
+            //         delete auctions.filters[key]; // remove whole key if empty
+            //     }
+            // }
+
+            // // Optionally update the URL
+            // const url = new URL(window.location.href);
+            // if (auctions.filters[key]) {
+            //     url.searchParams.set(key, auctions.filters[key]);
+            // } else {
+            //     url.searchParams.delete(key);
+            // }
+            // history.pushState({}, '', url);
+
+            // // Reload data
+            // auctions.onLoad();
+
+       
+    });
+
+
+
     $('#mileage_from, #mileage_to').change(function () {
 
         const url = new URL(window.location.href);
@@ -1101,12 +1375,17 @@
     });
 
 
+
+ $(document).ready(function () {
    
     auctions.getPlatforms();
     auctions.getVehicleTypes();
+    
     auctions.getMakes();
-    auctions.getModels();
-    auctions.getVariants();
+    // auctions.getModels();
+    // auctions.getVariants();
+
+
     auctions.getYears();
     auctions.getTransmissions();
     auctions.getFuelType();

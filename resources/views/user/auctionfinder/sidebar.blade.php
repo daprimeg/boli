@@ -56,6 +56,7 @@
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTransmission" aria-expanded="false" aria-controls="collapseTransmission">Transmission</button>
          </h2>
          <div id="collapseTransmission" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-transmission"></div>
       </div>
 
       <!-- Fuel type Filter -->
@@ -65,6 +66,7 @@
             Fuel Type</button>
          </h2>
          <div id="collapsefuel" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-fuel_type"></div>
       </div>
 
       <!-- Body type Filter -->
@@ -73,6 +75,7 @@
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiclebody" aria-expanded="false" aria-controls="collapseVehiclebody">Body Type</button>
          </h2>
          <div id="collapseVehiclebody" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-body"></div>
       </div>
 
       <!-- Color Filter -->
@@ -80,32 +83,28 @@
          <h2 class="accordion-header" id="headingVehicleType">
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVehiclecolor" aria-expanded="false" aria-controls="collapseVehiclecolor">Color </button>
          </h2>
-         <div id="collapseVehiclecolor" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion">
-
-         </div>
+         <div id="collapseVehiclecolor" class="accordion-collapse collapse" aria-labelledby="headingVehicleType" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-color"></div>
       </div>
 
       <!-- Doors Filter -->
       <div class="accordion-item border-bottom">
          <h2 class="accordion-header" id="headingTransmission">
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapsedoor" aria-expanded="false" aria-controls="collapsedoor">
-            Door
-            </button>
+            Door</button>
          </h2>
-         <div id="collapsedoor" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
-         </div>
+         <div id="collapsedoor" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-door"></div>
       </div>
 
       <!-- Seats Filter -->
       <div class="accordion-item border-bottom">
          <h2 class="accordion-header" id="headingTransmission">
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseseats" aria-expanded="false" aria-controls="collapseseats">
-            Seats
-            </button>
+            Seats</button>
          </h2>
-         <div id="collapseseats" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
-
-         </div>
+         <div id="collapseseats" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-seat"></div>
       </div>
 
       <!-- Grade Filter -->
@@ -115,8 +114,8 @@
             Grade
             </button>
          </h2>
-         <div id="collapsegrade" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
-         </div>
+         <div id="collapsegrade" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-grade"></div>
       </div>
 
       <!-- V5 Filter -->
@@ -125,8 +124,8 @@
             <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapsev5" aria-expanded="false" aria-controls="collapsev5"
             >V5 </button>
          </h2>
-         <div id="collapsev5" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
-         </div>
+         <div id="collapsev5" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-v5"></div>
       </div>
 
 
@@ -137,8 +136,8 @@
             Engine Size
             </button>
          </h2>
-         <div id="collapsecc" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
-         </div>
+         <div id="collapsecc" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion"></div>
+         <div class="tags tags-cc"></div>
       </div>
 
       <!-- Former Keeper Filter -->
@@ -150,6 +149,7 @@
          </h2>
          <div id="collapseformer_keepers" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
          </div>
+         <div class="tags tags-former_keeper"></div>
       </div>
 
 
@@ -162,6 +162,7 @@
          </h2>
          <div id="collapsenumber_of_services" class="accordion-collapse collapse" aria-labelledby="headingTransmission" data-bs-parent="#filterAccordion">
          </div>
+         <div class="tags tags-no_of_service"></div>
       </div>
       
       <div class="accordion-item ">
@@ -208,6 +209,9 @@
                </div>
             </div>
          </div>
+
+         <div class="tags tags-mileage_range"></div>
+
       </div>
 
 

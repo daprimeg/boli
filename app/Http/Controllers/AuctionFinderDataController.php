@@ -21,13 +21,14 @@ use App\Models\Color;
 use App\Models\Vehicle;
 use DataTables;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class AuctionFinderDataController extends Controller
 {
 
-    
+
     public function auctionList(Request $request)
     {
 
@@ -104,7 +105,7 @@ class AuctionFinderDataController extends Controller
 
 
             if($request->has('grade') && $request->grade != ''){
-                $query->whereIn('vehicles.grades',explode(',',$request->grade));
+                $query->whereIn('vehicles.grade',explode(',',$request->grade));
             }
 
 
@@ -195,6 +196,11 @@ class AuctionFinderDataController extends Controller
             return response()->json([
                 'toDate' =>  $toDate,
                 'fromDate' =>  $fromDate,
+                'filters' => [
+                    // "make" => Make::select('id','name')->whereIn('id',explode(',',$request->make))->get()->toArray(),
+                    // "model" => Model::select('id','name')->whereIn('id',explode(',',$request->model))->get()->toArray(),
+                    // "variant" => ModelVariant::select('id','name')->whereIn('id',explode(',',$request->variant))->get()->toArray(),
+                ],
                 'offset' => $offset,
                 'data'         => $results,
                 'total'        => $total,
@@ -452,9 +458,14 @@ class AuctionFinderDataController extends Controller
         ->select([
             'make.id',
             'make.name as label',
-            DB::raw('COUNT(vehicles.id) as count')
-        ])
-        ->groupBy('make.id','make.name')
+             DB::raw('COUNT(vehicles.id) as count')
+        ]);
+
+
+      
+
+
+        $data = $data->groupBy('make.id','make.name')
         ->orderBy('count','desc')
         ->get();
 
@@ -463,6 +474,7 @@ class AuctionFinderDataController extends Controller
         ],200);
 
     }
+
 
         public function getModels(Request $request)
     {
@@ -474,6 +486,7 @@ class AuctionFinderDataController extends Controller
             'model.name as label',
             DB::raw('COUNT(model.id) as count')
         ])
+        ->whereIn('model.make_id',explode(',',$request->make_id))
         ->groupBy('model.id','model.name')
         ->orderBy('count','desc')
         ->get();
@@ -494,6 +507,7 @@ class AuctionFinderDataController extends Controller
             'model_variant.name as label',
             DB::raw('COUNT(vehicles.id) as count')
         ])
+        ->whereIn('model_variant.model_id',explode(',',$request->model_id))
         ->groupBy('model_variant.id','model_variant.name')
         ->orderBy('count','desc')
         ->get();

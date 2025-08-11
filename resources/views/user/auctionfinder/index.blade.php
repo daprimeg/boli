@@ -111,7 +111,7 @@
                      <div>
                         {{-- <button class="btn btn-sm btn-outline-primary me-1">Hide Filters</button> --}}
 
-                        <a href="{{url('/auctionfinder')}}" class="text-decoration-none">Clear all</a>
+                        <a href="{{url('/auction-finder')}}" class="text-decoration-none">Clear all</a>
                      </div>
                   </div>
                   <hr>
