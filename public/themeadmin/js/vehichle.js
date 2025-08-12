@@ -41,14 +41,13 @@
         if(auctions.filters.mileage_to){
            $('#mileage_to').val(auctions.filters.mileage_to);
         }
-
         
-        $(".params").text('');
-        Object.entries(auctions.filters).forEach(([key, value]) => {
-            if(value){
-               $('.params').append(`<span class="badge mx-2" >${key}:${value} X</span>`);
-            }
-        });
+        // $(".params").text('');
+        // Object.entries(auctions.filters).forEach(([key, value]) => {
+        //     if(value){
+        //        $('.params').append(`<span class="badge mx-2" >${key}:${value} X</span>`);
+        //     }
+        // });
 
         auctions.searchrecord();
         auctions.renderActiveTags();
@@ -94,8 +93,6 @@
                  $(`.tags-color`).append(`<span data-key="color" data-value="${value.id}" class="badge mx-2">${value.title}X</span>`);   
             });
 
-         
-
 
             //Filters
 
@@ -120,7 +117,6 @@
                 });
             }
 
-            
             $(`.tags-door`).html('');
             if(auctions.filters.door){
                 auctions.filters.door.split(',').forEach((value) => {
@@ -155,6 +151,7 @@
                     $(`.tags-cc`).append(`<span data-key="cc" data-value="${value}" class="badge mx-2">${value}X</span>`);
                 });
             }
+
 
             $(`.tags-former_keeper`).html('');
             if(auctions.filters.former_keeper){
@@ -380,7 +377,7 @@
                     </div>`);
                 });
 
-                  auctions.renderActiveTags();
+            
                    auctions.getModels();
             },
             error: function (response) {
@@ -394,40 +391,60 @@
 
 
 
-    auctions.getModels = function  () {      
-
+    auctions.getModels = function () {      
         
         auctions.selected.model = []; 
          $.ajax({
             url: url+"/auction-finder/data/getModels?make_id="+auctions.filters.make,
             method: "GET",
             success: function (response) {
-                debugger
                 
-
                 $("#collapseVehiclemodel").html('');
-                response.data.forEach(element => {
 
-                    let selected = '';
-                    if(auctions.filters.model){
-                        let model = auctions.filters.model.split(',');
-                        if(model.includes(String(element.id))) {
-                            selected = 'checked';
-                            auctions.selected.model.push({id:element.id,title:element.label}); 
-                        }
+              
+
+                for(const key in response.data) {
+                    if(Object.prototype.hasOwnProperty.call(response.data, key)) {
+                        const data = response.data[key];
+
+                            $("#collapseVehiclemodel").append(`
+                                <div class="accordion-body" style="border-bottom: 1px solid #323232;padding: 5px 10px;margin-bottom: 8px;">
+                                    <div class="text-left">
+                                    ${key}
+                                    </div>
+                                </div>
+                            `);
+
+
+                          data.forEach(element => {
+
+                                let selected = '';
+                                if(auctions.filters.model){
+                                    let model = auctions.filters.model.split(',');
+                                    if(model.includes(String(element.id))) {
+                                        selected = 'checked';
+                                        auctions.selected.model.push({id:element.id,title:element.label}); 
+                                    }
+                                }
+
+                                $("#collapseVehiclemodel").append(`
+                                <div class="accordion-body py-1">
+                                    <div class="form-check d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="model[]" value="${element.id}" id="model_${element.id}">
+                                            <label class="form-check-label" for="model_${element.id}">${element.label}</label>
+                                        </div>
+                                        <span class="badge bg-light text-muted">${element.count}</span>
+                                    </div>
+                                </div>`);
+                          });
+
                     }
+                }
+                
+               
 
-                    $("#collapseVehiclemodel").append(`
-                    <div class="accordion-body py-1">
-                        <div class="form-check d-flex justify-content-between align-items-center">
-                            <div>
-                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="model[]" value="${element.id}" id="model_${element.id}">
-                                <label class="form-check-label" for="model_${element.id}">${element.label}</label>
-                            </div>
-                            <span class="badge bg-light text-muted">${element.count}</span>
-                        </div>
-                    </div>`);
-                });
+                
 
                 auctions.getVariants();
 
@@ -453,30 +470,48 @@
                 
 
                 $("#collapseVehiclevariant").html('');
-                response.data.forEach(element => {
+
+                    for(const key in response.data) {
+                    if(Object.prototype.hasOwnProperty.call(response.data, key)) {
+                        const data = response.data[key];
+
+                             $("#collapseVehiclevariant").append(`
+                                <div class="accordion-body" style="border-bottom: 1px solid #323232;padding: 5px 10px;margin-bottom: 8px;">
+                                    <div class="text-left">
+                                    ${key}
+                                    </div>
+                                </div>
+                            `);
+
+                            data.forEach(element => {
 
 
-                    let selected = '';
-                    if(auctions.filters.variant){
-                        let variant = auctions.filters.variant.split(',');
-                        if(variant.includes(String(element.id))) {
-                            selected = 'checked';
-                            auctions.selected.variant.push({id:element.id,title:element.label}); 
+                                let selected = '';
+                                if(auctions.filters.variant){
+                                    let variant = auctions.filters.variant.split(',');
+                                    if(variant.includes(String(element.id))) {
+                                        selected = 'checked';
+                                        auctions.selected.variant.push({id:element.id,title:element.label}); 
+                                        
+                                    }
+                                }
+
+                                $("#collapseVehiclevariant").append(`
+                                <div class="accordion-body py-1">
+                                    <div class="form-check d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="variant[]" value="${element.id}" id="variant_${element.id}">
+                                            <label class="form-check-label" for="variant_${element.id}">${element.label}</label>
+                                        </div>
+                                        <span class="badge bg-light text-muted">${element.count}</span>
+                                    </div>
+                                </div>`);
+                            });
                             
-                        }
                     }
+                }
 
-                    $("#collapseVehiclevariant").append(`
-                    <div class="accordion-body py-1">
-                        <div class="form-check d-flex justify-content-between align-items-center">
-                            <div>
-                                <input ${selected} data-name="${element.label}" class="form-check-input me-1" type="checkbox" name="variant[]" value="${element.id}" id="variant_${element.id}">
-                                <label class="form-check-label" for="variant_${element.id}">${element.label}</label>
-                            </div>
-                            <span class="badge bg-light text-muted">${element.count}</span>
-                        </div>
-                    </div>`);
-                });
+                auctions.onLoad();
 
             },
             error: function (response) {
@@ -489,7 +524,7 @@
 
 
 
-    auctions.getYears = function  () {      
+    auctions.getYears = function () {      
 
          $.ajax({
             url: url+"/auction-finder/data/getYears",
@@ -570,7 +605,7 @@
     
 
 
-    auctions.getFuelType = function  () {      
+    auctions.getFuelType = function () {      
 
          $.ajax({
             url: url+"/auction-finder/data/getFuelType",
@@ -598,6 +633,7 @@
                             <span class="badge bg-light text-muted">${element.count}</span>
                         </div>
                     </div>`);
+
                 });
 
             },
@@ -861,7 +897,7 @@
 
 
 
-    auctions.getEngineSize = function  () {      
+    auctions.getEngineSize = function () {      
 
          $.ajax({
             url: url+"/auction-finder/data/getEngineSize",
@@ -900,7 +936,7 @@
     }
 
 
-    auctions.getFormerKeepers = function  () {      
+    auctions.getFormerKeepers = function () {      
 
          $.ajax({
             url: url+"/auction-finder/data/getFormerKeepers",
@@ -939,7 +975,7 @@
     }
 
 
-    auctions.getNoOfservices = function  () {      
+    auctions.getNoOfservices = function () {      
 
          $.ajax({
             url: url+"/auction-finder/data/getNoOfservices",
@@ -974,9 +1010,7 @@
                 $("#collapsenumber_of_services").html('');
             },
          });
-
     }
-
 
     $('select[name=auction_name]').change(function (e) { 
         const url = new URL(window.location.href);
@@ -1063,22 +1097,29 @@
 
     $(document).on('change','input[name="make[]"]', function () {
 
-        auctions.selected.make = [];
-        let selected = [];
-        $('input[name="make[]"]:checked').each(function () {
-            selected.push($(this).val());
-            auctions.selected.make.push({
-                id:$(this).val(),
-                title:$(this).data('name')
-            })
-        });
 
-        const url = new URL(window.location.href);
-        url.searchParams.set('make', selected.toString());
-        history.pushState({}, '', url);
-        auctions.onLoad();
+            auctions.selected.make = [];
+            let selected = [];
+            $('input[name="make[]"]:checked').each(function () {
+                selected.push($(this).val());
+                auctions.selected.make.push({
+                    id:$(this).val(),
+                    title:$(this).data('name')
+                });
+            });
 
-         auctions.getModels();
+            const url = new URL(window.location.href);
+            url.searchParams.set('make', selected.toString());
+
+            url.searchParams.set('model','');
+            auctions.selected.model = [];
+            url.searchParams.set('variant','');
+            auctions.selected.variant = [];
+            history.pushState({}, '', url);
+            auctions.onLoad();
+    
+            auctions.getModels();
+
     });
 
 
@@ -1087,7 +1128,7 @@
             auctions.selected.model = [];
             let selected = [];
             $('input[name="model[]"]:checked').each(function () {
-                selected.push($(this).val());
+                 selected.push($(this).val());
                  auctions.selected.model.push({
                     id:$(this).val(),
                     title:$(this).data('name')
@@ -1095,8 +1136,12 @@
             });
 
             const url = new URL(window.location.href);
-            url.searchParams.set('model', selected.toString());
-            history.pushState({}, '', url);
+            url.searchParams.set('model',selected.toString());
+            
+            url.searchParams.set('variant','');
+            auctions.selected.variant = [];
+
+            history.pushState({},'',url);
             auctions.onLoad();
 
             auctions.getVariants();
@@ -1122,7 +1167,7 @@
 
 
     $(document).on('change','input[name="year[]"]', function () {
-        let selected = [];
+            let selected = [];
             $('input[name="year[]"]:checked').each(function () {
                 selected.push($(this).val());
             });
@@ -1134,7 +1179,7 @@
     });
 
     $(document).on('change','input[name="transmission[]"]', function () {
-        let selected = [];
+            let selected = [];
             $('input[name="transmission[]"]:checked').each(function () {
                 selected.push($(this).val());
             });
@@ -1147,7 +1192,7 @@
 
 
      $(document).on('change','input[name="fuel_type[]"]', function () {
-        let selected = [];
+            let selected = [];
             $('input[name="fuel_type[]"]:checked').each(function () {
                 selected.push($(this).val());
             });
@@ -1201,7 +1246,6 @@
         history.pushState({}, '', url);
         auctions.onLoad();
     });
-
 
     $(document).on('change','input[name="grade[]"]', function () {
         let selected = [];
@@ -1270,50 +1314,49 @@
 
      $(document).on('click','.tags span', function () {
 
-        
-
             let key = $(this).data('key');
             let value = $(this).data('value');
 
             switch (key) {
+
                 case 'type':
-                    $("#collapseVehicleType").find(`input[value=${value}]`).trigger('click');
+                    $("#collapseVehicleType").find(`input[value="${value}"]`).trigger('click');
                     break;
                 case 'make':
-                   $("#collapseVehiclemake").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseVehiclemake").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'model':
-                   $("#collapseVehiclemodel").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseVehiclemodel").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'variant':
-                   $("#collapseVehiclevariant").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseVehiclevariant").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'year':
-                   $("#collapseVehicleyear").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseVehicleyear").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'transmission':
-                   $("#collapseTransmission").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseTransmission").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'fuel_type':
-                   $("#collapsefuel").find(`input[value=${value}]`).trigger('click');
+                   $("#collapsefuel").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'body':
-                   $("#collapseVehiclebody").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseVehiclebody").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'color':
-                   $("#collapseVehiclecolor").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseVehiclecolor").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'door':
-                   $("#collapsedoor").find(`input[value=${value}]`).trigger('click');
+                   $("#collapsedoor").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'seat':
-                   $("#collapseseats").find(`input[value=${value}]`).trigger('click');
+                   $("#collapseseats").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'grade':
-                   $("#collapsegrade").find(`input[value=${value}]`).trigger('click');
+                   $("#collapsegrade").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'v5':
-                   $("#collapsev5").find(`input[value=${value}]`).trigger('click');
+                   $("#collapsev5").find(`input[value="${value}"]`).trigger('click');
                 break;
                 case 'cc':
                     
@@ -1321,16 +1364,17 @@
                 break;
                 case 'former_keeper':
                     
-                   $("#collapseformer_keepers").find(`input[value=${value}]`).trigger('click');
-
+                   $("#collapseformer_keepers").find(`input[value="${value}"]`).trigger('click');
                 break;
+
                 case 'no_of_service':
-                   $("#collapsenumber_of_services").find(`input[value=${value}]`).trigger('click');
+                   $("#collapsenumber_of_services").find(`input[value="${value}"]`).trigger('click');
                 break;
             
                 default:
 
-                    break;
+                break;
+
             }
 
 
@@ -1379,13 +1423,8 @@
  $(document).ready(function () {
    
     auctions.getPlatforms();
-    auctions.getVehicleTypes();
-    
+    auctions.getVehicleTypes();   
     auctions.getMakes();
-    // auctions.getModels();
-    // auctions.getVariants();
-
-
     auctions.getYears();
     auctions.getTransmissions();
     auctions.getFuelType();

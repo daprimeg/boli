@@ -462,8 +462,6 @@ class AuctionFinderDataController extends Controller
         ]);
 
 
-      
-
 
         $data = $data->groupBy('make.id','make.name')
         ->orderBy('count','desc')
@@ -479,41 +477,50 @@ class AuctionFinderDataController extends Controller
         public function getModels(Request $request)
     {
 
+        DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
         $data = DB::table('model')
+        ->join('make', 'make.id', '=', 'model.make_id')
         ->join('vehicles', 'vehicles.model_id', '=', 'model.id')
         ->select([
             'model.id',
             'model.name as label',
+            'make.name as make', 
             DB::raw('COUNT(model.id) as count')
         ])
         ->whereIn('model.make_id',explode(',',$request->make_id))
-        ->groupBy('model.id','model.name')
+        ->groupBy('model.id')
         ->orderBy('count','desc')
         ->get();
 
+        // dd($data->groupBy('make')->toArray());
+
         return response()->json([
-            "data" => $data
+            "data" => $data->groupBy('make')->toArray()
         ],200);
 
     }
 
         public function getVariants(Request $request)
     {
+         DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
         $data = DB::table('model_variant')
+        ->join('model','model.id', '=', 'model_variant.model_id')
         ->join('vehicles', 'vehicles.variant_id', '=', 'model_variant.id')
         ->select([
             'model_variant.id',
             'model_variant.name as label',
+            'model.name as model',
             DB::raw('COUNT(vehicles.id) as count')
         ])
         ->whereIn('model_variant.model_id',explode(',',$request->model_id))
-        ->groupBy('model_variant.id','model_variant.name')
+        ->groupBy('model_variant.id')
         ->orderBy('count','desc')
         ->get();
 
         return response()->json([
-            "data" => $data
+            "data" => $data->groupBy('model')->toArray()
         ],200);
 
     }
