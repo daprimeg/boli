@@ -99,17 +99,9 @@
                   <a href="{{ url('/admin/users') }}" class="menu-link">
                     <div data-i18n="Users">Users</div>
                   </a>
-                </li>
-
-
-                 
+                </li>     
               </ul>
             </li>  
-
-
-
-
-    
 
             <li class="menu-item {{ request()->is('admin/tickets*') ? 'active' : '' }} {{ request()->is('admin/tickets*') ? 'open' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -161,7 +153,6 @@
                 <i class="menu-icon icon-base ti tabler-calendar-user"></i>
                 <div data-i18n="Members & Plans">Members & Plans</div>
               </a>
-           
               <ul class="menu-sub">
                 <li class="menu-item {{ request()->is('admin/members*') ? 'active' : '' }}">
                   <a href="{{ url('/admin/members/') }}" class="menu-link">
@@ -174,8 +165,7 @@
                     <div data-i18n="Membership">Membership</div>
                   </a>
                 </li>
-            
-              
+                
                 <li class="menu-item {{ request()->is('admin/plans*') ? 'active' : '' }}">
                   <a href="{{ url('/admin/plans') }}" class="menu-link">
                     <div data-i18n="Plans">Plans</div>
