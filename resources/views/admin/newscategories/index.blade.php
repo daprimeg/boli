@@ -1,5 +1,6 @@
+
 @extends('admin.partial.app')
-@push('title') News @endpush
+@push('title') News Category @endpush
 @section('css')
 
 <style>
@@ -42,10 +43,10 @@
                     <div class="card-header border-bottom">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="card-title ">News</h5>
+                                <h5 class="card-title ">News Categories</h5>
                             </div>
                             <div class="col-md-6 text-end">
-                                 <a href="{{URL::to('/admin/news/create')}}" class="btn btn-primary">Add New</a>
+                                 <a href="{{URL::to('/admin/ncategories/create')}}" class="btn btn-primary">Add New</a>
                             </div>
                         </div>
                     </div>
@@ -69,16 +70,11 @@
                         <div class="pt-5 table-responsive text-nowrap">
                             <table id="blogTable" class="table table-bordered">
                                 <thead>
-                                    <tr>
+                                     <tr>
                                         <th>#</th>
-                                        <th>Title</th>
-                                        <th>Category</th>
-                                        <th>Feature Image</th>
-                                        <th>Description</th>
-                                        <th>Date</th>
-                                        <th>Created By</th>
-                                        <th>Total Pins</th>
-                                        <th>Actions</th>
+                                        <th>Name</th>
+                                        <th>Created At</th>
+                                        <th width="150">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0"></tbody>
@@ -94,11 +90,10 @@
 @section('js')
     <script>
             $(document).ready(function () {
-             let table = $('.table').DataTable({
-                    ordering:false,
+             let table = $('#blogTable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{URL::to('/admin/news')}}",
+                    ajax: "{{URL::to('/admin/ncategories')}}",
                 });
 
                 table.on('draw.dt', function () {
@@ -118,3 +113,4 @@
             });
     </script>
 @endsection
+

@@ -1,5 +1,5 @@
 @extends('admin.partial.app')
-@push('title') News @endpush
+@push('title') Role @endpush
 @section('css')
 
 <style>
@@ -34,18 +34,16 @@
       <div class="row g-6"> 
             <div class="col-md-12">
 
-                 @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                  @endif
+           
 
                 <div class="card">
                     <div class="card-header border-bottom">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="card-title ">News</h5>
+                                <h5 class="card-title ">Roles</h5>
                             </div>
                             <div class="col-md-6 text-end">
-                                 <a href="{{URL::to('/admin/news/create')}}" class="btn btn-primary">Add New</a>
+                                 <a href="{{URL::to('/admin/role/create')}}" class="btn btn-primary">Add New</a>
                             </div>
                         </div>
                     </div>
@@ -72,12 +70,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Title</th>
-                                        <th>Category</th>
-                                        <th>Feature Image</th>
-                                        <th>Description</th>
-                                        <th>Date</th>
-                                        <th>Created By</th>
-                                        <th>Total Pins</th>
+                                        <th>Created At</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -92,13 +85,19 @@
 @endsection
 
 @section('js')
+         @if(session('success'))
+            <script>
+                toastr.success('{{Session::get('success')}}')
+            </script>
+        @endif
+
     <script>
             $(document).ready(function () {
-             let table = $('.table').DataTable({
-                    ordering:false,
+             let table = $('#blogTable').DataTable({
                     processing: true,
+                    ordering:false,
                     serverSide: true,
-                    ajax: "{{URL::to('/admin/news')}}",
+                    ajax: "{{ url('/admin/role') }}",
                 });
 
                 table.on('draw.dt', function () {

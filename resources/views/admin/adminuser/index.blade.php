@@ -1,6 +1,8 @@
 @extends('admin.partial.app')
-@push('title') Members @endpush
+@push('title') Users @endpush
 @section('css')
+
+
 <style>
     .dataTables_length{
         display:none!important;
@@ -23,109 +25,24 @@
     }
 </style>
 
-<style>
-    .stats-card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
-        border-radius: 12px;
-        color: white;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
 
-    .stats-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .stats-card .card-body {
-        padding: 1.5rem;
-    }
-
-    .stats-icon {
-        background-color: #3b82f6;
-        border-radius: 8px;
-        padding: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .stats-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: white;
-    }
-
-    .stats-change {
-        color: #3b82f6;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .stats-label {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    /* Highlighted Card */
-    .highlight-card {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        border: none;
-        color: white;
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-    }
-
-    .highlight-card .stats-change {
-        color: rgba(255, 255, 255, 0.8);
-    }
-
-    .highlight-card .stats-label {
-        color: rgba(255, 255, 255, 0.9);
-    }
-
-    .highlight-card .stats-icon {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-</style>
 @endsection
 @section('content')
 
-<div class="container-fluid py-5">
-    <div class="row g-4">
-        @foreach ($cards as $card)
-            <div class="col-12 col-sm-6 col-md-4 " style="width: 20%;"> 
-                <div class="card {{ $card['highlight'] ? 'highlight-card' : 'stats-card' }} h-100 w-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <h2 class="stats-value">{{ $card['value'] }}</h2>
-                                <span class="stats-change">{{ $card['change'] }}</span>
-                            </div>
-                            <div class="stats-icon">
-                                <i class="{{ $card['icon'] }}" style="font-size: 1.2rem;"></i>
-                            </div>
-                        </div>
-                        <p class="stats-label">{{ $card['label'] }}</p>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</div>
+
 
   <div class="container-fluid  container-p-y">
       <div class="row g-6"> 
             <div class="col-md-12">
 
-           
+         
 
                 <div class="card">
                     <div class="card-header border-bottom">
                         <div class="row align-items-center">
                             <!-- Title -->
                             <div class="col-md-4">
-                                <h5 class="card-title mb-0">Members</h5>
+                                <h5 class="card-title mb-0">Users</h5>
                             </div>
 
 
@@ -135,19 +52,19 @@
                            
 
                              
-                                {{-- <div style="max-width:150px; min-height:28px;">
-                                    <select id="filterPlan" name="plan" class="form-select form-select-sm memberships"></select>
-                                </div> --}}
+                                <div style="max-width:150px; min-height:28px;">
+                                    <select id="filterRole" name="role" class="form-select form-select-sm role"></select>
+                                </div>
 
                            
-                                {{-- <select id="filterStatus" name="status" class="form-select form-select-sm" style="max-width: 150px;">
+                                <select id="filterStatus" name="status" class="form-select form-select-sm" style="max-width: 150px;">
                                     <option value="">All Status</option>
                                     <option value="1">Active</option>
                                     <option value="0">Deactive</option>
-                                </select> --}}
+                                </select>
 
                              
-                                <a href="{{ url('/admin/members/0/edit') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ url('/admin/users/0/edit') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-plus me-1"></i> Add New User
                                 </a>
                             </div>
@@ -180,11 +97,9 @@
                                         <th>#</th>
                                         <th>Image</th>
                                         <th>Full Name</th>
-                                        <th>Company</th>
                                         <th>Personal Email</th>
-                                        <th>Plan</th>
-                                        <th>Plan Status</th>
-                                        <th>Expiry Date</th>
+                                        <th>Role</th>
+                                        <th>Last login</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -200,8 +115,7 @@
 
 @endsection
 @section('js')
-
-@if(session('success'))
+         @if(session('success'))
             <script>
                 toastr.success('{{Session::get('success')}}')
             </script>
@@ -213,7 +127,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ajax: {
-            url: "{{ url('/admin/members') }}",
+            url: "{{ route('admin.users.index') }}",
             data: function(d) {
                 d.role   = $('#filterRole').val();
                 d.plan   = $('#filterPlan').val();
@@ -224,17 +138,15 @@ $(document).ready(function() {
             { data: 'id' },
             { data: 'avatar' },
             { data: 'name' },
-            { data: 'companyName' },
             { data: 'email' },
-            { data: 'plan' },
-            { data: 'planstatus' },
-            { data: 'expirydate' },
+            { data: 'role' },
+            { data: 'last_login' },
             { data: 'status' },
             { data: 'action', orderable: false, searchable: false }
         ]
     });
 
-    $('#filterPlan, #filterStatus').on('change', function() {
+    $('#filterRole, #filterPlan, #filterStatus').on('change', function() {
         table.draw();
     });
 
@@ -250,6 +162,7 @@ $(document).ready(function() {
     });
 
 });
+
 
    </script>
 @endsection

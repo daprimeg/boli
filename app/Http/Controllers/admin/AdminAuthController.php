@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DeviceController;
 use App\Models\Alert;
 use Illuminate\Http\Request;
 use App\Models\Vehicle;
@@ -20,7 +21,9 @@ class AdminAuthController extends Controller
 {
     public function showLoginForm()
     {
-  
+   if (Auth::check()) {
+        return redirect()->route('admin.dashboard');
+    }
         return view('admin.login');
     }
 
@@ -31,10 +34,12 @@ class AdminAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = User::where('personalEmail', $credentials['personalEmail'])->where('user_type', 1)->first();
+        $user = User::where('personalEmail', $credentials['personalEmail'])->whereNotIn('user_type', [0])->where('status', 1)->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
             Auth::login($user);
+             $deviceController = new DeviceController();
+             $deviceController->storeDeviceInfo($request);
             return redirect('/admin/dashboard');
         }
 

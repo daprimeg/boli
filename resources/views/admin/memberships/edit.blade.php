@@ -35,13 +35,13 @@
                                 <h5 class="card-title">Edit Membership</h5>
                             </div>
                             <div class="col-md-6 text-end">
-                                 <a href="{{URL::to('/admin/memberships')}}" class="btn btn-primary">Back To List</a>
+                                 <a href="{{URL::to('/admin/memberShips')}}" class="btn btn-primary">Back To List</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
 
-                           <form action="{{ URL::to('/admin/memberships/'.$membership->id.'/update')}}" method="POST">
+                           <form action="{{ URL::to('/admin/memberShips/'.$membership->id.'/update')}}" method="POST">
                                 @csrf
                                 
 

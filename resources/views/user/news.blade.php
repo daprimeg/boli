@@ -78,7 +78,7 @@
                     </h6>
                     <div class="d-flex justify-content-between">
                         <span
-                            style="background-color: #00316b; color: white;padding:4px 12px; border-radius: 4px; font-size: 12px;">Category</span>
+                            style="background-color: #00316b; color: white;padding:4px 12px; border-radius: 4px; font-size: 12px;">{{ $iitem->category->name ?? '' }}</span>
                         <small class="text-muted">
                             {{ $iitem->date }}</small>
 
@@ -99,7 +99,7 @@
                     style="display: none; background-color: #001020;  color: #ffffff; padding: 50px; border-radius: 8px; margin-bottom: 24px; font-family: Arial, sans-serif;">
                     <div style="display: flex; align-items: center; margin-bottom: 20px;">
                         <span
-                            style="background-color: #00316b; color: white; padding:4px 12px; border-radius: 4px; font-size: 12px; margin-right: 12px;">Category</span>
+                            style="background-color: #00316b; color: white; padding:4px 12px; border-radius: 4px; font-size: 12px; margin-right: 12px;">{{ $iitem->category->name ?? '' }}</span>
                         <span style="color: #c9d1d9; font-size: 14px;"> {{ $item->date }}</span>
                     </div>
                     <div class="row">

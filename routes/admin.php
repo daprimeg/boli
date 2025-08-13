@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\admin\AdminAuthController;
 use App\Http\Controllers\admin\AdminNewscrudController;
+use App\Http\Controllers\admin\AdminNewsCategoryController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\admin\AlertController;
+use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\PlanController;
 use App\Http\Controllers\admin\MembershipController;
 use App\Http\Controllers\admin\TicketsController;
@@ -64,13 +67,15 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
         
         Route::get('/masters/makes/getMakes', [MakeController::class, 'getMakes']);
         Route::resource('masters/makes',MakeController::class);
-
+        
         Route::get('/masters/models/getModels', [ModelController::class, 'getModels']);
         Route::resource('/masters/models',ModelController::class);
-
+        
         Route::get('/masters/variants/getVariants', [VariantController::class, 'getVariants']);
         Route::resource('/masters/variants',VariantController::class);
-
+        
+        Route::get('/masters/newcat/getnewscategory', [AdminNewscrudController::class, 'getCategory']);
+        Route::get('/masters/memberships/getmemberships', [AdminNewscrudController::class, 'getmemberships']);
         
         //Auctions
         Route::prefix('auctions')->group(function () {
@@ -114,7 +119,7 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
 
 
         //Membership
-        Route::prefix('memberships')->group(function () {
+        Route::prefix('memberShips')->group(function () {
             Route::get('/', [MembershipController::class, 'index']);
             Route::get('/create', [MembershipController::class, 'create']);
             Route::post('/store', [MembershipController::class, 'store']);
@@ -173,6 +178,18 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
             Route::delete('/{news}', [AdminNewscrudController::class, 'destroy']);
         });
 
+        //News categories
+
+        Route::prefix('ncategories')->group(function () {
+            Route::get('/', [AdminNewsCategoryController::class, 'index']);
+            Route::get('/create', [AdminNewsCategoryController::class, 'create']);
+            Route::post('/', [AdminNewsCategoryController::class, 'store']);
+           Route::get('/{newsCategory}/edit', [AdminNewsCategoryController::class, 'edit']);
+            Route::put('/{newsCategory}', [AdminNewsCategoryController::class, 'update']);
+            Route::delete('/{newsCategory}', [AdminNewsCategoryController::class, 'destroy']);
+        });
+
+
 
         //Alerts
         Route::prefix('alerts')->middleware('auth')->name('alerts.')->group(function () {
@@ -186,15 +203,37 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
         });
 
 
+        Route::prefix('role')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('role.index');
+            Route::get('/create', [RoleController::class, 'create'])->name('create');
+            Route::post('/store', [RoleController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [RoleController::class, 'update'])->name('update');
+            Route::delete('/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
+            Route::get('/getRole', [RoleController::class, 'getRole']);
+        });
+
+
+        //Members
+        Route::get('members', [UserController::class, 'index']);
+        Route::get('members-data', [UserController::class, 'getData']);
+        Route::get('members/create', [UserController::class, 'create']);
+        Route::post('members/store', [UserController::class, 'store']);
+        Route::get('members/{id}/edit', [UserController::class, 'edit']);
+        Route::post('members/{id}/update', [UserController::class, 'update']);
+        Route::get('members/{id}/delete', [UserController::class, 'destroy']);
+        Route::get('members/{id}/status/{status}', [UserController::class, 'updateStatus'])->name('admin.members.status');
+
+
         //Users
-        Route::get('users', [UserController::class, 'index']);
-        Route::get('users-data', [UserController::class, 'getData']);
-        Route::get('users/create', [UserController::class, 'create']);
-        Route::post('users/store', [UserController::class, 'store']);
-        Route::get('users/{id}/edit', [UserController::class, 'edit']);
-        Route::post('users/{id}/update', [UserController::class, 'update']);
-        Route::get('users/{id}/delete', [UserController::class, 'destroy']);
-        Route::get('users/{id}/status/{status}', [UserController::class, 'updateStatus']);
+        Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('users-data', [AdminUserController::class, 'getData']);
+        Route::get('users/create', [AdminUserController::class, 'create']);
+        Route::post('users/store', [AdminUserController::class, 'store']);
+        Route::get('users/{id}/edit', [AdminUserController::class, 'edit']);
+        Route::post('users/{id}/update', [AdminUserController::class, 'update']);
+        Route::get('users/{id}/delete', [AdminUserController::class, 'destroy']);
+        Route::get('users/{id}/status/{status}', [AdminUserController::class, 'updateStatus'])->name('admin.users.status');
 
         // Admin Authentication
         Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);

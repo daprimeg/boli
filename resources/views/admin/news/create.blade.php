@@ -51,6 +51,12 @@
                                             <input type="text" name="title" class="form-control" required>
                                         </div>
                                     </div>
+                                <div class="mb-3 col-md-4">
+                                    <label for="newcat" class="form-label">Category <span class="text-danger">*</span></label> <br>
+                                    <select name="newcat" class="form-control form-select newcat" required>
+                                       
+                                    </select>
+                                </div>
                                     <div class="col-md-4">
                                         <div class="form-group mb-3">
                                             <label class="form-label">Date</label>

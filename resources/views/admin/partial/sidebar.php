@@ -30,6 +30,14 @@
               </a>
             </li>
 
+            <li class="menu-item {{ request()->is('compare*') ? 'active open' : '' }}">
+              <a href="{{ URL::to('/compare') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-arrows-diff"></i>
+                <div data-i18n="Compare">Compare</div>
+              </a>
+            </li>
+
+
             <li class="menu-item {{ request()->is('auctionscheduler*') ? 'active' : '' }}">
               <a href="{{ URL::to('/auctionscheduler') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-gavel"></i>

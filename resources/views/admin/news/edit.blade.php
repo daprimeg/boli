@@ -51,6 +51,15 @@
                                             <input type="text" name="title" value="{{ $news->title }}" class="form-control" required>
                                         </div>
                                     </div>
+
+                                <div class="mb-3 col-md-4">
+                                    <label for="newcat" class="form-label">Category <span class="text-danger">*</span></label> <br>
+                                    <select name="newcat" class="form-control form-select newcat" required>
+                                        @if($news->category_id)
+                                        <option value="{{$news->category_id}}">{{$news->category->name}}</option>
+                                        @endif
+                                    </select>
+                                </div>
                                    
                                     <div class="col-md-4">
                                          <div class="form-group">

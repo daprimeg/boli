@@ -17,6 +17,7 @@ use App\Http\Controllers\InterestController;
 use App\Http\Controllers\AuctionFinderController;
 use App\Http\Controllers\AuctionFinderDataController;
 use App\Http\Controllers\ReauctionController;
+use App\Http\Controllers\CompareController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebController;
 use App\Http\Middleware\CheckUserStatus;
@@ -313,7 +314,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
             Route::get('/autionshadule', [WebController::class, 'AutionShadule'])->name('autionshadule');
 
-
+            // compare
+            Route::get('/compare', [CompareController::class,'index'])->name('compare');
+            Route::get('/get-models-variants/{make_id}', [CompareController::class, 'getModelsAndVariants']);
 
 
             Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');

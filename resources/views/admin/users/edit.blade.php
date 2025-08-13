@@ -1,5 +1,5 @@
 @extends('admin.partial.app')
-@push('title') Users @endpush
+@push('title') Members @endpush
 @section('css')
 <style>
    .form-label{
@@ -14,7 +14,7 @@
       <div class="row g-6"> 
          <div class="col-md-12">
              <?php $id = $user ? $user->id : 0; ?> 
-             <form action="{{ url('/admin/users/'.$id.'/update')}}" method="POST" enctype="multipart/form-data">
+             <form action="{{ url('/admin/members/'.$id.'/update')}}" method="POST" enctype="multipart/form-data">
                   @csrf
                   @if($user)
                     <input type="hidden" name="user_type" value="{{ $user->user_type }}" />
@@ -22,7 +22,7 @@
               
                 <div class="card">
                     <div class="card-header border-bottom">
-                         <h5 class="card-title">{{$user ? 'Edit' : 'Create'}} User</h5>
+                         <h5 class="card-title">{{$user ? 'Edit' : 'Create'}} Members</h5>
                     </div>
                     <div class="card-body">
                         <div class="row pb-5">

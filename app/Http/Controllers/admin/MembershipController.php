@@ -9,6 +9,8 @@ use App\Models\Membership;
 use App\Models\MembershipPayment;
 use DataTables;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class MembershipController extends Controller
 {
@@ -25,26 +27,37 @@ class MembershipController extends Controller
             ->Leftjoin('membership_plans', 'membership_plans.id', '=', 'memberships.plan_id');
 
 
-            if($request->has('status') && $request->status != '') {
-                $query->where('memberships.membership_status',$request->status);
-            }
+           if ($request->has('status') && $request->status != '') {
+                    $query->where('memberships.membership_status', $request->status);
+                }
 
-            if($request->has('type') && $request->type != '') {
-                $query->where('memberships.membership_type',$request->type);
-            }
+                if ($request->has('plan') && $request->plan != '') {
+                    $query->where('memberships.plan_id', $request->plan);
+                }
 
-            if ($request->has('start_date') && $request->start_date != '') {
-                $query->whereDate('memberships.membership_start_date', $request->start_date);
-            }
+              
+                if ($request->has('month') && $request->month != '') {
+                    $query->whereMonth('memberships.created_at', $request->month);
+                }
 
-            if ($request->has('end_date') && $request->end_date != '') {
-                $query->whereDate('memberships.membership_expiry_date', $request->end_date);
-            }
+          
+                if ($request->has('year') && $request->year != '') {
+                    $query->whereYear('memberships.created_at', $request->year);
+                }
+
+              
+                if ($request->has('search') && $request->search != '') {
+                    $search = $request->search;
+                    $query->where(function($q) use ($search) {
+                        $q->where('users.name', 'like', "%{$search}%")
+                        ->orWhere('users.email', 'like', "%{$search}%");
+                    });
+                }
 
             if ($request->has('search') && $request->search != '') {
                 $search = $request->search;
                 $query = $query->where(function ($q) use ($search) {
-                    // dd($search);
+              
                     $q->where('memberships.id', 'like', "%{$search}%")
                     ->orWhere('users.firstName', 'like', "%{$search}%")
                     ->orWhere('users.surname', 'like', "%{$search}%")
@@ -62,6 +75,7 @@ class MembershipController extends Controller
             $data = $query->select(
                     'memberships.*',
                     'users.firstName',
+                    'users.companyName',
                     'users.surname',
                     'users.personalEmail',
                     'membership_plans.plan_name',
@@ -74,10 +88,10 @@ class MembershipController extends Controller
             ->map(function ($item) {
         
                     
-                    $html = '<a href="'.URL::to('/admin/memberships/'.$item->id.'/edit').'" class="btn btn-sm btn-primary">Edit</a>
-                        <form action="'.URL::to('/admin/memberships/'.$item->id).'/destroy" method="POST" style="display:inline-block;">
+                    $html = '<a href="'.URL::to('/admin/MembershipController/'.$item->id.'/edit').'" class="btn btn-sm btn-primary">    <i class="fas fa-edit"></i></a>
+                        <form action="'.URL::to('/admin/MembershipController/'.$item->id).'/destroy" method="POST" style="display:inline-block;">
                             '.csrf_field().method_field('POST').'
-                            <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                            <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">  <i class="fas fa-trash-alt"></i></button>
                         </form>';
 
                     $badgeClass = match($item->membership_status) {
@@ -90,12 +104,12 @@ class MembershipController extends Controller
                   return [
                       $item->id,
                       $item->firstName . ' ' . $item->surname . '<br><small class="text-muted">' . $item->personalEmail . '</small>',
+                      $item->companyName ?? 'No Recode Found',
                       ucfirst($item->membership_type),
                       $item->plan_name . '<br><small class="text-muted">£' . number_format($item->price, 2) . '</small>',
                      '<span class="badge ' . $badgeClass . '">' . $item->membership_status . '</span>',
                       $item->membership_start_date ? \Carbon\Carbon::parse($item->membership_start_date)->format('Y-m-d') : '',
                       $item->membership_expiry_date ? \Carbon\Carbon::parse($item->membership_expiry_date)->format('Y-m-d') : '',
-                      $item->created_at ? $item->created_at->format('Y-m-d') : '',
                       $html,
                   ];
               });
@@ -108,9 +122,137 @@ class MembershipController extends Controller
                 ];
         
         }
-    
-        return view('admin.memberships.index');
 
+
+$startOfMonth = Carbon::now()->startOfMonth();
+$endOfMonth = Carbon::now()->endOfMonth();
+
+$freePlanId = 2;
+
+
+$autoRenewUserIds = DB::table('memberships')
+    ->select('user_id', DB::raw('COUNT(*) as membership_count'))
+    ->where('membership_status', 'Active')
+    ->groupBy('user_id')
+    ->having('membership_count', '>', 1)
+    ->pluck('user_id');
+
+$totalAutoRenewUsersCount = User::whereIn('id', $autoRenewUserIds)->count();
+
+
+$freeUserIds = DB::table('memberships')
+    ->where('membership_status', 'Active')
+    ->where('plan_id', $freePlanId)
+    ->pluck('user_id');
+
+$totalFreeUsersCount = User::whereIn('id', $freeUserIds)->count();
+
+
+$upgradeUserIds = DB::table('memberships')
+    ->select('user_id', DB::raw('COUNT(DISTINCT plan_id) as distinct_plans'))
+    ->where('membership_status', 'Active')
+    ->groupBy('user_id')
+    ->having('distinct_plans', '>', 1)
+    ->pluck('user_id');
+
+$totalUpgradeUsersCount = User::whereIn('id', $upgradeUserIds)->count();
+
+
+$failedMembershipIds = DB::table('membership_payments')
+    ->where('payment_status', '!=', 'Completed')
+    ->pluck('membership_id');
+
+$failedUserIds = DB::table('memberships')
+    ->whereIn('id', $failedMembershipIds)
+    ->pluck('user_id');
+
+$totalPaymentFailuresCount = User::whereIn('id', $failedUserIds)->count();
+
+
+
+
+$currentMonthAutoRenewUserIds = DB::table('memberships')
+    ->select('user_id', DB::raw('COUNT(*) as membership_count'))
+    ->where('membership_status', 'Active')
+    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    ->groupBy('user_id')
+    ->having('membership_count', '>', 1)
+    ->pluck('user_id');
+
+$currentMonthAutoRenewUsersCount = User::whereIn('id', $currentMonthAutoRenewUserIds)->count();
+
+$currentMonthFreeUserIds = DB::table('memberships')
+    ->where('membership_status', 'Active')
+    ->where('plan_id', $freePlanId)
+    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    ->pluck('user_id');
+
+$currentMonthFreeUsersCount = User::whereIn('id', $currentMonthFreeUserIds)->count();
+
+$currentMonthUpgradeUserIds = DB::table('memberships')
+    ->select('user_id', DB::raw('COUNT(DISTINCT plan_id) as distinct_plans'))
+    ->where('membership_status', 'Active')
+    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    ->groupBy('user_id')
+    ->having('distinct_plans', '>', 1)
+    ->pluck('user_id');
+
+$currentMonthUpgradeUsersCount = User::whereIn('id', $currentMonthUpgradeUserIds)->count();
+
+$currentMonthFailedMembershipIds = DB::table('membership_payments')
+    ->where('payment_status', '!=', 'Completed')
+    ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+    ->pluck('membership_id');
+
+$currentMonthFailedUserIds = DB::table('memberships')
+    ->whereIn('id', $currentMonthFailedMembershipIds)
+    ->pluck('user_id');
+
+$currentMonthPaymentFailuresCount = User::whereIn('id', $currentMonthFailedUserIds)->count();
+
+    $totalUsersCount = User::where('user_type', 0)->count();
+    $currentMonthUsersCount = User::where('user_type', 0)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+
+
+$cards = [
+    [
+        'value' => $totalUsersCount,
+        'change' => '+' . $currentMonthUsersCount,
+        'icon' => 'fas fa-users',
+        'label' => 'All Users',
+        'highlight' => false,
+    ],
+    [
+        'value' => $totalAutoRenewUsersCount,
+        'change' => '+' . $currentMonthAutoRenewUsersCount,
+        'icon' => 'fas fa-sync-alt',
+        'label' => 'Auto-Renew',
+        'highlight' => false,
+    ],
+    [
+        'value' => $totalFreeUsersCount,
+        'change' => '+' . $currentMonthFreeUsersCount,
+        'icon' => 'fas fa-user',
+        'label' => 'Free Users',
+        'highlight' => false,
+    ],
+    [
+        'value' => $totalUpgradeUsersCount,
+        'change' => '+' . $currentMonthUpgradeUsersCount,
+        'icon' => 'fas fa-arrow-up',
+        'label' => 'Upgrade',
+        'highlight' => false,
+    ],
+    [
+        'value' => $totalPaymentFailuresCount,
+        'change' => '+' . $currentMonthPaymentFailuresCount,
+        'icon' => 'fas fa-exclamation-triangle',
+        'label' => 'Payment Failures',
+        'highlight' => true,
+    ],
+];
+
+return view('admin.memberships.index', compact('cards'));
     }
 
     public function create() {
@@ -169,7 +311,7 @@ class MembershipController extends Controller
         // }
 
         $membership->save();
-        return redirect('/admin/memberships')->with('success', 'Membership updated successfully.');
+        return redirect('/admin/memberShips')->with('success', 'Membership updated successfully.');
 
     }
 
@@ -182,7 +324,7 @@ class MembershipController extends Controller
             'payment_method' => 'required|in:paypal,stripe,manual',
             'amount' => 'required|numeric',
             'currency' => 'required|string|max:10',
-            'payment_status' => 'required|in:Pending,Completed,Failed,Refunded',
+            'membership_status' => 'required|in:Pending,Completed,Failed,Refunded',
         ]);
 
         $user = User::where('personalEmail', $request->email)->first();
@@ -222,10 +364,10 @@ class MembershipController extends Controller
             'charge_id' => $request->charge_id ?? '',
             'amount' => $request->amount,
             'currency' => $request->currency,
-            'payment_status' => $request->payment_status,
+            'membership_status' => $request->membership_status,
         ]);
 
-        return redirect('/admin/memberships')->with('success', 'Membership created successfully.');
+        return redirect('/admin/memberShips')->with('success', 'Membership created successfully.');
         
     }
 
@@ -234,7 +376,7 @@ class MembershipController extends Controller
     {
         $membership = Membership::findOrFail($id);
         $membership->delete();
-        return redirect('/admin/memberships')->with('success', 'Membership deleted successfully.');
+        return redirect('/admin/memberShips')->with('success', 'Membership deleted successfully.');
     }
 
 }
