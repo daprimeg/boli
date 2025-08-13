@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use DataTables;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -15,62 +17,183 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        if($request->ajax()) {
+    if ($request->ajax()) {
 
-            $search = $request->input('search.value');
-            $start = $request->input('start') ?? 0;
-            $length = $request->input('length') ?? 10;
-            
-            $query = User::Leftjoin('users', 'users.id', '=', 'tickets.user_id');
+        $search = $request->input('search.value');
+        $start  = $request->input('start') ?? 0;
+        $length = $request->input('length') ?? 10;
 
-             if (!empty($search)) {
+
+       $query = User::leftJoin('memberships', function($join) {
+        $join->on('memberships.user_id', '=', 'users.id')
+             ->whereRaw('memberships.id = (SELECT id FROM memberships m2 WHERE m2.user_id = users.id ORDER BY m2.created_at DESC LIMIT 1)');
+        })
+        ->leftJoin('membership_plans', 'membership_plans.id', '=', 'memberships.plan_id')->where('users.user_type', 0);
+        
+        if (!empty($search)) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('users.id', 'like', "%{$search}%")
-                    ->orWhere('users.firstName', 'like', "%{$search}%");
+                    $q->where('users.surname', 'like', "%{$search}%")
+                    ->orWhere('users.firstName', 'like', "%{$search}%")
+                    ->orWhere('membership_plans.plan_name', 'like', "%{$search}%");
                 });
             }
 
-            $totalData = clone $query;
-            $data = $query->select(
-                    'users.*',
-            )
-            ->orderBy('users.created_at','desc')
-            ->offset($start)
-            ->limit($length)
-            ->get()
-            ->map(function ($row) {
-        
-                    $html = '';
-                    $html .= '<a href="' .url('/admin/users/'.$row->id). '" class="btn btn-sm btn-warning" >View</a>';
-                    $html .= '<a href="' .url('/admin/users/'.$row->id.'/edit'). '" class="btn btn-sm btn-warning" >Edit</a>';
-                    $html .= '<form action="' .url('/admin/users/'.$row->id). '" method="POST" style="display:inline-block;">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Delete this news?\')">Delete</button>
-                    </form>';
-
-                    $status =  $row->status == 1 ? '<a href="'.url('/admin/users/'.$row->id.'/status/0').'" class="btn btn-success btn-sm">Active</a>' : 
-                    '<a href="'.route('admin.users.status', [$row->id, 1]).'" class="btn btn-danger btn-sm">Deactive</a>';
-            
-                  return [
-                        $row->id,
-                        $row->company,
-                        $row->firstName.' '.$row->surname,
-                        $row->personalEmail,
-                        $status,
-                        $html,
-                  ];
-              });
-
-                return  [
-                    "draw" => intval($request->input('draw')),
-                    "recordsTotal" => $totalData->count(),
-                    "recordsFiltered" => $totalData->count(),
-                    "data" => $data
-                ];
+        if ($request->plan) {
+            $query->where('membership_plans.id', $request->plan);
         }
 
-        $users = User::all();
-        return view('admin.users.index', compact('users'));
+        if ($request->status !== null && $request->status !== '') {
+            $query->where('users.status', $request->status);
+        }
+
+        
+        $totalData = (clone $query)->distinct('users.id')->count('users.id');
+
+            $data = $query->select(
+                        'users.id',
+                        'users.firstName',
+                        'users.surname',
+                        'users.companyName',
+                        'users.user_type',
+                        'membership_plans.plan_name',
+                        'users.status',
+                        'memberships.membership_status',
+                        'memberships.membership_expiry_date',
+                        'users.personalEmail',
+                        DB::raw("COALESCE(membership_plans.plan_name, 'No Plan Purchased') as plan")
+                    )
+                    ->groupBy(
+                        'users.id',
+                        'users.firstName',
+                        'users.surname',
+                        'users.companyName',
+                        'users.user_type',
+                        'users.status',
+                        'users.personalEmail',
+                        'membership_plans.plan_name',
+                        'memberships.membership_status',
+                        'memberships.membership_expiry_date'
+                    )
+                    ->orderBy('users.created_at', 'desc')
+                    ->offset($start)
+                    ->limit($length)
+                    ->get()
+                    ->map(function ($row) {
+                     
+                  
+
+                   
+                        $status = $row->status == 1 
+                            ? '<a href="' . url('/admin/members/' . $row->id . '/status/0') . '" class="btn btn-success btn-sm">Active</a>'
+                            : '<a href="' . route('admin.members.status', [$row->id, 1]) . '" class="btn btn-danger btn-sm">Deactive</a>';
+
+
+                           
+                       if ($row->membership_status === 'Expired' || empty($row->membership_status)) {
+                            $membership_status = '<span>-</span>';
+                        } elseif (stripos($row->membership_status, 'Active') !== false) {
+                            $membership_status = '<span class="badge btn btn-success btn-sm" style="color:white;">'.$row->membership_status.'</span>';
+                        } elseif (stripos($row->membership_status, 'Inactive') !== false) {
+                            $membership_status = '<span class="badge bg-secondary" style="color:white;">'.$row->membership_status.'</span>';
+                        } elseif (stripos($row->membership_status, 'Pending') !== false) {
+                            $membership_status = '<span class="badge bg-warning" style="color:white;">'.$row->membership_status.'</span>';
+                        } elseif (stripos($row->membership_status, 'Cancelled') !== false) {
+                            $membership_status = '<span class="badge bg-primary" style="color:white;">'.$row->membership_status.'</span>';
+                        } else {
+                            $membership_status = '<span class="badge bg-info text-dark" style="color:white;">' . e($row->membership_status) . '</span>';
+                        }
+
+                   
+                        $html = '<a href="' . url('/admin/members/' . $row->id . '/edit') . '" 
+                                    class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="' . url('/admin/members/' . $row->id . '/delete') . '" 
+                                    class="btn btn-danger btn-sm" title="Delete" 
+                                    onclick="return confirm(\'Delete user?\')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>';
+                        return [
+                            'id'        => $row->id,
+                            'avatar'       => '<img style="width:50px;" src="'.asset('/public/uploads/avatar/'.$row->avatar).'" />',
+                            'name'        => $row->firstName . ' ' . $row->surname,
+                            'companyName' => $row->companyName,
+                            'email'       => $row->personalEmail,
+                            'plan'       => $row->plan != 'No Plan Purchased' ? $row->plan :'-',
+                            'planstatus'  => $membership_status,
+                            'expirydate'  => $row->membership_expiry_date ? \Carbon\Carbon::parse($row->membership_expiry_date)->format('Y-m-d') : '-',
+                            'status'      => $status,
+                            'action'      => $html
+                        ];
+                    });
+
+   
+                    return response()->json([
+                        "draw"            => intval($request->input('draw')),
+                        "recordsTotal"    => $totalData,
+                        "recordsFiltered" => $totalData,
+                        "data"            => $data
+                    ]);
+    }
+   
+
+            $startOfMonth = Carbon::now()->startOfMonth();
+            $endOfMonth = Carbon::now()->endOfMonth();
+            $freePlanId = 2;
+
+
+            $totalFreeUsersCount = User::where('user_type', 0)->count();
+            $currentMonthFreeUsersCount = User::where('user_type', 0)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+            
+            $totalAtciveUserCount = User::where('status', 1,)->where('user_type', 0)->count();
+            $currentMonthAtciveUserCount = User::where('status', 1)->where('user_type', 0)->whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
+            
+            $TotalPaidUsers = User::where('user_type', 0)
+            ->leftJoin('memberships', 'memberships.user_id', '=', 'users.id')->where('membership_status', 'Active')
+            ->where('plan_id','!=', $freePlanId)->count();
+            
+            $TotalPaidUsersMonth =User::where('user_type', 0)
+            ->leftJoin('memberships', 'memberships.user_id', '=', 'users.id')->where('membership_status', 'Active')
+            ->where('plan_id','!=', $freePlanId)->whereBetween('memberships.created_at', [$startOfMonth, $endOfMonth])->count();
+            
+            $cards = [
+            [
+                'value' => $totalFreeUsersCount,
+                'change' => '+' . $currentMonthFreeUsersCount,
+                'icon' => 'fas fa-users',
+                'label' => 'All Users',
+                'highlight' => false,
+            ],
+            [
+                'value' => $totalAtciveUserCount,
+                'change' => '+' . $currentMonthAtciveUserCount,
+                'icon' => 'fas fa-chart-line',
+                'label' => 'Total Active',
+                'highlight' => false,
+            ],
+            [
+                'value' => $TotalPaidUsers,
+                'change' => '+' . $TotalPaidUsersMonth,
+                'icon' => 'fas fa-credit-card',
+                'label' => 'Paid Users',
+                'highlight' => false,
+            ],
+            [
+                'value' => 980,
+                'change' => '+' . 31,
+                'icon' => 'fas fa-heart',
+                'label' => 'Engage',
+                'highlight' => false,
+            ],
+            [
+                'value' => 980,
+                'change' => '+' . 31,
+                'icon' => 'fas fa-crown',
+                'label' => 'Became a Pro',
+                'highlight' => true,
+            ],
+        ];
+        return view('admin.users.index', compact('cards'));
     }
 
      public function create(Request $request)
@@ -204,7 +327,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect('/admin/users')->with('success', 'User updated successfully.');        
+        return redirect('/admin/members')->with('success', 'User updated successfully.');        
 
     }
 
@@ -214,7 +337,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect('/admin/users')->with('success', 'User deleted successfully.');
+        return redirect('/admin/members')->with('success', 'User deleted successfully.');
     }
 
     public function updateStatus($id, $status)
@@ -223,6 +346,6 @@ class UserController extends Controller
         $user->status = $status;
         $user->save();
 
-        return redirect('/admin/users')->with('success', 'User status updated.');
+        return redirect('/admin/members')->with('success', 'User status updated.');
     }
 }

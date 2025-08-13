@@ -1,4 +1,4 @@
-@if(Auth::user()->user_type == 1)
+@if(Auth::user()->user_type != 0)
 
             <li class="menu-item {{ request()->is('admin/dashboard*') ? 'active' : '' }}">
                 <a href="{{URL::to('/admin/dashboard')}}" class="menu-link">
@@ -83,20 +83,33 @@
                 </li>
               </ul>
             </li>
-
-            <li class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }} {{ request()->is('admin/users*') ? 'open' : '' }} ">
+            <li class="menu-item {{ request()->is('admin/users*') ? 'active open' : '' }} {{ request()->is('admin/role*') ? 'active open' : '' }} ">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-users"></i>
-                <div data-i18n="User Management">User Management</div>
+                <div data-i18n="Staff Penal">Staff Penal</div>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }}">
-                  <a href="{{ url('/admin/users') }}" class="menu-link">
-                    <div data-i18n="Manage Users">Manage Users</div>
+                <li class="menu-item {{ request()->is('admin/role*') ? 'active' : '' }}">
+                  <a href="{{ url('/admin/role') }}" class="menu-link">
+                    <div data-i18n="Role">Role</div>
                   </a>
                 </li>
+
+                <li class="menu-item {{ request()->is('admin/users*') ? 'active' : '' }}">
+                  <a href="{{ url('/admin/users') }}" class="menu-link">
+                    <div data-i18n="Users">Users</div>
+                  </a>
+                </li>
+
+
+                 
               </ul>
-            </li>
+            </li>  
+
+
+
+
+    
 
             <li class="menu-item {{ request()->is('admin/tickets*') ? 'active' : '' }} {{ request()->is('admin/tickets*') ? 'open' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -143,18 +156,27 @@
               </ul>
             </li>
 
-            <li class="menu-item {{ request()->is('admin/memberships*') || request()->is('admin/plans*')  ? 'active open' : '' }}">
+            <li class="menu-item {{ request()->is('admin/memberShips*')  ||  request()->is('admin/members*')  ? 'active open' : '' }}">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-calendar-user"></i>
                 <div data-i18n="Members & Plans">Members & Plans</div>
               </a>
+           
               <ul class="menu-sub">
-                <li class="menu-item {{ request()->is('admin/memberships*') ? 'active open' : '' }}">
-                  <a href="{{ url('/admin/memberships') }}" class="menu-link">
+                <li class="menu-item {{ request()->is('admin/members*') ? 'active' : '' }}">
+                  <a href="{{ url('/admin/members/') }}" class="menu-link">
                     <div data-i18n="Members">Members</div>
                   </a>
                 </li>
-                <li class="menu-item {{ request()->is('admin/plans*') ? 'active open' : '' }}">
+                
+                <li class="menu-item {{ request()->is('admin/memberShips*') ? 'active' : '' }}">
+                  <a href="{{ url('/admin/memberShips') }}" class="menu-link">
+                    <div data-i18n="Membership">Membership</div>
+                  </a>
+                </li>
+            
+              
+                <li class="menu-item {{ request()->is('admin/plans*') ? 'active' : '' }}">
                   <a href="{{ url('/admin/plans') }}" class="menu-link">
                     <div data-i18n="Plans">Plans</div>
                   </a>

@@ -35,13 +35,13 @@
                                 <h5 class="card-title">Create Membership</h5>
                             </div>
                             <div class="col-md-6 text-end">
-                                 <a href="{{URL::to('/admin/memberships')}}" class="btn btn-primary">Back To List</a>
+                                 <a href="{{URL::to('/admin/memberShips')}}" class="btn btn-primary">Back To List</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
 
-                        <form method="POST" action="{{ url('/admin/memberships/store') }}">
+                        <form method="POST" action="{{ url('/admin/memberShips/store') }}">
                             @csrf
 
                             <div class="row">

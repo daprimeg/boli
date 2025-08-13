@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>@stack('title')</title>
     <meta name="description" content="" />
     <style>
@@ -186,7 +186,7 @@
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/pages/app-academy-details.css') }}" /> --}}
-
+<link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
     {{-- Lib --}}
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/select2.css') }}" />
 
@@ -274,6 +274,7 @@
         {{-- Libs --}}
          <script src="{{asset('public/themeadmin/assets/js/select2.js')}}"></script>
          <script src="{{asset('public/themeadmin/assets/js/jquertdatatable.js')}}"></script>
+         <script src="{{asset('public/theme/js/toastr.min.js')}}"></script>
          <script>
 
             $(document).ready(function () {
@@ -286,15 +287,6 @@
                         dataType: 'json'
                     }
                 });
-                $('.newcat').select2({
-                    placeholder: 'Select News Category',
-                    allowClear: true,
-                    ajax: {
-                        url: "{{url('/admin/masters/newcat/getnewscategory')}}",
-                        dataType: 'json'
-                    }
-                });
-
                 $('.model').select2({
                     placeholder: 'Select Model',
                     allowClear: true,
@@ -305,9 +297,27 @@
                 });
                 $('.vehicleTtypes').select2({
                     placeholder: 'Select Vehicle Type',
+                    allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
                         dataType: 'json',
+                    }
+                });
+
+                  $('.newcat').select2({
+                    placeholder: 'Select News Category',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/newcat/getnewscategory')}}",
+                        dataType: 'json'
+                    }
+                });
+                $('.memberships').select2({
+                    placeholder: 'Select Plan',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/memberships/getmemberships')}}",
+                        dataType: 'json'
                     }
                 });
                 $('.variants').select2({
@@ -349,6 +359,21 @@
                     ajax: {
                         url: "{{url('/admin/masters/centers/getCenters')}}",
                         dataType: 'json',
+                    }
+                });
+                $('.role').select2({
+                    placeholder: 'Select Role',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{ url('/admin/role/getRole') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        processResults: function (data) {
+
+                            return {
+                                results: data.results
+                            };
+                        }
                     }
                 });
 

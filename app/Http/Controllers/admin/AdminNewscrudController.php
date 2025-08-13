@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\User;
 use App\Models\NewsCategory;
+use App\Models\MembershipPlan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -100,6 +101,18 @@ class AdminNewscrudController extends Controller
 
             $makes = NewsCategory::where('name', 'like', "%$search%")
                 ->select('id', 'name as text')
+                ->limit(20)
+                ->get();
+
+            return response()->json(['results' => $makes]);
+        }
+
+    public function getmemberships(Request $request)
+        {
+            $search = $request->input('q');
+
+            $makes = MembershipPlan::where('plan_name', 'like', "%$search%")
+                ->select('id', 'plan_name as text')
                 ->limit(20)
                 ->get();
 
