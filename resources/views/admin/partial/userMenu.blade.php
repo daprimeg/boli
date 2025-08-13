@@ -49,32 +49,13 @@
               <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px; font-size: var(--font-p2)"  data-i18n="Profile">Profile </div>
             </li>
 
-            <li class="menu-item {{ request()->is('tickethistory*') || request()->is('createticket*') || request()->is('ticket*') ? 'open' : '' }}">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-info-hexagon"></i>
+            <li class="menu-item {{ request()->is('tickethistory*') || request()->is('createticket*') || request()->is('ticket*') ? 'active' : '' }}">
+              <a href="{{ route('ticket.history') }}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-news"></i>
                 <div data-i18n="Support">Support</div>
               </a>
-              <ul class="menu-sub">
-                <li class="menu-item {{ request()->is('createticket*')  ? 'active' : '' }}">
-                  <a href="{{ route('ticket.create') }}" class="menu-link ">
-                    <div data-i18n="Create Ticket">Create Ticket</div>
-                  </a>
-                </li>
-                <li class="menu-item {{ request()->is('tickethistory*') || request()->is('ticket*') ? 'active' : '' }}">
-                  <a href="{{ route('ticket.history') }}" class="menu-link">
-                    <div data-i18n="Ticket History">Ticket History</div>
-                  </a>
-                </li>
-              </ul>
             </li>
-
-            <li class="menu-item {{ request()->is('account-setting/billing*') ? 'active' : '' }}">
-              <a href="{{url('/account-setting/billing')}}" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-id"></i>
-                <div data-i18n="Billing Plan">Billing Plan</div>
-              </a>
-            </li>
-
+          
             <li class="menu-item {{ request()->is('news*') ? 'active' : '' }}">
               <a href="{{ route('news.index') }}" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-news"></i>

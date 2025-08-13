@@ -21,13 +21,14 @@ use App\Models\Color;
 use App\Models\Vehicle;
 use DataTables;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class AuctionFinderDataController extends Controller
 {
 
-    
+
     public function auctionList(Request $request)
     {
 
@@ -104,7 +105,7 @@ class AuctionFinderDataController extends Controller
 
 
             if($request->has('grade') && $request->grade != ''){
-                $query->whereIn('vehicles.grades',explode(',',$request->grade));
+                $query->whereIn('vehicles.grade',explode(',',$request->grade));
             }
 
 
@@ -170,6 +171,7 @@ class AuctionFinderDataController extends Controller
             ->get()
             ->map(function ($item) {
                 
+                $images = explode(',',$item->images);
                 return [
                     'id' => $item->id,
                     'make_name' => $item->make_name,
@@ -188,6 +190,9 @@ class AuctionFinderDataController extends Controller
                     'cap_below' => $item->cap_below ?? '',
                     'autotrader_retail_value' => $item->autotrader_retail_value ?? '',
                     'auto_boli' => 0,
+                    'image1' => isset($images[0]) ? $images[0] : '',
+                    'image2' => isset($images[1]) ? $images[1] : '',
+                    'inspection_report' => $item->inspection_report,
                 ];
 
             });
@@ -195,6 +200,11 @@ class AuctionFinderDataController extends Controller
             return response()->json([
                 'toDate' =>  $toDate,
                 'fromDate' =>  $fromDate,
+                'filters' => [
+                    // "make" => Make::select('id','name')->whereIn('id',explode(',',$request->make))->get()->toArray(),
+                    // "model" => Model::select('id','name')->whereIn('id',explode(',',$request->model))->get()->toArray(),
+                    // "variant" => ModelVariant::select('id','name')->whereIn('id',explode(',',$request->variant))->get()->toArray(),
+                ],
                 'offset' => $offset,
                 'data'         => $results,
                 'total'        => $total,
@@ -452,9 +462,12 @@ class AuctionFinderDataController extends Controller
         ->select([
             'make.id',
             'make.name as label',
-            DB::raw('COUNT(vehicles.id) as count')
-        ])
-        ->groupBy('make.id','make.name')
+             DB::raw('COUNT(vehicles.id) as count')
+        ]);
+
+
+
+        $data = $data->groupBy('make.id','make.name')
         ->orderBy('count','desc')
         ->get();
 
@@ -464,42 +477,54 @@ class AuctionFinderDataController extends Controller
 
     }
 
+
         public function getModels(Request $request)
     {
 
+        DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
         $data = DB::table('model')
+        ->join('make', 'make.id', '=', 'model.make_id')
         ->join('vehicles', 'vehicles.model_id', '=', 'model.id')
         ->select([
             'model.id',
             'model.name as label',
+            'make.name as make', 
             DB::raw('COUNT(model.id) as count')
         ])
-        ->groupBy('model.id','model.name')
+        ->whereIn('model.make_id',explode(',',$request->make_id))
+        ->groupBy('model.id')
         ->orderBy('count','desc')
         ->get();
 
+        // dd($data->groupBy('make')->toArray());
+
         return response()->json([
-            "data" => $data
+            "data" => $data->groupBy('make')->toArray()
         ],200);
 
     }
 
         public function getVariants(Request $request)
     {
+         DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
         $data = DB::table('model_variant')
+        ->join('model','model.id', '=', 'model_variant.model_id')
         ->join('vehicles', 'vehicles.variant_id', '=', 'model_variant.id')
         ->select([
             'model_variant.id',
             'model_variant.name as label',
+            'model.name as model',
             DB::raw('COUNT(vehicles.id) as count')
         ])
-        ->groupBy('model_variant.id','model_variant.name')
+        ->whereIn('model_variant.model_id',explode(',',$request->model_id))
+        ->groupBy('model_variant.id')
         ->orderBy('count','desc')
         ->get();
 
         return response()->json([
-            "data" => $data
+            "data" => $data->groupBy('model')->toArray()
         ],200);
 
     }

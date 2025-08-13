@@ -218,6 +218,7 @@ class AuctionFinderController extends Controller
                 $data = $query ->select(
                         'auctions.id',
                         'auction_platform.name as platform_name',
+                        'auction_platform.id as platform_id',
                         // 'auction_center.name as center_name',
                         // 'auctions.total_vehicles', 
                         'auctions.auction_date',
@@ -235,7 +236,8 @@ class AuctionFinderController extends Controller
                     ->limit($length)
                     ->get()
                     ->map(function ($auction) {
-                        $view = URL::to('/auctionfinder');
+
+                        $view = URL::to('/auction-finder?platform='.$auction->platform_id);
 
                         // ✅ Add status badge with color
                         $statusColor = match (strtolower($auction->status)) {
