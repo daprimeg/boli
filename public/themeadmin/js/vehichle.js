@@ -185,6 +185,7 @@
 
             if(auctions.filters.display_type == 'auction'){
                 $('table thead').html(`<tr>
+                    <th>#</th>
                     <th>Vehicle</th>
                     <th>Year</th>
                     <th>CC</th>
@@ -196,6 +197,7 @@
                 </tr>`);
             }else{
                 $('table thead').html(`<tr>
+                    <th>#</th>
                     <th>Vehicle</th>
                     <th>Clean</th>
                     <th>Average</th>
@@ -232,32 +234,57 @@
                             $('.table tbody').html('');
 
                         response.data.forEach(element => {
-                                if(auctions.filters.display_type == 'auction')
-                                $(`.table tbody`).append(`
-                                    <tr>
-                                        <td>${element.make_name} ${element.model_name} ${element.variant_name}</td>
-                                        <td>${element.year}</td>
-                                        <td>${element.cc}</td>
-                                        <td>${element.mileage}</td>
-                                        <td>${element.transmission}</td>
-                                        <td>${element.auction_name}</td>
-                                        <td>${element.auction_date} ${element.auction_time}</td>
-                                        <td>${element.last_bid}</td>
-                                    </tr>
-                                `);
-                                else{
+
+                                    let image1 = element.image1 ? "<span><img src= "+element.image1+" /> </span>" : '';
+                                    let image2 = element.image2 ? "<span><img src= "+element.image2+" /> </span>" : '';
+
+                                if(auctions.filters.display_type == 'auction'){
+
+                            
+
+                                    $(`.table tbody`).append(`<tr>
+                                            <td>
+                                                <button class="my_btn" type="button"><i class="menu-icon icon-base ti tabler-pointer-heart"></i></button>
+                                            </td>
+                                            <td>${element.make_name} ${element.model_name} ${element.variant_name}
+                                              <div class="extra">${image1} ${image2}</div>
+                                            </td>
+                                            <td>${element.year}</td>
+                                            <td>${element.cc}</td>
+                                            <td>${element.mileage}</td>
+                                            <td>${element.transmission}</td>
+                                            <td>${element.auction_name}</td>
+                                            <td>${element.auction_date} ${element.auction_time}</td>
+                                            <td>${element.last_bid}
+                                                <div class="extra">
+                                                   <a class="btn btn-primary report-link" target="_blank" href="${element.inspection_report}">View Report</a>
+                                                </div>
+                                            </td>
+                                        </tr>`);
+
+                                }else{
+
                                     $(`.table tbody`).append(`
                                     <tr>
-                                        <td>${element.make_name} ${element.model_name} ${element.variant_name}</td>
+                                        <td>
+                                            <button class="my_btn" type="button"><i class="menu-icon icon-base ti tabler-pointer-heart"></i></button>
+                                        </td>
+                                        <td>${element.make_name} ${element.model_name} ${element.variant_name}
+                                           <div class="extra">${image1} ${image2}</div>
+                                        </td>
                                         <td>${element.cap_clean}</td>
                                         <td>${element.cap_average}</td>
                                         <td>${element.cap_below}</td>
                                         <td>${element.autotrader_retail_value}</td>
                                         <td>${element.auction_name}</td>
                                         <td>${element.last_bid}</td>
-                                        <td>${element.auto_boli}</td>
-                                    </tr>
-                                `);
+                                        <td>${element.auto_boli}
+                                            <div class="extra">
+                                                <a class="btn btn-primary report-link" target="_blank" href="${element.inspection_report}">View Report</a>
+                                            </div>
+                                        </td>
+                                    </tr>`);
+
                                 }
                         });
 
@@ -440,12 +467,9 @@
                           });
 
                     }
+
                 }
                 
-               
-
-                
-
                 auctions.getVariants();
 
             },
@@ -1012,6 +1036,24 @@
          });
     }
 
+
+    
+    $(document).on('click','.my_btn', function () {
+
+        let element = $(this).parent().parent();
+        
+        if(element.hasClass('showing')) {
+                
+              element.removeClass('showing');
+        }else{
+              element.addClass('showing');
+        }   
+        
+        // alert('asd');
+        // $('.extra').hide();
+    });
+
+
     $('select[name=auction_name]').change(function (e) { 
         const url = new URL(window.location.href);
         url.searchParams.set('platform', $(this).val());
@@ -1039,11 +1081,11 @@
     $('.display_type').click(function (e) { 
 
         const url = new URL(window.location.href);
-        url.searchParams.set('display_type', $(this).val());
+        url.searchParams.set('display_type', $(this).data('id'));
         history.pushState({}, '', url);
-
         $('.display_type').removeClass('active');
         $(this).addClass('active');
+
         auctions.showHeadings();
         auctions.onLoad();
     });
@@ -1441,6 +1483,7 @@
 
 
     auctions.onLoad();
+    auctions.showHeadings();
 
     
 });

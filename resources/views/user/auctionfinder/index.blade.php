@@ -46,6 +46,37 @@
    
    }
 
+   .my_btn{
+      background: transparent;
+       border: none;
+   }
+
+   .auction-table tr{
+      vertical-align: baseline;
+   }
+
+   .auction-table .extra{
+      display: none;
+   }
+
+   .auction-table .showing .extra{
+      display: block;
+      margin-top: 10px;
+   }
+
+   .auction-table .report-link{
+      padding: 2px 7px;
+      font-size: 10px;      
+   }
+
+
+   .auction-table img{
+      width:60px;
+   }
+
+   .show_entries_div{
+
+   }
    
 </style>
 @endsection
@@ -54,8 +85,8 @@
 
 <div class="py-5 container-fluid filter">
 
-      <div class="row ">
-         <div class="col-md-3 auction-tabs">
+      <div class="d-flex flex-wrap justify-content-between">
+         <div class="auction-tabs">
                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
                   <ul class="nav flex-column flex-md-row gap-md-0 gap-2">
                      <li class="nav-item">
@@ -67,9 +98,9 @@
                   </ul>
                </div>
          </div>
-         <div class="col-md-9 text-right ">
-            <div class="row">
-               <div class="col-md-6 align-self-center">
+         <div  class="text-right ">
+            <div class="d-flex justify-content-between">
+               <div class=" align-self-center show_entries_div">
                   <span style="padding-right: 5px" >Show Entries</span>
                   <select style="height: 38px;padding: 0px 10px;" name="length">
                      {{-- <option value="10">10</option> --}}
@@ -81,8 +112,8 @@
 
                   <span class="params" ></span>
                </div>
-               <div class="col-md-6">
-                  <div class="d-flex justify-content-end">
+               <div class="">
+                  <div class="d-flex flex-wrap justify-content-end">
                      <div class="invoice_status">
                         <select id="auction_name" name="auction_name" class="form-select">
                         </select>
@@ -104,7 +135,7 @@
       </div>
 
       <div class="row">
-         <div class="col-md-3">
+         <div class="col-lg-3">
             <div class="card p-2">
                   <div class="d-flex justify-content-between align-items-center px-1 pt-1">
                      <h5 class="mb-0">Filters</h5>
@@ -122,21 +153,12 @@
          </div>
 
          <!-- Right: 9col Table section -->
-         <div class="col-md-9">
+         <div class="col-lg-9">
             <div class="card">
                <div class="table-responsive text-nowrap">
-                  <table class="table table-hover" >
+                  <table class="auction-table table table-hover" >
                      <thead>
-                        <tr>
-                           <th>Vehicle</th>
-                           <th>Year</th>
-                           <th>CC</th>
-                           <th>Mileage</th>
-                           <th>Transmission</th>
-                           <th>Auction</th>
-                           <th>Auction Time</th>
-                           <th>Last Bid</th>
-                        </tr>
+             
                      </thead>
                      <tbody></tbody>
                   </table>

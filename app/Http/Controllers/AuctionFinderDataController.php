@@ -171,6 +171,7 @@ class AuctionFinderDataController extends Controller
             ->get()
             ->map(function ($item) {
                 
+                $images = explode(',',$item->images);
                 return [
                     'id' => $item->id,
                     'make_name' => $item->make_name,
@@ -189,6 +190,9 @@ class AuctionFinderDataController extends Controller
                     'cap_below' => $item->cap_below ?? '',
                     'autotrader_retail_value' => $item->autotrader_retail_value ?? '',
                     'auto_boli' => 0,
+                    'image1' => isset($images[0]) ? $images[0] : '',
+                    'image2' => isset($images[1]) ? $images[1] : '',
+                    'inspection_report' => $item->inspection_report,
                 ];
 
             });
