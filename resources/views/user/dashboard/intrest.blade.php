@@ -36,15 +36,15 @@
 </div>
 
 
-<div class="row g-6 " style="padding: 0rem 4rem">
+<div class=" " style="padding: 0rem 4rem;">
     <div class="col-md-12">
 
         @include('user.dashboard.infocard')
 
         <br><br>
-        <div class="row g-4" style="margin-top: -30px;">
+        <div class="" style="margin-top: -30px; display: flex; gap: 20px;">
 
-            <div class="col-md-8 ">
+            <div class=" " style="flex: 2;">
                 <div id="lookbestauction" style="padding: 30px;" class="card text-white  rounded-4 shadow-sm h-100">
                     <div class="row">
                         <div class="col-md-6">
@@ -75,7 +75,7 @@
             </div>
 
             <!-- Right Side: Valuation -->
-            <div class="col-md-4">
+            <div class="" style="flex: 1;">
                 <div class="getValuation card text-white  rounded-4 shadow-sm h-100 valuesation"
                     style="margin-left: 8px">
                     <div class="card-header">
@@ -120,9 +120,6 @@
                 </div>
             </div>
             {{--  --}}
-
-
-
         </div>
         <!-- Left Side: Stats -->
 

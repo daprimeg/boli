@@ -650,6 +650,7 @@
                         <h5 class=" fs-5 text-white">Explore more pages</h5>
                     </div>
                 </div>
+                
                 <div class="dashboard-card">
                     <div class="dashboard-mockup ">
                         <img src="{{ asset('/public/theme/assets/bg-cars.png') }}" alt="Cars" />

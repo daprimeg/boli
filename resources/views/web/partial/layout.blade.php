@@ -13,11 +13,17 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('public/theme/fav.png')}}" />
     <link href="{{asset('/public/theme/css/bootstrap.css')}}" rel="stylesheet"/>
     <link rel="stylesheet" href="{{asset('/public/theme/styles.css')}}" />
+    <!-- Hugeicons Free Icon Font -->
+<link rel="stylesheet" href="https://cdn.hugeicons.com/1.0.0/hugeicons.css">
+
     <link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
 <style>
       #toast-container > .toast-success {
         background-color: #53a6ff !important;
         color: #000000 !important;
+    }
+    .list-inline .list-inline-item a:hover{
+      color: white !important;
     }
 </style>
      @yield('css')
@@ -63,7 +69,7 @@
       <div class="container">
         <div class="" style="width: 60%; padding: 100px 0px; color: var(--white-text)" >
           <h4 class=" ">AUTOBOLI Ltd</h4>
-          <p class="lead" style="font-size: var(--font-p2)">
+          <p class="lead" style="font-size: var(--font-p1)">
             Helping dealers, exporters, and traders buy smarter with real-time
             auction data from across the UK & Japan.
           
@@ -76,45 +82,51 @@
           <div class="container ">
             <div class=" text-white">
               <!-- Section: Explore -->
-              <div class="d-flex  align-items-center  " style="flex-wrap: wrap; gap: 50px; margin-bottom: 10px;">
-                <h6  style="font-size: var(--font-p1)">AutoBoli</h6>
-                <ul class="list-inline " style="display: flex; flex-wrap: wrap" >
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >about us</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >customer</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >community</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Affiliate & Referrals</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >News</a></li> 
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Brand</a></li> 
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Bidding </a></li> 
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Roadmap </a></li> 
+              <div class="d-flex  align-items-center mb-3 " style="flex-wrap: wrap; gap: 50px; ">
+                <h6  style="font-size: var(--font-p1); margin-bottom: 0px !important; line-height: 0px !important;">AutoBoli</h6>
+                <ul class="list-inline mb-0 " style="display: flex; flex-wrap: wrap" >
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >about us</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >customer</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >community</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Brand</a></li> 
+                  
                 </ul>
               </div>
 
               <!-- Section: Learn -->
               <div class="d-flex  align-items-center mb-3 " style="flex-wrap: wrap; gap: 70px">
-                <h6   style="font-size: var(--font-p1)">Learn</h6>
+                <h6   style="font-size: var(--font-p1); margin-bottom: 0px !important; line-height: 0px !important;">Learn</h6>
                 <ul class="list-inline mb-0"  style="display: flex; flex-wrap: wrap">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Bidding </a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Roadmap </a></li> 
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >How It Works</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Guidance</a></li>
                 </ul>
               </div>
 
                 
               
-              <div class="d-flex  align-items-center  mb-3   " style="flex-wrap: wrap; gap: 30px">
-                <h6   style="font-size: var(--font-p1)">Resources </h6>   
+              <div class="d-flex  align-items-center  mb-3" style="flex-wrap: wrap; gap: 30px">
+                <h6   style="font-size: var(--font-p1); margin-bottom: 0px !important; line-height: 0px !important;">Resources </h6>   
                 <ul class="list-inline mb-0" style="display: flex; flex-wrap: wrap">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Guidance</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Explore</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >featuristic panels</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >blog</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >support</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >vin search </a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >find auc</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >vahicle value</a></li>
+                  <li class="list-inline me-3"><a href="{{ url('/features') }}" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Features </a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >blog</a></li>
+                  <li class="list-inline-item me-3"><a href="{{ url('/autionshadule') }}" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Auction Solutions</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >vin search </a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Vahicle Value </a></li>
+                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >find auc</a></li> --}}
+                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >vahicle value</a></li> --}}
+                </ul>
+              </div>
+
+               <div class="d-flex  align-items-center  mb-3" style="flex-wrap: wrap; gap: 30px">
+                <h6   style="font-size: var(--font-p1); margin-bottom: 0px !important; line-height: 0px !important;">Resources </h6>   
+                <ul class="list-inline mb-0" style="display: flex; flex-wrap: wrap">
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Support </a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Privacy</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Terms </a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Disclaimer </a></li>
+                  <li class="list-inline-item me-3"><a href="{{ url('/faqs') }}" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >FAQs </a></li>
                 </ul>
               </div>
 
@@ -122,15 +134,16 @@
                 
              
               <div class="d-flex  align-items-center  mb-3   " style="flex-wrap: wrap; gap: 45px">
-                <h6   style="font-size: var(--font-p1)">Connect </h6>
+                <h6   style="font-size: var(--font-p1); margin-bottom: 0px !important; line-height: 0px !important;">Connect </h6>
                 <ul class="list-inline mb-0" style="display: flex; flex-wrap: wrap">
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Facbook</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >insta</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >tiktok</a></li>
-                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >x</a></li>
-                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p2)" >Actions</a></li> --}}
+                  <li class="list-inline-item me-3"><a href="" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Facbook</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >insta</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >tiktok</a></li>
+                  <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >x</a></li>
+                  {{-- <li class="list-inline-item me-3"><a href="#" class="text-white-50 text-decoration-none" style="font-size: var(--font-p1)" >Actions</a></li> --}}
                 </ul>
               </div>
+
             </div>
           </div>
 

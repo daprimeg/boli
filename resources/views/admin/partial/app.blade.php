@@ -11,7 +11,6 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 />
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -169,8 +168,48 @@
         }
         .menu-item a:hover i {
                     color: var(--bs-primary);
+        }
+
+        .smallogo {
+            display: none;
+        }
+
+        .layout-menu-collapsed .smallogo{
+             display: block;
 
         }
+        .layout-menu-collapsed .largelogo{
+             display: none;
+
+        }
+
+        .layout-menu-hover .largelogo{
+            display: block;
+        }
+        .layout-menu-hover .smallogo{
+            display: none;
+        }
+        .layout-menu-hover .wide{
+            display: block;
+        }
+        .layout-menu-hover .smallogo{
+            display: none;
+        }
+        .menu-item.active  a i{
+            color: var( --new-bs-bg) !important;
+        }
+        .menu-item.active  a  div{
+            color: white !important;
+        }
+        .menu-item.active:hover  a i{
+            color: var( --new-bs-bg) !important;
+        }
+        .menu-item.active:hover  a  div{
+            color: white !important;
+        }
+        /* .menu-item.active > .menu-link:not(.menu-toggle) {
+            color: black !important;
+        } */
     </style>
     
     <link rel="icon" type="image/x-icon" href="{{ asset('public/themeadmin/autobolidp.png') }}" />
@@ -204,7 +243,9 @@
                     </span>
                     <div class="app-brand demo">
                         {{-- <a href="{{URL::to('/admin/dashboard')}}"> --}}
-                        <img src="{{ asset('public/themeadmin/images/logo/logo.png') }}" />
+                        <img style="height: 39px;" src="{{ asset('public/themeadmin/images/logo/logo.png') }}" class="largelogo" />
+                        <img style="height: 39px; width: 40px;" src="{{ asset('public/theme/fav.png')}}"  class="smallogo" alt=""  />
+
                         {{-- </a> --}}
                     </div>
                     <div class="menu-inner-shadow"></div>
@@ -357,6 +398,16 @@
                     
                     if(!$('html').hasClass('layout-menu-collapsed')) {
                       $('html').addClass('layout-menu-collapsed');
+                      
+                        //   $('.samalllogo').style({
+                        //     'display': 'none',
+                            
+                        //   });
+                        //   $('.largelogo').style({
+                        //     'display': 'block',
+                            
+                        //   });
+
 
                         //   $('.menu-button').css({
                         //     'color': 'white',
@@ -366,6 +417,15 @@
 
                     }else{
                       $('html').removeClass('layout-menu-collapsed');
+
+                        // $('.samalllogo').style({
+                        //     'display': 'block',
+                            
+                        //   });
+                        //   $('.largelogo').style({
+                        //     'display': 'none',
+                            
+                        //   });
 
                         //   $('.menu-button').css({
                         //     'color': 'white',

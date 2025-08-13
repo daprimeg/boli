@@ -472,7 +472,7 @@ const global = {
                     </div>`);
 
                 });
-
+                    $('.getValuation .auction-item').first().click();
             }
         });
     }
@@ -498,22 +498,22 @@ const global = {
 
         let icon = "";
         if (percent > 0) {
-        icon = `<span style="color: var(--bs-primary); display: flex; align-items:center; font-size:var(--font-p1)"><i style=" font-size:var(--font-h4)" class="hgi hgi-stroke hgi-arrow-up-01"></i> ${percent.toFixed(1)}%</span>`;
+        icon = `<span style="color: var(--bs-primary); display: flex; align-items:center; font-size:var(--font-h5)"><i style=" font-size:var(--font-h4)" class="hgi hgi-stroke hgi-arrow-up-01"></i> ${percent.toFixed(1)}%</span>`;
         } else if (percent < 0) {
-            icon = `<spanstyle="color: red; display: flex; align-items:center; font-size:var(--font-p1)"><i style=" font-size:var(--font-h4)" class="hgi hgi-stroke hgi-arrow-down-01"></i> ${Math.abs(percent).toFixed(1)}%</span>`;
+            icon = `<spanstyle="color: red; display: flex; align-items:center; font-size:var(--font-p2)"><i style=" font-size:var(--font-h4)" class="hgi hgi-stroke hgi-arrow-down-01"></i> ${Math.abs(percent).toFixed(1)}%</span>`;
         } else {
             icon = `<span style="color: gray;">0%</span>`;
         }
         
         parent.find('.chart-containers').html(`
             <div class="chart-section">
-                    <h5 style="color:var(--bs-white); ">Past 3 months</h5>
+                   <p>Past 3 months</p>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex align-items-center; gap-3">
-                    <span ><i style="font-size:var(--font-h5); color:var(--bs-primary);" class="hgi hgi-stroke hgi-chart-average"></i></span>
+                    <span  style="background: var(--tra-primary-colr) ; height: 45px; display: flex; width: 45px; justify-content: center; align-items: center;" ><i style="font-size:var(--font-h6); font-weight:800;  color:var(--bs-primary);" class="hgi hgi-stroke hgi-pound"></i></span>
                         <div>
-                        <div style="font-size:var(--font-p1);" class="price me-2">£${price}</div>
-                        <small style="font-size:var(--font-p2);" class="text-muted">Average</small>
+                        <div style="font-size:var(--font-h6);" class="price me-2">£${price}</div>
+                        <small style="font-size:var(--font-p1); color:var(--dimtext)" class="">Average</small>
                         </div>
                     </div>
                     <div class="change up">
@@ -679,3 +679,8 @@ const global = {
         
 
   });
+
+
+
+
+  

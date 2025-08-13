@@ -19,9 +19,9 @@
             position: relative;
             border-radius: 10px;
             transition: all 0.8s ease;
-                        margin-top: 0px !important;
+            margin-top: 0px !important;
 
-           
+
         }
 
 
@@ -99,7 +99,7 @@
         }
 
         .btn-primary-custom {
-            background: white  !important;
+            background: white !important;
             border: 1px solid var(--items-border-colur) !important;
             color: black !important;
         }
@@ -141,9 +141,23 @@
 
         .table thead th {
             color: var(--dimtext)
-            /* Header text color */
-            font-weight: 400;
+                /* Header text color */
+                font-weight: 400;
 
+        }
+        .table tbody tr:hover {
+            background: var(--background-color2);
+            color: var(--white-text)
+            
+        }
+        .table tbody tr td {
+           text-align: center;
+            
+        }
+        .table tbody tr:hover .highlight-column{
+            background: red;
+            color: var(--white-text)
+            
         }
 
         .table tbody th {
@@ -155,15 +169,15 @@
         .table tbody td {
             text-align: left;
             color: white;
-             font-size: var(--font-p1);
+            font-size: var(--font-p1);
 
             /* Feature value color */
         }
 
         .category-header {
             background-color: #222;
-
-            color:  var(--dimtext);
+            font-size: var(--font-h6) !important;
+            color: var(--white-text) !important;
             text-align: left;
         }
 
@@ -192,13 +206,15 @@
             /* Ya apni background color rakhain */
             z-index: 10000 !important;
         }
-        .cinoe{
+
+        .cinoe {
             display: flex;
             margin: 10px !important;
             gap: 10px;
         }
-        .chek{
-            height: 20px ;
+
+        .chek {
+            height: 20px;
             border-radius: 50%;
             width: 20px;
             display: flex;
@@ -251,30 +267,30 @@
                                 style="border: 1px solid white; color: #ccc;">Get
                                 Started</a>
                         </div>
-                      <div class="border-top border-bottom text-center py-3 px-4"
+                        <div class="border-top border-bottom text-center py-3 px-4"
                             style="border-color:var(--items-border-colur) !important;">
                             <i class="bi bi-lightning-charge text-warning mb-2"></i>
 
                             <p class="billing-info mb-2">For small dealers.</p>
                         </div>
                         <ul class=" py-4 " style="color: white; text-decoration: none">
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
@@ -303,27 +319,27 @@
                             <p class="billing-info mb-2">For small dealers.</p>
                         </div>
                         <ul class=" py-4 " style="color: white">
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
@@ -353,35 +369,35 @@
                             <p class="billing-info mb-2">For medium-sized businesses.</p>
                         </div>
                         <ul class=" py-4 " style="color: white">
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
@@ -410,27 +426,27 @@
                             <p class="billing-info mb-2">For larger operations.</p>
                         </div>
                         <ul class=" py-4 " style="color: white">
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
-                            <li  class="cinoe" >
+                            <li class="cinoe">
                                 <span class="chek cione"><i class="fa-solid fa-check"></i></span>
                                 ujasidjsaik
                             </li>
@@ -443,9 +459,10 @@
 
 
         <div class="container py-5">
-           <h5  style="color: white; margin-top: 80px; margin-bottom: 50px;">Compare features and model access across all plans
+            <h5 style="color: white; margin-top: 80px; margin-bottom: 50px;">Compare features and model access across all
+                plans
 
-</h5>
+            </h5>
 
 
             <div class="row justify-content-center">
@@ -528,291 +545,752 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Credits</div>
-                                        </th>
+                                        <th class="category-header">Dashboard & Insights</th>
                                         <td>
-                                            <div class="inline-bottom-border">40 /day</div>
+
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">3 000 /month</div>
+
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border">35 000 /month</div>
+
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">100 000 /month</div>
+
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border">Batch size</div>
+                                            <div class="inline-bottom-border">Auction Overview </div>
                                         </th>
                                         <td>
-                                            <div class="inline-bottom-border">1</div>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
-                                        <td>
-                                            <div class="inline-bottom-border">2</div>
+                                     <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border">8</div>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">10</div>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border">Content storage history</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border">30 days</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">Unlimited</div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border">Unlimited</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">Unlimited</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Commercial Rights</div>
+                                            <div class="inline-bottom-border">Intereste Based </div>
                                         </th>
                                         <td>
                                             <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Watched List</div>
+                                        </th>
+                                        <td>
+                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Alerted List </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;
+                                                </span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                              
                                             </div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                                
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border">Lossless image format</div>
+                                            <div class="inline-bottom-border">Vehicle Sales Overview </div>
                                         </th>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span>
+                                               </div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                               
                                             </div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                              
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Faster image generation</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    
 
                                     <!-- Category -->
                                     <tr>
-                                        <th  class="category-header">Image Generator</th>
+                                        <th class="category-header">Intereste Based </th>
                                         <td>
-                                           
+
                                         </td>
                                         <td>
-                                            
+
                                         </td>
 
                                         <td class="highlight-column">
-                                            
+
                                         </td>
                                         <td>
-                                           
+
                                         </td>
                                     </tr>
-                                    </tr>
+
 
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border">FLUX.1 [schnell]</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border">40 images</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">3 000 images</div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border">35 000 images</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">100 000 images</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">FLUX.1 [dev]</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border">8 images</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">600 images</div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border">7 000 images</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">20 000 images</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">FLUX.1 Kontext [pro]</div>
+                                            <div class="inline-bottom-border">Save Custom Search (Interest)</div>
                                         </th>
                                         <td>
                                             <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">100 images</div>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border">1 166 images</div>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">3 333 images</div>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border"><span class="underline-dotted">Seedream
-                                                    3.0</span></div>
+                                            <div class="inline-bottom-border">Discover Matching Auctions</div>
+                                        </th>
+                                        <td>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Past Auction Records</div>
+                                        </th>
+                                        <td>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border"><span class="underline-dotted">3-Month Price
+                                                    Trend Graph</span></div>
+                                        </th>
+                                        <td>
+                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Real-Time Vehicle Valuation</div>
+                                        </th>
+                                        <td>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Best Auction Match Finder</div>
                                         </th>
                                         <td>
                                             <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">100 images</div>
+                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border">1 166 images</div>
+                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">3 333 images</div>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="category-header">Auction Data</th>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td class="highlight-column">
+
+                                        </td>
+                                        <td>
+
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border">GPT Image</div>
+                                            <div class="inline-bottom-border">Auction Market Snapshot</div>
                                         </th>
                                         <td>
                                             <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">66 images</div>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border">777 images</div>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border">2 222 images</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">FLUX.1.1 [ultra]</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">60 images</div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border">700 images</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">2 000 images</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">GPT Image HD</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border">85 images</div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border">571 images</div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>
-                                            <div class="inline-bottom-border">Legacy models</div>
+                                            <div class="inline-bottom-border">Live Online Auctions</div>
                                         </th>
                                         <td>
                                             <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
                                             </div>
                                         </td>
 
                                         <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="inline-bottom-border"><span class="material-symbols-outlined check-icon">check_circle</span>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Scheduled Timed Auctions</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Auction Vehicle Insights</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Auction Alerts & Notifications</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Live Auction Screen</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Auction Schedule </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Reaction Tracker </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Upcoming Auction Vehicles </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Historical Auction Data </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="category-header">Vehicle Valuation </th>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td class="highlight-column">
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+
+
+
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Instant Vehicle Valuation </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Smart Bid Recommendation </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <th class="category-header">More </th>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td class="highlight-column">
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Comparison Tool </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">VIN Report Credits </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Industry News & Insights </div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Sub-User Account Access</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Light/Dark Mode</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="inline-bottom-border">Advanced Search Filters</div>
+                                        </th>
+                                        <td>
+                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+
+                                        <td class="highlight-column">
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="inline-bottom-border"><span
+                                                    class="material-symbols-outlined check-icon">check_circle</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
                                 </tbody>
                             </table>
 
