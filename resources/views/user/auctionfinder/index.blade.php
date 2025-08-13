@@ -1,4 +1,4 @@
-@extends('admin.partial.app')
+@extends('user.partial.app')
 @push('title') Auction Finder @endpush
 @section('css')
 <style>

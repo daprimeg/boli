@@ -19,7 +19,7 @@
                     <li class="menu-item">
                         <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px; font-size: var(--font-p2)" data-i18n="Menu">Menu </div>
                     </li>
-                    @include('admin.partial.menu')
+                    @include('user.partial.menu')
                 </ul>
             </aside>
 

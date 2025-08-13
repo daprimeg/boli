@@ -1,4 +1,4 @@
-@include('user.partial.layout')
+@extends('user.partial.app')
 
 <div class="container mt-5">
     <div class="card shadow">
