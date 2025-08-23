@@ -114,6 +114,64 @@
     </div>
 </div>
 
+<div class="container-fluid container-p-y">
+    <div class="card">
+
+        <div class="card-header border-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h5 class="card-title mb-0">Members Filter</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row pt-5">
+                <div class="row g-3 align-items-end">  
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label" for="status">Status</label>
+                           <select name="status" class="form-control">
+                                <option value="" selected>-- Select All --</option>   
+                                <option value="1">Active</option>   
+                                <option value="0">Deactive</option>   
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label" for="plan">Plan</label>
+                            <select name="plan" class="form-control memberships">
+                               
+                            </select>
+                        </div>
+                    </div>
+
+              
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label" for="search">Search</label>
+                            <input type="text" name="search" id="search" class="form-control" placeholder="Search...">
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-md-1">
+                        <button type="button"  id="searchBtn" class="btn btn-primary w-100">
+                            Search
+                        </button>
+                    </div>
+
+                </div> 
+            </div> 
+        </div>
+
+    </div> 
+</div>
+
+
   <div class="container-fluid  container-p-y">
       <div class="row g-6"> 
             <div class="col-md-12">
@@ -168,9 +226,7 @@
                                </select>
                                <span style="padding-left: 5px" class="pl-2 pageinfo">0</span>
                             </div>
-                            <div class="col-md-4 text-end">
-                              <input style="max-width: 300px"  placeholder="Search.." type="text" class="d-inline form-control" name="search"  />
-                            </div>
+                           
                          </div>
 
                          <div class="pt-5 table-responsive text-nowrap">
@@ -181,7 +237,9 @@
                                         <th>Image</th>
                                         <th>Full Name</th>
                                         <th>Company</th>
+                                        <th>Mobile</th>
                                         <th>Personal Email</th>
+                                        <th>Business Type</th>
                                         <th>Plan</th>
                                         <th>Plan Status</th>
                                         <th>Expiry Date</th>
@@ -215,9 +273,9 @@ $(document).ready(function() {
         ajax: {
             url: "{{ url('/admin/members') }}",
             data: function(d) {
-                d.role   = $('#filterRole').val();
-                d.plan   = $('#filterPlan').val();
-                d.status = $('#filterStatus').val();
+                d.plan   = $('select[name="plan"]').val();
+                d.status = $('select[name="status"]').val();
+                d.search = $('#search').val();
             }
         },
         columns: [
@@ -225,7 +283,9 @@ $(document).ready(function() {
             { data: 'avatar' },
             { data: 'name' },
             { data: 'companyName' },
+            { data: 'phone' },
             { data: 'email' },
+            { data: 'businessType' },
             { data: 'plan' },
             { data: 'planstatus' },
             { data: 'expirydate' },
@@ -234,22 +294,19 @@ $(document).ready(function() {
         ]
     });
 
-    $('#filterPlan, #filterStatus').on('change', function() {
+
+    $('#searchBtn').on('click', function () {
         table.draw();
     });
 
-
-    $("input[name='search']").on('keyup change', function () {
-        table.search(this.value).draw();
-    });
-
-  
     table.on('draw.dt', function () {
         var info = table.page.info();
         $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
     });
 
 });
+
+
 
    </script>
 @endsection

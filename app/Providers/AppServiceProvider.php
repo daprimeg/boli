@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\Role;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,22 @@ class AppServiceProvider extends ServiceProvider
             View::share('_s',[
                 'primary' => '',
             ]);
+
+                View::composer('*', function ($view) {
+                $user = Auth::user();
+
+                if ($user) {
+                    $roleId = $user->user_type ?? null;
+                    $role = Role::find($roleId);
+
+                    $permissions = [];
+                    if ($role && $role->permissions) {
+                        $permissions = $role->permissions ;
+                    }
+                    $view->with('isAdmin', $roleId);
+                    $view->with('Permissions', $permissions);
+                }
+            });
 
     }
 }

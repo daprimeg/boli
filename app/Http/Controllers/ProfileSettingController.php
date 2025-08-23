@@ -7,12 +7,11 @@ use App\Models\User;
 use App\Models\Auction;
 use App\Models\Membership;
 use App\Models\Plan;
-use App\Models\UserLogin;
 use App\Models\UserDevice;
+use App\Models\UserLogin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-
 
 
 class ProfileSettingController extends Controller
@@ -20,12 +19,19 @@ class ProfileSettingController extends Controller
 
 
     
-    public function userProfile()
-    {
-        $alerts = Alert::with('user')->get(); // fetch all alerts for all users
-    
-        return view('user.account-setting.userprofile', compact('alerts'));
-    }
+public function userProfile()
+{
+    $alerts = Alert::with('user')->get();
+
+    $user = Auth::user();
+
+    $userDevices = UserDevice::where('user_id', $user->id)
+        ->orderBy('logged_in_at', 'desc')
+        ->get();
+
+    return view('user.account-setting.userprofile', compact('alerts', 'user', 'userDevices'));
+}
+
     
     
 

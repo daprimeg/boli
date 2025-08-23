@@ -18,8 +18,9 @@ class UserController extends Controller
     {
 
     if ($request->ajax()) {
-
-        $search = $request->input('search.value');
+        
+        $search = $request->input('search');
+       
         $start  = $request->input('start') ?? 0;
         $length = $request->input('length') ?? 10;
 
@@ -29,11 +30,14 @@ class UserController extends Controller
              ->whereRaw('memberships.id = (SELECT id FROM memberships m2 WHERE m2.user_id = users.id ORDER BY m2.created_at DESC LIMIT 1)');
         })
         ->leftJoin('membership_plans', 'membership_plans.id', '=', 'memberships.plan_id')->where('users.user_type', 0);
-        
         if (!empty($search)) {
                 $query->where(function ($q) use ($search) {
                     $q->where('users.surname', 'like', "%{$search}%")
                     ->orWhere('users.firstName', 'like', "%{$search}%")
+                    ->orWhere('users.companyName', 'like', "%{$search}%")
+                    ->orWhere('users.phone', 'like', "%{$search}%")
+                    ->orWhere('users.personalEmail', 'like', "%{$search}%")
+                    ->orWhere('users.businessType', 'like', "%{$search}%")
                     ->orWhere('membership_plans.plan_name', 'like', "%{$search}%");
                 });
             }
@@ -51,6 +55,8 @@ class UserController extends Controller
 
             $data = $query->select(
                         'users.id',
+                        'users.phone',
+                        'users.businessType',
                         'users.firstName',
                         'users.surname',
                         'users.companyName',
@@ -64,6 +70,8 @@ class UserController extends Controller
                     )
                     ->groupBy(
                         'users.id',
+                        'users.phone',
+                        'users.businessType',
                         'users.firstName',
                         'users.surname',
                         'users.companyName',
@@ -117,7 +125,9 @@ class UserController extends Controller
                             'id'        => $row->id,
                             'avatar'       => '<img style="width:50px;" src="'.asset('/public/uploads/avatar/'.$row->avatar).'" />',
                             'name'        => $row->firstName . ' ' . $row->surname,
+                            'phone'        => $row->phone,
                             'companyName' => $row->companyName,
+                            'businessType'        => $row->businessType,
                             'email'       => $row->personalEmail,
                             'plan'       => $row->plan != 'No Plan Purchased' ? $row->plan :'-',
                             'planstatus'  => $membership_status,

@@ -10,10 +10,15 @@ class Role extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'created_at','updated_at'
+        'name','permissions', 'created_at','updated_at'
     ];
 
     public function users() {
         return $this->belongsTo(User::class, 'id');
     }
+    public function getPermissionsAttribute($value)
+    {
+        return $value ? json_decode($value, true) : [];
+    }
+
 }

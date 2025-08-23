@@ -52,18 +52,23 @@ class RoleController extends Controller
 
                 $editUrl = url('admin/role/'.$role->id.'/edit');
                 $deleteUrl = route('role.destroy', $role->id);
+                $accessUrl = url('admin/role/access', $role->id);
 
-                $html = '
-                    <a href="' . $editUrl . '" class="btn btn-sm btn-primary" title="Edit">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;">
-                        ' . csrf_field() . method_field('DELETE') . '
-                        <button class="btn btn-sm btn-danger" title="Delete" onclick="return confirm(\'Are you sure?\')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                ';
+            $html = '
+                <a href="' . $editUrl . '" class="btn btn-sm btn-primary" title="Edit">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="' . $accessUrl . '" class="btn btn-sm btn-warning" title="Give Access">
+                    <i class="fas fa-key"></i>
+                </a>
+                <form action="' . $deleteUrl . '" method="POST" style="display:inline-block;">
+                    ' . csrf_field() . method_field('DELETE') . '
+                    <button class="btn btn-sm btn-danger" title="Delete" onclick="return confirm(\'Are you sure?\')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            ';
+
 
 
                   return [
@@ -96,22 +101,20 @@ class RoleController extends Controller
 
     }
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
-
-           $validated = $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
         ]);
-
-
         $Role = Role::create([
-            'name' => $request->title,
+            'name'       => $request->title,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-        ]);;
-
-        return redirect()->route('role.index')->with('success', 'Role created successfully.');
+        ]);
+        return redirect()->to('/admin/role/access/' . $Role->id)
+        ->with('success', 'Role created successfully.');
     }
+
 
 
 
@@ -160,6 +163,100 @@ class RoleController extends Controller
 
         return response()->json(['results' => $models]);
 
+    }
+
+public function access($id)
+{
+    $role = Role::findOrFail($id);
+
+    // Pehle se save permissions decode karo
+    $savedPermissions = $role->permissions ? json_decode($role->permissions, true) : [];
+
+    $menus = [
+        [
+            'id' => 'masters',
+            'name' => 'Master',
+            'children' => [
+                ['id' => 'bodytypes', 'name' => 'Body Type'],
+                ['id' => 'vehicletypes', 'name' => 'Vehicle Type'],
+                ['id' => 'platforms', 'name' => 'Platform'],
+                ['id' => 'centers', 'name' => 'Center'],
+                ['id' => 'colours', 'name' => 'Colour'],
+                ['id' => 'makes', 'name' => 'Make'],
+                ['id' => 'models', 'name' => 'Model'],
+                ['id' => 'variants', 'name' => 'Variant'],
+            ]
+        ],
+        [
+            'id' => 'datamanagement',
+            'name' => 'Data Management',
+            'children' => [
+                ['id' => 'auctions', 'name' => 'Import Data CSV'],
+                ['id' => 'vehicles', 'name' => 'Vehicles'],
+            ]
+        ],
+        [
+            'id' => 'staffpanel',
+            'name' => 'Staff Panel',
+            'children' => [
+                ['id' => 'role', 'name' => 'Role'],
+                ['id' => 'users', 'name' => 'Users'],
+                ['id' => 'activity', 'name' => 'Activity'],
+            ]
+        ],
+        [
+            'id' => 'supporttickets',
+            'name' => 'Support & Tickets',
+            'children' => [
+                ['id' => 'tickets', 'name' => 'All Support Tickets'],
+            ]
+        ],
+        [
+            'id' => 'contentmanagement',
+            'name' => 'Content Management',
+            'children' => [
+                ['id' => 'blogs', 'name' => 'Blogs'],
+                ['id' => 'blogcategories', 'name' => 'Blogs Categories'],
+                ['id' => 'news', 'name' => 'News'],
+                ['id' => 'ncategories', 'name' => 'News Categories'],
+            ]
+        ],
+        [
+            'id' => 'membersplans',
+            'name' => 'Members & Plans',
+            'children' => [
+                ['id' => 'members', 'name' => 'Members'],
+                ['id' => 'memberships', 'name' => 'Membership'],
+                ['id' => 'plans', 'name' => 'Plans'],
+            ]
+        ],
+        [
+            'id' => 'notifications',
+            'name' => 'Notifications',
+            'children' => [
+                ['id' => 'alerts', 'name' => 'Alerts'],
+            ]
+        ],
+    ];
+
+    return view('admin.role.access', compact('role', 'menus', 'savedPermissions'));
+}
+
+
+    public function accessStore(Request $request){
+     
+            $roleId = $request->role_id;
+            $permissions = $request->permissions ?? [];
+
+            Role::where('id', $roleId)->update([
+                'permissions' => json_encode($permissions)
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Permissions saved successfully',
+                'data' => $permissions
+            ]);
     }
 
 }

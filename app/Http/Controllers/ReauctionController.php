@@ -11,6 +11,7 @@ use App\Models\AutoPrice;
 use App\Models\AutoLegal;
 use App\Models\AuctionPlatform;
 use App\Models\AuctionCenter;
+use App\Models\Notification;
 use App\Models\Interest; 
 use App\Models\VehicleType;
 use App\Models\Make;
@@ -97,6 +98,7 @@ public function index(Request $request)
                 'model.name AS model_name',
                 'model_variant.name AS model_variant_name',
                 'auctions.auction_date',
+                'auctions.id AS acId',
                 DB::raw('(
                     SELECT COUNT(DISTINCT v2.auction_id)
                     FROM vehicles v2
@@ -116,14 +118,14 @@ public function index(Request $request)
                 $platefrom = '<p class="text-primary">'.$vehicle->platform_name.'</p>';
                 $deff = '<p class="text-danger" style="color:#570303;">Waiting</p>';
 
-           $actions = '
-                <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
-                    <i class="fas fa-eye"></i>
-                </a>
-                <a class="btn btn-sm btn-danger" style="background-color:#570303 ; border-color: #8000;">
-                 <i class="fas fa-bell"></i>
+                $actions = '
+                    <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-sm btn-danger add-notification" data-auction-id="'.$vehicle->acId .'" style="background-color:#570303 ; border-color: #8000;">
+                    <i class="fas fa-bell"></i>
 
-                </a>';
+                    </a>';
 
 
                 $PreviousBtn = '
@@ -259,7 +261,30 @@ public function interest(Request $request)
 
     return response()->json($userInterest);
 }
+public function notification(Request $request)
+{
+    $exists = Notification::where('user_id', Auth::id())
+        ->where('auction_id', $request->auction_id)
+        ->exists();
 
+    if ($exists) {
+        return response()->json([
+            'status' => 'exists',
+            'message' => 'You have already created a notification.'
+        ]);
+    }
+
+    Notification::create([
+        'user_id'    => Auth::id(),
+        'auction_id' => $request->auction_id,
+        'is_read'    => 0
+    ]);
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Notification created.'
+    ]);
+}
 
 
 

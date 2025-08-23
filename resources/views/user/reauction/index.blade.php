@@ -495,4 +495,32 @@
             });
         });
     </script>
+
+
+
+<script>
+$(document).on('click', '.add-notification', function () {
+    var auction_id = $(this).data('auction-id');
+
+    $.ajax({
+        url: "{{ route('notifications.store') }}",
+        method: "POST",
+        data: {
+            auction_id: auction_id,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                toastr.success(response.message); 
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function () {
+            toastr.error('Server error! Please try again.');
+        }
+    });
+});
+
+</script>
 @endsection

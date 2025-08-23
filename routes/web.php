@@ -313,6 +313,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/reauction/interest', [ReauctionController::class,'interest'])->name('reauction-interest');
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
             Route::get('/autionshadule', [WebController::class, 'AutionShadule'])->name('autionshadule');
+            Route::post('/notificationsstore', [ReauctionController::class, 'notification'])->name('notifications.store');
 
             // compare
             Route::get('/compare', [CompareController::class,'index'])->name('compare');

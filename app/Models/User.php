@@ -50,12 +50,13 @@ class User extends Authenticatable  // This should extend Authenticatable
      return $this->hasMany(Interest::class,'user_id');
     }
     public function memberships()
-{
-    return $this->hasMany(Membership::class, 'user_id', 'id');
-}
-public function role()
-{
-    return $this->belongsTo(Role::class, 'user_type', 'id');
-}
+    {
+        return $this->hasMany(Membership::class, 'user_id', 'id');
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'user_type', 'id');
+    }
+
 
 }

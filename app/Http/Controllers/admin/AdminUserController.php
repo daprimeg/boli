@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 use DataTables;
 
@@ -17,7 +18,13 @@ class AdminUserController extends Controller
 
 public function index(Request $request)
 {
+    $Permissions = Auth::user()->role->permissions;
+        if (!isset($Permissions['staffpanel']['users']) || !in_array('view', $Permissions['staffpanel']['users'])) {
+            return redirect()->route('admin.dashboard')->with('error', 'You do not have permission to view this page.');
+        }
+ 
     if ($request->ajax()) {
+        
 
         $search = $request->input('search.value');
         $start  = $request->input('start') ?? 0;
@@ -39,7 +46,7 @@ public function index(Request $request)
                 });
             }
         if ($request->role) {
-            // $query->where('users.user_type', $request->role == 'admin' ? 1 : ($request->role == 'user' ? 0 : $request->role));
+        
             $query->where('users.user_type', $request->role);
         }
 
@@ -101,15 +108,33 @@ public function index(Request $request)
                             : '<a href="' . route('admin.users.status', [$row->id, 1]) . '" class="btn btn-danger btn-sm">Deactive</a>';
 
                    
-                        $html = '<a href="' . url('/admin/users/' . $row->id . '/edit') . '" 
-                                    class="btn btn-primary btn-sm" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="' . url('/admin/users/' . $row->id . '/delete') . '" 
-                                    class="btn btn-danger btn-sm" title="Delete" 
-                                    onclick="return confirm(\'Delete user?\')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>';
+                 
+                       
+dd( $Permissions);
+                        // Edit button
+                        if (isset($Permissions['staffpanel']['users']) && in_array('edit', $Permissions['staffpanel']['users'])) {
+                            $editButton = '<a href="' . url('/admin/users/' . $row->id . '/edit') . '" 
+                                                class="btn btn-primary btn-sm" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                        </a>';
+                        } else {
+                            $editButton = '<span class="btn btn-secondary btn-sm" title="No permission to edit">No permission</span>';
+                        }
+
+                        // Delete button
+                        if (isset($Permissions['staffpanel']['users']) && in_array('delete', $Permissions['staffpanel']['users'])) {
+                            $deleteButton = '<a href="' . url('/admin/users/' . $row->id . '/delete') . '" 
+                                                class="btn btn-danger btn-sm" title="Delete" 
+                                                onclick="return confirm(\'Delete user?\')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>';
+                        } else {
+                            $deleteButton = '<span class="btn btn-secondary btn-sm" title="No permission to delete">Delete</span>';
+                        }
+
+                        // Combine buttons
+                        $html = $editButton . ' ' . $deleteButton;
+
                         return [
                             'id'        => $row->id,
                             'name'        => $row->firstName . ' ' . $row->surname,

@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\admin\AlertController;
 use App\Http\Controllers\admin\RoleController;
+use App\Http\Controllers\admin\ActivityController;
 use App\Http\Controllers\admin\PlanController;
 use App\Http\Controllers\admin\MembershipController;
 use App\Http\Controllers\admin\TicketsController;
@@ -211,6 +212,11 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
             Route::put('/{id}', [RoleController::class, 'update'])->name('update');
             Route::delete('/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
             Route::get('/getRole', [RoleController::class, 'getRole']);
+            Route::get('/access/{id}', [RoleController::class, 'access']);
+            Route::post('/access/store', [RoleController::class, 'accessStore']);
+        });
+        Route::prefix('activity')->group(function () {
+            Route::get('/', [ActivityController::class, 'index'])->name('role.index');
         });
 
 
@@ -236,7 +242,7 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
         Route::get('users/{id}/status/{status}', [AdminUserController::class, 'updateStatus'])->name('admin.users.status');
 
         // Admin Authentication
-        Route::get('/dashboard', [AdminAuthController::class, 'dashboard']);
+        Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/profile', [AdminAuthController::class, 'profile']);
 
 

@@ -171,6 +171,15 @@
                     color: var(--bs-primary);
 
         }
+
+        select option{
+            background: var(--bs-paper-bg)!important;
+            border: 1px solid black;
+            border-radius: 1px;
+        }
+        select{
+             background: var(--bs-paper-bg)!important
+        }
     </style>
     
     <link rel="icon" type="image/x-icon" href="{{ asset('public/themeadmin/autobolidp.png') }}" />
