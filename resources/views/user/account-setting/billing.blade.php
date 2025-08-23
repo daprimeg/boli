@@ -3,7 +3,7 @@ use Carbon\Carbon;
 
 ?>
 
-@extends('admin.partial.app')
+@extends('user.partial.app')
 
 
 
