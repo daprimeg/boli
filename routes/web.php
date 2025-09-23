@@ -49,6 +49,9 @@ Route::get('/autionshadule', [WebController::class, 'AutionShadule']);
 
 Route::get('/exploreevery', [WebController::class, 'ExploreEvery']);
 Route::get('/compair', [WebController::class, 'compairaution']);
+Route::get('/privecy', [WebController::class, 'privecy']);
+Route::get('/faqs', [WebController::class, 'faqs']);
+Route::get('/explore/newss', [WebController::class, 'newss']);
 
 Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);

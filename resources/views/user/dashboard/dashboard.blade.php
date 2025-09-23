@@ -104,6 +104,7 @@
 margin-top: 20px;
 background: #0f1c2c;
  padding-bottom: 20px;
+ margin: 10px;  
  
 
 }
@@ -162,7 +163,7 @@ background: #0f1c2c;
       margin: 10px;
       margin-top: 20px;
       padding: 20px;
-      background: rgba(0, 140, 255, 0.226);
+      /* background: rgba(0, 140, 255, 0.226); */
     }
 
     
@@ -171,7 +172,7 @@ background: #0f1c2c;
       color: #a0aec0; 
     }
     .chart-placeholder {
-      background-color:transparent !important; /* Darker blue for chart area */
+      background: rgba(0, 140, 255, 0);
       height: 200px; /* Placeholder height */
       margin-top: 15px;
       border-radius: 5px;

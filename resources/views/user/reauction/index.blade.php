@@ -158,17 +158,28 @@
 
         .costome-table-chagefont .costome-table-childchagefont th {
             font-size: var(--font-p1);
-            color: var(--bs-heading-color)
+            color: var(--bs-heading-color);
+            border: none;
         }
 
         .costome-table-childchagefont tr td{
             font-size: var(--font-p1);
-            color: var(--bs-heading-color)
+            color: var(--bs-heading-color);
+                        border: none;
+
+        }
+        .costome-table-childchagefont tr {
+            
+                        border: none;
+
         }
         .costome-table-childchagefont tr td .PreviousBtnRec{
             border-radius: var( --btn-border-radis)
         }
-         
+         .table-responsive .table-bordered tbody tr:hover{
+            background: var( --new-bs-bg);
+            cursor: pointer;
+         }
         
         @media only screen and (max-width: 576px) {
 

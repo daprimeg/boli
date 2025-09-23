@@ -36,6 +36,19 @@ class WebController extends Controller
     {
         return view('web.pricing');
     }
+
+    public function privecy ()
+    {
+        return view('web.privecy');
+    }
+    public function faqs ()
+    {
+        return view('web.faqs');
+    }
+    public function newss ()
+    {
+        return view('web.newss');
+    }
     public function AutionShadule(Request $request)
     {
          if ($request->ajax()) {

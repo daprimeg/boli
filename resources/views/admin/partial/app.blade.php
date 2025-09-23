@@ -11,7 +11,6 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 />
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -169,8 +168,17 @@
         }
         .menu-item a:hover i {
                     color: var(--bs-primary);
+        }
+
+        .smallogo {
+            display: none;
+        }
+
+        .layout-menu-collapsed .smallogo{
+             display: block;
 
         }
+
 
         select option{
             background: var(--bs-paper-bg)!important;
@@ -180,6 +188,40 @@
         select{
              background: var(--bs-paper-bg)!important
         }
+
+        .layout-menu-collapsed .largelogo{
+             display: none;
+
+        }
+
+        .layout-menu-hover .largelogo{
+            display: block;
+        }
+        .layout-menu-hover .smallogo{
+            display: none;
+        }
+        .layout-menu-hover .wide{
+            display: block;
+        }
+        .layout-menu-hover .smallogo{
+            display: none;
+        }
+        .menu-item.active  a i{
+            color: var( --new-bs-bg) !important;
+        }
+        .menu-item.active  a  div{
+            color: white !important;
+        }
+        .menu-item.active:hover  a i{
+            color: var( --new-bs-bg) !important;
+        }
+        .menu-item.active:hover  a  div{
+            color: white !important;
+        }
+        /* .menu-item.active > .menu-link:not(.menu-toggle) {
+            color: black !important;
+        } */
+
     </style>
     
     <link rel="icon" type="image/x-icon" href="{{ asset('public/themeadmin/autobolidp.png') }}" />
@@ -202,6 +244,7 @@
 
     @include('admin.partial.head')
     @yield('css')
+
 </head>
 <body>
     <div class="layout-wrapper layout-content-navbar">
@@ -212,6 +255,42 @@
                 </span>
                 <div class="app-brand demo">
                     <img src="{{ asset('public/themeadmin/images/logo/logo.png') }}" />
+
+
+  </head>
+  <body>
+      <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+
+                <aside id="layout-menu" class="layout-menu menu-vertical menu">
+                    <span class="menu-button">
+                        {{-- <img style="width: 24px;" src="{{ asset('public/images/logo/6742024.png')}}" alt="" /> --}}
+                        <i class="icon-base ti tabler-chevron-right"></i>
+                    </span>
+                    <div class="app-brand demo">
+                        {{-- <a href="{{URL::to('/admin/dashboard')}}"> --}}
+                        <img style="height: 39px;" src="{{ asset('public/themeadmin/images/logo/logo.png') }}" class="largelogo" />
+                        <img style="height: 39px; width: 40px;" src="{{ asset('public/theme/fav.png')}}"  class="smallogo" alt=""  />
+
+                        {{-- </a> --}}
+                    </div>
+                    <div class="menu-inner-shadow"></div>
+                    <ul class="menu-inner py-1">
+                        <li class="menu-item">
+                            <div style="margin: 0px 15px;border-bottom: 1px solid var(--bs-border-color);padding-bottom: 9px;padding-top: 16px; font-size: var(--font-p2)" data-i18n="Menu">Menu </div>
+                        </li>
+                     
+                        @include('admin.partial.adminMenu')
+                        @include('admin.partial.userMenu')
+                    </ul>
+                </aside>
+                
+                <div class="menu-mobile-toggler d-xl-none rounded-1">
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
+                        <i class="ti tabler-menu icon-base"></i>
+                        <i class="ti tabler-chevron-right icon-base"></i>
+                    </a>
+
                 </div>
                 <div class="menu-inner-shadow"></div>
                 <ul class="menu-inner py-1">
@@ -275,8 +354,162 @@
             <div class="layout-overlay layout-menu-toggle"></div>
             <div class="drag-target"></div>
         </div>
+
     </div>
     @include('admin.partial.footer')
     @yield('js')
+
+
+
+        <script src="{{ asset('public/themeadmin/assets/js/jquery.js')}}"></script>
+        {{-- <script src="{{asset('public/themeadmin/assets/vendor/js/template-customizer.js')}}"></script> --}}
+        <script src="{{ asset('public/themeadmin/assets/vendor/js/helpers.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/js/config.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/popper/popper.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/js/bootstrap.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/@algolia/autocomplete-js.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/pickr/pickr.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/hammer/hammer.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/i18n/i18n.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/js/menu.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.js') }}"></script>
+        <script src="{{ asset('public/themeadmin/assets/js/main.js') }}"></script>
+
+        {{-- <script src="{{ asset('public/themeadmin/assets/js/app-academy-course-details.js') }}"></script> --}}
+
+        {{-- Libs --}}
+         <script src="{{asset('public/themeadmin/assets/js/select2.js')}}"></script>
+         <script src="{{asset('public/themeadmin/assets/js/jquertdatatable.js')}}"></script>
+         <script>
+
+            $(document).ready(function () {
+
+                $('.make').select2({
+                    placeholder: 'Select Make',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/makes/getMakes')}}",
+                        dataType: 'json'
+                    }
+                });
+
+                $('.model').select2({
+                    placeholder: 'Select Model',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/models/getModels')}}",
+                        dataType: 'json',
+                    }
+                });
+                $('.vehicleTtypes').select2({
+                    placeholder: 'Select Vehicle Type',
+                    ajax: {
+                        url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
+                        dataType: 'json',
+                    }
+                });
+                $('.variants').select2({
+                    placeholder: 'Select Variant',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/variants/getVariants')}}",
+                        dataType: 'json',
+                    }
+                });
+                $('.bodyTypes').select2({
+                    placeholder: 'Body Type',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/bodytypes/getBodyTypes')}}",
+                        dataType: 'json',
+                    }
+                });
+                $('.color').select2({
+                    placeholder: 'Select Color',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/colours/getColours')}}",
+                        dataType: 'json',
+                    }
+                });
+                $('.auctions').select2({
+                    placeholder: 'Select Auction',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/auctions/getAuction')}}",
+                        dataType: 'json',
+                    }
+                });
+
+                $('.center').select2({
+                    placeholder: 'Select Center',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/centers/getCenters')}}",
+                        dataType: 'json',
+                    }
+                });
+
+                $('.platform').select2({
+                    placeholder: 'Select Plateform',
+                    allowClear: true,
+                    ajax: {
+                        url: "{{url('/admin/masters/platforms/getPlatforms')}}",
+                        dataType: 'json',
+                    }
+                });
+
+                $(".menu-button").click(function (e) { 
+                    
+                    if(!$('html').hasClass('layout-menu-collapsed')) {
+                      $('html').addClass('layout-menu-collapsed');
+                      
+                        //   $('.samalllogo').style({
+                        //     'display': 'none',
+                            
+                        //   });
+                        //   $('.largelogo').style({
+                        //     'display': 'block',
+                            
+                        //   });
+
+
+                        //   $('.menu-button').css({
+                        //     'color': 'white',
+                        //     'background-color': 'blue',
+                        //     'font-size': '16px'
+                        //   });
+
+                    }else{
+                      $('html').removeClass('layout-menu-collapsed');
+
+                        // $('.samalllogo').style({
+                        //     'display': 'block',
+                            
+                        //   });
+                        //   $('.largelogo').style({
+                        //     'display': 'none',
+                            
+                        //   });
+
+                        //   $('.menu-button').css({
+                        //     'color': 'white',
+                        //     'background-color': 'blue',
+                        //     'font-size': '16px'
+                        //   });
+                    }             
+                });
+
+
+                
+                                
+            });
+
+        </script>
+
+        @yield('js')
+
 </body>
 </html>
