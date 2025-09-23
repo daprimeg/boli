@@ -200,9 +200,8 @@
     {{-- Lib --}}
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/select2.css') }}" />
 
-=======
+
     @include('admin.partial.head')
->>>>>>> 977cbce44fb55949b1e549c9dd61aee28a1d9ce5
     @yield('css')
 </head>
 <body>
