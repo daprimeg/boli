@@ -35,10 +35,7 @@
                 background-repeat: no-repeat;
             }
 
-            #toast-container>.toast-success {
-                background-color: #53a6ff !important;
-                color: #000000 !important;
-            }
+   
 
             .bgcolor {
                 background-color: #000f21 !important;
@@ -74,10 +71,6 @@
             }
 
 
-            #toast-container>.toast-success {
-                background-color: #53a6ff !important;
-                color: #000000 !important;
-            }
 
             .navbar {
                 display: none;

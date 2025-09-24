@@ -66,10 +66,7 @@
             background-repeat: no-repeat;
         }
 
-        #toast-container > .toast-success {
-            background-color: #53a6ff !important;
-            color: #000000 !important;
-        }
+    
     </style>
     @yield('css')
 </head>

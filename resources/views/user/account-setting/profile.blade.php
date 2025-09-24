@@ -157,4 +157,27 @@
 
         </div>
     </div>
+    <script>
+         
+
+    </script>
+@endsection
+@section('js')
+        
+<script>
+    
+            $('#upload').change(function(){
+            const file = this.files[0];
+            const reader = new FileReader();
+         
+            reader.onload = function(event){
+            const imagedata = event.target.result;
+            
+            $('#uploadedAvatar').attr('src',imagedata)
+            
+            };
+            reader.readAsDataURL(file)
+        })
+
+</script>
 @endsection

@@ -10,6 +10,7 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 />
+
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -222,6 +223,35 @@
             color: black !important;
         } */
 
+        /* Success (Green) */
+#toast-container > .toast-success {
+    background-color: #28a745 !important; /* Bootstrap green */
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+/* Error (Red) */
+#toast-container > .toast-error {
+    background-color: #dc3545 !important; /* Bootstrap red */
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+/* Info (Blue) */
+#toast-container > .toast-info {
+    background-color: #17a2b8 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+/* Warning (Orange) */
+#toast-container > .toast-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+}
+
+
     </style>
     
     <link rel="icon" type="image/x-icon" href="{{ asset('public/themeadmin/autobolidp.png') }}" />
@@ -237,7 +267,7 @@
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.css') }}" />
     {{-- <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/pages/app-academy-details.css') }}" /> --}}
-<link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
+    <link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
     {{-- Lib --}}
     <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/css/select2.css') }}" />
 
@@ -281,7 +311,7 @@
                         </li>
                      
                         @include('admin.partial.adminMenu')
-                        @include('admin.partial.userMenu')
+                        @include('user.partial.menu')
                     </ul>
                 </aside>
                 
@@ -359,6 +389,7 @@
     @include('admin.partial.footer')
     @yield('js')
 
+<script src="https://unpkg.com/i18next@23.4.6/dist/umd/i18next.min.js"></script>
 
 
         <script src="{{ asset('public/themeadmin/assets/js/jquery.js')}}"></script>
@@ -378,7 +409,7 @@
         <script src="{{ asset('public/themeadmin/assets/js/main.js') }}"></script>
 
         {{-- <script src="{{ asset('public/themeadmin/assets/js/app-academy-course-details.js') }}"></script> --}}
-
+        <script src="public/themeadmin/assets/js/toastr.min.js"></script>
         {{-- Libs --}}
          <script src="{{asset('public/themeadmin/assets/js/select2.js')}}"></script>
          <script src="{{asset('public/themeadmin/assets/js/jquertdatatable.js')}}"></script>
@@ -506,6 +537,8 @@
                 
                                 
             });
+
+
 
         </script>
 

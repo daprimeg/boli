@@ -18,10 +18,7 @@
 
     <link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
 <style>
-      #toast-container > .toast-success {
-        background-color: #53a6ff !important;
-        color: #000000 !important;
-    }
+
     .list-inline .list-inline-item a:hover{
       color: white !important;
     }

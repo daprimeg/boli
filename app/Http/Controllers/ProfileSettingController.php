@@ -58,7 +58,7 @@ public function userProfile()
                 'website' => 'required|string|max:255',
                 'businessEmail' => 'required|string|email|max:255|unique:users,businessEmail,' . $user->id,
                 'motorTradeInsurance' => 'required|string|max:255',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:800',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1000',
             ]);
 
     

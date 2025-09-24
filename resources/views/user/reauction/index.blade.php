@@ -316,6 +316,7 @@
 @endsection
 
 @section('js')
+
     <script>
         $(document).ready(function() {
             let table = $('#blogTable').DataTable({
