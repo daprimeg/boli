@@ -21,15 +21,19 @@
         </li>
 
     
-        {{-- <li class="nav-item">
-            <a class="nav-link" href="#"
-                ><i class="icon-base ti tabler-bell icon-sm me-1_5"></i> Notifications</a
-                >
-        </li>
         <li class="nav-item">
+            <a style="border-radius: var(--btn-border-radis) !important;" 
+            class="nav-link {{ request()->is('account-setting/notifications') ? 'active' : '' }}" 
+            href="{{URL::to('/account-setting/notifications')}}">
+                <i class="icon-base ti tabler-bell icon-sm me-1_5"></i> 
+                Notifications
+            </a>
+        </li>
+
+        {{-- <li class="nav-item">
             <a class="nav-link" href="#"
                 ><i class="icon-base ti tabler-link icon-sm me-1_5"></i> Connections</a
                 >
-        </li> --}}
+        </li>  --}}
     </ul>
 </div>

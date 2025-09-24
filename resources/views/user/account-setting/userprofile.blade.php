@@ -215,51 +215,53 @@
             <div class="col-xl-8 col-lg-7 col-md-7">
                 
          <div class="card mb-6">
-        <h5 class="card-header">Recent Devices</h5>
-        <div class="table-responsive">
-         <table class="table">
-            <thead>
-                <tr>
-                    <th>Browser</th>
-                    <th>Device</th>
-                    <th>Location</th>
-                    <th>Recent Activities</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($userDevices as $device)
+            <h5 class="card-header">Recent Devices</h5>
+            <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            {{-- Icon based on platform --}}
-                            @php
-                                $iconClass = '';
-                                $iconColor = '';
-                                if (str_contains(strtolower($device->platform), 'windows')) {
-                                    $iconClass = 'tabler-brand-windows';
-                                    $iconColor = 'text-info';
-                                } elseif (str_contains(strtolower($device->platform), 'iphone')) {
-                                    $iconClass = 'tabler-device-mobile';
-                                    $iconColor = 'text-danger';
-                                } elseif (str_contains(strtolower($device->platform), 'android')) {
-                                    $iconClass = 'tabler-brand-android';
-                                    $iconColor = 'text-success';
-                                } elseif (str_contains(strtolower($device->platform), 'mac')) {
-                                    $iconClass = 'tabler-brand-apple';
-                                }
-                            @endphp
-                            <i class="icon-base ti {{ $iconClass }} icon-md align-top {{ $iconColor }} me-2"></i>
-                            {{ $device->browser }} on {{ $device->platform }}
-                        </td>
-                        <td>{{ $device->device }}</td>
-                        <td>{{ $device->country ?? 'Unknown' }}</td>
-                        <td>{{ \Carbon\Carbon::parse($device->logged_in_at)->format('d, F Y H:i') }}</td>
+                        <th>Browser</th>
+                        <th>Device</th>
+                        <th>Location</th>
+                        <th>Recent Activities</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($userDevices as $device)
+                        <tr>
+                            <td>
+                                {{-- Icon based on platform --}}
+                                @php
+                                    $iconClass = '';
+                                    $iconColor = '';
+                                    if (str_contains(strtolower($device->platform), 'windows')) {
+                                        $iconClass = 'tabler-brand-windows';
+                                        $iconColor = 'text-info';
+                                    } elseif (str_contains(strtolower($device->platform), 'iphone')) {
+                                        $iconClass = 'tabler-device-mobile';
+                                        $iconColor = 'text-danger';
+                                    } elseif (str_contains(strtolower($device->platform), 'android')) {
+                                        $iconClass = 'tabler-brand-android';
+                                        $iconColor = 'text-success';
+                                    } elseif (str_contains(strtolower($device->platform), 'mac')) {
+                                        $iconClass = 'tabler-brand-apple';
+                                    }
+                                @endphp
+                                <i class="icon-base ti {{ $iconClass }} icon-md align-top {{ $iconColor }} me-2"></i>
+                                {{ $device->browser }} on {{ $device->platform }}
+                            </td>
+                            <td>{{ $device->device }}</td>
+                            <td>{{ $device->country ?? 'Unknown' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($device->logged_in_at)->format('d, F Y H:i') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
         </div>
-      </div>
+        
+    </div>
+    @include('user.account-setting.cards')
             </div>
         </div>
     </div>

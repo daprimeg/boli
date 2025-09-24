@@ -8,11 +8,15 @@ use App\Models\Auction;
 use App\Models\Membership;
 use App\Models\Plan;
 use App\Models\UserDevice;
+use App\Models\Interest;
 use App\Models\UserLogin;
+use App\Models\UserPaymentMethod;
+use App\Models\UserNotificationSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\DB;
 
 class ProfileSettingController extends Controller
 {
@@ -22,15 +26,36 @@ class ProfileSettingController extends Controller
 public function userProfile()
 {
     $alerts = Alert::with('user')->get();
-
     $user = Auth::user();
 
     $userDevices = UserDevice::where('user_id', $user->id)
         ->orderBy('logged_in_at', 'desc')
         ->get();
 
-    return view('user.account-setting.userprofile', compact('alerts', 'user', 'userDevices'));
+
+$recentViews = $user->recentViews()
+    ->with('vehicle')
+    ->latest()
+    ->take(5)
+    ->get()
+    ->map(function ($recent) {
+        if ($recent->vehicle && $recent->vehicle->images) {
+            $imagesArray = explode(',', $recent->vehicle->images);
+            $recent->vehicle->first_image = $imagesArray[0]; 
+        } else {
+            $recent->vehicle->first_image = null;
+        }
+        return $recent;
+    });
+       $interests = Interest::with(['make', 'model', 'variant'])
+        ->where('user_id', $user->id)
+        ->latest()
+        ->get();
+      
+
+    return view('user.account-setting.userprofile', compact('alerts', 'user', 'userDevices', 'recentViews','interests'));
 }
+
 
     
     
@@ -133,24 +158,137 @@ public function userProfile()
 
 
 
-    public function billing(Request $request)
-    {
+ public function billing(Request $request)
+{
+    $user = Auth::user();
 
-        $user = Auth::user();
-
-        $plans = Plan::all();
-        $membership = Membership::where('user_id',$user->id)
+    $plans = Plan::all();
+    $membership = Membership::where('user_id',$user->id)
         ->orderBy('created_at','desc')
         ->get();
 
-        $current = Membership::where('user_id',$user->id)
+    $current = Membership::where('user_id',$user->id)
         ->where('membership_status', 'Active')
         ->whereDate('membership_start_date', '<=', now())
         ->whereDate('membership_expiry_date', '>=', now())
         ->first();
+
+    // yahan payment methods le aao
+    $paymentMethods = UserPaymentMethod::where('user_id', $user->id)->get();
+
+    return view('user.account-setting.billing', compact(
+        'user','membership','plans','current','paymentMethods'
+    ));
+}
+
+
+    public function Notifications(Request $request)
+    {
+
+            $user = Auth::user();
+
+    $notificationTypes = [
+        'news_and_blog'    => 'News and Blog',
+        'new_auction_finder' => 'New Auction Finder',
+        'my_interest'      => 'My Interest',
+        'reauction'        => 'Reauction',
+    ];
+
+            $settings = $user->notificationSettings->keyBy('type');
+
     
-        return view('user.account-setting.billing', compact('user','membership','plans','current'));
+        return view('user.account-setting.Notification', compact('notificationTypes', 'settings'));
     }
+    public function storenotification(Request $request)
+    {
+        $user = Auth::user();
+
+
+        foreach ($request->types as $type => $values) {
+            UserNotificationSetting::updateOrCreate(
+                ['user_id' => $user->id, 'type' => $type],
+                [
+                    'email' => isset($values['email']),
+                    'browser' => isset($values['browser']),
+                    'send_preference' => $request->sendNotification ?? 'online', 
+                ]
+            );
+        }
+
+        return back()->with('success', 'Notification settings updated successfully!');
+    }
+
+  public function store(Request $request)
+    {
+        $request->validate([
+            'payment_type' => 'required|in:card,paypal',
+            'account_number' => 'required|string|max:255',
+            'account_name' => 'required|string|max:255',
+            'expiry_date' => 'nullable|string|max:10',
+            'cvv' => 'nullable|string|max:4',
+        ]);
+
+    
+        $exists = UserPaymentMethod::where('user_id', Auth::id())
+            ->where('card_number', $request->account_number)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->back()->withErrors(['account_number' => 'This card is already saved!']);
+        }
+
+    
+        if ($request->payment_type === 'card' && !$this->isValidCard($request->account_number)) {
+            return redirect()->back()->withErrors(['account_number' => 'Invalid card number!']);
+        }
+
+        $method = new UserPaymentMethod();
+        $method->user_id = Auth::id();
+        $method->payment_type = $request->payment_type;
+        $method->card_number = $request->account_number;
+        $method->card_holder_name = $request->account_name;
+        $method->expiry_date = $request->expiry_date;
+        $method->cvv = $request->cvv;
+        $method->save();
+
+        return redirect()->back()->with('success', 'Payment method saved successfully!');
+    }
+
+
+    private function isValidCard($number)
+    {
+        $number = preg_replace('/\D/', '', $number);
+        $sum = 0;
+        $alt = false;
+
+        for ($i = strlen($number) - 1; $i >= 0; $i--) {
+            $n = intval($number[$i]);
+
+            if ($alt) {
+                $n *= 2;
+                if ($n > 9) {
+                    $n -= 9;
+                }
+            }
+            $sum += $n;
+            $alt = !$alt;
+        }
+
+        return ($sum % 10 == 0);
+    }
+
+
+        public function destroy($id)
+        {
+            $method = UserPaymentMethod::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->firstOrFail();
+
+            $method->delete();
+
+            return redirect()->back()->with('success', 'Payment method deleted successfully!');
+        }
+
 
     
     public function editSecuritySettings()

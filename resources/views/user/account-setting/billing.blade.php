@@ -234,6 +234,8 @@ use Carbon\Carbon;
                 </div>
             </div>
 
+            
+        @include("user.account-setting.cardinfo")
 
 
             <div class="col-md-12 pt-3">

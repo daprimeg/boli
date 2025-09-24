@@ -23,6 +23,8 @@ use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use App\Models\RecentView;
+use Illuminate\Support\Facades\Auth;
 
 class AuctionFinderController extends Controller
 {
@@ -135,12 +137,40 @@ class AuctionFinderController extends Controller
 
     public function vehicle($id)
     {
-        
-        $vehicle = Vehicle::where('id',$id)->first();
-        if(!$vehicle){
+        $vehicle = Vehicle::where('id', $id)->first();
+        if (!$vehicle) {
             return back()->with('error','Vehicle Not Found');
         }
 
+        $userId = Auth::id();
+
+
+        $existingView = RecentView::where('user_id', $userId)
+            ->where('vehicle_id', $id)
+            ->first();
+
+        if ($existingView) {
+ 
+            $existingView->touch(); 
+        } else {
+
+            RecentView::create([
+                'user_id' => $userId,
+                'vehicle_id' => $id,
+            ]);
+        }
+
+  
+        $recentViews = RecentView::where('user_id', $userId)
+            ->orderByDesc('updated_at')
+            ->get();
+
+        if ($recentViews->count() > 5) {
+            $idsToDelete = $recentViews->skip(5)->pluck('id'); 
+            RecentView::whereIn('id', $idsToDelete)->delete();
+        }
+
+      
         $auctionsPlatform = AuctionPlatform::all();
         $colors = DB::table('color')->where('id', $vehicle->color_id)->first();
         $biddingHistoryArray = json_decode($vehicle->bidding_history, true);
@@ -153,7 +183,6 @@ class AuctionFinderController extends Controller
         ];
         
         return view('user.vehicle.index',$data);
-
     }
 
 

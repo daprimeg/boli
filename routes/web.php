@@ -241,10 +241,20 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get','post'],'/account-setting/changePassword', [ProfileSettingController::class, 'changePassword']);
     Route::match(['get','post'],'/account-setting/billing', [ProfileSettingController::class, 'billing']);
     Route::get('/userprofile', [ProfileSettingController::class, 'userprofile']);
-    
+    Route::get('/account-setting/notifications', [ProfileSettingController::class, 'Notifications']);
+    Route::post('/notifications', [ProfileSettingController::class, 'storenotification'])->name('user.notifications.store');
+   
     // News (public)
     Route::get('/news', [NewsController::class, 'index'])->name('news.index');
     Route::post('/news/{id}/toggle-pin', [NewsController::class, 'togglePin'])->name('news.togglePin');
+
+
+
+
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::resource('payment-methods', ProfileSettingController::class);
+});
+
 
 });
 

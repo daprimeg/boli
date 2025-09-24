@@ -57,6 +57,14 @@ class User extends Authenticatable  // This should extend Authenticatable
     {
         return $this->belongsTo(Role::class, 'user_type', 'id');
     }
+    public function notificationSettings()
+    {
+        return $this->hasMany(UserNotificationSetting::class, 'user_id');
+    }
+    public function recentViews()
+    {
+        return $this->hasMany(RecentView::class);
+    }
 
 
 }
