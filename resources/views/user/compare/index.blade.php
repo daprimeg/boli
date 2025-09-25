@@ -3,6 +3,81 @@
     Compare
 @endpush
 @section('css')
+<style>
+
+#mileage_range_min::-webkit-slider-thumb,
+#mileage_range_max::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    transition: background 0.2s;
+}
+
+
+#mileage_range_min::-webkit-slider-thumb {
+    background: #3b82f6;
+}
+
+
+#mileage_range_max::-webkit-slider-thumb {
+    background: #f70000;
+}
+
+
+#mileage_range_min::-webkit-slider-thumb:hover {
+    background: #60a5fa;
+}
+#mileage_range_max::-webkit-slider-thumb:hover {
+    background: #ff4d4d;
+}
+
+
+#mileage_range_min::-moz-range-thumb {
+    background: #3b82f6;
+    border: none;
+}
+#mileage_range_max::-moz-range-thumb {
+    background: #2563eb;
+    border: none;
+}
+.select2-container--default .select2-selection--multiple {
+    background-color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    min-height: 40px; 
+    padding: 5px 10px;
+    color: #f3f4f6;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #3b82f6; 
+    color: white;
+    border-radius: 0.4rem;
+    padding: 2px 6px;
+    margin-right: 4px;
+    margin-top: 4px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: #fff;
+    margin-right: 2px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-search__field {
+    color: #f3f4f6;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+
+  padding-left: 15px !important;
+
+}
+
+</style>
 @endsection
 @include('user.compare.customestyle')
 @section('content')
@@ -75,15 +150,51 @@
                         </div>
 
                         <!-- Mileage -->
-                        <div class="col-md-3 py-3">
-                            <div class="form-group">
-                                <label class="form-label" for="mileage">Mileage (km)</label>
-                                <input type="number" name="mileage" id="mileage" class="form-control"
-                                    placeholder="Enter Mileage">
+                    <div class="col-md-3 py-3">
+                        <div class="form-group" style="position: relative;">
+                            <label class="form-label" for="mileage_range" style="font-weight:600;color:#f3f4f6;">Mileage</label>
+                            
+            
+                            <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.5rem;">
+                                <input 
+                                    type="number" 
+                                    name="mileage_from" 
+                                    id="mileage_from" 
+                                    class="form-control" 
+                                    placeholder="Min" 
+                                    style="flex:1;padding:0.5rem 0.75rem;border-radius:0.5rem;border:1px solid #4b5563;background:#111827;color:#f3f4f6;font-weight:500;outline:none;"
+                                >
+                                <span style="color:#9ca3af;font-weight:600;">to</span>
+                                <input 
+                                    type="number" 
+                                    name="mileage_to" 
+                                    id="mileage_to" 
+                                    class="form-control" 
+                                    placeholder="Max" 
+                                    style="flex:1;padding:0.5rem 0.75rem;border-radius:0.5rem;border:1px solid #4b5563;background:#111827;color:#f3f4f6;font-weight:500;outline:none;"
+                                >
+                            </div>
+
+                        <div style="position:relative; height:40px;">
+                    
+                            <input 
+                                type="range" 
+                                id="mileage_range_max" 
+                                min="0" max="500000" value="500000" step="1000"
+                                style="position:absolute;top:14px;left:0;width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:#374151;cursor:pointer;z-index:2;"
+                            >
+                 
+                            <input 
+                                type="range" 
+                                id="mileage_range_min" 
+                                min="0" max="500000" value="0" step="1000"
+                                style="position:absolute;top:14px;left:0;width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:#374151;cursor:pointer;z-index:1;"
+                            >
+                        </div>
+                                <small style="color:#9ca3af;margin-top:0.25rem;display:block;">Select mileage range in kilometers</small>
                             </div>
                         </div>
-
-                        <!-- Transmission -->
+                         <!-- Transmission -->
                         <div class="col-md-3 py-3">
                             <div class="form-group">
                                 <label class="form-label" for="transmission">Transmission</label>
@@ -127,14 +238,20 @@
                         </div>
 
                         <!-- Auction -->
-                        <div class="col-md-3 py-3">
-                            <div class="form-group">
-                                <label class="form-label" for="auction_id">Auction</label>
-                                <select name="auction_id" id="auction_id" class="form-control auctions select2" required>
-                                    <option value="">Select Auction</option>
-                                </select>
-                            </div>
+                    <div class="col-md-3 py-3">
+                        <div class="form-group" style="position: relative;">
+                            <label class="form-label" for="platform_id" style="">Auction House</label>
+                            <select name="platform_id[]" 
+                                    id="platform_id" 
+                                    class="form-control platformhouse select2" 
+                                    multiple="multiple" 
+                                    style="width: 100%; padding: 0.4rem; border-radius: 0.5rem; border: 1px solid #d1d5db; background:#1f2937; color:#f3f4f6;" 
+                                    required>
+                            </select>
+                            
                         </div>
+                    </div>
+
 
 
                         <div class="col-md-3 py-3 align-self-end">
@@ -184,341 +301,6 @@
 @endsection
 
 @section('js')
-    <script>
-        $(document).ready(function() {
+@include('user.compare.script')
 
-            // Function to load data (all or filtered)
-            function loadComparisonData(filters = {}) {
-                $.ajax({
-                    url: "{{ url('/compare') }}",
-                    type: "GET",
-                    data: filters,
-                    dataType: "json",
-                    success: function(response) {
-                        let headRow = $('#comparison-head');
-                        let body = $('#comparison-body');
-
-                        headRow.empty();
-                        body.empty();
-
-                        headRow.append(`
-                    <th style="min-width: 180px; padding: 10px; text-align: left;"></th>
-                `);
-
-
-                        // response.data.forEach(vehicle => {
-                        //     headRow.append(`
-                    //         <th class="vehicle-header" style="min-width: 200px; padding: 10px; text-align: center;">
-                    //             <div class="vehicle-card">
-                    //                 <div class="card-content">
-                    //                     <div class="vehicle-name" style="font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:150px;">
-                    //                         ${vehicle.title}
-                    //                     </div>
-                    //                     <span style="font-size: 10px; margin-top: 10px; margin-bottom: 2px;" class="badge">${vehicle.auction_name}</span>
-                    //                     <hr style="border: none; height: 2px; background-color: skyblue; margin-top: 5px; width:50%;">
-                    //                     <div class="card-actions" style="display: flex; gap: 5px; justify-content: center;">
-                    //                         <button style="padding: 4px 10px; font-size: 13px; background-color: red; color: white; border: none; border-radius: 3px;">Report</button>
-                    //                         <button style="padding: 4px 10px; font-size: 13px; background-color: #2563eb; color: white; border: none; border-radius: 3px;">View</button>
-                    //                     </div>
-                    //                 </div>
-                    //             </div>
-                    //         </th>
-                    //     `);
-                        // });
-
-                        response.data.forEach(vehicle => {
-                            headRow.append(`
-                        <th class="vehicle-header" 
-                            style="min-width: 200px; padding: 12px; text-align: center; vertical-align: top;">
-                            <div class="vehicle-card" 
-                                style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; transition: transform 0.2s ease;">
-                                <div class="card-content">
-                                    <div class="vehicle-name" 
-                                        style="font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; margin-bottom: 6px;">
-                                        ${vehicle.title}
-                                    </div>
-                                    <span style="display: inline-block; font-size: 11px; padding: 3px 8px; border: 1px solid #0ea5e9; color: #0ea5e9; border-radius: 4px; margin-bottom: 8px;">
-                                        ${vehicle.auction_name}
-                                    </span>
-                                    <hr style="border: none; height: 2px; background-color: #0ea5e9; margin: 8px auto; width: 60%;">
-                                    <div class="card-actions" 
-                                        style="display: flex; gap: 6px; justify-content: center;">
-                                        <button style="padding: 5px 12px; font-size: 12px; background-color: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                            Report
-                                        </button>
-                                        <button style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                            View
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                    `);
-                        });
-
-
-
-
-                        let attributes = [
-                            // Auc Section
-                            {
-                                section: 'Auc',
-                                label: 'Auction House',
-                                key: 'platform_name'
-                            },
-                            {
-                                section: 'Auc',
-                                label: 'Center',
-                                key: 'center_name'
-                            },
-                            {
-                                section: 'Auc',
-                                label: 'Auc Type',
-                                key: 'auction_type'
-                            },
-                            {
-                                section: 'Auc',
-                                label: 'Date & Time',
-                                key: 'auction_date'
-                            },
-
-                            // Valuation Section
-                            {
-                                section: 'Valuation',
-                                label: 'Autoboli Suggested',
-                                key: 'autoboli_suggested'
-                            },
-                            {
-                                section: 'Valuation',
-                                label: 'Cap Clean',
-                                key: 'cap_clean'
-                            },
-                            {
-                                section: 'Valuation',
-                                label: 'Cap Avg',
-                                key: 'cap_avg'
-                            },
-                            {
-                                section: 'Valuation',
-                                label: 'Cap Blue',
-                                key: 'cap_blue'
-                            },
-
-                            // Auc Results Section
-                            {
-                                section: 'Auc Results',
-                                label: 'Starting Bid',
-                                key: 'start_bid'
-                            },
-                            {
-                                section: 'Auc Results',
-                                label: 'Last Bid',
-                                key: 'last_bid'
-                            },
-                            {
-                                section: 'Auc Results',
-                                label: 'Auc Status',
-                                key: 'bidding_status'
-                            },
-
-                            // Spec Section
-                            {
-                                section: 'Spec',
-                                label: 'Mileage',
-                                key: 'mileage'
-                            },
-                            {
-                                section: 'Spec',
-                                label: 'CC',
-                                key: 'cc'
-                            },
-                            {
-                                section: 'Spec',
-                                label: 'V5',
-                                key: 'v5'
-                            },
-                            {
-                                section: 'Spec',
-                                label: 'Last Service',
-                                key: 'last_service'
-                            },
-                            {
-                                section: 'Spec',
-                                label: 'Former Keeper',
-                                key: 'former_keepers'
-                            },
-                            {
-                                section: 'Spec',
-                                label: 'MOT Ex',
-                                key: 'mot_expiry_date'
-                            }
-                        ];
-
-
-                        if (response.data.length === 0) {
-                            body.append(`
-        <tr>
-            <td colspan="100%" style="text-align:center; padding: 20px; font-size: 16px; color: red;">
-                No Data Found
-            </td>
-        </tr>
-    `);
-                            return;
-                        }
-
-                        let lastSection = null;
-
-                        attributes.forEach(attr => {
-                            // If new section, insert a heading row
-                            if (attr.section !== lastSection) {
-                                lastSection = attr.section;
-                                body.append(`
-        <tr style="background-color: #003366; color: white;">
-                <td colspan="${response.data.length + 1}" style="font-weight: bold; padding: 10px; font-size: 16px;">
-                    ${lastSection}
-                </td>
-            </tr>
-        `);
-                            }
-
-                            let row =
-                                `<tr><td class="row-label" style="padding: 10px; font-weight: bold; min-width: 180px;">${attr.label}</td>`;
-
-                            let priceKeys = ['cap_clean', 'last_bid', 'cap_avg', 'cap_blue',
-                                'autoboli_suggested'
-                            ];
-
-                            if (priceKeys.includes(attr.key)) {
-                                let values = response.data.map(v => parseFloat(v[attr.key]) ||
-                                    0);
-                                let minVal = Math.min(...values);
-                                let maxVal = Math.max(...values);
-
-                                response.data.forEach(vehicle => {
-                                    let value = parseFloat(vehicle[attr.key]) || 0;
-                                    let displayValue = vehicle[attr.key] ?? 'N/A';
-
-                                    let bgColor = '';
-                                    let labelText = '';
-
-                                    if (value === 0 || value === null || isNaN(value)) {
-                                        bgColor = '#87CEEB';
-                                        labelText = 'Neutral';
-                                    } else if (value === minVal) {
-                                        bgColor = '#22c55e';
-                                        labelText = 'Recommended';
-                                    } else if (value === maxVal) {
-                                        bgColor = '#ef4444';
-                                        labelText = 'High Price';
-                                    } else {
-                                        bgColor = '#facc15';
-                                        labelText = 'Average';
-                                    }
-
-                                    row += `
-                <td class="cell-data" style="padding: 10px; min-width: 200px; text-align: center;">
-                    <div style="display: inline-block; background-color: ${bgColor}; color: black; padding: 4px 10px; font-size: 12px; font-weight: 500; border-radius: 12px;">
-                        ${displayValue} <small style="opacity: 0.8; color:black;">(${labelText})</small>
-                    </div>
-                </td>
-            `;
-                                });
-
-                            } else {
-                                response.data.forEach(vehicle => {
-                                    let value = vehicle[attr.key] ?? 'N/A';
-                                    row +=
-                                        `<td class="cell-data" style="padding: 10px; min-width: 200px; text-align: center;">${value}</td>`;
-                                });
-                            }
-
-                            row += `</tr>`;
-                            body.append(row);
-                        });
-
-
-                    }
-                });
-            }
-
-
-
-            loadComparisonData();
-
-            $('#searchBtn').on('click', function() {
-                let filters = {
-                    vehicle: $('#vehicle').val(),
-                    make_id: $('#make_id').val(),
-                    model_id: $('#model_id').val(),
-                    variant_id: $('#variant_id').val(),
-                    year: $('#year').val(),
-                    mileage: $('#mileage').val(),
-                    transmission: $('#transmission').val(),
-                    fuel: $('#fuel').val(),
-                    grade: $('#grade').val(),
-                    auction_id: $('#auction_id').val(),
-                };
-
-
-                let allEmpty = Object.values(filters).every(v => v === "" || v === null);
-                if (allEmpty) {
-                    loadComparisonData();
-                } else {
-                    loadComparisonData(filters);
-                }
-            });
-
-        });
-
-
-
-
-
-        $('#make_id').on('change', function() {
-            var makeId = $(this).val();
-
-            // Clear dropdowns before loading new data
-            $('#model_id').empty().append('<option value="">Select Model</option>');
-            $('#variant_id').empty().append('<option value="">Select Variant</option>');
-
-            if (makeId) {
-                $.ajax({
-                    url: "{{ url('/get-models-variants') }}/" + makeId,
-                    type: 'GET',
-                    success: function(data) {
-                        $.each(data.models, function(index, model) {
-                            $('#model_id').append('<option value="' + model.id + '">' + model
-                                .name + '</option>');
-                        });
-                        $.each(data.variants, function(index, variant) {
-                            $('#variant_id').append('<option value="' + variant.id + '">' +
-                                variant.name + '</option>');
-                        });
-                        $('#model_id').select2({
-                            placeholder: 'Select Model',
-                            allowClear: true
-                        });
-
-                        $('#variant_id').select2({
-                            placeholder: 'Select Variant',
-                            allowClear: true
-                        });
-                        if (data.models.length > 0) {
-                            $('#model_id').val(data.models[0].id).trigger('change');
-                        } else {
-                            $('#model_id').val(null).trigger('change');
-                        }
-                        if (data.variants.length > 0) {
-                            $('#variant_id').val(data.variants[0].id).trigger('change');
-                        } else {
-                            $('#variant_id').val(null).trigger('change');
-                        }
-                    }
-                });
-            } else {
-                $('#model_id').val('').trigger('change');
-                $('#variant_id').val('').trigger('change');
-            }
-        });
-    </script>
 @endsection

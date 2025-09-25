@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 class CompareController extends Controller
 {
-   public function index(Request $request)
+public function index(Request $request)
 {
     if ($request->ajax()) {
 
@@ -27,16 +27,22 @@ class CompareController extends Controller
         $start = $request->input('start') ?? 0;
         $length = $request->input('length') ?? 10;
 
-        $query = Vehicle::leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id')
+        // Subquery: pick latest vehicle id per auction
+        $sub = Vehicle::select(DB::raw('MAX(id) as id'))
+            ->groupBy('auction_id');
+
+        $query = Vehicle::joinSub($sub, 'latest_vehicles', function($join) {
+                $join->on('vehicles.id', '=', 'latest_vehicles.id');
+            })
+            ->leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id')
             ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
             ->leftJoin('make', 'make.id', '=', 'vehicles.make_id')
             ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
             ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
             ->leftJoin('auction_center', 'auction_center.id', '=', 'vehicles.center_id')
-             ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+            ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
             ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
             ->leftJoin('color', 'color.id', '=', 'vehicles.color_id');
-
 
         if ($request->filled('transmission')) {
             $query->where('vehicles.transmission', $request->transmission);
@@ -53,8 +59,8 @@ class CompareController extends Controller
         if ($request->filled('center_id')) {
             $query->where('vehicles.center_id', $request->center_id);
         }
-        if ($request->filled('auction_id')) {
-            $query->where('auction_id', $request->auction_id);
+        if ($request->filled('platform_id')) {
+            $query->whereIn('auctions.platform_id', $request->platform_id);
         }
         if ($request->filled('make_id')) {
             $query->where('vehicles.make_id', $request->make_id);
@@ -65,8 +71,15 @@ class CompareController extends Controller
         if ($request->filled('variant_id')) {
             $query->where('vehicles.variant_id', $request->variant_id);
         }
+        $mileageFrom = $request->input('mileage_from');
+        $mileageTo   = $request->input('mileage_to');
 
-        $totalData = clone $query;
+        if (!is_null($mileageFrom) && !is_null($mileageTo) && ($mileageTo - $mileageFrom) >= 1) {
+            $query->where('vehicles.mileage', '>=', $mileageFrom)
+                ->where('vehicles.mileage', '<=', $mileageTo);
+        }
+
+        $totalData = $query->count();
 
         $vehicles = $query->select(
                 'vehicles.*',
@@ -86,40 +99,36 @@ class CompareController extends Controller
             ->offset($start)
             ->limit($length)
             ->get();
-$vehicles->transform(function ($vehicle) {
-    $history = $vehicle->bidding_history;
 
-    // If it's a string, split by comma
-    if (is_string($history)) {
-        // Remove brackets and quotes if exists, then split
-        $history = str_replace(['[', ']', '"', "'"], '', $history);
-        $history = explode(',', $history);
-    }
+        // Transform start_bid from bidding_history
+        $vehicles->transform(function ($vehicle) {
+            $history = $vehicle->bidding_history;
 
-    if (is_array($history) && count($history) > 0) {
-        $firstBid = trim($history[0]); // get first value
-        // Clean £ and commas and convert to float
-        $cleanBid = floatval(str_replace(['£', ','], '', $firstBid));
-        $vehicle->start_bid = $cleanBid;
-    } else {
-        $vehicle->start_bid = null;
-    }
-    return $vehicle;
-});
+            if (is_string($history)) {
+                $history = str_replace(['[', ']', '"', "'"], '', $history);
+                $history = explode(',', $history);
+            }
 
+            if (is_array($history) && count($history) > 0) {
+                $firstBid = trim($history[0]); 
+                $vehicle->start_bid = floatval(str_replace(['£', ','], '', $firstBid));
+            } else {
+                $vehicle->start_bid = null;
+            }
+            return $vehicle;
+        });
 
-
-        // Response JSON for your table
         return response()->json([
             "draw" => intval($request->input('draw')),
-            "recordsTotal" => $totalData->count(),
-            "recordsFiltered" => $totalData->count(),
+            "recordsTotal" => $totalData,
+            "recordsFiltered" => $totalData,
             "data" => $vehicles
         ]);
     }
 
     return view('user.compare.index');
 }
+
 
 public function getModelsAndVariants($make_id)
 {
