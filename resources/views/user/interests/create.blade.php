@@ -4,11 +4,19 @@
 @section('css')
 
     <style>
-        .form-label{
-            padding-top: 18px;
-            padding-bottom: 6px;
-            font-size: 15px;
-        }
+   
+
+        .form-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+.select2-container .select2-selection--single {
+    height: 38px !important;
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}
     </style>
 
 @endsection
@@ -55,31 +63,26 @@
                                     <h4 class="card-title ">Primary</h4>
                                 </div>
 
-                                <div class="mb-3 col-md-4">
+                             <div class="mb-3 col-md-4">
                                     <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
-                                    <input type="text" value="{{old('title')}}" name="title" class="form-control" required>
+                                    <input type="text" value="{{ old('title') }}" name="title" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3 col-md-4">
-                                    <label for="make_id" class="form-label">Make <span class="text-danger">*</span></label> <br>
-                                    <select name="make_id" class="form-control form-select" required>
-                                       
-                                    </select>
+                                    <label for="make_id" class="form-label">Make <span class="text-danger">*</span></label>
+                                    <select name="make_id" id="make_id" class="form-select select2" required></select>
                                 </div>          
 
                                 <div class="mb-3 col-md-4">
-                                    <label for="model_id" class="form-label">Model <span class="text-danger">*</span></label> <br>
-                                    <select name="model_id" class="form-select form-control" required>
-                                        
-                                    </select>
+                                    <label for="model_id" class="form-label">Model <span class="text-danger">*</span></label>
+                                    <select name="model_id" id="model_id" class="form-select select2" required></select>
                                 </div>
-                                
+
                                 <div class="mb-3 col-md-4">
-                                    <label for="model_variant_id" class="form-label">Model Variant </label> <br>
-                                    <select name="variant_id" class="form-select form-control">
-                                       
-                                    </select>
-                                </div>
+                                    <label for="variant_id" class="form-label">Model Variant</label>
+                                    <select name="variant_id" id="variant_id" class="form-select select2"></select>
+                            </div>
+
 
                                 <div class="mb-3 col-md-4">
                                     <label for="year_from" class="form-label">Year</label>
@@ -207,70 +210,74 @@
 
 <script>
 
-
-    $('select[name=make_id]').select2({
+$(document).ready(function () {
+    // Make
+    $('#make_id').select2({
         placeholder: 'Select Make',
         allowClear: true,
         ajax: {
-            url: "{{url('/admin/masters/makes/getMakes')}}",
+            url: "{{ url('/admin/masters/makes/getMakes') }}",
             dataType: 'json',
-            
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.results // Laravel se {id, text}
+                };
+            }
         }
     }).on('change', function () {
-
-        $('select[name=model_id]').val(null).trigger('change');
-        $('select[name=variant_id]').val(null).trigger('change');
-        
+        $('#model_id').val(null).trigger('change'); // reset model
+        $('#variant_id').val(null).trigger('change'); // reset variant
     });
 
-
-    $('select[name=model_id]').select2({
+    // Model
+    $('#model_id').select2({
         placeholder: 'Select Model',
         allowClear: true,
         ajax: {
-            url: "{{url('/admin/masters/models/getModels')}}",
+            url: "{{ url('/admin/masters/models/getModels') }}",
             dataType: 'json',
+            delay: 250,
             data: function (params) {
                 return {
                     q: params.term, // search term
-                    make_id: $('select[name=make_id]').val()
+                    make_id: $('#make_id').val() // filter by make
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.results
                 };
             }
         }
     }).on('change', function () {
-        $('select[name=variant_id]').val(null).trigger('change');
+        $('#variant_id').val(null).trigger('change'); // reset variant
     });
-    
-    $('select[name=variant_id]').select2({
+
+    // Variant
+    $('#variant_id').select2({
         placeholder: 'Select Variant',
         allowClear: true,
         ajax: {
-            url: "{{url('/admin/masters/variants/getVariants')}}",
+            url: "{{ url('/admin/masters/variants/getVariants') }}",
             dataType: 'json',
+            delay: 250,
             data: function (params) {
                 return {
-                    q: params.term, // search term
-                    model_id: $('select[name=model_id]').val()
+                    q: params.term,
+                    model_id: $('#model_id').val() // filter by model
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.results
                 };
             }
         }
     });
+});
 
-
-    $('select[name=fuel_type]').change(function (e) { 
-
-        if($(this).val() == 'Electric'){   
-            $('select[name=cc_from]').parent().parent().parent().hide();
-            $('select[name=cc_from]').val('');
-            $('select[name=cc_to]').val('');
-
-        }else{
-            $('select[name=cc_from]').parent().parent().parent().show();
-        }
-    }).trigger('change');
-
-    
-
+   
 
 
 </script>

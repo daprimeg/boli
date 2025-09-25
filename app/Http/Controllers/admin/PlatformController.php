@@ -28,6 +28,23 @@ class PlatformController extends Controller
         return response()->json(['results' => $models]);
   }
 
+public function getPlatformshouse(Request $request)
+{
+    $search = $request->input('q');
+
+    $models = AuctionPlatform::query()
+        ->leftJoin('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+        ->leftJoin('vehicles', 'vehicles.auction_id', '=', 'auctions.id')
+        ->where('auction_platform.name', 'like', "%$search%")
+        ->select('auction_platform.id', 'auction_platform.name as text')
+        ->groupBy('auction_platform.id', 'auction_platform.name')
+        ->havingRaw('COUNT(vehicles.id) > 1')
+        ->limit(20)
+        ->get();
+
+    return response()->json(['results' => $models]);
+}
+
 
     public function index(Request $request)
 {

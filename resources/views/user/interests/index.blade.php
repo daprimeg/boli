@@ -10,11 +10,6 @@
    .table{
     width: 100%!important;
    }
-
-   .dataTables_info{
-      /* display: inline!important; */
-   }
-
    .datatables-products th {
       text-align: center;
    }
@@ -32,9 +27,7 @@
 @section('content')
    <div class="container-fluid container-p-y">
       <div class="row g-6"> 
-            <div class="col-md-12">
-
-                        
+            <div class="col-md-12">    
 
                  @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
@@ -69,7 +62,7 @@
                         </div>
 
                         <div class="pt-5 table-responsive text-nowrap">
-                            <table class="table table-bordered">
+                            <table id="interestTable" class="table table-bordered">
                                 <thead>
                                     <tr>
                                        <th>#</th>
@@ -94,31 +87,37 @@
 @endsection
 
 @section('js')
-    <script>
-            $(document).ready(function () {
-             let table = $('table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering:false,
-                    ajax: "{{ url('/interest')}}",
-                });
+<script>
+    $(document).ready(function () {
+        if ($.fn.DataTable.isDataTable('#interestTable')) {
+            $('#interestTable').DataTable().destroy();
+        }
 
-                table.on('draw.dt', function () {
-                    var info = table.page.info();
-                    $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
-                });
+        let table = $('#interestTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ordering:false,
+            ajax: "{{ url('/interest')}}",
+        });
 
-                $("input[name='search']").on('keyup change', function () {
-                    table.search(this.value).draw();
-                });
+        table.on('draw.dt', function () {
+            var info = table.page.info();
+            $('.pageinfo').html(
+                `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`
+            );
+        });
 
-                $("select[name='length']").on('change', function () {
-                    const length = $(this).val();
-                    table.page.len(length).draw();
-                }).trigger('change');
+        $("input[name='search']").on('keyup change', function () {
+            table.search(this.value).draw();
+        });
 
-            });
-    </script>
+        $("select[name='length']").on('change', function () {
+            const length = $(this).val();
+            table.page.len(length).draw();
+        }).trigger('change');
+    });
+
+</script>
 @endsection
 
 

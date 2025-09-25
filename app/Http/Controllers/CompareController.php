@@ -22,13 +22,13 @@ class CompareController extends Controller
 public function index(Request $request)
 {
     if ($request->ajax()) {
-
         $search = $request->input('search.value');
         $start = $request->input('start') ?? 0;
         $length = $request->input('length') ?? 10;
 
-        // Subquery: pick latest vehicle id per auction
+        // Subquery: latest "On Sale" vehicle per auction
         $sub = Vehicle::select(DB::raw('MAX(id) as id'))
+            ->where('bidding_status', 'On Sale')
             ->groupBy('auction_id');
 
         $query = Vehicle::joinSub($sub, 'latest_vehicles', function($join) {
@@ -44,39 +44,22 @@ public function index(Request $request)
             ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
             ->leftJoin('color', 'color.id', '=', 'vehicles.color_id');
 
-        if ($request->filled('transmission')) {
-            $query->where('vehicles.transmission', $request->transmission);
+        // Filters
+        $filters = ['transmission','vehicle','fuel','grade','center_id','make_id','model_id','variant_id'];
+        foreach($filters as $f) {
+            if ($request->filled($f)) {
+                $query->where("vehicles.$f", $request->$f);
+            }
         }
-        if ($request->filled('vehicle')) {
-            $query->where('vehicles.title', $request->vehicle);
-        }
-        if ($request->filled('fuel')) {
-            $query->where('vehicles.fuel_type', $request->fuel);
-        }
-        if ($request->filled('grade')) {
-            $query->where('vehicles.grade', $request->grade);
-        }
-        if ($request->filled('center_id')) {
-            $query->where('vehicles.center_id', $request->center_id);
-        }
+
         if ($request->filled('platform_id')) {
             $query->whereIn('auctions.platform_id', $request->platform_id);
         }
-        if ($request->filled('make_id')) {
-            $query->where('vehicles.make_id', $request->make_id);
-        }
-        if ($request->filled('model_id')) {
-            $query->where('vehicles.model_id', $request->model_id);
-        }
-        if ($request->filled('variant_id')) {
-            $query->where('vehicles.variant_id', $request->variant_id);
-        }
+
         $mileageFrom = $request->input('mileage_from');
         $mileageTo   = $request->input('mileage_to');
-
         if (!is_null($mileageFrom) && !is_null($mileageTo) && ($mileageTo - $mileageFrom) >= 1) {
-            $query->where('vehicles.mileage', '>=', $mileageFrom)
-                ->where('vehicles.mileage', '<=', $mileageTo);
+            $query->whereBetween('vehicles.mileage', [$mileageFrom, $mileageTo]);
         }
 
         $totalData = $query->count();
@@ -100,7 +83,7 @@ public function index(Request $request)
             ->limit($length)
             ->get();
 
-        // Transform start_bid from bidding_history
+        // Start bid fix
         $vehicles->transform(function ($vehicle) {
             $history = $vehicle->bidding_history;
 

@@ -89,7 +89,8 @@ public function index(Request $request)
         }
 
         $totalData = clone $query;
-
+        $totalRecords = Vehicle::count(); 
+        $totalFiltered = (clone $query)->count(DB::raw('distinct vehicles.reg')); 
         $data = $query->select(
                 'vehicles.*',
                 'auction_platform.name AS platform_name',
@@ -105,15 +106,22 @@ public function index(Request $request)
                     WHERE v2.reg = vehicles.reg
                     ) AS auction_count')
                 )
+            ->groupBy('vehicles.reg')
             ->offset($start)
             ->limit($length)
             ->get()
             ->map(function ($vehicle) {
-                $vehicleName = '
-                    <div>
-                        <p class="mb-1">'.strtoupper($vehicle->make_name) . " - " . $vehicle->model_name.'</p>
-                        <p class="text-muted mb-0 small">'.$vehicle->model_variant_name.'</p>
-                    </div>';
+            $vehicleName = '
+                    <div style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
+                        title="'.strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name.'">
+                        <p class="mb-1 text-truncate">'.strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name.'</p>
+                    </div>
+                    <p class="text-muted mb-0 small text-truncate" 
+                    style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
+                    title="'.$vehicle->model_variant_name.'">
+                    '.$vehicle->model_variant_name.'
+                    </p>';
+
 
                 $platefrom = '<p class="text-primary">'.$vehicle->platform_name.'</p>';
                 $deff = '<p class="text-danger" style="color:#570303;">Waiting</p>';
@@ -154,18 +162,30 @@ public function index(Request $request)
 
         return response()->json([
             "draw" => intval($request->input('draw')),
-            "recordsTotal" => $totalData->count(),
-            "recordsFiltered" => $totalData->count(),
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalFiltered,
             "data" => $data
         ]);
-    }
-    $userId = Auth::id();
-    $interests = Interest::where('user_id', $userId)->get();
-    $auctionPlatform = AuctionPlatform::pluck('name');
-    $auctionCenter = AuctionCenter::pluck('name');
-    $today = Carbon::today();
-    $vehicleCountToday = Vehicle::whereDate('created_at', $today)->count();
-    return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests','vehicleCountToday'));
+            }
+            $userId = Auth::id();
+            $interests = Interest::where('user_id', $userId)->get();
+            $auctionPlatform = DB::table('auction_platform')
+                ->leftJoin('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+                ->leftJoin('vehicles', 'vehicles.auction_id', '=', 'auctions.id')
+                ->select('auction_platform.id', 'auction_platform.name')
+                ->groupBy('auction_platform.id', 'auction_platform.name')
+                ->havingRaw('COUNT(vehicles.id) > 1')
+                ->pluck('auction_platform.name', 'auction_platform.id'); 
+
+            $auctionCenter = DB::table('auction_center')
+            ->leftJoin('vehicles', 'vehicles.center_id', '=', 'auction_center.id')
+            ->select('auction_center.id', 'auction_center.name')
+            ->groupBy('auction_center.id', 'auction_center.name')
+            ->havingRaw('COUNT(vehicles.id) > 1')
+            ->pluck('auction_center.name', 'auction_center.id');
+            $today = Carbon::today();
+            $vehicleCountToday = Vehicle::whereDate('created_at', $today)->count();
+            return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests','vehicleCountToday'));
 }
 
 

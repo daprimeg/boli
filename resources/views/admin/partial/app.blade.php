@@ -434,18 +434,20 @@
                         dataType: 'json',
                     }
                 });
-                $('.vehicleTtypes').select2({
-                    placeholder: 'Select Vehicle Type',
-                    ajax: {
-                        url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
-                        dataType: 'json',
-                    }
-                });
+             
                 $('.variants').select2({
                     placeholder: 'Select Variant',
                     allowClear: true,
                     ajax: {
                         url: "{{url('/admin/masters/variants/getVariants')}}",
+                        dataType: 'json',
+                    }
+                });
+
+                $('.vehicleTtypes').select2({
+                    placeholder: 'Select Vehicle Type',
+                    ajax: {
+                        url: "{{url('/admin/masters/vehicletypes/getVehicleTypes')}}",
                         dataType: 'json',
                     }
                 });

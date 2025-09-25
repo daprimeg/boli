@@ -61,32 +61,33 @@
                                     <input type="text" value="{{$model->title}}" name="title" class="form-control" required>
                                 </div>
 
-                                <div class="mb-3 col-md-4">
+                               <div class="mb-3 col-md-4">
                                     <label for="make_id" class="form-label">Make <span class="text-danger">*</span></label> <br>
-                                    <select name="make_id" class="form-control form-select" required>
+                                    <select id="make_id" name="make_id" class="form-control form-select" required>
                                         @if($model->make)
-                                        <option value="{{$model->make_id}}">{{$model->make->name}}</option>
+                                            <option value="{{ $model->make_id }}" selected>{{ $model->make->name }}</option>
                                         @endif
                                     </select>
                                 </div>          
 
                                 <div class="mb-3 col-md-4">
                                     <label for="model_id" class="form-label">Model <span class="text-danger">*</span></label> <br>
-                                    <select name="model_id" class="form-select form-control" required>
+                                    <select id="model_id" name="model_id" class="form-select form-control" required>
                                         @if($model->model)
-                                         <option value="{{$model->model_id}}">{{$model->model->name}}</option>
+                                            <option value="{{ $model->model_id }}" selected>{{ $model->model->name }}</option>
                                         @endif
                                     </select>
                                 </div>
-                                
+
                                 <div class="mb-3 col-md-4">
-                                    <label for="model_variant_id" class="form-label">Model Variant <span class="text-danger">*</span></label> <br>
-                                    <select name="variant_id" class="form-select form-control">
-                                         @if($model->variant)
-                                         <option value="{{$model->variant_id}}">{{$model->variant->name}}</option>
+                                    <label for="variant_id" class="form-label">Model Variant <span class="text-danger">*</span></label> <br>
+                                    <select id="variant_id" name="variant_id" class="form-select form-control">
+                                        @if($model->variant)
+                                            <option value="{{ $model->variant_id }}" selected>{{ $model->variant->name }}</option>
                                         @endif
                                     </select>
                                 </div>
+
 
                                 <div class="mb-3 col-md-4">
                                     <label for="year_from" class="form-label">Year</label>
@@ -212,70 +213,78 @@
 
 <script>
 
-
-    $('select[name=make_id]').select2({
+$(document).ready(function () {
+    // Make
+    $('#make_id').select2({
         placeholder: 'Select Make',
         allowClear: true,
         ajax: {
-            url: "{{url('/admin/masters/makes/getMakes')}}",
+            url: "{{ url('/admin/masters/makes/getMakes') }}",
             dataType: 'json',
-            
-            
+            delay: 250,
+            processResults: function (data) {
+                return { results: data.results };
+            }
         }
     }).on('change', function () {
-
-        $('select[name=model_id]').val(null).trigger('change');
-        $('select[name=variant_id]').val(null).trigger('change');
-        
+        $('#model_id').val(null).trigger('change');
+        $('#variant_id').val(null).trigger('change');
     });
 
-
-    $('select[name=model_id]').select2({
+    // Model
+    $('#model_id').select2({
         placeholder: 'Select Model',
         allowClear: true,
         ajax: {
-            url: "{{url('/admin/masters/models/getModels')}}",
+            url: "{{ url('/admin/masters/models/getModels') }}",
             dataType: 'json',
+            delay: 250,
             data: function (params) {
                 return {
-                    q: params.term, // search term
-                    make_id: $('select[name=make_id]').val()
+                    q: params.term,
+                    make_id: $('#make_id').val()
                 };
+            },
+            processResults: function (data) {
+                return { results: data.results };
             }
         }
     }).on('change', function () {
-        $('select[name=variant_id]').val(null).trigger('change');
+        $('#variant_id').val(null).trigger('change');
     });
-    
-    $('select[name=variant_id]').select2({
+
+    // Variant
+    $('#variant_id').select2({
         placeholder: 'Select Variant',
         allowClear: true,
         ajax: {
-            url: "{{url('/admin/masters/variants/getVariants')}}",
+            url: "{{ url('/admin/masters/variants/getVariants') }}",
             dataType: 'json',
+            delay: 250,
             data: function (params) {
                 return {
-                    q: params.term, // search term
-                    model_id: $('select[name=model_id]').val()
+                    q: params.term,
+                    model_id: $('#model_id').val()
                 };
+            },
+            processResults: function (data) {
+                return { results: data.results };
             }
         }
     });
 
+    // 👇 Already selected values ko Select2 initialize karne ke liye
+    if ($('#make_id').find('option[selected]').length) {
+        $('#make_id').trigger('change.select2');
+    }
+    if ($('#model_id').find('option[selected]').length) {
+        $('#model_id').trigger('change.select2');
+    }
+    if ($('#variant_id').find('option[selected]').length) {
+        $('#variant_id').trigger('change.select2');
+    }
+});
 
-    $('select[name=fuel_type]').change(function (e) { 
-
-        if($(this).val() == 'Electric'){   
-            $('select[name=cc_from]').parent().parent().parent().hide();
-            $('select[name=cc_from]').val('');
-            $('select[name=cc_to]').val('');
-
-        }else{
-            $('select[name=cc_from]').parent().parent().parent().show();
-        }
-    }).trigger('change');
-
-    
 
 
 

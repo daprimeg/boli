@@ -301,7 +301,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="color"
                         id="color"onclick="return false;">
-                    <label class="form-check-label disc" for="color">{{ $vehicle->color->name }}</label>
+                    <label class="form-check-label disc" for="color">{{ $vehicle->color->name ?? " " }}</label>
                 </div>
             </div>
             <div class="col-md-2 sider1">

@@ -52,6 +52,7 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
 
         //Masters
         Route::get('/masters/platforms/getPlatforms', [PlatformController::class,'getPlatforms']);
+        Route::get('/masters/platforms/getPlatformshouse', [PlatformController::class,'getPlatformshouse']);
         Route::resource('masters/platforms',PlatformController::class);
 
         Route::get('/masters/centers/getCenters', [CenterController::class,'getCenters']);
