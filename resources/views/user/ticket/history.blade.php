@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="pt-5 table-responsive text-nowrap">
-                            <table class="table table-bordered">
+                            <table id="ticketHistoryTable" class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -84,6 +84,7 @@
                                 </thead>
                                 <tbody class="table-border-bottom-0"></tbody>
                             </table>
+
                         </div>
                     </div>  
                 </div>
@@ -94,28 +95,34 @@
 
 @section('js')
     <script>
-            $(document).ready(function () {
-             let table = $('table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: "{{ URL::to('/tickethistory')}}",
-                });
+$(document).ready(function () {
+    if ($.fn.DataTable.isDataTable('#ticketHistoryTable')) {
+        $('#ticketHistoryTable').DataTable().destroy();
+    }
 
-                table.on('draw.dt', function () {
-                    var info = table.page.info();
-                    $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
-                });
+    let table = $('#ticketHistoryTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ URL::to('/tickethistory')}}",
+    });
 
-                $("input[name='search']").on('keyup change', function () {
-                    table.search(this.value).draw();
-                });
+    table.on('draw.dt', function () {
+        var info = table.page.info();
+        $('.pageinfo').html(
+            `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`
+        );
+    });
 
-                $("select[name='length']").on('change', function () {
-                    const length = $(this).val();
-                    table.page.len(length).draw();
-                }).trigger('change');
+    $("input[name='search']").on('keyup change', function () {
+        table.search(this.value).draw();
+    });
 
-            });
+    $("select[name='length']").on('change', function () {
+        const length = $(this).val();
+        table.page.len(length).draw();
+    }).trigger('change');
+});
+
     </script>
 @endsection
 

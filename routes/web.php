@@ -18,8 +18,10 @@ use App\Http\Controllers\AuctionFinderController;
 use App\Http\Controllers\AuctionFinderDataController;
 use App\Http\Controllers\ReauctionController;
 use App\Http\Controllers\CompareController;
+use App\Http\Controllers\UserAlertController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\CheckUserStatus;
 use App\Models\BodyType;
 use App\Models\Color;
@@ -30,14 +32,28 @@ use App\Models\VehicleModel;
 use App\Models\VehicleType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Broadcast;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
-
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
+// ya agar session auth use kar rahe ho to
+Broadcast::routes(['middleware' => ['auth']]);
 // Public routes
+use App\Events\NewBlogNotification;
+
+Route::get('/test-notify', function() {
+    $user = Auth::user();
+
+    // Event fire karna, DB entry event me ho jaayegi
+    event(new NewBlogNotification($user, 'Test Notification', 'This is a test'));
+
+    \Log::info('Event fired for user '.$user->id);
+
+    return 'Event fired for user '.$user->id;
+});
 
 
 Route::get('/', [WebController::class,'index']);
@@ -327,19 +343,19 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
             Route::get('/autionshadule', [WebController::class, 'AutionShadule'])->name('autionshadule');
             Route::post('/notificationsstore', [ReauctionController::class, 'notification'])->name('notifications.store');
-
+            
             // compare
             Route::get('/compare', [CompareController::class,'index'])->name('compare');
             Route::get('/get-models-variants/{make_id}', [CompareController::class, 'getModelsAndVariants']);
-
-
+            
+            
             Route::view('/vinsearch', 'user/vinsearch')->name('vinsearch');
             // Route::view('/interest', 'user/interest')->name('interest');
-
+            
             Route::get('/interest/myintrest', [InterestController::class,'myintrest']);
             Route::get('/interest/setintrest/{id}', [InterestController::class,'setintrest']);
             Route::resource('/interest',InterestController::class);
-
+            
             Route::view('/gellery', 'user/gellery')->name('gellery');
             Route::view('/comparevehicles', 'user/comparevehicles')->name('comparevehicles');
             Route::view('/reauctiontracker', 'user/reauctiontracker')->name('reauctiontracker');
@@ -356,6 +372,23 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/ticket-history/data', [TicketController::class, 'historyData'])->name('ticket.history.data');
             Route::post('/ticket/{id}/feedback', [TicketController::class, 'submitFeedback'])->name('ticket.feedback');
 
+            
+            // myalert
+            Route::get('/myalert', [UserAlertController::class,'index']);
+            Route::get('/myalert/get-filters', [UserAlertController::class, 'getVehicleFilters'])->name('get.filters');
+
+
+            Route::post('/notifications/mark-read/{id}', function ($id) {
+                $notif = \App\Models\UserNotificationAlert::findOrFail($id);
+                $notif->update(['is_read' => 1]);
+                return back();
+            });
+            
+            Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+            Route::get('/notifications/delete/{id}', [NotificationController::class, 'delete'])->name('notifications.delete');
+            Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.all');
+
+            
   
 
     });

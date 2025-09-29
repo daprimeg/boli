@@ -4,12 +4,15 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Events\NewBlogNotification;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\UserNotificationAlert;
 
 class BlogController extends Controller
 {
@@ -127,7 +130,22 @@ class BlogController extends Controller
             $blog->save();
         }
 
-        return redirect('/admin/blogs')->with('success', 'Blog created successfully.');
+     $users = User::all();
+
+    foreach ($users as $user) {
+        // Insert into your custom table
+        $notification = UserNotificationAlert::create([
+            'user_id' => $user->id,
+            'title' => $blog->title,
+            'message' => "New blog published: {$blog->title}",
+            'is_read' => 0
+        ]);
+
+    // Fire event
+    event(new NewBlogNotification($user, $notification));
+}
+
+        // return redirect('/admin/blogs')->with('success', 'Blog created successfully.');
     }
 
     public function edit(Blog $blog)

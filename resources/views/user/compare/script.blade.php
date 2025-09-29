@@ -37,9 +37,9 @@ $(document).ready(function() {
                                             <button style="padding: 5px 12px; font-size: 12px; background-color: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;">
                                                 Report
                                             </button>
-                                            <button style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                            <a href="{{ url('/auction-finder/vehicle') }}/${vehicle.id}"  style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
                                                 View
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

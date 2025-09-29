@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Auction;
 use App\Models\AuctionPlatform;
 use App\Models\Auctions;
+use App\Models\RecentView;
+use App\Models\Notification;
 use App\Models\Membership;
 use App\Models\MembershipPayment;
 use Illuminate\Http\Request;
@@ -62,6 +64,21 @@ class DashboardController extends Controller
             ->where('auctions.end_date', '>=', Carbon::now())
             ->count();
 
+            $userId = auth()->id();
+
+           $recentVehicles = RecentView::with(['vehicle.make', 'vehicle.model', 'vehicle.variant'])
+            ->where('user_id', auth()->id())
+            ->where('created_at', '>=', now()->subDays(2))
+            ->get()
+            ->pluck('vehicle');
+
+            $alertVehicles = Notification::with(['vehicle.make', 'vehicle.model', 'vehicle.variant'])
+                ->where('user_id', auth()->id())
+                ->latest()
+                ->get()
+                ->pluck('vehicle')
+                ->unique('id'); // sirf unique vehicles
+
 
             $data = [
                 'notSoldVehicles' => $notSoldVehicles,
@@ -73,6 +90,8 @@ class DashboardController extends Controller
                 'inProgressAuctions' => $totalSoldVehicles, 
                 'onlineAuctions' => $totalSoldVehicles, 
                 'timeAuctions' => $totalSoldVehicles, 
+                'recentVehicles'      => $recentVehicles, 
+                'alertVehicles'      => $alertVehicles, 
             ];
 
             return view('user.dashboard.dashboard',$data);

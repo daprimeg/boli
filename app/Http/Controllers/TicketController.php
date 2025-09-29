@@ -22,15 +22,13 @@ class TicketController extends Controller
             "issue_topic" => "required|string",
             "issue_type" => "required|string",
             "details" => "required|string",
-            "priority" => "required|in:Low,Medium,High", // Add validation
+            "priority" => "required|in:Low,Medium,High",
             "attachment" => "nullable|file|max:2048",
         ]);
 
         $user = Auth::user();
 
-        // $attachmentPath = $request->hasFile("attachment")
-        //     ? $request->file("attachment")->store("attachments", "public")
-        //     : null;
+    
 
         $t = Ticket::create([
             "user_id" => $user->id,
@@ -38,8 +36,8 @@ class TicketController extends Controller
             "issue_topic" => $request->issue_topic,
             "issue_type" => $request->issue_type,
             "details" => $request->details,
-            "priority" => $request->priority, // Store priority
-            "status" => 0, // Default to "open"
+            "priority" => $request->priority, 
+            "status" => 0, 
             "attachment" => '',
             "response" => 1,
         ]);

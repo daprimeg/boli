@@ -22,6 +22,15 @@
         </a>
     </li>
 
+        <li class="menu-item {{ request()->is('myalert*') ? 'active' : '' }}">
+            <a href="{{ url('/myalert') }}" class="menu-link">    
+                <!-- Icon: Tabler history -->
+                <i class="menu-icon ti tabler-history"></i>         
+                <div>View History</div>
+            </a>
+        </li>
+
+
     <li class="menu-item {{ request()->is('reauction*') ? 'active open' : '' }}">
         <a href="{{ URL::to('/reauction') }}" class="menu-link" >
         <i class="menu-icon icon-base ti tabler-calendar-repeat"></i>

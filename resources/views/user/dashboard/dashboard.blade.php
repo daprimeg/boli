@@ -378,6 +378,13 @@ background: #0f1c2c;
                                  <span class="borders mt-0" style="" ></span>
                                 </button>
                             </li>
+
+                            <li class="nav-item" role="presentation">
+                              <button class="d-block nav-link" style="font-size: var(--font-p1); font-weight: var(--font-weight-semibold)  ; margin-bottom: -10px !important"  id="alter-tab" data-bs-toggle="tab" data-bs-target="#alter" type="button" role="tab" aria-controls="alter" aria-selected="false">
+                                  <span class="d-block" >Alert</span> 
+                                 <span class="borders mt-0" style="" ></span>
+                                </button>
+                            </li>
                             
                           </ul>
                   </div>
@@ -422,6 +429,11 @@ background: #0f1c2c;
           </div>
           <div class="tab-pane fade" id="profile"  role="tabpanel" aria-labelledby="profile-tab">
             @include('user.dashboard.intrest')
+
+       
+          </div>
+          <div class="tab-pane fade" id="alter"  role="tabpanel" aria-labelledby="alter-tab">
+            @include('user.dashboard.alter')
 
        
           </div>

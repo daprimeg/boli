@@ -10,7 +10,7 @@ class Notification extends Model
 
     protected $fillable = [
         'user_id',
-        'auction_id',
+        'vehicle_id',
         'is_read',
     ];
 
@@ -18,14 +18,14 @@ class Notification extends Model
         'is_read' => 'boolean',
     ];
 
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function auction()
+    public function vehicle()
     {
-        return $this->belongsTo(Auction::class);
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 }
+
