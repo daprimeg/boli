@@ -104,7 +104,7 @@
 
 
                     <span style="font-size: 28px; font-weight: 600; margin: 10px 0px;">{{ $vehicle->year }}
-                        {{ $vehicle->make->name }} {{ $vehicle->model->name }} – {{ $vehicle->variant->name }}</span>
+                        {{ $vehicle->make->name ?? "" }} {{ $vehicle->model->name ?? "" }} – {{ $vehicle->variant->name ?? "" }}</span>
                     <div class="row mt-2  d-flex justify-content-center align-items-center"
                         style="border-radius: 10px; margin-top: 30px !important; background: #00264d !important;padding-top: 10px">
                         <div class="col-md-4">

@@ -54,9 +54,12 @@
                             <td>{{ $vehicle->model->name ?? 'N/A' }}</td>
                             <td>{{ $vehicle->variant->name ?? 'N/A' }}</td>
                             <td class="text-center">
-                                <a href="{{ url('vehicles/'.$vehicle->id) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                                @if(!empty($vehicle->id))
+                                    <a href="{{ url('vehicles/'.$vehicle->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                @endif
+
                             </td>
                         </tr>
                     @empty

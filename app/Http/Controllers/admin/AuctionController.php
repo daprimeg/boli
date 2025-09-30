@@ -73,10 +73,10 @@ class AuctionController extends Controller
     function checkVariant($value)
     {
         $model = ModelVariant::where('id',$value)->first();
-        if(!$model){
-            throw new ModelNotFoundException("Variant '{$value}' not found.");
-        }
-        return $model->id;
+        // if(!$model){
+        //     throw new ModelNotFoundException("Variant '{$value}' not found.");
+        // }
+        return $model->id ?? NULL;
     }
 
     function checkVehicleType($value)
@@ -122,7 +122,7 @@ class AuctionController extends Controller
     function checkCenter($value)
     {
     
-        $model = AuctionCenter::where('name',$value)->first();
+        $model = AuctionCenter::where('id',$value)->first();
         if(!$model){
             throw new ModelNotFoundException("Auction Center '{$value}' not found.");
         }

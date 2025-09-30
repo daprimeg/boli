@@ -2,12 +2,13 @@
 
     <div
         class="d-flex flex-column flex-md-row justify-content-center align-items-center header-section mt-5 ps-md-10 ps-0 text-center text-md-start">
-        <div style="max-width:75px" class="w-100">
+        <div class="w-auto">
             <div class="stats-card">
-                <h3 class="stats-number">{{ $vehicleCountToday }}</h3>
+                <h3 class="stats-number">{{ $vehicleCountToday ?? 0 }}</h3>
                 <p class="stats-label">Today</p>
             </div>
         </div>
+
         <div class="">
             <div class="platform-info">
                 <div class="inner-tag" style="display: flex; gap:10px;align-items: center;">

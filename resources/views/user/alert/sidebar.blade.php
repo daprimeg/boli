@@ -8,6 +8,9 @@
    </h2>
    <div id="collapseVehiclemake" class="accordion-collapse collapse">
       <div class="accordion-body py-1 tags tags-make"></div>
+      <div class="mt-3">
+         <div id="selected-filters_make"></div>
+      </div>
    </div>
 </div>
 
@@ -21,6 +24,9 @@
    </h2>
    <div id="collapseVehiclemodel" class="accordion-collapse collapse">
       <div class="accordion-body py-1 tags tags-model"></div>
+      <div class="mt-3">
+         <div id="selected-filters_model"></div>
+      </div>
    </div>
 </div>
 
@@ -34,6 +40,9 @@
    </h2>
    <div id="collapseVehiclevariant" class="accordion-collapse collapse">
       <div class="accordion-body py-1 tags tags-variant"></div>
+      <div class="mt-3">
+         <div id="selected-filters_variant"></div>
+      </div>
    </div>
 </div>
 
@@ -47,6 +56,9 @@
    </h2>
    <div id="collapseVehicleYear" class="accordion-collapse collapse">
       <div class="accordion-body py-1 tags tags-year"></div>
+      <div class="mt-3">
+         <div id="selected-filters_year"></div>
+      </div>
    </div>
 </div>
 
@@ -60,13 +72,16 @@
    </h2>
    <div id="collapseVehicleFuel" class="accordion-collapse collapse">
       <div class="accordion-body py-1 tags tags-fuel_type"></div>
+      <div class="mt-3">
+         <div id="selected-filters_fuel_type"></div>
+      </div>
    </div>
 </div>
 
 
 
 <!-- Mileage Filter -->
-<div class="accordion-item">
+{{-- <div class="accordion-item">
    <h2 class="accordion-header" id="headingMileage">
       <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" 
               data-bs-target="#collapseMileage" aria-expanded="false" aria-controls="collapseMileage">
@@ -112,4 +127,4 @@
       </div>
    </div>
    <div class="tags tags-mileage_range"></div>
-</div>
+</div> --}}

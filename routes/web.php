@@ -374,8 +374,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
             
             // myalert
-            Route::get('/myalert', [UserAlertController::class,'index']);
-            Route::get('/myalert/get-filters', [UserAlertController::class, 'getVehicleFilters'])->name('get.filters');
+            Route::get('/viewhistory', [UserAlertController::class,'index']);
+            Route::get('/viewhistory/get-filters', [UserAlertController::class, 'getVehicleFilters'])->name('get.filters');
+            Route::post('viewhistory/auction-data', [UserAlertController::class, 'getAuctionData'])->name('get.auction.data');
 
 
             Route::post('/notifications/mark-read/{id}', function ($id) {

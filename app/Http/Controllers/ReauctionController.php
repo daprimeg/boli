@@ -88,77 +88,89 @@ public function index(Request $request)
                     }
         }
 
-        $totalData = clone $query;
-        $totalRecords = Vehicle::count(); 
-        $totalFiltered = (clone $query)->count(DB::raw('distinct vehicles.reg')); 
-        $data = $query->select(
-                'vehicles.*',
-                'auction_platform.name AS platform_name',
-                'auction_center.name AS center_name',
-                'make.name AS make_name',
-                'model.name AS model_name',
-                'model_variant.name AS model_variant_name',
-                'auctions.auction_date',
-                'auctions.id AS acId',
-                DB::raw('(
-                    SELECT COUNT(DISTINCT v2.auction_id)
-                    FROM vehicles v2
-                    WHERE v2.reg = vehicles.reg
-                    ) AS auction_count')
+            $totalData = clone $query;
+            $totalRecords = Vehicle::select('reg')->distinct()->count();
+            $totalFiltered = $query->select('vehicles.reg')
+                ->groupBy('vehicles.reg')
+                ->havingRaw('COUNT(vehicles.id) >= 2')
+                ->get()
+                ->count();
+            $data = $query->select(
+                    'vehicles.*',
+                    'auction_platform.name AS platform_name',
+                    'auction_center.name AS center_name',
+                    'make.name AS make_name',
+                    'model.name AS model_name',
+                    'model_variant.name AS model_variant_name',
+                    'auctions.auction_date',
+                    'auctions.id AS acId',
+                    DB::raw('COUNT(vehicles.id) as auction_count'), 
+                    DB::raw('COUNT(vehicles.id) as vehicle_count')
                 )
-            ->groupBy('vehicles.reg')
-            ->offset($start)
-            ->limit($length)
-            ->get()
-            ->map(function ($vehicle) {
+                ->groupBy('vehicles.reg')
+                ->havingRaw('COUNT(vehicles.id) >= 2') 
+                ->offset($start)
+                ->limit($length)
+                ->get()
+                ->map(function ($vehicle) {
+
+      
+            $bids = Vehicle::where('reg', $vehicle->reg)
+                    ->orderBy('created_at', 'asc') 
+                    ->pluck('last_bid')
+                    ->toArray();
+
+            $firstBid = $bids[0] ?? 0;
+            $lastBid = end($bids) ?? 0;
+            $diff = $lastBid - $firstBid;  
+
+            $diffText = $diff > 0 ? "<span style='color:green;'>+{$diff}</span>" 
+                                : "<span style='color:red;'>{$diff}</span>";
+
             $vehicleName = '
-                    <div style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
-                        title="'.strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name.'">
-                        <p class="mb-1 text-truncate">'.strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name.'</p>
-                    </div>
-                    <p class="text-muted mb-0 small text-truncate" 
-                    style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
-                    title="'.$vehicle->model_variant_name.'">
-                    '.$vehicle->model_variant_name.'
-                    </p>';
+                <div style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
+                    title="'.strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name.'">
+                    <p class="mb-1 text-truncate">'.strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name.'</p>
+                </div>
+                <p class="text-muted mb-0 small text-truncate" 
+                style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" 
+                title="'.$vehicle->model_variant_name.'">
+                '.$vehicle->model_variant_name.'
+                </p>';
 
+            $platefrom = '<p class="text-primary">'.$vehicle->platform_name.'</p>';
+            $deff = $diffText; 
 
-                $platefrom = '<p class="text-primary">'.$vehicle->platform_name.'</p>';
-                $deff = '<p class="text-danger" style="color:#570303;">Waiting</p>';
+            $actions = '
+                <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
+                    <i class="fas fa-eye"></i>
+                </a>
+                <a class="btn btn-sm btn-danger add-notification" data-auction-id="'.$vehicle->id .'" style="background-color:#570303 ; border-color: #8000;">
+                <i class="fas fa-bell"></i>
+                </a>';
 
-                $actions = '
-                    <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                    <a class="btn btn-sm btn-danger add-notification" data-auction-id="'.$vehicle->acId .'" style="background-color:#570303 ; border-color: #8000;">
-                    <i class="fas fa-bell"></i>
+            $PreviousBtn = '
+                <div class="PreviousBtnRec d-flex justify-content-center">
+                    <button type="button" class="btn btn-sm btn-primary PreviousBtnRec" data-ref="' . $vehicle->reg . '">
+                        ' . $vehicle->vehicle_count . ' ↑
+                    </button>
+                </div>
+            ';
 
-                    </a>';
+            return [
+                $vehicleName ?? 'N/A',
+                $vehicle->reg ?? 'N/A',
+                $PreviousBtn,
+                $platefrom ?? 'N/A',
+                $vehicle->center_name ?? 'N/A',
+                $vehicle->last_bid ?? 'N/A',
+                $vehicle->bidding_status ?? 'N/A',
+                $deff, 
+                \Carbon\Carbon::parse($vehicle->created_at)->format('Y-m-d H:i'),
+                $actions
+            ];
+        });
 
-
-                $PreviousBtn = '
-                    <div class="PreviousBtnRec d-flex justify-content-center">
-                        <button type="button" class="btn btn-sm btn-primary PreviousBtnRec" data-ref="' . $vehicle->reg . '">
-                            ' . $vehicle->auction_count . ' ↑
-                        </button>
-                    </div>
-                ';
-
-
-
-                return [
-                    $vehicleName ?? 'N/A',
-                    $vehicle->reg ?? 'N/A',
-                    $PreviousBtn,
-                    $platefrom ?? 'N/A',
-                    $vehicle->center_name ?? 'N/A',
-                    $vehicle->last_bid ?? 'N/A',
-                    $vehicle->bidding_status ?? 'N/A',
-                    $deff,
-                   \Carbon\Carbon::parse($vehicle->created_at)->format('Y-m-d H:i'),
-                    $actions
-                ];
-            });
 
         return response()->json([
             "draw" => intval($request->input('draw')),
@@ -284,7 +296,7 @@ public function interest(Request $request)
 public function notification(Request $request)
 {
     $exists = Notification::where('user_id', Auth::id())
-        ->where('auction_id', $request->auction_id)
+        ->where('vehicle_id', $request->auction_id)
         ->exists();
 
     if ($exists) {
@@ -296,7 +308,7 @@ public function notification(Request $request)
 
     Notification::create([
         'user_id'    => Auth::id(),
-        'auction_id' => $request->auction_id,
+        'vehicle_id' => $request->auction_id,
         'is_read'    => 0
     ]);
 

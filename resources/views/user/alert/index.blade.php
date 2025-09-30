@@ -77,6 +77,10 @@
    .show_entries_div{
 
    }
+   .skyblue-badge {
+    background-color: #0080ff;
+    color: #ffffff; 
+}
    
 </style>
 @endsection
@@ -121,25 +125,25 @@
                   <div class="d-flex justify-content-between align-items-center px-1 pt-1">
                      <h5 class="mb-0">Filters</h5>
                      <div>
-                        {{-- <button class="btn btn-sm btn-outline-primary me-1">Hide Filters</button> --}}
-
-                        <a href="{{url('/auction-finder')}}" class="text-decoration-none">Clear all</a>
+                        <a href="{{url('/viewhistory')}}" class="text-decoration-none">Clear all</a>
                      </div>
                   </div>
+             
                   <hr>
                   <div class="accordion" id="filterAccordion">
                         @include('user.alert.sidebar')
                   </div>
+
+         
             </div>
          </div>
 
-         <!-- Right: 9col Table section -->
+      
          <div class="col-lg-9">
             <div class="card">
               <div class="table-responsive text-nowrap mt-3">
 
-                <!-- My Alert Table -->
-                    <!-- My Alerts Table -->
+           
                     <table id="auction-table" class="auction-table table table-hover table-switch">
                     <thead>
                         <tr>
@@ -155,32 +159,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Toyota Corolla</td>
-                            <td>2021</td>
-                            <td>1800</td>
-                            <td><img src="https://via.placeholder.com/80" class="img-fluid rounded" width="80"></td>
-                            <td>25,000 km</td>
-                            <td>Automatic</td>
-                            <td>USS Tokyo</td>
-                            <td>2025-09-30 12:00 PM</td>
-                            <td>$12,000</td>
-                        </tr>
-                        <tr>
-                            <td>Honda Civic</td>
-                            <td>2020</td>
-                            <td>1500</td>
-                            <td><img src="https://via.placeholder.com/80" class="img-fluid rounded" width="80"></td>
-                            <td>30,000 km</td>
-                            <td>Manual</td>
-                            <td>CAA Nagoya</td>
-                            <td>2025-10-01 10:30 AM</td>
-                            <td>$10,500</td>
-                        </tr>
+                        
                     </tbody>
                     </table>
 
-                    <!-- Recent Views Table -->
+                  
                     <table id="recent-table" class="auction-table table table-hover table-switch d-none">
                     <thead>
                         <tr>
@@ -196,28 +179,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Suzuki Alto</td>
-                            <td>2019</td>
-                            <td>660</td>
-                            <td><img src="https://via.placeholder.com/80" class="img-fluid rounded" width="80"></td>
-                            <td>15,000 km</td>
-                            <td>Automatic</td>
-                            <td>JU Sapporo</td>
-                            <td>2025-09-28 09:00 AM</td>
-                            <td>$3,500</td>
-                        </tr>
-                        <tr>
-                            <td>Nissan Note</td>
-                            <td>2018</td>
-                            <td>1200</td>
-                            <td><img src="https://via.placeholder.com/80" class="img-fluid rounded" width="80"></td>
-                            <td>40,000 km</td>
-                            <td>CVT</td>
-                            <td>HAA Kobe</td>
-                            <td>2025-09-27 02:15 PM</td>
-                            <td>$4,800</td>
-                        </tr>
+                        
                     </tbody>
                     </table>
 
@@ -256,34 +218,248 @@
 
 
 <script>
-$(document).ready(function() {
+$(document).ready(function () {
+
+  
+function loadFilters(makeId = null, modelId = null) {
     $.ajax({
         url: "{{ route('get.filters') }}",
         type: "GET",
-        dataType: "json",
-        success: function(data) {
+        data: { make_id: makeId, model_id: modelId },
+        success: function (data) {
+            let selected = getFilters();
 
-            function createCheckboxList(items, className) {
-                let html = '';
-                $.each(items, function(i, item){
-                    let id = item.id ?? item.name ?? item.year ?? item.fuel_type;
-                    let name = item.name ?? item.year ?? item.fuel_type;
-                    html += `<div class="form-check">
-                                <input class="form-check-input ${className}" type="checkbox" value="${id}" id="${className}-${i}">
-                                <label class="form-check-label" for="${className}-${i}">${name}</label>
-                             </div>`;
-                });
-                return html;
+       
+            $('.tags-make').html(createCheckboxList(data.makes, 'filter-make'));
+
+       
+            if (makeId) {
+                $('.tags-model').html(createCheckboxList(data.models, 'filter-model'));
+            } else {
+                $('.tags-model').html('');
             }
 
-            $('.tags-make').html(createCheckboxList(data.makes, 'filter-make'));
-            $('.tags-model').html(createCheckboxList(data.models, 'filter-model'));
-            $('.tags-variant').html(createCheckboxList(data.variants, 'filter-variant'));
+        
+            if (modelId) {
+                $('.tags-variant').html(createCheckboxList(data.variants, 'filter-variant'));
+            } else {
+                $('.tags-variant').html('');
+            }
+
             $('.tags-year').html(createCheckboxList(data.years, 'filter-year'));
             $('.tags-fuel_type').html(createCheckboxList(data.fuel_types, 'filter-fuel'));
+
+           
+            updateCheckboxStates(selected);
+
+            bindFilterEvents();
         }
     });
+}
+
+
+
+function updateCheckboxStates(selected) {
+    $.each(selected, function (key, values) {
+        values.forEach(function (val) {
+            $(`.filter-${key}[value="${val}"]`).prop('checked', true);
+        });
+    });
+}
+function bindFilterEvents() {
+  
+    $(document).off('change', '.filter-make').on('change', '.filter-make', function () {
+        let makeId = $(this).val();
+        if ($(this).is(':checked')) {
+            loadFilters(makeId, null);
+        } else {
+            loadFilters();
+        }
+        updateSelectedFilters();
+        loadTables();
+    });
+
+ 
+    $(document).off('change', '.filter-model').on('change', '.filter-model', function () {
+        let modelId = $(this).val();
+        if ($(this).is(':checked')) {
+            let makeId = $('.filter-make:checked').val();
+            loadFilters(makeId, modelId);
+        } else {
+            let makeId = $('.filter-make:checked').val();
+            loadFilters(makeId, null);
+        }
+        updateSelectedFilters();
+        loadTables();
+    });
+
+  
+    $(document).off('change', '.filter-variant, .filter-year, .filter-fuel')
+        .on('change', '.filter-variant, .filter-year, .filter-fuel', function () {
+            updateSelectedFilters();
+            loadTables();
+        });
+
+   
+    $(document).off('click', '.remove-filter').on('click', '.remove-filter', function () {
+        let checkboxId = $(this).parent().data('checkbox');
+        $('#' + checkboxId).prop('checked', false).trigger('change');
+        loadTables();
+    });
+}
+
+
+
+function createCheckboxList(items, className) {
+    let html = '';
+    $.each(items, function (i, item) {
+        let id = item.id ?? item.year ?? item.fuel_type;
+        let name = item.name ?? item.year ?? item.fuel_type;
+        html += `<div class="form-check">
+                    <input class="form-check-input ${className}" type="checkbox" value="${id}" id="${className}-${i}">
+                    <label class="form-check-label" for="${className}-${i}">${name}</label>
+                </div>`;
+    });
+    return html;
+}
+
+function updateSelectedFilters() {
+  
+    $('#selected-filters_make').html('');
+    $('#selected-filters_model').html('');
+    $('#selected-filters_variant').html('');
+    $('#selected-filters_year').html('');
+    $('#selected-filters_fuel_type').html('');
+
+    $('input[type=checkbox]:checked').each(function () {
+        let val = $(this).next('label').text();
+        let id = $(this).attr('id');
+        let className = $(this).attr('class').split(' ')[1]; 
+        let key = className.replace('filter-', ''); 
+
+        let badgeHtml = `<span class="badge skyblue-badge me-1 mb-1" data-checkbox="${id}">
+                            ${val} <span class="remove-filter" style="cursor:pointer;">&times;</span>
+                         </span>`;
+
+
+        $(`#selected-filters_${key}`).append(badgeHtml);
+    });
+}
+
+
+function getFilters() {
+    let filters = {};
+
+    $('input[type=checkbox]:checked').each(function () {
+      
+        let className = $(this).attr('class').split(' ')[1]; 
+        let key = className.replace('filter-', ''); 
+
+        if (!filters[key]) {
+            filters[key] = [];
+        }
+        filters[key].push($(this).val());
+    });
+
+    return filters;
+}
+
+let currentPage = 1;
+
+function loadTables() {
+    let filters = getFilters();
+    let length = $("select[name='length']").val(); 
+
+    $.ajax({
+        url: "{{ route('get.auction.data') }}",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            filters: filters,
+            page: currentPage,
+            length: length
+        },
+        success: function (res) {
+            
+            let auctionHtml = '';
+            $.each(res.auctionData, function (i, row) {
+                if (row.vehicle) {
+                    auctionHtml += `<tr>
+                        <td>${row.vehicle.vehicle}</td>
+                        <td>${row.vehicle.year}</td>
+                        <td>${row.vehicle.cc}</td>
+                        <td><img src="${row.vehicle.image}" width="50"></td>
+                        <td>${row.vehicle.mileage}</td>
+                        <td>${row.vehicle.transmission}</td>
+                        <td>${row.vehicle.auction.name}</td>
+                        <td>${row.vehicle.auction.auction_date}</td>
+                        <td>${row.vehicle.last_bid}</td>
+                    </tr>`;
+                }
+            });
+            $('#auction-table tbody').html(auctionHtml);
+
+      
+            let recentHtml = '';
+            $.each(res.recentData, function (i, row) {
+                if (row.vehicle) {
+                    recentHtml += `<tr>
+                        <td>${row.vehicle.vehicle}</td>
+                        <td>${row.vehicle.year}</td>
+                        <td>${row.vehicle.cc}</td>
+                        <td><img src="${row.vehicle.image}" width="50"></td>
+                        <td>${row.vehicle.mileage}</td>
+                        <td>${row.vehicle.transmission}</td>
+                        <td>${row.vehicle.auction.name}</td>
+                        <td>${row.vehicle.auction.auction_date}</td>
+                        <td>${row.vehicle.last_bid}</td>
+                    </tr>`;
+                }
+            });
+            $('#recent-table tbody').html(recentHtml);
+
+          
+            renderPagination(res.page, res.length, res.auctionTotal);
+        }
+    });
+}
+
+
+    function renderPagination(page, length, total) {
+        let totalPages = Math.ceil(total / length);
+        let html = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<li class="page-item ${i === page ? 'active' : ''}">
+                        <a class="page-link" href="#">${i}</a>
+                    </li>`;
+        }
+
+        $('.pagination').html(html);
+
+
+        $('.pagination .page-link').off('click').on('click', function (e) {
+            e.preventDefault();
+            currentPage = parseInt($(this).text());
+            loadTables();
+        });
+    }
+
+
+    $("select[name='length']").on('change', function () {
+        currentPage = 1; 
+        loadTables();
+    });
+
+
+
+
+
+    loadFilters();
+    loadTables();
 });
+
+
 
 </script>
 

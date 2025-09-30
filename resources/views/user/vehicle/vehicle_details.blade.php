@@ -38,15 +38,15 @@
 
         {{-- Right Column: Info --}}
         <div class="col-md-6">
-            <h3>{{ $vehicle->year }} {{ $vehicle->make->name }} {{ $vehicle->model->name }} –
-                {{ $vehicle->variant->name }}</h3>
+            <h3>{{ $vehicle->year }} {{ $vehicle->make->name ?? " " }} {{ $vehicle->model->name ?? " " }} –
+                {{ $vehicle->variant->name ?? " " }}</h3>
             <div class="row " style=" border: solid #004890; border-radius: 15px; margin-bottom: 20px;">
                 <div class="row mt-2  align-self-center " style="border-radius: 5px; margin: 0px">
                     <div class="col-md-3">
                         <ul style="list-style: none; padding-left: 0px; font-size: 15px;">
                             <li>
                                 <span style="color: #d4d4d4;">Make</span><br>
-                                <span style="color: white;">{{ $vehicle->make->name }}</span>
+                                <span style="color: white;">{{ $vehicle->make->name ?? "" }}</span>
                             </li>
                         </ul>
                     </div>
@@ -54,7 +54,7 @@
                         <ul style="list-style: none; padding-left: 0px;  font-size: 15px;">
                             <li>
                                 <span style="color: #d4d4d4;">Model</span><br>
-                                <span style="color: white;">{{ $vehicle->model->name }}</span>
+                                <span style="color: white;">{{ $vehicle->model->name ?? "" }}</span>
 
                             </li>
                         </ul>
@@ -63,7 +63,7 @@
                         <ul style="list-style: none; padding-left: 0px; font-size: 15px;">
                             <li>
                                 <span style="color: #d4d4d4;">Variant</span><br>
-                                <span style="color: white;"> {{ $vehicle->variant->name }}</span>
+                                <span style="color: white;"> {{ $vehicle->variant->name  ?? "" }}</span>
                             </li>
                         </ul>
                     </div>
@@ -259,7 +259,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="make" id="make"
                         onclick="return false;">
-                    <label class="form-check-label disc" for="make">{{ $vehicle->make->name }}</label>
+                    <label class="form-check-label disc" for="make">{{ $vehicle->make->name ?? "" }}</label>
                 </div>
             </div>
             <div class="col-md-2 sider1 ">
@@ -267,7 +267,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="model" id="model"
                         onclick="return false;">
-                    <label class="form-check-label disc" for="model">{{ $vehicle->model->name }}</label>
+                    <label class="form-check-label disc" for="model">{{ $vehicle->model->name ?? "" }}</label>
                 </div>
             </div>
             <div class="col-md-2 sider1 ">
@@ -275,7 +275,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="variant" id="variant"
                         onclick="return false;">
-                    <label class="form-check-label disc" for="variant">{{ $vehicle->variant->name }}</label>
+                    <label class="form-check-label disc" for="variant">{{ $vehicle->variant->name ?? "" }}</label>
                 </div>
             </div>
 
@@ -284,7 +284,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="cc" id="cc"
                         onclick="return false;">
-                    <label class="form-check-label disc" for="cc">{{ $vehicle->cc }}</label>
+                    <label class="form-check-label disc" for="cc">{{ $vehicle->cc ?? "" }}</label>
                 </div>
             </div>
 
@@ -293,7 +293,7 @@
                 <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="year" id="year"
                         onclick="return false;">
-                    <label class="form-check-label disc" for="year">{{ $vehicle->year }}</label>
+                    <label class="form-check-label disc" for="year">{{ $vehicle->year ?? "" }}</label>
                 </div>
             </div>
             <div class="col-md-2 sider1">
