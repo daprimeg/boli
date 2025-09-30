@@ -182,7 +182,7 @@
         
          
         
-
+        if (! $.fn.DataTable.isDataTable('.table')) {
              let table = $('#vehicleTable').DataTable({
                     processing: true,
                     serverSide: true,
@@ -220,6 +220,7 @@
                  $('#searchBtn').on('click', function() {
                    table.ajax.reload();
                 });   
+            }
     });
     </script>
 @endsection

@@ -105,7 +105,7 @@
 @section('js')
    <script>
       $(document).ready(function() {
-         
+         if (! $.fn.DataTable.isDataTable('.table')) {
          let table = $('.table').DataTable({
                paging: true,
                searching: true,
@@ -127,7 +127,7 @@
             table.page.len(length).draw();
          }).trigger('change');
 
-         
+      }
 
       });
    </script>

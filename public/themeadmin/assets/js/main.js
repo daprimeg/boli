@@ -1,7 +1,3 @@
-/**
- * Main
- */
-
 'use strict';
 
 window.isRtl = window.Helpers.isRtl();

@@ -266,7 +266,7 @@
         @endif
    <script>
 $(document).ready(function() {
-
+        if (! $.fn.DataTable.isDataTable('.table')) {
     var table = $('#table').DataTable({
         processing: true,
         serverSide: true,
@@ -303,7 +303,7 @@ $(document).ready(function() {
         var info = table.page.info();
         $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
     });
-
+        }
 });
 
 

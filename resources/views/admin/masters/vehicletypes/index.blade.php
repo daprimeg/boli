@@ -98,28 +98,28 @@
 @section('js')
     <script>
             $(document).ready(function () {
+                if (! $.fn.DataTable.isDataTable('.table')) {
+                    let table = $('.table').DataTable({
+                            processing: true,
+                            serverSide: true,
+                            ordering:false,
+                            ajax:"{{URL::to('/admin/masters/vehicletypes')}}",
+                        });
 
-               let table = $('.table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering:false,
-                    ajax:"{{URL::to('/admin/masters/vehicletypes')}}",
-                });
+                        table.on('draw.dt', function () {
+                            var info = table.page.info();
+                            $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
+                        });
 
-                table.on('draw.dt', function () {
-                    var info = table.page.info();
-                    $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
-                });
+                        $("input[name='search']").on('keyup change', function () {
+                            table.search(this.value).draw();
+                        });
 
-                $("input[name='search']").on('keyup change', function () {
-                    table.search(this.value).draw();
-                });
-
-                $("select[name='length']").on('change', function () {
-                    const length = $(this).val();
-                    table.page.len(length).draw();
-                }).trigger('change');
-
+                        $("select[name='length']").on('change', function () {
+                            const length = $(this).val();
+                            table.page.len(length).draw();
+                        }).trigger('change');
+                }
             });
     </script>
 @endsection

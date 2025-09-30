@@ -88,7 +88,7 @@
 
     <script>
       $(function() {
-
+        if (! $.fn.DataTable.isDataTable('.table')) {
             let table = $('table').DataTable({
                     ordering:false,
                     processing: true,
@@ -109,7 +109,7 @@
                 const length = $(this).val();
                 table.page.len(length).draw();
             }).trigger('change');
-
+        }
 
       });
 

@@ -229,6 +229,7 @@
 @section('js')
     <script>
 $(document).ready(function () {
+            if (! $.fn.DataTable.isDataTable('.table')) {
     let table = $('.table').DataTable({
         processing: true,
         ordering: false,
@@ -258,6 +259,7 @@ $(document).ready(function () {
         const length = $(this).val();
         table.page.len(length).draw();
     }).trigger('change');
+}
 });
 
     </script>

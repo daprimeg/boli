@@ -97,7 +97,7 @@
 @section('js')
     <script>
             $(document).ready(function () {
-
+            if (! $.fn.DataTable.isDataTable('.table')) {
                let table = $('.table').DataTable({
                     processing: true,
                     serverSide: true,
@@ -118,7 +118,7 @@
                     const length = $(this).val();
                     table.page.len(length).draw();
                 }).trigger('change');
-
+            }
             });
     </script>
 @endsection
