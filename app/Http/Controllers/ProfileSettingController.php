@@ -181,24 +181,48 @@ $recentViews = $user->recentViews()
     ));
 }
 
-
-    public function Notifications(Request $request)
-    {
-
-            $user = Auth::user();
+public function Notifications(Request $request)
+{
+    $user = Auth::user();
 
     $notificationTypes = [
-        'news_and_blog'    => 'News and Blog',
-        'new_auction_finder' => 'New Auction Finder',
-        'my_interest'      => 'My Interest',
-        'reauction'        => 'Reauction',
+        'auction_activity' => [
+            'new_auction_finder'   => 'New Auction Finder Alerts',
+            'upcoming_reminder'    => 'Upcoming Auction Reminder',
+            'auction_result'       => 'Auction Result Published',
+            'reauction'            => 'Reauction Alerts',
+            'auction_updates'      => 'Auction Delays / Status Updates',
+        ],
+        'vehicle_tracking' => [
+            'watchlist_updates'    => 'Watchlist Updates',
+            'interest_alerts'      => 'Interest-Based Alerts',
+        ],
+        'scheduling' => [
+            'calendar_reminder'    => 'Auction Calendar Reminder',
+            'auction_digest'       => 'Daily/Weekly Auction Digest',
+        ],
+        'system' => [
+            'membership_billing'   => 'Membership / Billing Updates',
+            'system_updates'       => 'System Updates & New Features',
+            'security_alerts'      => 'Security Alerts',
+        ],
+        'news_engagement' => [
+            'news_and_blog'        => 'News & Blog Updates',
+            'special_offers'       => 'Special Offers & Promotions',
+            'survey_feedback'      => 'Survey & Feedback Requests',
+        ],
     ];
 
-            $settings = $user->notificationSettings->keyBy('type');
+    // User ke sab settings load karo
+    $settings = $user->notificationSettings->keyBy('type');
 
-    
-        return view('user.account-setting.Notification', compact('notificationTypes', 'settings'));
-    }
+    // Ab ek row se global send_preference le lo
+    $globalSetting = $user->notificationSettings()->first();
+
+    return view('user.account-setting.Notification', compact('notificationTypes', 'settings', 'globalSetting'));
+}
+
+
     public function storenotification(Request $request)
     {
         $user = Auth::user();
@@ -210,7 +234,7 @@ $recentViews = $user->recentViews()
                 [
                     'email' => isset($values['email']),
                     'browser' => isset($values['browser']),
-                    'send_preference' => $request->sendNotification ?? 'online', 
+                    'send_preference' => $request->sendNotification ?? 'anytime', 
                 ]
             );
         }

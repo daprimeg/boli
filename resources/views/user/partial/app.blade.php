@@ -2,7 +2,7 @@
 <html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-wide" dir="ltr" data-skin="default" data-assets-path="../assets/" data-template="vertical-menu-template" data-bs-theme="dark">
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+<link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
     @include('admin.partial.head')
     @yield('css')
 </head>

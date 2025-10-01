@@ -72,6 +72,12 @@
         <div >News</div>
         </a>
     </li>
+    <li class="menu-item {{ request()->is('blog*') ? 'active' : '' }}">
+        <a href="{{ route('blog.index') }}" class="menu-link">
+        <i class="menu-icon icon-base ti tabler-news"></i>
+        <div >Blog</div>
+        </a>
+    </li>
 
     <!-- Cards -->
     <li class="menu-item {{ request()->is('userprofile*') ? 'active' : '' }}">

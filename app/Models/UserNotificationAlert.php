@@ -12,7 +12,9 @@ class UserNotificationAlert extends Model
         'user_id',
         'title',
         'message',
-        'is_read'
+        'is_read',
+        'link',      
+        'image'     
     ];
 
     // Relation with User

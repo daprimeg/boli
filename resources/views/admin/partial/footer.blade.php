@@ -14,7 +14,7 @@
         <script src="{{ asset('public/themeadmin/assets/vendor/js/menu.js') }}"></script>
         <script src="{{ asset('public/themeadmin/assets/vendor/libs/plyr/plyr.js') }}"></script>
         <script src="{{ asset('public/themeadmin/assets/js/main.js') }}"></script>
-
+<script src="public/themeadmin/assets/js/toastr.min.js"></script>
         {{-- <script src="{{ asset('public/themeadmin/assets/js/app-academy-course-details.js') }}"></script> --}}
 
         {{-- Libs --}}

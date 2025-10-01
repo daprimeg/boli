@@ -25,36 +25,42 @@
         <li class="dropdown-notifications-list scrollable-container">
             <ul class="list-group list-group-flush">
 
-                @forelse($UserNotifications as $n)
-                    <li class="list-group-item list-group-item-action dropdown-notifications-item {{ $n->is_read ? 'marked-as-read' : '' }}">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar">
+            @forelse($UserNotifications as $n)
+                <li class="list-group-item list-group-item-action dropdown-notifications-item {{ $n->is_read ? 'marked-as-read' : '' }}"
+                    @if($n->link) onclick="window.location.href='{{ url($n->link) }}'" style="cursor: pointer;" @endif>
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="avatar">
+                                @if($n->image)
+                                    <img src="{{ asset('public/uploads/blogs/' . $n->image) }}" alt="Notification Image" class="rounded-circle" width="40" height="40">
+                                @else
                                     <span class="avatar-initial rounded-circle bg-label-primary">
                                         <i class="icon-base ti tabler-bell"></i>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1 small">{{ $n->title }}</h6>
-                                <small class="mb-1 d-block text-body">{{ $n->message }}</small>
-                                <small class="text-body-secondary">{{ $n->created_at->diffForHumans() }}</small>
-                            </div>
-                            <div class="flex-shrink-0 dropdown-notifications-actions">
-                                <a href="{{ route('notifications.read', $n->id) }}" class="dropdown-notifications-read">
-                                    <span class="badge badge-dot"></span>
-                                </a>
-                                <a href="{{ route('notifications.delete', $n->id) }}" class="dropdown-notifications-archive">
-                                    <span class="icon-base ti tabler-x"></span>
-                                </a>
+                                @endif
                             </div>
                         </div>
-                    </li>
-                @empty
-                    <li class="list-group-item text-center">
-                        <small class="text-muted">No new notifications</small>
-                    </li>
-                @endforelse
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 small">{{ $n->title }}</h6>
+                            <small class="mb-1 d-block text-body">{{ $n->message }}</small>
+                            <small class="text-body-secondary">{{ $n->created_at->diffForHumans() }}</small>
+                        </div>
+                        <div class="flex-shrink-0 dropdown-notifications-actions">
+                            <a href="{{ route('notifications.read', $n->id) }}" class="dropdown-notifications-read">
+                                <span class="badge badge-dot"></span>
+                            </a>
+                            <a data-id="{{ $n->id }}" class="dropdown-notifications-archive">
+                                <span class="icon-base ti tabler-x"></span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            @empty
+                <li class="list-group-item text-center">
+                    <small class="text-muted">No new notifications</small>
+                </li>
+            @endforelse
+
 
             </ul>
         </li>

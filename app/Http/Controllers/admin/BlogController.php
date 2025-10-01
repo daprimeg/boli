@@ -7,11 +7,14 @@ use Illuminate\Http\Request;
 use App\Events\NewBlogNotification;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\UserNotificationSetting;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Mail\NewsAndBlogNotification;
+use Illuminate\Support\Facades\Mail;
 use App\Models\UserNotificationAlert;
 
 class BlogController extends Controller
@@ -96,6 +99,52 @@ class BlogController extends Controller
         return view('admin.blog.create', compact('categories'));
     }
 
+    private function getNewsAndBlogUsers()
+    {
+        return UserNotificationSetting::where('type', 'news_and_blog')
+            ->where('browser', 1)
+            ->where(function ($query) {
+                $query->where('send_preference', 'anytime')
+                      ->orWhereNull('send_preference'); 
+            })
+            ->pluck('user_id') 
+            ->toArray();       
+    }
+
+    private function getNewsAndBlogUsersEmail()
+    {
+        $emails = User::whereIn('id', function($query) {
+                $query->select('user_id')
+                    ->from('user_notification_settings')
+                    ->where('type', 'news_and_blog')
+                    ->where('email', 1)
+                    ->where(function($q) {
+                        $q->where('send_preference', 'anytime')
+                            ->orWhereNull('send_preference');
+                    });
+            })
+            ->whereNotNull('personalEmail') 
+            ->where('personalEmail', '!=', '') 
+            ->pluck('personalEmail')
+            ->toArray();
+
+        return $emails; 
+    }
+
+    private function sendNewsAndBlogEmail(array $emails, string $title, string $messageContent)
+{
+    if (empty($emails)) {
+        return false; // nothing to send
+    }
+
+    foreach ($emails as $email) {
+        Mail::to($email)->send(new NewsAndBlogNotification($title, $messageContent));
+    }
+
+    return true;
+}
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -130,21 +179,24 @@ class BlogController extends Controller
             $blog->save();
         }
 
-     $users = User::all();
+            $users = $this->getNewsAndBlogUsers(); 
 
-    foreach ($users as $user) {
-        // Insert into your custom table
-        $notification = UserNotificationAlert::create([
-            'user_id' => $user->id,
-            'title' => $blog->title,
-            'message' => "New blog published: {$blog->title}",
-            'is_read' => 0
-        ]);
+            foreach ($users as $userId) {
+                $user = User::find($userId); 
+             
 
-    // Fire event
-    event(new NewBlogNotification($user, $notification));
-}
+                if ($user) {
+                    $blogPageLink="blogs?id=".$blog->id;
+                    $imageblog=  $fileName ?? NULL ;
+                    event(new NewBlogNotification($user, $blog->title, $blog->title,$blogPageLink,$imageblog));
+                }
+            }
+            $userEmail = $this->getNewsAndBlogUsersEmail();
+            if($userEmail){
 
+                $this->sendNewsAndBlogEmail($userEmail, $blog->title, $blog->description);
+            }
+            
         // return redirect('/admin/blogs')->with('success', 'Blog created successfully.');
     }
 

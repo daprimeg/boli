@@ -27,11 +27,30 @@ class NotificationController extends Controller
         return back();
     }
 
+
+
+
+
     public function delete($id)
-    {
-        UserNotificationAlert::where('id', $id)->where('user_id', Auth::id())->delete();
-        return back();
+{
+   $notification = UserNotificationAlert::where('id', $id)
+    ->where('user_id', auth()->id())
+    ->first();
+
+    if (!$notification) {
+        return response()->json(['message' => 'Notification not found'], 404);
     }
+
+    $notification->delete();
+
+    return response()->json(['message' => 'Notification deleted successfully']);
 }
+
+
+
+
+}
+
+
 
 ?>

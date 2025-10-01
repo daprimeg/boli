@@ -195,18 +195,6 @@ Route::get('/uploading2', function (Request $request) {
 
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 Route::get('/packages', [FrontendController::class, 'pricing'])->name('packages');
 
 Route::view('/registration', 'front.register')->name('registration');
@@ -262,6 +250,7 @@ Route::middleware(['auth'])->group(function () {
    
     // News (public)
     Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+    Route::get('/blogs', [NewsController::class, 'blogs'])->name('blog.index');
     Route::post('/news/{id}/toggle-pin', [NewsController::class, 'togglePin'])->name('news.togglePin');
 
 
@@ -386,7 +375,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             });
             
             Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-            Route::get('/notifications/delete/{id}', [NotificationController::class, 'delete'])->name('notifications.delete');
+            Route::post('/notifications/delete/{id}', [NotificationController::class, 'delete']);
             Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.all');
 
             

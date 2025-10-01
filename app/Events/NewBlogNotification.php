@@ -16,16 +16,25 @@ class NewBlogNotification implements ShouldBroadcast
     public $user;
     public $notification;
 
-    public function __construct(User $user, $title, $message)
+    /**
+     * @param  \App\Models\User  $user
+     * @param  string $title
+     * @param  string $message
+     * @param  string|null $link
+     * @param  string|null $image
+     */
+    public function __construct(User $user, $title, $message, $link = null, $image = null)
     {
         $this->user = $user;
 
-        // Create DB entry here
+ 
         $this->notification = UserNotificationAlert::create([
             'user_id' => $user->id,
-            'title' => $title,
+            'title'   => $title,
             'message' => $message,
-            'is_read' => 0
+            'link'    => $link,   
+            'image'   => $image,  
+            'is_read' => 0,
         ]);
     }
 
@@ -42,11 +51,13 @@ class NewBlogNotification implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'id' => $this->notification->id,
-            'title' => $this->notification->title,
-            'message' => $this->notification->message,
-            'is_read' => $this->notification->is_read,
-            'created_at' => $this->notification->created_at->toDateTimeString()
+            'id'         => $this->notification->id,
+            'title'      => $this->notification->title,
+            'message'    => $this->notification->message,
+            'link'       => $this->notification->link,   
+            'image'      => $this->notification->image, 
+            'is_read'    => $this->notification->is_read,
+            'created_at' => $this->notification->created_at->toDateTimeString(),
         ];
     }
 }

@@ -31,25 +31,34 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($notificationTypes as $key => $label)
-                <tr>
-                    <td class="text-nowrap text-heading">{{ $label }}</td>
-                    <td>
-                        <div class="form-check mb-0 d-flex justify-content-center align-items-center">
-                            <input type="checkbox" class="form-check-input"
-                                name="types[{{ $key }}][email]"
-                                {{ ($settings[$key]->email ?? false) ? 'checked' : '' }}>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-check mb-0 d-flex justify-content-center align-items-center">
-                            <input type="checkbox" class="form-check-input"
-                                name="types[{{ $key }}][browser]"
-                                {{ ($settings[$key]->browser ?? false) ? 'checked' : '' }}>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
+                @foreach($notificationTypes as $category => $types)
+    <tr>
+        <td colspan="3" class="fw-bold text-primary">
+            {{ ucfirst(str_replace('_', ' ', $category)) }}
+        </td>
+    </tr>
+
+    @foreach($types as $key => $label)
+        <tr>
+            <td class="text-nowrap text-heading">{{ $label }}</td>
+            <td>
+                <div class="form-check mb-0 d-flex justify-content-center align-items-center">
+                    <input type="checkbox" class="form-check-input"
+                        name="types[{{ $key }}][email]"
+                        {{ ($settings[$key]->email ?? false) ? 'checked' : '' }}>
+                </div>
+            </td>
+            <td>
+                <div class="form-check mb-0 d-flex justify-content-center align-items-center">
+                    <input type="checkbox" class="form-check-input"
+                        name="types[{{ $key }}][browser]"
+                        {{ ($settings[$key]->browser ?? false) ? 'checked' : '' }}>
+                </div>
+            </td>
+        </tr>
+    @endforeach
+@endforeach
+
             </tbody>
         </table>
     </div>
@@ -60,11 +69,11 @@
         <div class="row">
             <div class="col-sm-6">
                 <select id="sendNotification" class="form-select" name="sendNotification">
-                    <option value="online" {{ ($globalSetting->send_preference ?? 'online') == 'online' ? 'selected' : '' }}>
-                        Only when I'm online
-                    </option>
-                    <option value="anytime" {{ ($globalSetting->send_preference ?? '') == 'anytime' ? 'selected' : '' }}>
+                    <option value="anytime" {{ ($globalSetting->send_preference ?? 'anytime') == 'anytime' ? 'selected' : '' }}>
                         Anytime
+                    </option>
+                    <option value="online" {{ ($globalSetting->send_preference ?? '') == 'online' ? 'selected' : '' }}>
+                        Only when I'm online
                     </option>
                 </select>
             </div>
