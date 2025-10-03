@@ -246,9 +246,15 @@
                                             <td>
                                                 <button class="my_btn" type="button"><i class="menu-icon icon-base ti tabler-pointer-heart"></i></button>
                                             </td>
-                                            <td>${element.make_name} ${element.model_name} ${element.variant_name}
-                                              <div class="extra">${image1} ${image2}</div>
-                                            </td>
+                                            <td>
+                                                <a href="${baseUrl}/${element.id}" target="_blank">
+                                                    ${element.make_name} ${element.model_name} ${element.variant_name}
+                                                    <div class="extra">
+                                                    ${image1} ${image2}
+                                                    </div>
+                                                </a>
+                                                </td>
+
                                             <td>${element.year}</td>
                                             <td>${element.cc}</td>
                                             <td>${element.mileage}</td>

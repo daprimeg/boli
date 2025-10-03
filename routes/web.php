@@ -33,6 +33,7 @@ use App\Models\VehicleType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\NotifyIntrestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -295,6 +296,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/auction-finder/vehicle/{id}', [AuctionFinderController::class, 'vehicle']);
             Route::get('/auction-finder',[AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
+            Route::post('/alert-platefrom/store', [AuctionFinderController::class, 'storeAlert']);
 
             //Data
             Route::get('/auction-finder/data/getRelatedVehicle/{id}',[AuctionFinderDataController::class,'getRelatedVehicle']);
@@ -388,6 +390,10 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
 
    // Admin Routes
     require __DIR__.'/admin.php';
+
+    // cron job route
+    Route::get('/send_interest_notify/{token?}', [NotifyIntrestController::class, 'sendInterestNotify']);
+    Route::get('/send-daily-summary', [NotifyIntrestController::class, 'sendDailySummary']);
 
 
     Route::get('mail',function(){

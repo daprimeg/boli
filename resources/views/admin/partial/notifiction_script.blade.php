@@ -27,48 +27,57 @@
         notificationAudio.load();
 
         Echo.private(`notifications.${userId}`)
-            .listen('.NewBlogNotification', (e) => {
+            .listen('.NotificationEvent', (e) => {
 
                 let list = document.querySelector(".dropdown-notifications-list ul.list-group");
                 console.log(e)
-                if (list) {
-                    let avatarHtml = e.image 
+                    if (list) {
+                        // ✅ Image handling
+                        let avatarHtml = e.image 
                             ? `<img src="${e.image.startsWith('http') ? e.image : `{{ url('public/uploads/blogs') }}/${e.image}`}" 
-                                    alt="Notification Image" class="rounded-circle" width="40" height="40">`
-                            : `<span class="avatar-initial rounded-circle bg-label-primary">
-                                    <i class="icon-base ti tabler-bell"></i>
+                                    alt="Notification Image" class="rounded-circle border shadow-sm" width="40" height="40">`
+                            : `<span class="avatar-initial rounded-circle bg-label-primary d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                                    <i class="icon-base ti tabler-bell fs-5"></i>
                             </span>`;
 
-              
-                    let linkStart = e.link ? `<a href="${e.link.startsWith('http') ? e.link : `{{ url('/') }}/${e.link}`}" class="d-flex text-decoration-none text-body">` : `<div class="d-flex">`;
-                    let linkEnd   = e.link ? `</a>` : `</div>`;
-                    let title = truncateText(e.title, 40); 
-                    let message = truncateText(e.title, 80); 
+                        // ✅ Link handling
+                        let linkStart = e.link 
+                            ? `<a href="${e.link.startsWith('http') ? e.link : `{{ url('/') }}/${e.link}`}" class="d-flex text-decoration-none text-body">` 
+                            : `<div class="d-flex">`;
 
-                let newItem = `
-                    <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                        ${linkStart}
-                            <div class="flex-shrink-0 me-3">
-                                <div class="avatar">
-                                    ${avatarHtml}
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1 small" title="${e.title}">${title}</h6>
-                                <small class="mb-1 d-block text-body" title="${e.message}">${message}</small>
-                                <small class="text-body-secondary">just now</small>
-                            </div>
-                            <div class="flex-shrink-0 dropdown-notifications-actions">
-                                <a href="javascript:void(0)" class="dropdown-notifications-read">
-                                    <span class="badge badge-dot"></span>
-                                </a>
-                                <a data-id="${ e.id }" class="dropdown-notifications-archive">
-                                    <span class="icon-base ti tabler-x"></span>
-                                </a>
-                            </div>
-                        ${linkEnd}
-                    </li>
-                `;
+                        let linkEnd = e.link ? `</a>` : `</div>`;
+
+                        // ✅ Text truncate
+                        let title   = truncateText(e.title, 40); 
+                        let message = truncateText(e.message, 80);  // yahan galti thi, pehle `e.title` tha
+
+                        // ✅ Final UI
+                        let newItem = `
+                            <li class="list-group-item list-group-item-action dropdown-notifications-item d-flex align-items-start">
+                                ${linkStart}
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar">
+                                            ${avatarHtml}
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 small fw-semibold text-truncate" title="${e.title}">${title}</h6>
+                                        <small class="mb-1 d-block text-body text-truncate" title="${e.message}">${message}</small>
+                                        <small class="text-body-secondary">just now</small>
+                                    </div>
+                                    <div class="flex-shrink-0 dropdown-notifications-actions ms-2">
+                                        <a href="javascript:void(0)" class="dropdown-notifications-read me-2" title="Mark as read">
+                                            <span class="badge badge-dot"></span>
+                                        </a>
+                                        <a data-id="${ e.id }" class="dropdown-notifications-archive" title="Remove">
+                                            <span class="icon-base ti tabler-x"></span>
+                                        </a>
+                                    </div>
+                                ${linkEnd}
+                            </li>
+                        `;
+
+
 
 
             

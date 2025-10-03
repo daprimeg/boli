@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Events\NewBlogNotification;
+use App\Events\NotificationEvent;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\UserNotificationSetting;
@@ -188,7 +188,7 @@ class BlogController extends Controller
                 if ($user) {
                     $blogPageLink="blogs?id=".$blog->id;
                     $imageblog=  $fileName ?? NULL ;
-                    event(new NewBlogNotification($user, $blog->title, $blog->title,$blogPageLink,$imageblog));
+                    event(new NotificationEvent($user, $blog->title, $blog->title,$blogPageLink,$imageblog));
                 }
             }
             $userEmail = $this->getNewsAndBlogUsersEmail();
@@ -197,7 +197,7 @@ class BlogController extends Controller
                 $this->sendNewsAndBlogEmail($userEmail, $blog->title, $blog->description);
             }
             
-        // return redirect('/admin/blogs')->with('success', 'Blog created successfully.');
+        return redirect('/admin/blogs')->with('success', 'Blog created successfully.');
     }
 
     public function edit(Blog $blog)

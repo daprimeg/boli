@@ -182,6 +182,7 @@
 
 <script>
       let url = "{{url('/')}}";
+      const baseUrl = "{{ url('/auction-finder/vehicle') }}";
    $(document).ready(function () {
          $('.menu-button').trigger('click');
          $('.menu-button').hide();    

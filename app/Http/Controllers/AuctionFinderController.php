@@ -293,8 +293,17 @@ class AuctionFinderController extends Controller
                             $auction->car_count,
                             "<span>".date('d-m-Y',strtotime($auction->auction_date))."</span > <br> <span  style='font-size: var(--font-p2) !important;'>".date('h:s A',strtotime($auction->auction_date))."</span>",
                             $statusBadge ?? '-',
-                            '<a href="'.$view.'" class="btn btn-sm btn-primary"  style="  font-size: var(--font-p2) !important;">View</a> 
                             '
+                            <button class="btn btn-sm btn-danger alert-btn" data-auction="'.$auction->id.'" data-platform="'.$auction->platform_id .'" 
+                            style="font-size: var(--font-p2) !important; margin-left:5px;">
+                                <i class="fas fa-bell"></i> 
+                            </button>
+                            <a href="'.$view.'" class="btn btn-sm btn-primary" style="font-size: var(--font-p2) !important;">
+                            <i class="fas fa-eye"></i> 
+                            </a>
+                          
+                            '
+
                         ];
                     });
             
@@ -310,6 +319,39 @@ class AuctionFinderController extends Controller
 
           return view('user.auctionscheduler.index');
     }
+
+
+public function storeAlert(Request $request)
+{
+    $user = Auth::user();
+
+    // Check if alert already exists
+    $exists = \App\Models\PlatefromAlert::where('user_id', $user->id)
+        ->where('auction_id', $request->auction_id)
+        ->where('platform_id', $request->platform_id)
+        ->first();
+
+    if ($exists) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Alert already exists for this auction & platform.'
+        ]);
+    }
+
+    // Create new alert
+    $alert = \App\Models\PlatefromAlert::create([
+        'user_id'     => $user->id,
+        'auction_id'  => $request->auction_id,
+        'platform_id' => $request->platform_id,
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Alert saved successfully!',
+        'data'    => $alert
+    ]);
+}
+
 
 
 }

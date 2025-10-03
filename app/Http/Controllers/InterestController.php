@@ -13,6 +13,8 @@ use App\Models\AuctionPlatform;
 use App\Models\BodyType;
 use App\Models\Vehicle;
 use Carbon\Carbon;
+use App\Mail\InterestCreatedMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -201,28 +203,29 @@ class InterestController extends Controller
         ]);
 
 
-        $intrest = Interest::create([
-            'title' =>  $request->title,
-            'make_id' =>  $request->make_id,
-            'model_id' =>  $request->model_id,
-            'variant_id' =>  $request->variant_id,
-            'year_from' =>  $request->year_from,
-            'year_to' =>  $request->year_to,
-            'mileage_from' =>  $request->mileage_from,
-            'mileage_to' =>  $request->mileage_to,
-            'transmission' =>  $request->transmission,
-            'cc_from' => $request->cc_from,
-            'cc_to' => $request->cc_to,
-            'grade' => $request->grade,
-            'fuel_type' => $request->fuel_type,
-            'former_keeper' => $request->former_keeper,
-            'price_from' => $request->price_from,
-            'price_to' => $request->price_to,
-            'user_id' => Auth::user()->id,
+        $interest = Interest::create([
+        'title' => $request->title,
+        'make_id' => $request->make_id,
+        'model_id' => $request->model_id,
+        'variant_id' => $request->variant_id,
+        'year_from' => $request->year_from,
+        'year_to' => $request->year_to,
+        'mileage_from' => $request->mileage_from,
+        'mileage_to' => $request->mileage_to,
+        'transmission' => $request->transmission,
+        'cc_from' => $request->cc_from,
+        'cc_to' => $request->cc_to,
+        'grade' => $request->grade,
+        'fuel_type' => $request->fuel_type,
+        'former_keeper' => $request->former_keeper,
+        'price_from' => $request->price_from,
+        'price_to' => $request->price_to,
+        'user_id' => Auth::id(),
+        'created_at' => now(),
+        'updated_at' => null,
+    ]);
 
-            'created_at' => Carbon::now(),
-            'updated_at' => NULL,
-        ]);
+         Mail::to(Auth::user()->personalEmail)->send(new InterestCreatedMail($interest));
 
          return redirect('/interest')->with('success', 'Interest created successfully.');
     }

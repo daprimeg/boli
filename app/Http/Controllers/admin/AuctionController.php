@@ -12,10 +12,14 @@ use App\Models\Color;
 use App\Models\Make;
 use App\Models\ModelVariant;
 use App\Models\Vehicle;
+use App\Models\UserNotificationSetting;
+use App\Models\Interest;
 use App\Models\VehicleModel;
 use App\Models\VehicleType;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
+use App\Mail\InterestAlertMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -157,6 +161,13 @@ class AuctionController extends Controller
     }
 
 
+
+
+
+
+
+
+
     public function store(Request $request)
     {
    
@@ -228,7 +239,9 @@ class AuctionController extends Controller
                                 'doors' => is_numeric($data['doors']) ? (int)$data['doors'] : null,
                                 'seats' => is_numeric($data['seats']) ? (int)$data['seats'] : null,
                                 'fuel_type' => $data['fuel_type'] ?? null,
+                                'fuel_details' => $data['fuel_details'] ?? null,
                                 'transmission' => $data['transmission'] ?? null,
+                                'transmission_details' => $data['transmission_details'] ?? null,
                                 'cc' => is_numeric($data['cc']) ? (Float)$data['cc'] : null,
                                 'keys' => $data['keys'] ?? null,
 
@@ -295,8 +308,9 @@ class AuctionController extends Controller
                                 'damage_details' => $data['damage_details'] ?? null,
                                 
                             ]);
+                        
 
-                }
+                        }
                    
             }
 

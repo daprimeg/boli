@@ -194,7 +194,6 @@ public function Notifications(Request $request)
             'auction_updates'      => 'Auction Delays / Status Updates',
         ],
         'vehicle_tracking' => [
-            'watchlist_updates'    => 'Watchlist Updates',
             'interest_alerts'      => 'Interest-Based Alerts',
         ],
         'scheduling' => [
@@ -213,10 +212,10 @@ public function Notifications(Request $request)
         ],
     ];
 
-    // User ke sab settings load karo
+
     $settings = $user->notificationSettings->keyBy('type');
 
-    // Ab ek row se global send_preference le lo
+
     $globalSetting = $user->notificationSettings()->first();
 
     return view('user.account-setting.Notification', compact('notificationTypes', 'settings', 'globalSetting'));
@@ -227,20 +226,52 @@ public function Notifications(Request $request)
     {
         $user = Auth::user();
 
+        
+        $notificationTypes = [
+            'auction_activity' => [
+                'new_auction_finder',
+                'upcoming_reminder',
+                'auction_result',
+                'reauction',
+                'auction_updates',
+            ],
+            'vehicle_tracking' => [
+                'interest_alerts',
+            ],
+            'scheduling' => [
+                'calendar_reminder',
+                'auction_digest',
+            ],
+            'system' => [
+                'membership_billing',
+                'system_updates',
+                'security_alerts',
+            ],
+            'news_engagement' => [
+                'news_and_blog',
+                'special_offers',
+                'survey_feedback',
+            ],
+        ];
 
-        foreach ($request->types as $type => $values) {
-            UserNotificationSetting::updateOrCreate(
-                ['user_id' => $user->id, 'type' => $type],
-                [
-                    'email' => isset($values['email']),
-                    'browser' => isset($values['browser']),
-                    'send_preference' => $request->sendNotification ?? 'anytime', 
-                ]
-            );
+        foreach ($notificationTypes as $category => $types) {
+            foreach ($types as $type) {
+                $values = $request->types[$type] ?? []; 
+
+                UserNotificationSetting::updateOrCreate(
+                    ['user_id' => $user->id, 'type' => $type],
+                    [
+                        'email' => !empty($values['email']) ? 1 : 0,
+                        'browser' => !empty($values['browser']) ? 1 : 0,
+                        'send_preference' => $request->sendNotification ?? 'anytime', 
+                    ]
+                );
+            }
         }
 
         return back()->with('success', 'Notification settings updated successfully!');
     }
+
 
   public function store(Request $request)
     {

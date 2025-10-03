@@ -253,6 +253,34 @@
                 });
 
     });
+
+
+
+$(document).on("click", ".alert-btn", function () {
+    let auctionId = $(this).data("auction");
+    let platformId = $(this).data("platform");
+
+    $.ajax({
+       url: "{{ url('alert-platefrom/store') }}",
+        type: "POST",
+        data: {
+            auction_id: auctionId,
+            platform_id: platformId,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function (response) {
+            if (response.success) {
+                toastr.success(response.message);
+            } else {
+                toastr.warning(response.message);
+            }
+        },
+        error: function () {
+            toastr.error("Something went wrong, please try again.");
+        }
+    });
+});
+
     </script>
 @endsection
 

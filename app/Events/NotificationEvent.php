@@ -9,7 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class NewBlogNotification implements ShouldBroadcast
+class NotificationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets;
 
@@ -45,7 +45,7 @@ class NewBlogNotification implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'NewBlogNotification';
+        return 'NotificationEvent';
     }
 
     public function broadcastWith()
