@@ -297,6 +297,7 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             Route::get('/auction-finder',[AuctionFinderController::class,'index'])->name('auctionfinder');
             Route::get('/auctionscheduler', [AuctionFinderController::class,'auctionScheduler']);
             Route::post('/alert-platefrom/store', [AuctionFinderController::class, 'storeAlert']);
+            Route::post('/auction/intrest', [AuctionFinderController::class, 'getIntrest']);
 
             //Data
             Route::get('/auction-finder/data/getRelatedVehicle/{id}',[AuctionFinderDataController::class,'getRelatedVehicle']);

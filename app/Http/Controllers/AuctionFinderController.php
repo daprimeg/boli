@@ -13,6 +13,7 @@ use App\Models\AuctionPlatform;
 use App\Models\AuctionCenter;
 use App\Models\VehicleType;
 use App\Models\Make;
+use App\Models\Interest;
 use App\Models\VehicleModel;
 use App\Models\ModelVariant;
 use App\Models\Year;
@@ -244,69 +245,118 @@ class AuctionFinderController extends Controller
             
                 $totalData = clone $query;
 
-                $data = $query ->select(
-                        'auctions.id',
-                        'auction_platform.name as platform_name',
-                        'auction_platform.id as platform_id',
-                        // 'auction_center.name as center_name',
-                        // 'auctions.total_vehicles', 
-                        'auctions.auction_date',
-                        'auctions.status',
-                        DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
-                        DB::raw('(
-                            SELECT GROUP_CONCAT(DISTINCT auction_center.name)
-                            FROM vehicles
-                            JOIN auction_center ON auction_center.id = vehicles.center_id
-                            WHERE vehicles.auction_id = auctions.id
-                        ) as center_names')
-                    )
-                    
-                    ->offset($start)
-                    ->limit($length)
-                    ->get()
-                    ->map(function ($auction) {
+                $userId = auth()->id(); 
 
-                        $view = URL::to('/auction-finder?platform='.$auction->platform_id);
+                $data = $query->select(
+                    'auctions.id',
+                    'auction_platform.name as platform_name',
+                    'auction_platform.id as platform_id',
+                    'auctions.auction_date',
+                    'auctions.status',
+                    DB::raw('(SELECT COUNT(*) FROM vehicles WHERE vehicles.auction_id = auctions.id) as car_count'),
+                    DB::raw('(
+                        SELECT GROUP_CONCAT(DISTINCT auction_center.name)
+                        FROM vehicles
+                        JOIN auction_center ON auction_center.id = vehicles.center_id
+                        WHERE vehicles.auction_id = auctions.id
+                    ) as center_names'),
+                    DB::raw("(
+                        SELECT COUNT(*) 
+                        FROM vehicles v
+                        JOIN interest i 
+                            ON (i.user_id = {$userId})
+                        AND (i.make_id IS NULL OR i.make_id = v.make_id)
+                        AND (i.model_id IS NULL OR i.model_id = v.model_id)
+                        AND (i.variant_id IS NULL OR i.variant_id = v.variant_id)
+                        AND (i.year_from IS NULL OR v.year >= i.year_from)
+                        AND (i.year_to IS NULL OR v.year <= i.year_to)
+                        AND (i.mileage_from IS NULL OR v.mileage >= i.mileage_from)
+                        AND (i.mileage_to IS NULL OR v.mileage <= i.mileage_to)
+                        AND (i.fuel_type IS NULL OR v.fuel_type = i.fuel_type)
+                        AND (i.transmission IS NULL OR v.transmission = i.transmission)
+                        AND (i.cc_from IS NULL OR v.cc >= i.cc_from)
+                        AND (i.cc_to IS NULL OR v.cc <= i.cc_to)
+                        AND (i.price_from IS NULL OR v.buy_now_price >= i.price_from)
+                        AND (i.price_to IS NULL OR v.buy_now_price <= i.price_to)
+                        WHERE v.auction_id = auctions.id
+                    ) as interest_count"),
+                    DB::raw("(
+                        SELECT GROUP_CONCAT(DISTINCT i.id)
+                        FROM vehicles v
+                        JOIN interest i 
+                            ON (i.user_id = {$userId})
+                        AND (i.make_id IS NULL OR i.make_id = v.make_id)
+                        AND (i.model_id IS NULL OR i.model_id = v.model_id)
+                        AND (i.variant_id IS NULL OR i.variant_id = v.variant_id)
+                        AND (i.year_from IS NULL OR v.year >= i.year_from)
+                        AND (i.year_to IS NULL OR v.year <= i.year_to)
+                        AND (i.mileage_from IS NULL OR v.mileage >= i.mileage_from)
+                        AND (i.mileage_to IS NULL OR v.mileage <= i.mileage_to)
+                        AND (i.fuel_type IS NULL OR v.fuel_type = i.fuel_type)
+                        AND (i.transmission IS NULL OR v.transmission = i.transmission)
+                        AND (i.cc_from IS NULL OR v.cc >= i.cc_from)
+                        AND (i.cc_to IS NULL OR v.cc <= i.cc_to)
+                        AND (i.price_from IS NULL OR v.buy_now_price >= i.price_from)
+                        AND (i.price_to IS NULL OR v.buy_now_price <= i.price_to)
+                        WHERE v.auction_id = auctions.id
+                    ) as interest_ids")
+                )
+                ->offset($start)
+                ->limit($length)
+                ->get()
+                ->map(function ($auction) {
+                    $view = URL::to('/auction-finder?platform='.$auction->platform_id);
 
-                        // ✅ Add status badge with color
-                        $statusColor = match (strtolower($auction->status)) {
-                            'planned'   => 'danger-red',
-                            'in progress' => 'warning',
-                            'update' => 'success',
-                            'cancel'    => 'primary',
-                            default     => 'secondary',
-                        };
+                    $statusColor = match (strtolower($auction->status)) {
+                        'planned'   => 'danger-red',
+                        'in progress' => 'warning',
+                        'update' => 'success',
+                        'cancel'    => 'primary',
+                        default     => 'secondary',
+                    };
 
-                        $statusBadge = '<span class="badge bg-' . $statusColor . '">' . ucfirst($auction->status ?? '-') . '</span>';
+                    $statusBadge = '<span class="badge bg-' . $statusColor . '">' . ucfirst($auction->status ?? '-') . '</span>';
 
-                        $centers = "<div class='centers' >";
-                        foreach (explode(',',$auction->center_names) as $key => $value) {
-                          $centers .="<span>".$value."</span>";
-                        }
+                    $centers = "<div class='centers'>";
+                    foreach (explode(',', $auction->center_names) as $value) {
+                        $centers .= "<span>".$value."</span>";
+                    }
+                    $centers .= "</div>";
 
-                        $centers .="</div>";
-
-
-                        return [
-                            "<span class='text-primary' >".$auction->platform_name ?? 'N/A'."</span>",
-                            $centers,
-                            $auction->car_count,
-                            "<span>".date('d-m-Y',strtotime($auction->auction_date))."</span > <br> <span  style='font-size: var(--font-p2) !important;'>".date('h:s A',strtotime($auction->auction_date))."</span>",
-                            $statusBadge ?? '-',
-                            '
-                            <button class="btn btn-sm btn-danger alert-btn" data-auction="'.$auction->id.'" data-platform="'.$auction->platform_id .'" 
-                            style="font-size: var(--font-p2) !important; margin-left:5px;">
-                                <i class="fas fa-bell"></i> 
+                    return [
+                        "<span class='text-primary'>".$auction->platform_name ?? 'N/A'."</span>",
+                        $centers,
+                        $auction->car_count,
+                        "<span>".date('d-m-Y', strtotime($auction->auction_date))."</span><br>
+                        <span style='font-size: var(--font-p2) !important;'>".date('h:i A', strtotime($auction->auction_date))."</span>",
+                        $statusBadge ?? '-',
+                        "<div class='PreviousBtnRec d-flex justify-content-center'>
+                            <button type='button' 
+                                class='btn btn-sm btn-primary open-vehicle-modal' 
+                                data-auction-id='".$auction->id."' 
+                                data-interest-id='".$auction->interest_ids."' 
+                                data-platform='".$auction->platform_name."' 
+                                data-platform-id='".$auction->platform_id."'
+                                data-status='".$auction->status."' 
+                                data-date='".$auction->auction_date."' 
+                                data-centers='".$auction->center_names."' 
+                                data-count='".$auction->interest_count."'>
+                                ".$auction->interest_count." ↑
                             </button>
-                            <a href="'.$view.'" class="btn btn-sm btn-primary" style="font-size: var(--font-p2) !important;">
+                        </div>"
+                        ,
+                        '
+                        <button class="btn btn-sm btn-danger alert-btn" data-auction="'.$auction->id.'" data-platform="'.$auction->platform_id.'" 
+                        style="font-size: var(--font-p2) !important; margin-left:5px;">
+                            <i class="fas fa-bell"></i> 
+                        </button>
+                        <a href="'.$view.'" class="btn btn-sm btn-primary" style="font-size: var(--font-p2) !important;">
                             <i class="fas fa-eye"></i> 
-                            </a>
-                          
-                            '
+                        </a>'
+                    ];
+                });
 
-                        ];
-                    });
-            
+                            
 
                 return [
                     "draw" => intval($request->input('draw')),
@@ -321,11 +371,54 @@ class AuctionFinderController extends Controller
     }
 
 
+public function getIntrest(Request $request)
+{
+    $auctionId = $request->auction_id;
+     $platformId  = $request->platform_id;
+    $interests = Interest::all();
+    $totalVehicles = Vehicle::where('auction_id', $auctionId)->count();
+
+    $result = [];
+
+    foreach ($interests as $interest) {
+        $interestVehicles = Vehicle::where('auction_id', $auctionId)
+            ->when($interest->make_id, fn($q) => $q->where('make_id', $interest->make_id))
+            ->when($interest->model_id, fn($q) => $q->where('model_id', $interest->model_id))
+            ->when($interest->variant_id, fn($q) => $q->where('variant_id', $interest->variant_id))
+            ->when($interest->year_from, fn($q) => $q->where('year', '>=', $interest->year_from))
+            ->when($interest->year_to, fn($q) => $q->where('year', '<=', $interest->year_to))
+            ->when($interest->mileage_from, fn($q) => $q->where('mileage', '>=', $interest->mileage_from))
+            ->when($interest->mileage_to, fn($q) => $q->where('mileage', '<=', $interest->mileage_to))
+            ->when($interest->fuel_type, fn($q) => $q->where('fuel_type', $interest->fuel_type))
+            ->when($interest->transmission, fn($q) => $q->where('transmission', $interest->transmission))
+            ->when($interest->cc_from, fn($q) => $q->where('cc', '>=', $interest->cc_from))
+            ->when($interest->cc_to, fn($q) => $q->where('cc', '<=', $interest->cc_to))
+            ->when($interest->price_from, fn($q) => $q->where('buy_now_price', '>=', $interest->price_from))
+            ->when($interest->price_to, fn($q) => $q->where('buy_now_price', '<=', $interest->price_to))
+            ->count();
+
+        $result[] = [
+            "interest_name"     => $interest->title,
+            "make_id"           => $interest->make_id,
+            "model_id"          => $interest->model_id,
+            "variant_id"        => $interest->variant_id,
+            "platform_id"       => $platformId ?? null, 
+            "make_name"         => optional($interest->make)->name,
+            "model_name"        => optional($interest->model)->name,
+            "variant_name"      => optional($interest->variant)->name,
+            "total_vehicles"    => $totalVehicles,
+            "interest_vehicles" => $interestVehicles,
+        ];
+    }
+
+    return response()->json($result);
+}
+
+
+
 public function storeAlert(Request $request)
 {
     $user = Auth::user();
-
-    // Check if alert already exists
     $exists = \App\Models\PlatefromAlert::where('user_id', $user->id)
         ->where('auction_id', $request->auction_id)
         ->where('platform_id', $request->platform_id)

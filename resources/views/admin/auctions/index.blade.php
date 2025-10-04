@@ -63,38 +63,51 @@
                            </div>
                            <div class="pt-5 table-responsive">
                                  <table class="datatables-products table table-bordered">
-                                       <thead class="border-top">
-                                          <tr>
+                                    <thead class="border-top">
+                                       <tr>
                                              <th>Name</th>
                                              <th>Unique Id</th>
                                              <th>Date</th>
                                              <th>End Date</th>
                                              <th>Platform</th>
-                                             <th>status</th>
+                                             <th>Status</th>
                                              <th>Actions</th>
-                                          </tr>
-                                       </thead>
-                                       <tbody>
-                                          @foreach($auctions as $auction)
-                                          <tr>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       @foreach($auctions as $auction)
+                                       <tr>
                                              <td>{{ $auction->name }}</td>
                                              <td>{{ $auction->table_id }}</td>
-                                             <td>{{ date('d-M-Y H:i', strtotime($auction->auction_date))}}</td>
-                                             <td>@if($auction->end_date){{ date('d-M-Y H:i', strtotime($auction->end_date))}}@endif</td>
+                                             <td>{{ date('d-M-Y H:i', strtotime($auction->auction_date)) }}</td>
+                                             <td>@if($auction->end_date){{ date('d-M-Y H:i', strtotime($auction->end_date)) }}@endif</td>
                                              <td>{{ $auction->platform->name ?? '' }}</td>
                                              <td>{{ $auction->status ?? '' }}</td>
                                              <td>
                                                 <a href="{{ url('/admin/auctions/'.$auction->id.'/edit') }}" class="btn btn-sm btn-primary">Edit</a>
-                                                <a href="{{url('/admin/auctions/viewCsv/'.$auction->id)}}" class="btn btn-sm btn-warning">View</a>
-                                                <form action="{{url('/admin/auctions'.$auction->id) }}" method="POST" style="display:inline;">
+                                                
+                                                {{-- Download btn (Green) --}}
+                                                <a href="{{ url('/admin/auctions/viewCsv/'.$auction->id) }}" class="btn btn-sm btn-success">Download</a>
+                                                
+                                                {{-- New View btn (Yellow) --}}
+                                                <a href="{{ url('/auction-finder?platform='.$auction->platform_id) }}" 
+                                                   target="_blank" 
+                                                   class="btn btn-sm btn-warning">
+                                                   View
+                                                </a>
+
+                                                <form action="{{ url('/admin/auctions'.$auction->id) }}" method="POST" style="display:inline;">
                                                    @csrf @method('DELETE')
-                                                   <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                                   <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
+                                                         Delete
+                                                   </button>
                                                 </form>
                                              </td>
-                                          </tr>
-                                          @endforeach
-                                       </tbody>
+                                       </tr>
+                                       @endforeach
+                                    </tbody>
                                  </table>
+
                            </div>
                      </div>
                </div>

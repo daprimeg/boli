@@ -158,6 +158,7 @@
                                         <th style="font-size: var(--font-p2) !important; ">Total Vehicles</th>
                                         <th style="font-size: var(--font-p2) !important;">Time</th>
                                         <th style="font-size: var(--font-p2) !important; ;">Status</th>
+                                        <th style="font-size: var(--font-p2) !important; ;">Interest</th>
                                         <th style="font-size: var(--font-p2) !important; ">Action</th>
                                     </tr>
                                 </thead>
@@ -171,9 +172,121 @@
 
         </div>
     </div>
+
+<div class="modal fade" id="vehicleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h4 class="mb-2">Vehicle Auction History</h4>
+          <h5 class="vehicleName"></h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover text-center">
+            <thead>
+                <tr>
+                <th>Interest Name</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Variant</th>
+                <th>Total Vehicles</th>
+                <th>Your Interest Vehicles</th>
+                <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="vehicleModalTableBody">
+                <!-- dynamically fill -->
+            </tbody>
+            </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 @section('js')
+
+<script>
+document.addEventListener("click", function(e) {
+    if (e.target.classList.contains("open-vehicle-modal")) {
+        let el = e.target;
+
+        let auctionId   = el.dataset.auctionId;
+        let interestId  = el.dataset.interestId || el.dataset.interestIds; 
+        let auctionName = el.dataset.platform;
+        let platformId  = el.dataset.platformId; 
+
+        // Title set karo
+        $(".vehicleName").html(auctionName);
+
+        // Loading row
+        $("#vehicleModalTableBody").html("<tr><td colspan='5'>Loading...</td></tr>");
+
+        // AJAX request
+        $.ajax({
+            url: "{{ url('auction/intrest') }}", 
+            type: "POST",
+            data: { 
+                   auction_id: auctionId,
+                interest_id: interestId,
+                platform_id: platformId,   // 👈 yahan bhej do
+                _token: "{{ csrf_token() }}" 
+            },
+            dataType: "json",
+                success: function(data) {
+                    let rows = "";
+                    if (data.length > 0) {
+                        data.forEach(function(item, index) {
+                            let make    = item.make_id ?? "";
+                            let model   = item.model_id ?? "";
+                            let variant = item.variant_id ?? "";
+                            let platform = item.platform_id ?? "";
+
+                            let viewUrl = `/autoboli/auction-finder?make=${make}&model=${model}&variant=${variant}&platform=${platform}`;
+
+                            rows += `
+                                <tr>
+                                    <td>${item.interest_name ?? '-'}</td>
+                                    <td>${item.make_name ?? '-'}</td>
+                                    <td>${item.model_name ?? '-'}</td>
+                                    <td>${item.variant_name ?? '-'}</td>
+                                    <td>${item.total_vehicles ?? 0}</td>
+                                    <td>${item.interest_vehicles ?? 0}</td>
+                                    <td>
+                                        <a href="${viewUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        rows = "<tr><td colspan='7'>No history found</td></tr>";
+                    }
+                    $("#vehicleModalTableBody").html(rows);
+                },
+
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error, xhr.responseText);
+                $("#vehicleModalTableBody").html("<tr><td colspan='5'>Error loading data</td></tr>");
+            }
+        });
+
+        // Modal show
+        let modal = new bootstrap.Modal(document.getElementById("vehicleModal"));
+        modal.show();
+    }
+});
+</script>
+
+
+
+
     <script>
+        
         $(document).ready(function () {
 
              let table = $('.table').DataTable({
@@ -281,7 +394,13 @@ $(document).on("click", ".alert-btn", function () {
     });
 });
 
-    </script>
+
+    
+
+</script>
+
+
+
 @endsection
 
 
