@@ -64,6 +64,17 @@
                         dataType: 'json',
                     }
                 });
+                
+             $('.platformhouse').select2({
+                    placeholder: 'Select Auction House',
+                    allowClear: true,
+                    multiple: true,
+                    ajax: {
+                        url: "{{ url('/admin/masters/platforms/getPlatforms') }}",
+                        dataType: 'json',
+                       
+                    }
+                });
                 $('.color').select2({
                     placeholder: 'Select Color',
                     allowClear: true,
