@@ -38,7 +38,7 @@
             color: #fff;
             border: none;
             padding: 5px 15px;
-         border-radius: var(--btn-border-radis);
+            border-radius: var(--btn-border-radis);
 
             font-size: var(--font-p1);
             border-radius: var(--btn-border-radis);
@@ -79,7 +79,6 @@
             padding: 10px;
             text-align: center;
             margin-bottom: 10px
-          
         }
 
         .stats-number {
@@ -113,7 +112,8 @@
             display: inline-block;
             padding: 4px 10px;
             margin-left: 6px;
-            font-size: var(--font-p2);;
+            font-size: var(--font-p2);
+            ;
             color: #fff;
             background-color: rgba(253, 5, 5, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -162,25 +162,28 @@
             border: none;
         }
 
-        .costome-table-childchagefont tr td{
+        .costome-table-childchagefont tr td {
             font-size: var(--font-p1);
             color: var(--bs-heading-color);
-                        border: none;
+            border: none;
 
         }
+
         .costome-table-childchagefont tr {
-            
-                        border: none;
+
+            border: none;
 
         }
-        .costome-table-childchagefont tr td .PreviousBtnRec{
-            border-radius: var( --btn-border-radis)
+
+        .costome-table-childchagefont tr td .PreviousBtnRec {
+            border-radius: var(--btn-border-radis)
         }
-         .table-responsive .table-bordered tbody tr:hover{
-            background: var( --new-bs-bg);
+
+        .table-responsive .table-bordered tbody tr:hover {
+            background: var(--new-bs-bg);
             cursor: pointer;
-         }
-        
+        }
+
         @media only screen and (max-width: 576px) {
 
             .inner-tag {
@@ -220,6 +223,7 @@
 
                         <div class="row pt-5">
                             <div class="col-md-8">
+
                                 <select style="max-width:200px;padding:5px;" name="length" class="">
                                     <option value="10">10</option>
                                     <option value="100">100</option>
@@ -235,9 +239,10 @@
                                     <div class="row custom-nav">
                                         <div class="col-md-4 mt-2">
                                             <div class="nav-item">
-                                                <input type="checkbox" id="inprogress_check">
-                                                <label for="inprogress_check">Inprogress</label>
+                                                <input type="checkbox" id="Upcoming" value="Upcoming">
+                                                <label for="Upcoming">Upcoming</label>
                                             </div>
+                                        
 
                                         </div>
 
@@ -316,53 +321,62 @@
 @endsection
 
 @section('js')
-
     <script>
-        $(document).ready(function() {
-            let table = $('#blogTable').DataTable({
-                processing: true,
-                ordering: false,
-                serverSide: true,
-                ajax: {
-                    url: "{{ url('/reauction') }}",
-                    data: function(d) {
-                        d.inprogress_check = $('#inprogress_check').is(':checked') ? 1 : 0;
-                        d.interest_id = $('#selected_interest_id').val();
-                    }
-                }
+$(document).ready(function() {
+    let table = $('#blogTable').DataTable({
+        processing: true,
+        ordering: false,
+        serverSide: true,
+        ajax: {
+            url: "{{ url('/reauction') }}",
+            data: function(d) {
+                d.inprogress_check = $('#inprogress_check').is(':checked') ? 1 : 0;
+                d.interest_id = $('#selected_interest_id').val();
+                
+                // 👇 Send "Upcoming" if checkbox checked, otherwise "Today"
+                d.auction_filter = $('#Upcoming').is(':checked') ? 'Upcoming' : 'Today';
+            }
+        }
+    });
 
+    // Update page info text
+    table.on('draw.dt', function() {
+        var info = table.page.info();
+        $('.pageinfo').html(
+            `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
+    });
 
-            });
+    // Search input
+    $("input[name='search']").on('keyup change', function() {
+        table.search(this.value).draw();
+    });
 
-            table.on('draw.dt', function() {
-                var info = table.page.info();
-                $('.pageinfo').html(
-                    `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
-            });
+    // Page length change
+    $("select[name='length']").on('change', function() {
+        const length = $(this).val();
+        table.page.len(length).draw();
+    }).trigger('change');
 
-            $("input[name='search']").on('keyup change', function() {
-                table.search(this.value).draw();
-            });
+    // Checkbox change (in progress)
+    $('#inprogress_check').on('change', function() {
+        table.ajax.reload();
+    });
 
-            $("select[name='length']").on('change', function() {
-                const length = $(this).val();
-                table.page.len(length).draw();
-            }).trigger('change');
-            $('#inprogress_check').on('change', function() {
-                table.ajax.reload();
-            });
-            $('#interestDropdown').on('click', '.dropdown-item', function(e) {
-                e.preventDefault();
-                const selectedId = $(this).data('id');
-                $('#selected_interest_id').val(selectedId);
-                $('#dropdownMenuButton').text($(this).text());
-                table.ajax.reload();
-            });
+    // Interest dropdown
+    $('#interestDropdown').on('click', '.dropdown-item', function(e) {
+        e.preventDefault();
+        const selectedId = $(this).data('id');
+        $('#selected_interest_id').val(selectedId);
+        $('#dropdownMenuButton').text($(this).text());
+        table.ajax.reload();
+    });
 
+    // 👇 When “Upcoming” checkbox changes
+    $('#Upcoming').on('change', function() {
+        table.ajax.reload(); // reload table to apply filter
+    });
+});
 
-
-
-        });
 
 
 
@@ -381,7 +395,7 @@
                 success: function(response) {
                     if (response.length === 0) {
                         $('#vehicleModalTableBody').html(
-                        '<tr><td colspan="6">No data found.</td></tr>');
+                            '<tr><td colspan="6">No data found.</td></tr>');
                         return;
                     }
 
@@ -425,7 +439,7 @@
 
 
         const scrollContainer = document.getElementById('scrollableRow');
-        const scrollAmount = 250; // pixels
+        const scrollAmount = 250;
 
         document.getElementById('scrollLeft').addEventListener('click', () => {
             scrollContainer.scrollBy({
@@ -444,111 +458,112 @@
 
     <script>
         $(document).ready(function() {
-            $.ajax({
-                url: '{{ route('reauction-interest') }}',
-                method: 'GET',
-                dataType: 'json',
-                success: function(interests) {
-                    let html = '';
 
-                    interests.forEach(function(interest, index) {
-                        html += `
-                        <div class="col-auto" style="width: 22%;">
-                            <div class="card h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
-                                <div class="card-body pb-1 text-start">
-                                    <div class="d-flex align-items-start mb-2">
-                                       <div class="dot-box"
-                                 style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px; ">
-                                 <div class="dot"
-                                     style=" width: 30px;  height: 30px; background-color: #0d6efd;  border-radius: 50%;">
-                                 </div>
-                              </div>
-                                        <h4 class="mb-0 ms-2">
-                                            <span class="auction-count" data-primary="${interest.primary_count}" data-secondary="${interest.secondary_count}">
-                                                ${interest.primary_count}
-                                            </span>
-                                        </h4>
+
+            function loadInterests(interestId = null) {
+                $.ajax({
+                    url: '{{ route('reauction-interest') }}',
+                    method: 'GET',
+                    data: interestId ? {
+                        secondary: interestId
+                    } : {},
+                    dataType: 'json',
+                    success: function(interests) {
+                        let html = '';
+
+                        interests.forEach(function(interest) {
+                            html += `
+                    <div class="col-auto" style="width: 22%;">
+                        <div class="card h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
+                            <div class="card-body pb-1 text-start">
+                                <div class="d-flex align-items-start mb-2">
+                                    <div class="dot-box"
+                                        style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px;">
+                                        <div class="dot"
+                                            style="width: 30px; height: 30px; background-color: #0d6efd; border-radius: 50%;">
+                                        </div>
                                     </div>
-                                    <p class=" text-start">
-                                        <p class="total_auctions">${interest.title}</p>
-                                    </p>
-                                    <p  class="mb-0 text-start">
-                                        <label  class="d-flex align-items-center cursor-pointer mb-2">
-                                            <input type="checkbox" class="secondary-toggle me-2">
-                                            <small style="font-size:var(--font-p2)">Include Secondary</small>
-                                        </label>
-                                    </p>
+                                    <h4 class="mb-0 ms-2">
+                                        <span class="auction-count">${interest.matched_reauction_cars}</span>
+                                    </h4>
                                 </div>
+                                <p class="text-start mb-1 total_auctions">${interest.title}</p>
+                                <p class="mb-0 text-start">
+                                    <label class="d-flex align-items-center cursor-pointer mb-2">
+                                        <input type="checkbox" 
+                                               class="secondary-toggle me-2" 
+                                               data-id="${interest.interest_id}"
+                                               ${interestId == interest.interest_id ? 'checked' : ''}>
+                                        <small style="font-size:var(--font-p2)">Include Secondary</small>
+                                    </label>
+                                </p>
                             </div>
                         </div>
+                    </div>
                     `;
+                        });
 
-                    });
+                        $('#scrollableRow').html(html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        $('#scrollableRow').html(
+                        '<p class="text-danger">Failed to load interests.</p>');
+                    }
+                });
+            }
 
-                    $('#scrollableRow').html(html);
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                    $('#scrollableRow').html('<p class="text-danger">Failed to load interests.</p>');
-                }
-            });
+
+            loadInterests();
+
 
             $(document).on('change', '.secondary-toggle', function() {
-                const $card = $(this).closest('.card-body');
-                const $count = $card.find('.auction-count');
-                const primary = $count.data('primary');
-                const secondary = $count.data('secondary');
+                const interestId = $(this).data('id');
+                const isChecked = $(this).is(':checked');
 
-                if ($(this).is(':checked')) {
-                    $count.text(secondary);
-                } else {
-                    $count.text(primary);
-                }
+
+                loadInterests(isChecked ? interestId : null);
             });
         });
     </script>
 
 
 
-<script>
-$(document).off('click.addNotify', '.add-notification') // namespace diya
-    .on('click.addNotify', '.add-notification', function (e) {
-        e.preventDefault();
+    <script>
+        $(document).off('click.addNotify', '.add-notification') // namespace diya
+            .on('click.addNotify', '.add-notification', function(e) {
+                e.preventDefault();
 
-        var auction_id = $(this).data('auction-id');
-        console.log("Sending AJAX for auction_id:", auction_id);
+                var auction_id = $(this).data('auction-id');
+                console.log("Sending AJAX for auction_id:", auction_id);
 
-        $.ajax({
-            url: "{{ route('notifications.store') }}",
-            method: "POST",
-            data: {
-                auction_id: auction_id,
-                _token: "{{ csrf_token() }}"
-            },
-            success: function (response) {
-                toastr.clear();
-                if (response.status === 'success') {
-                    toastr.success(response.message); 
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-            error: function () {
-                toastr.clear();
-                toastr.error('Server error! Please try again.');
-            }
-        });
-});
+                $.ajax({
+                    url: "{{ route('notifications.store') }}",
+                    method: "POST",
+                    data: {
+                        auction_id: auction_id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        toastr.clear();
+                        if (response.status === 'success') {
+                            toastr.success(response.message);
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function() {
+                        toastr.clear();
+                        toastr.error('Server error! Please try again.');
+                    }
+                });
+            });
+    </script>
 
+    <script>
+        let btn = document.querySelector('.add-notification');
 
-
-
-</script>
-
-<script>
-  let btn = document.querySelector('.add-notification');
-
-// Ye browser ke native API ka use karega
-console.log(getEventListeners(btn));
-</script>
+        // Ye browser ke native API ka use karega
+        console.log(getEventListeners(btn));
+    </script>
 @endsection

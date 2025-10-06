@@ -292,6 +292,7 @@ document.addEventListener("click", function(e) {
              let table = $('.table').DataTable({
                     processing: true,
                     serverSide: true,
+                     ordering: false,
                     ajax:{
                         url: "{{ url('auctionscheduler') }}",
                         data:function (d){
