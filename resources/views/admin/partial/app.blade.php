@@ -316,7 +316,7 @@
                         </li>
                      
                         @include('admin.partial.adminMenu')
-                        @include('user.partial.menu')
+                        {{-- @include('user.partial.menu') --}}
                     </ul>
                 </aside>
                 

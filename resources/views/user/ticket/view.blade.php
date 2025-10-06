@@ -1,5 +1,4 @@
-@extends('admin.partial.app')
-
+@extends('user.partial.app')
 @push('title') Ticket @endpush
 
 @section('css')
