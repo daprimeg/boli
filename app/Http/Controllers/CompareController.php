@@ -22,95 +22,107 @@ class CompareController extends Controller
 public function index(Request $request)
 {
     if ($request->ajax()) {
-        $search = $request->input('search.value');
-        $start = $request->input('start') ?? 0;
-        $length = $request->input('length') ?? 10;
-
-        // Subquery: latest "On Sale" vehicle per auction
-        $sub = Vehicle::select(DB::raw('MAX(id) as id'))
-            ->where('bidding_status', 'On Sale')
-            ->groupBy('auction_id');
-
-        $query = Vehicle::joinSub($sub, 'latest_vehicles', function($join) {
-                $join->on('vehicles.id', '=', 'latest_vehicles.id');
-            })
-            ->leftJoin('vehicle_type', 'vehicle_type.id', '=', 'vehicles.vehicle_id')
-            ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
+             $query = \DB::table('vehicles')
+            ->join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
             ->leftJoin('make', 'make.id', '=', 'vehicles.make_id')
             ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
             ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
+            ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
+            ->leftJoin('color', 'color.id', '=', 'vehicles.color_id')
             ->leftJoin('auction_center', 'auction_center.id', '=', 'vehicles.center_id')
             ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
-            ->leftJoin('body_types', 'body_types.id', '=', 'vehicles.body_id')
-            ->leftJoin('color', 'color.id', '=', 'vehicles.color_id');
+            ->select(
+                'vehicles.id',
+                'vehicles.title',
+                'vehicles.make_id',
+                'vehicles.model_id',
+                'vehicles.variant_id',
+                'vehicles.year',
+                'vehicles.mileage',
+                'vehicles.images',
+                'vehicles.inspection_report',
+                'vehicles.cc',
+                'vehicles.v5',
+                'vehicles.last_service',
+                'vehicles.former_keepers',
+                'vehicles.mot_expiry_date',
+                'vehicles.start_date',
+                'vehicles.end_date',
+                'vehicles.buy_now_price as start_bid',
+                'vehicles.last_bid',
+                'vehicles.bidding_status',
+                'vehicles.cap_clean',
+                'vehicles.cap_average as cap_avg',
+                'vehicles.cap_below as cap_blue',
+                'vehicles.autotrader_trade_value as autoboli_suggested',
+                'auctions.id as auction_id',
+                'auctions.name as auction_name',
+                'auctions.auction_type',
+                'auctions.auction_date',
+                'auctions.platform_id',
+                'auctions.table_id',
+                'auctions.status',
+                'auction_center.name as center_name',
+                'auction_platform.name as platform_name',
+                'make.name as make_name',
+                'model.name as model_name',
+                'model_variant.name as variant_name',
+                'body_types.name as body_type',
+                'color.name as color_name'
+            );
 
-        // Filters
-        $filters = ['transmission','vehicle','fuel','grade','center_id','make_id','model_id','variant_id'];
-        foreach($filters as $f) {
-            if ($request->filled($f)) {
-                $query->where("vehicles.$f", $request->$f);
-            }
+        // apply filters
+        if ($request->filled('make_id')) {
+            $query->where('vehicles.make_id', $request->make_id);
         }
 
-        if ($request->filled('platform_id')) {
+        if ($request->filled('model_id')) {
+            $query->where('vehicles.model_id', $request->model_id);
+        }
+
+        if ($request->filled('variant_id')) {
+            $query->where('vehicles.variant_id', $request->variant_id);
+        }
+
+        if ($request->filled('year')) {
+            $query->where('vehicles.year', $request->year);
+        }
+
+        if ($request->filled('mileage_from')) {
+            $query->where('vehicles.mileage', '>=', $request->mileage_from);
+        }
+
+        if ($request->filled('mileage_to')) {
+            $query->where('vehicles.mileage', '<=', $request->mileage_to);
+        }
+
+        if ($request->filled('transmission')) {
+            $query->where('vehicles.transmission', $request->transmission);
+        }
+
+        if ($request->filled('fuel')) {
+            $query->where('vehicles.fuel_type', $request->fuel);
+        }
+
+        if ($request->filled('grade')) {
+            $query->where('vehicles.grade', $request->grade);
+        }
+
+            if ($request->filled('platform_id')) {
             $query->whereIn('auctions.platform_id', $request->platform_id);
         }
+        $vehicles = $query
+            ->orderBy('auctions.auction_date', 'desc')
+            ->get()
+            ->unique('auction_id')
+            ->values();
 
-        $mileageFrom = $request->input('mileage_from');
-        $mileageTo   = $request->input('mileage_to');
-        if (!is_null($mileageFrom) && !is_null($mileageTo) && ($mileageTo - $mileageFrom) >= 1) {
-            $query->whereBetween('vehicles.mileage', [$mileageFrom, $mileageTo]);
-        }
-
-        $totalData = $query->count();
-
-        $vehicles = $query->select(
-                'vehicles.*',
-                'auctions.name AS auction_name',
-                'auctions.auction_type AS auction_type',
-                'auctions.auction_date AS auction_date',
-                'vehicle_type.name AS vehicle_name',
-                'auction_center.name AS center_name',
-                'auction_platform.name AS platform_name',
-                'make.name AS make_name',
-                'model.name AS model_name',
-                'model_variant.name AS model_variant_name',
-                'body_types.name AS body_type_name',
-                'vehicles.year AS year',
-                'color.name AS color_name'
-            )
-            ->offset($start)
-            ->limit($length)
-            ->get();
-
-        // Start bid fix
-        $vehicles->transform(function ($vehicle) {
-            $history = $vehicle->bidding_history;
-
-            if (is_string($history)) {
-                $history = str_replace(['[', ']', '"', "'"], '', $history);
-                $history = explode(',', $history);
-            }
-
-            if (is_array($history) && count($history) > 0) {
-                $firstBid = trim($history[0]); 
-                $vehicle->start_bid = floatval(str_replace(['£', ','], '', $firstBid));
-            } else {
-                $vehicle->start_bid = null;
-            }
-            return $vehicle;
-        });
-
-        return response()->json([
-            "draw" => intval($request->input('draw')),
-            "recordsTotal" => $totalData,
-            "recordsFiltered" => $totalData,
-            "data" => $vehicles
-        ]);
+        return response()->json(['data' => $vehicles]);
     }
 
     return view('user.compare.index');
 }
+
 
 
 public function getModelsAndVariants($make_id)

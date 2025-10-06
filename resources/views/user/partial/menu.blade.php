@@ -25,7 +25,7 @@
     <li class="menu-item {{ request()->is('viewhistory*') ? 'active' : '' }}">
             <a href="{{ url('/viewhistory') }}" class="menu-link">    
                 <i class="menu-icon ti tabler-history"></i>         
-                <div>View History</div>
+                <div>Watchlist</div>
             </a>
     </li>
 

@@ -332,37 +332,42 @@ $(document).ready(function() {
             data: function(d) {
                 d.inprogress_check = $('#inprogress_check').is(':checked') ? 1 : 0;
                 d.interest_id = $('#selected_interest_id').val();
-                
-                // 👇 Send "Upcoming" if checkbox checked, otherwise "Today"
                 d.auction_filter = $('#Upcoming').is(':checked') ? 'Upcoming' : 'Today';
+            },
+            dataSrc: function(json) {
+               
+                updatePlatformCenterUI(json.platforms, json.centers,json.recordsTotal);
+              
+                return json.data;
+
             }
         }
     });
 
-    // Update page info text
+
     table.on('draw.dt', function() {
         var info = table.page.info();
         $('.pageinfo').html(
             `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
     });
 
-    // Search input
+    
     $("input[name='search']").on('keyup change', function() {
         table.search(this.value).draw();
     });
 
-    // Page length change
+   
     $("select[name='length']").on('change', function() {
         const length = $(this).val();
         table.page.len(length).draw();
     }).trigger('change');
 
-    // Checkbox change (in progress)
+   
     $('#inprogress_check').on('change', function() {
         table.ajax.reload();
     });
 
-    // Interest dropdown
+  
     $('#interestDropdown').on('click', '.dropdown-item', function(e) {
         e.preventDefault();
         const selectedId = $(this).data('id');
@@ -371,11 +376,52 @@ $(document).ready(function() {
         table.ajax.reload();
     });
 
-    // 👇 When “Upcoming” checkbox changes
+  
     $('#Upcoming').on('change', function() {
-        table.ajax.reload(); // reload table to apply filter
+        table.ajax.reload();
     });
+
+    
+function updatePlatformCenterUI(platforms, centers, recordsTotal) {
+    const platformContainer = $('.platform-badges');
+    const centerContainer = $('.platefrom_mar');
+    const vehicleCountToday = $('#vehicleCountToday');
+
+    platformContainer.empty();
+    centerContainer.empty();
+
+    // ✅ Update the Today count
+    if (recordsTotal !== undefined && recordsTotal > 0) {
+        vehicleCountToday.text(recordsTotal);
+    } else {
+        vehicleCountToday.text(0);
+    }
+
+    // ✅ Platforms
+    if (platforms && platforms.length > 0) {
+        $.each(platforms, function(index, platform) {
+            platformContainer.append(
+                `<span class="platform-badge ${index === 0 ? 'active' : ''}">${platform}</span>`
+            );
+        });
+    } else {
+        platformContainer.append(`<span style="color: gray;">No Platforms</span>`);
+    }
+
+    // ✅ Centers
+    if (centers && centers.length > 0) {
+        $.each(centers, function(index, center) {
+            centerContainer.append(
+                `<span style="font-size: var(--font-p3); color: var(--dimtext)">${center}</span>`
+            );
+        });
+    } else {
+        centerContainer.append(`<span style="color: gray;">No Centers</span>`);
+    }
+}
+
 });
+
 
 
 

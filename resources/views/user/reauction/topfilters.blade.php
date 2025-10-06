@@ -4,7 +4,7 @@
         class="d-flex flex-column flex-md-row justify-content-center align-items-center header-section mt-5 ps-md-10 ps-0 text-center text-md-start">
         <div class="w-auto">
             <div class="stats-card">
-                <h3 class="stats-number">{{ $vehicleCountToday ?? 0 }}</h3>
+                <h3 class="stats-number" id="vehicleCountToday">0</h3>
                 <p class="stats-label">Today</p>
             </div>
         </div>
@@ -17,10 +17,7 @@
                     </div>
                     <div>
                         <div class="platform-badges">
-                            @foreach ($auctionPlatform as $platform)
-                                <span
-                                    class="platform-badge {{ $loop->first ? 'active' : '' }}">{{ $platform }}</span>
-                            @endforeach
+                            
                         </div>
 
                     </div>
@@ -32,10 +29,7 @@
                     <div>
                         <div class="platform-badges platefrom_mar">
 
-                            @foreach ($auctionCenter as $centerform)
-                                <span
-                                    style="font-size: var(--font-p3); color: var(--dimtext)">{{ $centerform }}</span>
-                            @endforeach
+                            
                         </div>
                     </div>
                 </div>

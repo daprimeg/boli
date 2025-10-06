@@ -34,6 +34,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\NotifyIntrestController;
+
+use App\Http\Controllers\Auth\GoogleController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -72,6 +76,10 @@ Route::get('/explore/newss', [WebController::class, 'newss']);
 
 Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
+
+// Google auth
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 Route::get('/register', [AuthController::class, 'register']);
 

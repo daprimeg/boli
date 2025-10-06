@@ -41,18 +41,17 @@ public function index(Request $request)
         DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
 
         $today = now()->toDateString();
-        $auctionFilter = $request->auction_filter ?? 'Today'; // 'Today' or 'Upcoming'
+        $auctionFilter = $request->auction_filter ?? 'Today';
 
-        // 🔹 Base auctions filter
-        $auctionQuery = DB::table('auctions');
-        if ($auctionFilter === 'Upcoming') {
-            $auctionQuery->whereDate('auction_date', '>=', $today);
-        } else {
-            $auctionQuery->whereDate('auction_date', '=', $today);
-        }
-        $auctionIds = $auctionQuery->pluck('id');
+        $auctionIds = DB::table('auctions')
+            ->when($auctionFilter === 'Upcoming', function ($q) use ($today) {
+                $q->whereDate('auction_date', '>=', $today);
+            }, function ($q) use ($today) {
+                $q->whereDate('auction_date', '=', $today);
+            })
+            ->pluck('id');
 
-        // 🔹 Base vehicle query
+  
         $query = DB::table('vehicles')
             ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
             ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
@@ -61,6 +60,13 @@ public function index(Request $request)
             ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
             ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
             ->whereIn('vehicles.auction_id', $auctionIds)
+            ->whereExists(function ($subQuery) use ($today) {
+                $subQuery->select(DB::raw(1))
+                    ->from('vehicles as v2')
+                    ->join('auctions as a2', 'a2.id', '=', 'v2.auction_id')
+                    ->whereColumn('v2.reg', 'vehicles.reg')
+                    ->whereDate('a2.auction_date', '<', $today);
+            })
             ->select(
                 'vehicles.*',
                 'auctions.auction_date',
@@ -71,25 +77,18 @@ public function index(Request $request)
                 'model_variant.name as model_variant_name'
             );
 
-        // 🔹 Apply Interest Filter
-        if (!empty($request->interest_id)) {
+
+        if ($request->filled('interest_id')) {
             $interest = Interest::find($request->interest_id);
             if ($interest) {
-                if (!empty($interest->make_id)) {
-                    $query->where('vehicles.make_id', $interest->make_id);
-                }
-                if (!empty($interest->model_id)) {
-                    $query->where('vehicles.model_id', $interest->model_id);
-                }
-                if (!empty($interest->variant_id)) {
-                    $query->where('vehicles.variant_id', $interest->variant_id);
-                }
+                $query->when($interest->make_id, fn($q) => $q->where('vehicles.make_id', $interest->make_id))
+                      ->when($interest->model_id, fn($q) => $q->where('vehicles.model_id', $interest->model_id))
+                      ->when($interest->variant_id, fn($q) => $q->where('vehicles.variant_id', $interest->variant_id));
             }
         }
 
-        // 🔹 Search by Registration Number or other fields
-        $search = $request->input('search.value');
-        if (!empty($search)) {
+        if ($request->filled('search.value')) {
+            $search = $request->input('search.value');
             $query->where(function ($q) use ($search) {
                 $q->where('vehicles.reg', 'LIKE', "%{$search}%")
                     ->orWhere('make.name', 'LIKE', "%{$search}%")
@@ -100,37 +99,35 @@ public function index(Request $request)
             });
         }
 
-        // 🔹 Apply In-progress Filter
         if ($request->inprogress_check == 1) {
             $query->where('vehicles.bidding_status', 'inprogress');
         }
 
-        // 🔹 Only include vehicles that have appeared before (previous auctions)
-        $query->whereExists(function ($subQuery) use ($today) {
-            $subQuery->select(DB::raw(1))
-                ->from('vehicles as v2')
-                ->join('auctions as a2', 'a2.id', '=', 'v2.auction_id')
-                ->whereColumn('v2.reg', 'vehicles.reg')
-                ->whereDate('a2.auction_date', '<', $today);
-        });
-
-        // 🔹 DataTables server-side parameters
-        $start = $request->input('start') ?? 0;
-        $length = $request->input('length') ?? 10;
-
-        // 🔹 Total records count before pagination
+    
         $totalRecords = (clone $query)->count();
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
 
-        // 🔹 Fetch paginated data
-        $vehicles = $query
-            ->skip($start)
-            ->take($length)
-            ->get();
+        $vehicles = $query->skip($start)->take($length)->get();
 
-        // 🔹 Prepare Data for DataTables
+        $platforms = DB::table('auctions')
+            ->join('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
+            ->whereIn('auctions.id', $auctionIds)
+            ->distinct()
+            ->pluck('auction_platform.name')
+            ->filter()
+            ->values();
+
+        $centers = DB::table('vehicles')
+            ->join('auction_center', 'auction_center.id', '=', 'vehicles.center_id')
+            ->whereIn('vehicles.auction_id', $auctionIds)
+            ->distinct()
+            ->pluck('auction_center.name')
+            ->filter()
+            ->values();
+
+
         $data = $vehicles->map(function ($vehicle) use ($today) {
-
-            // Calculate bid difference
             $bids = DB::table('vehicles')
                 ->join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
                 ->where('vehicles.reg', $vehicle->reg)
@@ -138,42 +135,29 @@ public function index(Request $request)
                 ->pluck('vehicles.last_bid')
                 ->toArray();
 
-            $firstBid = $bids[0] ?? 0;
-            $lastBid = end($bids) ?? 0;
-            $diff = $lastBid - $firstBid;
-
+            $diff = (end($bids) ?? 0) - ($bids[0] ?? 0);
             $diffText = $diff > 0
                 ? "<span style='color:green;'>+{$diff}</span>"
                 : "<span style='color:red;'>{$diff}</span>";
 
-            // Vehicle Name
             $vehicleName = '
-                <div style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
-                    title="' . strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name . '">
-                    <p class="mb-1 text-truncate">' . strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name . '</p>
+                <div style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    <p class="mb-1 text-truncate" title="' . strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name . '">
+                        ' . strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name . '
+                    </p>
                 </div>
-                <p class="text-muted mb-0 small text-truncate"
-                    style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"
-                    title="' . $vehicle->model_variant_name . '">
+                <p class="text-muted mb-0 small text-truncate" title="' . $vehicle->model_variant_name . '">
                     ' . $vehicle->model_variant_name . '
                 </p>';
 
-            // Platform
-            $platform = '<p class="text-primary">' . ($vehicle->platform_name ?? 'N/A') . '</p>';
-
-            // Action buttons
             $actions = '
-                <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" 
-                   class="btn btn-sm btn-primary me-1">
+                <a href="' . url("/auction-finder/vehicle/{$vehicle->id}") . '" class="btn btn-sm btn-primary me-1">
                     <i class="fas fa-eye"></i>
                 </a>
-                <a class="btn btn-sm btn-danger add-notification"
-                   data-auction-id="' . $vehicle->id . '"
-                   style="background-color:#570303; border-color:#8000;">
+                <a class="btn btn-sm btn-danger add-notification" data-auction-id="' . $vehicle->id . '">
                     <i class="fas fa-bell"></i>
                 </a>';
 
-            // Previous record count
             $previousCount = DB::table('vehicles')
                 ->join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
                 ->where('vehicles.reg', $vehicle->reg)
@@ -182,18 +166,16 @@ public function index(Request $request)
 
             $PreviousBtn = '
                 <div class="PreviousBtnRec d-flex justify-content-center">
-                    <button type="button"
-                        class="btn btn-sm btn-primary PreviousBtnRec"
-                        data-ref="' . $vehicle->reg . '">
+                    <button type="button" class="btn btn-sm btn-primary PreviousBtnRec" data-ref="' . $vehicle->reg . '">
                         ' . $previousCount . ' ↑
                     </button>
                 </div>';
 
             return [
-                $vehicleName ?? 'N/A',
+                $vehicleName,
                 $vehicle->reg ?? 'N/A',
                 $PreviousBtn,
-                $platform ?? 'N/A',
+                $vehicle->platform_name ?? 'N/A',
                 $vehicle->center_name ?? 'N/A',
                 $vehicle->last_bid ?? 'N/A',
                 $vehicle->bidding_status ?? 'N/A',
@@ -203,36 +185,22 @@ public function index(Request $request)
             ];
         });
 
-        // 🔹 Return DataTables Response
+
         return response()->json([
             'draw' => intval($request->input('draw')),
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $totalRecords,
-            'data' => $data
+            'data' => $data,
+            'platforms' => $platforms,
+            'centers' => $centers
         ]);
     }
 
-    // -------- Non-AJAX section (view) ----------
     $userId = Auth::id();
     $interests = Interest::where('user_id', $userId)->get();
+    $vehicleCountToday = Vehicle::whereDate('created_at', now()->toDateString())->count();
 
-    $auctionPlatform = DB::table('auction_platform')
-        ->leftJoin('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
-        ->leftJoin('vehicles', 'vehicles.auction_id', '=', 'auctions.id')
-        ->select('auction_platform.id', 'auction_platform.name')
-        ->groupBy('auction_platform.id', 'auction_platform.name')
-        ->pluck('auction_platform.name', 'auction_platform.id');
-
-    $auctionCenter = DB::table('auction_center')
-        ->leftJoin('vehicles', 'vehicles.center_id', '=', 'auction_center.id')
-        ->select('auction_center.id', 'auction_center.name')
-        ->groupBy('auction_center.id', 'auction_center.name')
-        ->pluck('auction_center.name', 'auction_center.id');
-
-    $today = Carbon::today();
-    $vehicleCountToday = Vehicle::whereDate('created_at', $today)->count();
-
-    return view('user.reauction.index', compact('auctionPlatform', 'auctionCenter', 'interests', 'vehicleCountToday'));
+    return view('user.reauction.index', compact('interests', 'vehicleCountToday'));
 }
 
 

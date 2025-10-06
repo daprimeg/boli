@@ -45,7 +45,7 @@
                     <div class="card-header border-bottom">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5 class="card-title">Edit Interest</h5>
+                                <h5 class="card-title">Create Interest</h5>
                             </div>
                             <div class="col-md-6 text-end">
                                  <a href="{{url('/interest')}}" class="btn btn-primary">Back To List</a>
@@ -64,7 +64,7 @@
                                 </div>
 
                              <div class="mb-3 col-md-4">
-                                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <label for="title" class="form-label">Interest Title <span class="text-danger">*</span></label>
                                     <input type="text" value="{{ old('title') }}" name="title" class="form-control" required>
                                 </div>
 
@@ -158,7 +158,7 @@
                                 </div>
                                 
                                 <div class="mb-3 col-md-4">
-                                    <label class="form-label">Price</label>
+                                    <label class="form-label">Price (CAP Clean)</label>
                                     <div class="d-flex">
                                         <div class="box w-100">
                                             <input name="price_from" value="{{old('price_from')}}" step="any" placeholder="From" type="number" class="form-control"  />
@@ -189,10 +189,7 @@
                                     </select>
                                 </div>
 
-                                <div class="mb-3 col-md-4">
-                                    <label class="form-label">Former Keepers</label>
-                                    <input type="number" value="{{old('former_keeper')}}" name="former_keeper" class="form-control">
-                                </div>
+                              
 
                                 <div class="col-12 text-center pt-3">
                                     <button type="submit" class="btn btn-primary">Save</button>

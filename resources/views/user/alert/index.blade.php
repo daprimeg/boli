@@ -1,5 +1,5 @@
 @extends('user.partial.app')
-@push('title') View History @endpush
+@push('title') Watchlist @endpush
 @section('css')
 <style>
 

@@ -1,108 +1,123 @@
 <script>
 $(document).ready(function() {
 
-    function loadComparisonData(filters = {}) {
-        $.ajax({
-            url: "{{ url('/compare') }}",
-            type: "GET",
-            data: filters,
-            dataType: "json",
-            success: function(response) {
-                let headRow = $('#comparison-head');
-                let body = $('#comparison-body');
+function loadComparisonData(filters = {}) {
+    $.ajax({
+        url: "{{ url('/compare') }}",
+        type: "GET",
+        data: filters,
+        dataType: "json",
+        success: function(response) {
+            let headRow = $('#comparison-head');
+            let body = $('#comparison-body');
 
-                headRow.empty();
-                body.empty();
+            headRow.empty();
+            body.empty();
 
-                headRow.append(`<th style="min-width: 180px; padding: 10px; text-align: left;"></th>`);
+            headRow.append(`<th style="min-width: 180px; padding: 10px; text-align: left;"></th>`);
 
-                // Show one car per auction
-                let auctionsShown = {};
-                response.data.forEach(vehicle => {
-                    if (!auctionsShown[vehicle.auction_id]) {
-                        auctionsShown[vehicle.auction_id] = true;
+            let auctionsShown = {};
+            response.data.forEach(vehicle => {
+                if (!auctionsShown[vehicle.auction_id]) {
+                    auctionsShown[vehicle.auction_id] = true;
 
-                        headRow.append(`
-                            <th class="vehicle-header" style="min-width: 200px; padding: 12px; text-align: center; vertical-align: top;">
-                                <div class="vehicle-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; transition: transform 0.2s ease;">
-                                    <div class="card-content">
-                                        <div class="vehicle-name" style="font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; margin-bottom: 6px;">
-                                            ${vehicle.title}
-                                        </div>
-                                        <span style="display: inline-block; font-size: 11px; padding: 3px 8px; border: 1px solid #0ea5e9; color: #0ea5e9; border-radius: 4px; margin-bottom: 8px;">
-                                            ${vehicle.auction_name}
-                                        </span>
-                                        <hr style="border: none; height: 2px; background-color: #0ea5e9; margin: 8px auto; width: 60%;">
-                                        <div class="card-actions" style="display: flex; gap: 6px; justify-content: center;">
-                                            <button style="padding: 5px 12px; font-size: 12px; background-color: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                                Report
-                                            </button>
-                                            <a href="{{ url('/auction-finder/vehicle') }}/${vehicle.id}"  style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                                View
-                                            </a>
-                                        </div>
+             
+                    let vehicleName = `${vehicle.make_name ?? ''} ${vehicle.model_name ?? ''} ${vehicle.year ?? ''}`.trim();
+
+              
+                    let imageList = [];
+                    if (vehicle.images && typeof vehicle.images === 'string') {
+                        imageList = vehicle.images.split(',').map(img => img.trim());
+                    }
+
+                    let firstImage = imageList.length > 0 ? imageList[0] : 'no-image.jpg'; 
+
+                    headRow.append(`
+                        <th class="vehicle-header" style="min-width: 200px; padding: 12px; text-align: center; vertical-align: top;">
+                            <div class="vehicle-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; transition: transform 0.2s ease;">
+                                <div class="card-content">
+                                    <img src="${firstImage}" 
+                                         alt="${vehicleName}" 
+                                         style="height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;">
+                                    <div class="vehicle-name" style="font-size: 14px; font-weight: 600; white-space: nowrap;  margin-bottom: 6px;">
+                                        ${vehicleName}
+                                    </div>
+                                    <span style="display: inline-block; font-size: 11px; padding: 3px 8px; border: 1px solid #0ea5e9; color: #0ea5e9; border-radius: 4px; margin-bottom: 8px;">
+                                        ${vehicle.platform_name ?? 'Unknown Auction'}
+                                    </span>
+                                    <hr style="border: none; height: 2px; background-color: #0ea5e9; margin: 8px auto; width: 60%;">
+                                    <div class="card-actions" style="display: flex; gap: 6px; justify-content: center;">
+                                        <a href="${vehicle.inspection_report }"  target="_blank" style="padding: 5px 12px; font-size: 12px; background-color: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                            Report
+                                        </a>
+                                        <a href="{{ url('/auction-finder/vehicle') }}/${vehicle.id}"  target="_blank"
+                                           style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                            View
+                                        </a>
                                     </div>
                                 </div>
-                            </th>
-                        `);
-                    }
-                });
+                            </div>
+                        </th>
+                    `);
+                }
+            });
 
-                let attributes = [
-                    { section: 'Auc', label: 'Auction House', key: 'platform_name' },
-                    { section: 'Auc', label: 'Center', key: 'center_name' },
-                    { section: 'Auc', label: 'Auc Type', key: 'auction_type' },
-                    { section: 'Auc', label: 'Date & Time', key: 'auction_date' },
-                    { section: 'Valuation', label: 'Autoboli Suggested', key: 'autoboli_suggested' },
-                    { section: 'Valuation', label: 'Cap Clean', key: 'cap_clean' },
-                    { section: 'Valuation', label: 'Cap Avg', key: 'cap_avg' },
-                    { section: 'Valuation', label: 'Cap Blue', key: 'cap_blue' },
-                    { section: 'Auc Results', label: 'Starting Bid', key: 'start_bid' },
-                    { section: 'Auc Results', label: 'Last Bid', key: 'last_bid' },
-                    { section: 'Auc Results', label: 'Auc Status', key: 'bidding_status' },
-                    { section: 'Spec', label: 'Mileage', key: 'mileage' },
-                    { section: 'Spec', label: 'CC', key: 'cc' },
-                    { section: 'Spec', label: 'V5', key: 'v5' },
-                    { section: 'Spec', label: 'Last Service', key: 'last_service' },
-                    { section: 'Spec', label: 'Former Keeper', key: 'former_keepers' },
-                    { section: 'Spec', label: 'MOT Ex', key: 'mot_expiry_date' }
-                ];
+            let attributes = [
+                { section: 'Auc', label: 'Auction House', key: 'platform_name' },
+                { section: 'Auc', label: 'Center', key: 'center_name' },
+                { section: 'Auc', label: 'Auc Type', key: 'auction_type' },
+                { section: 'Auc', label: 'Date & Time', key: 'auction_date' },
+                { section: 'Valuation', label: 'Autoboli Suggested', key: 'autoboli_suggested' },
+                { section: 'Valuation', label: 'Cap Clean', key: 'cap_clean' },
+                { section: 'Valuation', label: 'Cap Avg', key: 'cap_avg' },
+                { section: 'Valuation', label: 'Cap Blue', key: 'cap_blue' },
+                { section: 'Auc Results', label: 'Starting Bid', key: 'start_bid' },
+                { section: 'Auc Results', label: 'Last Bid', key: 'last_bid' },
+                { section: 'Auc Results', label: 'Auc Status', key: 'bidding_status' },
+                { section: 'Spec', label: 'Mileage', key: 'mileage' },
+                { section: 'Spec', label: 'CC', key: 'cc' },
+                { section: 'Spec', label: 'V5', key: 'v5' },
+                { section: 'Spec', label: 'Last Service', key: 'last_service' },
+                { section: 'Spec', label: 'Former Keeper', key: 'former_keepers' },
+                { section: 'Spec', label: 'MOT Ex', key: 'mot_expiry_date' }
+            ];
 
-                if (response.data.length === 0) {
-                    body.append(`<tr><td colspan="100%" style="text-align:center; padding: 20px; font-size: 16px; color: red;">No Data Found</td></tr>`);
-                    return;
+            if (response.data.length === 0) {
+                body.append(`<tr><td colspan="100%" style="text-align:center; padding: 20px; font-size: 16px; color: red;">No Data Found</td></tr>`);
+                return;
+            }
+
+            let lastSection = null;
+
+            attributes.forEach(attr => {
+                if (attr.section !== lastSection) {
+                    lastSection = attr.section;
+                    body.append(`
+                        <tr style="background-color: #003366; color: white;">
+                            <td colspan="${Object.keys(auctionsShown).length + 1}" style="font-weight: bold; padding: 10px; font-size: 16px;">
+                                ${lastSection}
+                            </td>
+                        </tr>
+                    `);
                 }
 
-                let lastSection = null;
+                let row = `<tr><td class="row-label" style="padding: 10px; font-weight: bold; min-width: 180px;">${attr.label}</td>`;
 
-                attributes.forEach(attr => {
-                    if (attr.section !== lastSection) {
-                        lastSection = attr.section;
-                        body.append(`
-                            <tr style="background-color: #003366; color: white;">
-                                <td colspan="${Object.keys(auctionsShown).length + 1}" style="font-weight: bold; padding: 10px; font-size: 16px;">
-                                    ${lastSection}
-                                </td>
-                            </tr>
-                        `);
-                    }
-
-                    let row = `<tr><td class="row-label" style="padding: 10px; font-weight: bold; min-width: 180px;">${attr.label}</td>`;
-
-                    Object.keys(auctionsShown).forEach(auctionId => {
-                        let vehicle = response.data.find(v => v.auction_id == auctionId);
-                        let value = vehicle[attr.key] ?? 'N/A';
-                        row += `<td class="cell-data" style="padding: 10px; min-width: 200px; text-align: center;">${value}</td>`;
-                    });
-
-                    row += `</tr>`;
-                    body.append(row);
+                Object.keys(auctionsShown).forEach(auctionId => {
+                    let vehicle = response.data.find(v => v.auction_id == auctionId);
+                    let value = vehicle[attr.key] ?? 'N/A';
+                    row += `<td class="cell-data" style="padding: 10px; min-width: 200px; text-align: center;">${value}</td>`;
                 });
-            }
-        });
-    }
 
-    loadComparisonData();
+                row += `</tr>`;
+                body.append(row);
+            });
+        }
+    });
+}
+
+
+
 
     $('#searchBtn').on('click', function() {
         let filters = {

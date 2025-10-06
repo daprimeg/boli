@@ -91,9 +91,9 @@
                   @endif
 
                 <div class="px-4 mb-4 d-flex col-md-12">
-                    <button class="w-100 py-3 mx-3 login-btn">
-                    <i class="fab fa-google me-2"></i> Sign In with Google
-                    </button>
+                    <a href="{{ route('google.login') }}" class="w-100 py-3 mx-3 login-btn d-block text-center" style="text-decoration:none;">
+                        <i class="fab fa-google me-2"></i> Sign In with Google
+                    </a>
                     <button class="w-100 py-3l login-btn">
                     <i class="fab fa-apple me-2"></i> Sign In with Apple
                     </button>
