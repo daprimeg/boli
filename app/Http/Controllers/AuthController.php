@@ -29,6 +29,10 @@ use Symfony\Component\Mime\Part\HtmlPart;
 use App\Models\UserDevice;
 use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Http;
+use App\Mail\VerifyEmail;
+
+
+
 
 class AuthController extends Controller
 {
@@ -211,159 +215,222 @@ class AuthController extends Controller
     }
 
 
-    // Registration
-    public function register_submit(Request $request)
-    {
-            if(Auth::check()) {
-              return redirect('/dashboard')->with('message', 'You are already logged in.');
-            }
 
-            $validator = Validator::make($request->all(), [
-                'password' => 'required|string',
-                'companyName' => 'required|string|max:255',
-                'companyAddress1' => 'required|string|max:255',
-                'companyAddress2' => 'required|string|max:255',
-                'townCity' => 'required|string|max:255',
-                'country' => 'required|string|max:255',
-                'postcode' => 'required|string|max:255',
-                'telephone' => 'required|string|max:255',
-                'businessType' => 'required|string|max:255',
-                'companyReg' => 'required|string|max:255',
-                'website' => 'required|url',
-                'businessEmail' => 'required|string|email|max:255|unique:users',
-                'motorTradeInsurance' => 'required|string|max:255',
-                'vatNumber' => 'required|string|max:255',
-                
-                'firstName' => 'required|string|max:255',
-                'surname' => 'required|string|max:255',
-                'title' => 'required|string|max:255',
-                'jobTitle' => 'required|string|max:255',
+public function register_submit(Request $request)
+{
+    if (Auth::check()) {
+        return redirect('/dashboard')->with('message', 'You are already logged in.');
+    }
 
-                'phone' => 'required|string|max:255',
-                'personalEmail' => 'required|string|email|max:255|unique:users',      
-                'avatar' => 'required|file|mimes:jpg,png,pdf|max:4096',
-          
-            ],[],
-            [
-            'companyName' => 'Company Name',
-            'companyAddress1' => 'Address Line 1',
-            'companyAddress2' => 'Address Line 2',
-            'townCity' => 'Town or City',
-            'country' => 'Country',
-            'postcode' => 'Postcode',
-            'telephone' => 'Telephone Number',
-            'businessType' => 'Business Type',
-            'companyReg' => 'Company Registration Number',
-            'website' => 'Company Website',
-            'businessEmail' => 'Business Email',
-            'motorTradeInsurance' => 'Motor Trade Insurance',
-            'vatNumber' => 'VAT Number',
-            'firstName' => 'First Name',
-            'surname' => 'Surname',
-            'title' => 'Title',
-            'jobTitle' => 'Job Title',
-            'password' => 'Password',
-            
-            'phone' => 'Phone Number',
-            'personalEmail' => 'Personal Email',
-            'password' => 'Password',
-            'avatar' => 'Profile',
-        ]);
+    $validator = Validator::make($request->all(), [
+        'password' => 'required|string|min:6',
+        'companyName' => 'required|string|max:255',
+        'companyAddress1' => 'required|string|max:255',
+        'companyAddress2' => 'nullable|string|max:255',
+        'townCity' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'postcode' => 'required|string|max:255',
+        'telephone' => 'required|string|max:255',
+        'businessType' => 'required|string|max:255',
+        'companyReg' => 'required|string|max:255',
+        'website' => 'required|url',
+        'businessEmail' => 'required|string|email|max:255|unique:users',
+        'motorTradeInsurance' => 'required|string|max:255',
+        'vatNumber' => 'required|string|max:255',
+        'firstName' => 'required|string|max:255',
+        'surname' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'jobTitle' => 'required|string|max:255',
+        'phone' => 'required|string|max:255',
+        'personalEmail' => 'required|string|email|max:255|unique:users',
+        'avatar' => 'required|file|mimes:jpg,png,pdf|max:4096',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Request Failed',
-                'errors' => $validator->errors()
-            ], 422);
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation Failed',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    // ✅ Create user
+    $user = new User();
+    $user->fill($request->only([
+        'companyName', 'businessType', 'companyReg', 'website', 'businessEmail',
+        'motorTradeInsurance', 'vatNumber', 'companyAddress1', 'companyAddress2',
+        'townCity', 'country', 'postcode', 'telephone', 'firstName', 'surname',
+        'title', 'jobTitle', 'phone', 'personalEmail'
+    ]));
+    $user->user_type = 0;
+    $user->email_verification_token_status = 0;
+    $user->password = Hash::make($request->password);
+    $user->email_verification_token = strtoupper(Str::random(6));
+
+    // ✅ Avatar upload
+    if ($request->file('avatar')) {
+        $fileName = time() . '__' . $request->file('avatar')->getClientOriginalName();
+        $filePath = public_path('uploads/avatar');
+        $request->file('avatar')->move($filePath, $fileName);
+        $user->avatar = $fileName;
+    }
+
+    $user->save();
+
+  
+    try {
+        Mail::to($user->personalEmail)->send(new VerifyEmail($user));
+    } catch (\Exception $e) {
+        \Log::error('Email sending failed: ' . $e->getMessage());
+    }
+
+   
+ $verifyUrl = route('verify.email.show', ['email' => $user->personalEmail]);
+
+    return response()->json([
+        'success' => true,
+        'redirect_url' => $verifyUrl,
+        'message' => 'Please verify your email'
+    ]);
+
+}
+
+
+public function show($email)
+{
+
+    $user = User::where('personalEmail', $email)->first();
+    if (!$user) {
+        return redirect('/login')->with('error', 'User not found.');
+    }
+    if ($user->email_verification_token_status != 0 || !$user->email_verification_token) {
+        return redirect('/login')->with('error', 'Email already verified or no verification token found.');
+    }
+    return view('auth.verify-email', [
+        'email' => $user->personalEmail
+    ]);
+}
+
+
+public function resendToken(Request $request)
+{
+    $request->validate(['email' => 'required|email']);
+
+    $user = User::where('personalEmail', $request->email)->first();
+
+    if (!$user) {
+        return response()->json(['success' => false, 'message' => 'Email not found.']);
+    }
+
+    if ($user->status == 0) {
+        return response()->json(['success' => false, 'message' => 'Account is blocked.']);
+    }
+
+  
+    if ($user->last_resend_at && !Carbon::parse($user->last_resend_at)->isToday()) {
+            $user->resend_count = 0;
         }
 
-            $user = new User();
+ 
+    $user->resend_count += 1;
+    $user->last_resend_at = now();
 
-            $user->companyName = $request->companyName;
-            $user->businessType = $request->businessType;
-            $user->companyReg = $request->companyReg;
-            $user->website = $request->website;
-            $user->businessEmail = $request->businessEmail;
-            $user->motorTradeInsurance = $request->motorTradeInsurance;
-            $user->vatNumber = $request->vatNumber;
-            $user->companyAddress1 = $request->companyAddress1;
-            $user->companyAddress2 = $request->companyAddress2;
-            $user->townCity = $request->townCity;
-            $user->country = $request->country;
-            $user->postcode = $request->postcode;
-            $user->telephone = $request->telephone;
-            
-            $user->firstName = $request->firstName;
-            $user->surname = $request->surname;
-        
-            $user->title = $request->title;
-            $user->jobTitle = $request->jobTitle;
-            $user->phone = $request->phone;
-            $user->personalEmail = $request->personalEmail;
-            $user->status = $request->status;
-            $user->user_type = 0;
+  
+    if ($user->resend_count > 3) {
+        $user->status = 0; 
+        $user->save();
+        return response()->json([
+            'success' => false,
+            'message' => 'Too many resend attempts. Your account has been blocked.'
+        ]);
+    }
+
+ 
+    $token = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6));
+    $user->email_verification_token = $token;
+    $user->save();
+
+
+    Mail::to($user->personalEmail)->send(new VerifyEmail($user));
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Verification code sent successfully.',
+        'resend_count' => $user->resend_count
+    ]);
+}
+
+
+
+
+public function verifyToken(Request $request)
+{
+    $request->validate([
+        'token' => 'required|size:6',
+        'email' => 'required|email',
+    ]);
+
+    $user = User::where('personalEmail', $request->email)->first();
+
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User not found.'
+        ], 404);
+    }
+
+ 
+    if ($user->status == 0) {
+        if ($user->last_resend_at && Carbon::parse($user->last_resend_at)->addHours(24)->isPast()) {
+  
             $user->status = 1;
+            $user->resend_count = 0;
+            $user->save();
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your account is blocked. Please try again after 24 hours or contact support.'
+            ], 403);
+        }
+    }
 
-            $user->password = FacadesHash::make($request->password);
-            
-            if ($request->file('avatar')) {
-                // Remove existing thumbnail if it exists
-                if ($user->avatar && file_exists(public_path('uploads/' . $user->avatar))) {
-                    unlink(public_path('uploads/' . $user->avatar));
-                }
-                $fileName = time() . '__ff__' . $request->file('avatar')->getClientOriginalName();
-                $filePath = public_path('uploads/avatar');
-                $request->file('avatar')->move($filePath, $fileName);
-                $user->avatar = $fileName;
-                // $user->save();
-            }
 
-            // if ($request->file('uploadID')) {
-            //     // Remove existing thumbnail if it exists
-            //     if ($user->uploadID && file_exists(public_path('uploads/' . $user->uploadID))) {
-            //         unlink(public_path('uploads/' . $user->uploadID));
-            //     }
-            //     $fileName = time() . '__ff__' . $request->file('uploadID')->getClientOriginalName();
-            //     $filePath = public_path('uploads/uploadID');
-            //     $request->file('uploadID')->move($filePath, $fileName);
-            //     // $user->uploadID = $fileName;
-            //      $user->avatar = $fileName;
-            //     // $user->save();
-            // }
+    if ($user->email_verification_token !== $request->token) {
+        $user->resend_count = $user->resend_count + 1;
 
-            // if ($request->file('motorTradeProof')) {
-            //     // Remove existing thumbnail if it exists
-            //     if ($user->motorTradeProof && file_exists(public_path('uploads/' . $user->motorTradeProof))) {
-            //         unlink(public_path('uploads/' . $user->motorTradeProof));
-            //     }
-            //     $fileName = time() . '__ff__' . $request->file('motorTradeProof')->getClientOriginalName();
-            //     $filePath = public_path('uploads/motorTradeProof');
-            //     $request->file('motorTradeProof')->move($filePath, $fileName);
-            //     $user->motorTradeProof = $fileName;
-            //     // $user->save();
-            // }
-
-            // if ($request->file('addressProof')) {
-            //     // Remove existing thumbnail if it exists
-            //     if ($user->addressProof && file_exists(public_path('uploads/' . $user->addressProof))) {
-            //         unlink(public_path('uploads/' . $user->addressProof));
-            //     }
-            //     $fileName = time() . '__ff__' . $request->file('addressProof')->getClientOriginalName();
-            //     $filePath = public_path('uploads/addressProof');
-            //     $request->file('addressProof')->move($filePath, $fileName);
-            //     $user->addressProof = $fileName;
-            //     // $user->save();
-            // }
-
+        if ($user->resend_count >= 3) {
+            // Block the user & save time
+            $user->status = 0;
+            $user->last_resend_at = Carbon::now();
             $user->save();
 
-            Auth::login($user);
-
             return response()->json([
-              'message' => 'Account Registration Complete',
-            ], 201);
+                'success' => false,
+                'message' => 'Too many invalid attempts. Your account has been blocked for 24 hours.'
+            ], 403);
+        }
 
+        $user->save();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid verification code. Attempt ' . $user->resend_count . ' of 3.'
+        ], 422);
     }
+
+
+    $user->email_verification_token_status = 1;
+    $user->resend_count = 0;
+    $user->save();
+
+    Auth::login($user);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Email verified successfully!',
+        'redirect_url' => url('/dashboard')
+    ]);
+}
+
 
 
     public function register_submit1(Request $request)
@@ -569,8 +636,17 @@ class AuthController extends Controller
         }
 
         // Check user account status
-        if ($user->status == 0) {
-            return redirect()->back()->with('error', 'Your account is deactivated.');
+      
+
+        if ($user->email_verification_token_status == 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'This user verification not be done'
+                ], 403);
+        }
+
+          if ($user->status == 0) {
+            return redirect()->back()->with('error', 'Your account is deactivated or blocked. Please contact support.');
         }
     
         // Check membership status
@@ -595,6 +671,8 @@ class AuthController extends Controller
         }
 
     }
+
+    
 
     public function forgotpassword()
     {

@@ -19,10 +19,8 @@ class FuelType
             'Petrol',
             "Diesel", 
             "Electric",
-            "Petrol/Electric",
-            "None", 
-            "Diesel/Electric",
-            "Bi-Fuel",
+            "Hybrid",
+            "Other"
         ];
 
     }

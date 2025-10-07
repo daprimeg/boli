@@ -33,43 +33,7 @@
         }
 
 
-        .custom-btn {
-            background-color: var(--bs-primary);
-            color: #fff;
-            border: none;
-            padding: 5px 15px;
-            border-radius: var(--btn-border-radis);
-
-            font-size: var(--font-p1);
-            border-radius: var(--btn-border-radis);
-        }
-
-        .custom-btn:hover {
-            background-color: #0080ffd4;
-        }
-
-        .custom-btn::after {
-            display: inline-block;
-            margin-left: 5px;
-            vertical-align: middle;
-            content: "▼";
-            font-size: var(--font-p1);
-        }
-
-        .dropdown-menu {
-            background-color: #1e3a8a;
-            border: none;
-            border-radius: var(--btn-border-radis);
-        }
-
-        .dropdown-item {
-            color: #fff;
-            padding: 5px 15px;
-        }
-
-        .dropdown-item:hover {
-            background-color: #2a2a40;
-        }
+     
     </style>
 
     {{-- Top bar Css --}}
@@ -427,60 +391,57 @@ function updatePlatformCenterUI(platforms, centers, recordsTotal) {
 
 
 
-        $(document).on('click', '.PreviousBtnRec', function() {
-            let reg = $(this).data('ref');
-            if (!reg) return;
+$(document).on('click', '.PreviousBtnRec', function() {
+    let reg = $(this).data('ref');
+    if (!reg) return;
 
-            $.ajax({
-                url: '{{ route('reauctioninfo') }}',
-                method: 'POST',
-                data: {
-                    reg: reg,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.length === 0) {
-                        $('#vehicleModalTableBody').html(
-                            '<tr><td colspan="6">No data found.</td></tr>');
-                        return;
-                    }
+    // ✅ Check whether Upcoming checkbox is checked
+    let isUpcoming = $('#Upcoming').is(':checked') ? 1 : 0;
 
+    $.ajax({
+        url: '{{ route('reauctioninfo') }}',
+        method: 'POST',
+        data: {
+            reg: reg,
+            upcoming: isUpcoming, // ✅ send flag to backend
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            if (response.length === 0) {
+                $('#vehicleModalTableBody').html(
+                    '<tr><td colspan="6">No data found.</td></tr>');
+                return;
+            }
 
+            $('.vehicleName').html(
+                response[0].name + ' - ' + response[0].variant + ' - ' +
+                '<small class="text-danger" style="font-size: 80%;">' + reg + '</small>'
+            );
 
-                    $('.vehicleName').html(
-                        response[0].name + ' - ' + response[0].variant + ' - ' +
-                        '<small class="text-danger" style="font-size: 80%;">' + reg + '</small>'
-                    );
-
-
-                    $('#vehicleModalTableBody').empty();
-                    response.forEach(function(item) {
-                        let row = `
+            $('#vehicleModalTableBody').empty();
+            response.forEach(function(item) {
+                let row = `
                     <tr>
-                        <td style = " font-size: var(--font-p2);color: var(--bs-heading-color);">${item.platform}</td>
-                        <td style = " font-size: var(--font-p2); color: var(--bs-heading-color);">${item.center}</td>
-                        <td style = " font-size: var(--font-p2);
-                    color: var(--bs-heading-color);">${item.last_bid}</td>
-                        <td style = " font-size: var(--font-p2);
-                    color: var(--bs-heading-color);">${item.status}</td>
-                        <td style = " font-size: var(--font-p2);
-                    color: var(--bs-heading-color);">${item.difference}</td>
-                        <td style = " font-size: var(--font-p2);
-                    color: var(--bs-heading-color);">${item.time}</td>
-                    </tr>
-                `;
-                        $('#vehicleModalTableBody').append(row);
-                    });
-
-                    $('#vehicleModal').modal('show');
-                },
-                error: function() {
-                    $('#vehicleModalTableBody').html(
-                        '<tr><td colspan="6">Failed to load data.</td></tr>');
-                    $('#vehicleModal').modal('show');
-                }
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.platform}</td>
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.center}</td>
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.last_bid}</td>
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.status}</td>
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.difference}</td>
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.time}</td>
+                    </tr>`;
+                $('#vehicleModalTableBody').append(row);
             });
-        });
+
+            $('#vehicleModal').modal('show');
+        },
+        error: function() {
+            $('#vehicleModalTableBody').html(
+                '<tr><td colspan="6">Failed to load data.</td></tr>');
+            $('#vehicleModal').modal('show');
+        }
+    });
+});
+
 
 
 

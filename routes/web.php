@@ -77,6 +77,11 @@ Route::get('/explore/newss', [WebController::class, 'newss']);
 Route::get('/login',  [AuthController::class, 'login'])->name('login');
 Route::post('/login_submit', [AuthController::class, 'login_submit']);
 
+
+Route::get('/verify-email/{email}', [AuthController::class, 'show'])->name('verify.email.show');
+Route::post('/verify-email-token', [AuthController::class, 'verifyToken'])->name('verify.email.submit');
+Route::post('/verify-email/resend', [AuthController::class, 'resendToken'])->name('verify.email.resend');
+
 // Google auth
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
@@ -346,6 +351,8 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             
             // compare
             Route::get('/compare', [CompareController::class,'index'])->name('compare');
+            Route::get('/compare/head', [CompareController::class, 'fetchHead'])->name('compare.head');
+            Route::post('/compare/body', [CompareController::class, 'fetchBody']);
             Route::get('/get-models-variants/{make_id}', [CompareController::class, 'getModelsAndVariants']);
             
             

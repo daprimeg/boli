@@ -15,32 +15,28 @@ class GoogleController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function handleGoogleCallback()
-    {
-        try {
-            $googleUser = Socialite::driver('google')->user();
+public function handleGoogleCallback()
+{
+    try {
+        $googleUser = Socialite::driver('google')->user();
 
-      
-            $user = User::where('personalEmail', $googleUser->getEmail())->first();
+        // Find user by email
+        $user = User::where('personalEmail', $googleUser->getEmail())->first();
 
-            if (!$user) {
-              
-                $user = User::create([
-                    'personalEmail' => $googleUser->getEmail(),
-                    'firstName' => $googleUser->user['given_name'] ?? '',
-                    'surname' => $googleUser->user['family_name'] ?? '',
-                    'avatar' => $googleUser->getAvatar(),
-                    'password' => Hash::make(uniqid()), 
-                    'status' => 1,
-                ]);
-            }
-
-       
-            Auth::login($user);
-
-            return redirect('/dashboard'); 
-        } catch (\Exception $e) {
-            return redirect('/login')->with('error', 'Google login failed. Please try again.');
+        // If user does not exist, redirect with custom message
+        if (!$user) {
+            return redirect('/register')
+                ->with('error', 'No account found for this Google email. Please sign up first.');
         }
+
+        // Login existing user
+        Auth::login($user);
+
+        return redirect('/dashboard');
+    } catch (\Exception $e) {
+        \Log::error('Google Login Error: ' . $e->getMessage());
+        return redirect('/login')->with('error', 'Google login failed. Please try again.');
     }
+}
+
 }

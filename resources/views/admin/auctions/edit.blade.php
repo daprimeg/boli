@@ -87,6 +87,7 @@
                                  <option value="Planned" {{ $auction->status == 'Planned' ? 'selected' : '' }}>Planned</option>
                                  <option value="In Progress" {{ $auction->status =='In Progress' ? 'selected' : '' }}>InProgress</option>
                                  <option value="Update" {{ $auction->status =='Update' ? 'selected' : '' }}>Update</option>
+                                 <option value="Done" {{ $auction->status =='Done' ? 'selected' : '' }}>Done</option>
                                  <option value="Cancel" {{ $auction->status =='Cancel' ? 'selected' : '' }}>Cancel</option>
                                  {{-- <option value="updated" {{ $auction->status == 'updated' ? 'selected' : '' }}>Updated</option>
                                  <option value="cancel" {{ $auction->status == 'cancel' ? 'selected' : '' }}>Cancel</option> --}}

@@ -76,6 +76,13 @@
   padding-left: 15px !important;
 
 }
+.form-label.required::after {
+    content: " *";
+    color: red;
+    font-weight: bold;
+}
+
+
 
 </style>
 @endsection
@@ -104,27 +111,24 @@
 
 
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label" for="make_id">Make</label>
-                                <select name="make_id" id="make_id" class="form-control make select2" required>
-                                    <option value="">Select Make</option>
-                                </select>
-                            </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label required" for="make_id">Make</label>
+                            <select name="make_id" id="make_id" class="form-control make select2" required>
+                                <option value="">Select Make</option>
+                            </select>
                         </div>
+                    </div>
 
-
-
-
-                        <!-- Model -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label" for="model_id">Model</label>
-                                <select name="model_id" id="model_id" class="form-control model select2">
-                                    <option value="">Select Model</option>
-                                </select>
-                            </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label required" for="model_id">Model</label>
+                            <select name="model_id" id="model_id" class="form-control model select2" required>
+                                <option value="">Select Model</option>
+                            </select>
                         </div>
+                    </div>
+
 
                         <!-- Variant -->
                         <div class="col-md-3">
@@ -137,17 +141,18 @@
                         </div>
 
                         <!-- Year -->
-                        <div class="col-md-3">
+                        <div class="col-md-3 py-3">
                             <div class="form-group">
                                 <label class="form-label" for="year">Year</label>
                                 <select name="year" id="year" class="form-control select2">
                                     <option value="">Select Year</option>
-                                    @for ($i = date('Y'); $i >= 1990; $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
+                                    @foreach ($years as $item)
+                                        <option value="{{ $item }}">{{ $item }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
+
 
                         <!-- Mileage -->
                     <div class="col-md-3 py-3">
@@ -200,13 +205,13 @@
                                 <label class="form-label" for="transmission">Transmission</label>
                                 <select name="transmission" id="transmission" class="form-control select2">
                                     <option value="">Select Transmission</option>
-                                    <option value="Automatic">Automatic</option>
-                                    <option value="Auto/Manual Mode">Auto/Manual Mode</option>
-                                    <option value="Manual Transmission">Manual Transmission</option>
-                                    <option value="Auto Clutch">Auto Clutch</option>
+                                    @foreach ($transmissions as $item)
+                                        <option value="{{ $item }}">{{ $item }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
+
 
                         <!-- Fuel -->
                         <div class="col-md-3 py-3">
@@ -223,19 +228,18 @@
                         </div>
 
 
-                        <div class="col-md-3 py-3">
-                            <div class="form-group">
-                                <label class="form-label" for="grade">Grade</label>
-                                <select name="grade" id="grade" class="form-control select2" required>
-                                    <option value="">Select Grade</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
+                    <div class="col-md-3 py-3">
+                        <div class="form-group">
+                            <label class="form-label" for="grade">Grade</label>
+                            <select name="grade" id="grade" class="form-control select2">
+                                <option value="">Select Grade</option>
+                                @foreach ($grades as $item)
+                                    <option value="{{ $item }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                    </div>
+
 
                         <!-- Auction -->
                     <div class="col-md-3 py-3">
@@ -280,15 +284,11 @@
                         <div class="table-section" style="width: 100%;">
                             <div class="table-container" style="width: 100%; overflow-x: auto;">
                                 <table class="comparison-table" style="width: 100%; border-collapse: collapse;">
-                                    <thead>
-                                        <tr id="comparison-head">
-                                            <th class="row-header">
-                                                <p>Vehicle in Auctions</p>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="comparison-body">
-                                    </tbody>
+                                       <thead>
+                                            <tr id="comparison-head"></tr>
+                                        </thead>
+                                     <tbody id="comparison-body"></tbody>
+ 
                                 </table>
                             </div>
                         </div>
@@ -298,6 +298,9 @@
             </div>
         </div>
     </div>
+
+
+    
 @endsection
 
 @section('js')

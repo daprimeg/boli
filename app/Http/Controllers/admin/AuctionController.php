@@ -23,7 +23,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-
+use App\Models\User;
+use App\Mail\AuctionStatusUpdatedMail;
+use App\Models\UserNotificationAlert;
+use App\Events\NotificationEvent;
 class AuctionController extends Controller
 {
 
@@ -349,7 +352,7 @@ class AuctionController extends Controller
             'end_date' => 'nullable',
             'auction_type' => 'required|string|max:255',
             'platform_id' => 'required|integer',
-            'status' => 'required|in:Planned,In Progress,Cancel,Update',
+            'status' => 'required|in:Planned,In Progress,Cancel,Update,Done',
             'csv_path' => 'nullable|file|mimes:csv,txt',
         ]);
 
@@ -485,18 +488,26 @@ class AuctionController extends Controller
 
             if ($request->hasFile('csv_path')) {
 
-                // Delete previous CSV file if exists
+           
                 if ($old_url  && Storage::exists($old_url)) {
                     Storage::delete($old_url);
                 }
 
-                //Now Uploading New CSV File
                 $csvFile = $request->file('csv_path');
                 $filename = time() . '_' . $csvFile->getClientOriginalName();
                 $path = $csvFile->storeAs('uploads/csv', $filename);
                 $auction->csv_path = $path;
                 $auction->save();
             }
+
+     
+            if ($request->status == 'Update') {
+              
+                $this->SendAuctionStatusUpdatedMail($auction, $request->status);
+                
+                
+            }
+
 
             return redirect('/admin/auctions')->with('success', 'Auction updated successfully.');
 
@@ -506,6 +517,47 @@ class AuctionController extends Controller
         }
 
     }
+
+public function SendAuctionStatusUpdatedMail($auction, $status)
+{
+    $emails = User::whereIn('id', function($query) {
+                    $query->select('user_id')
+                        ->from('user_notification_settings')
+                        ->where('type', 'auction_updates')
+                        ->where('email', 1)
+                        ->where(function($q) {
+                            $q->where('send_preference', 'anytime')
+                              ->orWhereNull('send_preference');
+                        });
+                })
+                ->whereNotNull('personalEmail')
+                ->where('personalEmail', '!=', '')
+                ->get(); // 👈 changed from pluck() to get() so we can loop users
+
+    if ($emails->isNotEmpty()) {
+        try {
+            // send mail to all
+            Mail::to($emails->pluck('personalEmail')->toArray())
+                ->send(new AuctionStatusUpdatedMail($auction, $status));
+
+     
+            foreach ($emails as $user) {
+                $title = 'Auction Status Updated';
+                $message = "Auction '{$auction->title}' status changed to '{$status}'.";
+                $link = url('/auctionscheduler'); 
+                $image = 'https://w7.pngwing.com/pngs/332/735/png-transparent-gavel-auction-computer-icons-judiciary-text-computer-logo.png'?? null;
+
+                event(new NotificationEvent($user, $title, $message, $link, $image));
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Failed to send Auction Status Update mail: ' . $e->getMessage());
+        }
+    } else {
+        \Log::info('No users subscribed to auction update emails.');
+    }
+}
+
 
 
     public function destroy($id)

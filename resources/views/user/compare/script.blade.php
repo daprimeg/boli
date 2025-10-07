@@ -1,117 +1,131 @@
 <script>
 $(document).ready(function() {
 
-function loadComparisonData(filters = {}) {
+function loadComparisonHead(extraFilters = {}) {
+    let filters = {
+        make_id: $('#make_id').val(),
+        model_id: $('#model_id').val(),
+        variant_id: $('#variant_id').val(),
+        year: $('#year').val(),
+        mileage_from: $('#mileage_from').val(),
+        mileage_to: $('#mileage_to').val(),
+        transmission: $('#transmission').val(),
+        fuel: $('#fuel').val(),
+        grade: $('#grade').val(),
+        platform_id: $('#platform_id').val(),
+        ...extraFilters 
+    };
+
     $.ajax({
-        url: "{{ url('/compare') }}",
+        url: "{{ url('/compare/head') }}",
         type: "GET",
         data: filters,
         dataType: "json",
         success: function(response) {
-            let headRow = $('#comparison-head');
-            let body = $('#comparison-body');
-
-            headRow.empty();
-            body.empty();
-
-            headRow.append(`<th style="min-width: 180px; padding: 10px; text-align: left;"></th>`);
-
-            let auctionsShown = {};
-            response.data.forEach(vehicle => {
-                if (!auctionsShown[vehicle.auction_id]) {
-                    auctionsShown[vehicle.auction_id] = true;
-
-             
-                    let vehicleName = `${vehicle.make_name ?? ''} ${vehicle.model_name ?? ''} ${vehicle.year ?? ''}`.trim();
-
-              
-                    let imageList = [];
-                    if (vehicle.images && typeof vehicle.images === 'string') {
-                        imageList = vehicle.images.split(',').map(img => img.trim());
-                    }
-
-                    let firstImage = imageList.length > 0 ? imageList[0] : 'no-image.jpg'; 
-
-                    headRow.append(`
-                        <th class="vehicle-header" style="min-width: 200px; padding: 12px; text-align: center; vertical-align: top;">
-                            <div class="vehicle-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; transition: transform 0.2s ease;">
-                                <div class="card-content">
-                                    <img src="${firstImage}" 
-                                         alt="${vehicleName}" 
-                                         style="height: 150px; object-fit: cover; border-radius: 6px; margin-bottom: 10px;">
-                                    <div class="vehicle-name" style="font-size: 14px; font-weight: 600; white-space: nowrap;  margin-bottom: 6px;">
-                                        ${vehicleName}
-                                    </div>
-                                    <span style="display: inline-block; font-size: 11px; padding: 3px 8px; border: 1px solid #0ea5e9; color: #0ea5e9; border-radius: 4px; margin-bottom: 8px;">
-                                        ${vehicle.platform_name ?? 'Unknown Auction'}
-                                    </span>
-                                    <hr style="border: none; height: 2px; background-color: #0ea5e9; margin: 8px auto; width: 60%;">
-                                    <div class="card-actions" style="display: flex; gap: 6px; justify-content: center;">
-                                        <a href="${vehicle.inspection_report }"  target="_blank" style="padding: 5px 12px; font-size: 12px; background-color: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                            Report
-                                        </a>
-                                        <a href="{{ url('/auction-finder/vehicle') }}/${vehicle.id}"  target="_blank"
-                                           style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                            View
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                    `);
-                }
-            });
-
-            let attributes = [
-                { section: 'Auc', label: 'Auction House', key: 'platform_name' },
-                { section: 'Auc', label: 'Center', key: 'center_name' },
-                { section: 'Auc', label: 'Auc Type', key: 'auction_type' },
-                { section: 'Auc', label: 'Date & Time', key: 'auction_date' },
-                { section: 'Valuation', label: 'Autoboli Suggested', key: 'autoboli_suggested' },
-                { section: 'Valuation', label: 'Cap Clean', key: 'cap_clean' },
-                { section: 'Valuation', label: 'Cap Avg', key: 'cap_avg' },
-                { section: 'Valuation', label: 'Cap Blue', key: 'cap_blue' },
-                { section: 'Auc Results', label: 'Starting Bid', key: 'start_bid' },
-                { section: 'Auc Results', label: 'Last Bid', key: 'last_bid' },
-                { section: 'Auc Results', label: 'Auc Status', key: 'bidding_status' },
-                { section: 'Spec', label: 'Mileage', key: 'mileage' },
-                { section: 'Spec', label: 'CC', key: 'cc' },
-                { section: 'Spec', label: 'V5', key: 'v5' },
-                { section: 'Spec', label: 'Last Service', key: 'last_service' },
-                { section: 'Spec', label: 'Former Keeper', key: 'former_keepers' },
-                { section: 'Spec', label: 'MOT Ex', key: 'mot_expiry_date' }
-            ];
-
-            if (response.data.length === 0) {
-                body.append(`<tr><td colspan="100%" style="text-align:center; padding: 20px; font-size: 16px; color: red;">No Data Found</td></tr>`);
+            if (response.status === "error") {
+                toastr.error(response.message);
                 return;
             }
 
-            let lastSection = null;
+            let headRow = $('#comparison-head');
+            headRow.empty();
 
-            attributes.forEach(attr => {
-                if (attr.section !== lastSection) {
-                    lastSection = attr.section;
-                    body.append(`
-                        <tr style="background-color: #003366; color: white;">
-                            <td colspan="${Object.keys(auctionsShown).length + 1}" style="font-weight: bold; padding: 10px; font-size: 16px;">
-                                ${lastSection}
-                            </td>
-                        </tr>
-                    `);
+            headRow.append(`<th style="min-width: 180px; padding: 10px; text-align: left;"></th>`);
+            let vehicleIds = [];
+
+            response.data.forEach(vehicle => {
+                vehicleIds.push(vehicle.id); 
+                let vehicleName = `${vehicle.make_name ?? ''} ${vehicle.model_name ?? ''} ${vehicle.variant_name ?? ''} ${vehicle.year ?? ''}`.trim();
+                let firstImage = (vehicle.images?.split(',')[0] || 'no-image.jpg').trim();
+                const baseUrl = "{{ asset('public/uploads/platforms/') }}/";
+                const platformImage = vehicle.platform_image
+                    ? `${baseUrl}${vehicle.platform_image}`
+                    : "{{ asset('images/default-platform.png') }}";
+
+                let selectorOptions = `<option value="">-- Select Other Vehicle --</option>`;
+                if (vehicle.other_vehicles && vehicle.other_vehicles.length > 0) {
+                    vehicle.other_vehicles.forEach(v => {
+                        let img = v.images ? v.images.split(',')[0].trim() : '';
+                        let text = `${v.make_name} ${v.model_name} ${v.variant_name ?? ''} (${v.year ?? ''})`;
+                        selectorOptions += `<option value="${v.id}" data-auction="${vehicle.auction_id}" data-image="${img}">${text}</option>`;
+                    });
+                } else {
+                    selectorOptions += `<option disabled>No other vehicles</option>`;
                 }
 
-                let row = `<tr><td class="row-label" style="padding: 10px; font-weight: bold; min-width: 180px;">${attr.label}</td>`;
-
-                Object.keys(auctionsShown).forEach(auctionId => {
-                    let vehicle = response.data.find(v => v.auction_id == auctionId);
-                    let value = vehicle[attr.key] ?? 'N/A';
-                    row += `<td class="cell-data" style="padding: 10px; min-width: 200px; text-align: center;">${value}</td>`;
-                });
-
-                row += `</tr>`;
-                body.append(row);
+                headRow.append(`
+                    <th class="vehicle-header" style="min-width: 240px; padding: 12px; text-align: center; vertical-align: top;">
+                        <div class="vehicle-card"
+                            style="background: #03326a; color: #fff; border: 1px solid #1e293b; border-radius: 12px; padding: 14px;
+                                    transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(255,255,255,0.05); cursor: pointer;">
+                            <div class="platform-info" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px;">
+                                <img src="${platformImage}" alt="Platform"
+                                    style="width: 60px; height: 30px; object-fit: contain; border-radius: 6px; background-color: #fff; border: 1px solid #0ea5e9; padding: 4px;">
+                                <span style="font-size: 13px; font-weight: 600;">${vehicle.platform_name ?? 'Unknown Platform'}</span>
+                            </div>
+                            <hr style="border: none; height: 1px; background-color: #0ea5e9; width: 70%; margin: 6px auto; opacity: 0.7;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 12px 0; padding: 8px 10px; background: #03326a; border-radius: 1px; border: 1px solid ##03326a;">
+                                <img src="${firstImage}" alt="${vehicleName}" style="width: 90px; height: 65px; object-fit: cover; border-radius: 6px; border: 1px solid #334155; background: #111827;">
+                                <div style="flex: 1; text-align: left; color: #fff; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    ${vehicleName}
+                                </div>
+                            </div>
+                            <div style="margin: 10px 0; text-align: left;">
+                                <label style="display: block; font-size: 12px; font-weight: 500; color: #94a3b8; margin-bottom: 4px;">Other Similar Cars</label>
+                                <select class="vehicle-selector"
+                                    style="width: 100%; background-color: #0f172a; color: #e2e8f0; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 8px; font-size: 12px; cursor: pointer;">
+                                    ${selectorOptions}
+                                </select>
+                            </div>
+                            <div style="display: flex; gap: 8px; justify-content: center; margin-top: 8px;">
+                                <a href="${vehicle.inspection_report}" target="_blank"
+                                    style="padding: 5px 12px; font-size: 12px; background-color: #dc2626; color: white; border: none; border-radius: 5px;">Report</a>
+                                <a href="{{ url('/auction-finder/vehicle') }}/${vehicle.id}" target="_blank"
+                                    style="padding: 5px 12px; font-size: 12px; background-color: #2563eb; color: white; border: none; border-radius: 5px;">View</a>
+                            </div>
+                        </div>
+                    </th>
+                `);
             });
+
+          
+            if (vehicleIds.length > 0) {
+                loadComparisonBody(vehicleIds);
+            }
+
+         
+            $('.vehicle-selector').each(function() {
+                $(this).select2({
+                    width: '100%',
+                    templateResult: function(state) {
+                        if (!state.id) return state.text; 
+                        let img = $(state.element).data('image');
+                        if (img) {
+                            return $(`<span style="display:flex; align-items:center;"><img src="${img}" style="width:50px; height:auto; margin-right:8px; border-radius:4px;"> ${state.text}</span>`);
+                        }
+                        return state.text;
+                    },
+                    templateSelection: function(state) {
+                        return state.text;
+                    }
+                });
+            });
+
+            
+            $('.vehicle-selector').off('change').on('change', function() {
+                const vehicleId = $(this).val();
+                const auctionId = $(this).find(':selected').data('auction');
+                if (vehicleId && auctionId) {
+                    loadComparisonHead({
+                        auction_id: auctionId,
+                        vehicle_id: vehicleId
+                    });
+                }
+            });
+        },
+        error: function(xhr) {
+            let msg = xhr.responseJSON?.message || "Something went wrong";
+            toastr.error(msg);
         }
     });
 }
@@ -119,30 +133,62 @@ function loadComparisonData(filters = {}) {
 
 
 
-    $('#searchBtn').on('click', function() {
-        let filters = {
-            vehicle: $('#vehicle').val(),
-            make_id: $('#make_id').val(),
-            model_id: $('#model_id').val(),
-            variant_id: $('#variant_id').val(),
-            year: $('#year').val(),
-            mileage_from: $('#mileage_from').val(),
-            mileage_to: $('#mileage_to').val(),
-            transmission: $('#transmission').val(),
-            fuel: $('#fuel').val(),
-            grade: $('#grade').val(),
-            platform_id: $('#platform_id').val(),
-        };
 
-        let allEmpty = Object.values(filters).every(v => v === "" || v === null);
-        if (allEmpty) {
-            loadComparisonData();
-        } else {
-            loadComparisonData(filters);
+function loadComparisonBody(vehicleIds = []) {
+    let body = $('#comparison-body');
+    body.empty();
+
+    if (vehicleIds.length === 0) {
+        body.append('<tr><td colspan="100%" style="text-align:center; padding:20px; font-size:16px; color:red;">No Vehicles Selected</td></tr>');
+        return;
+    }
+
+    $.ajax({
+        url: "{{ url('/compare/body') }}",
+        type: "POST",
+        data: { vehicle_ids: vehicleIds, _token: "{{ csrf_token() }}" },
+        success: function(response) {
+            body.html(response.html);
+        },
+        error: function(xhr) {
+            let msg = xhr.responseJSON?.message || "Something went wrong";
+            toastr.error(msg);
         }
     });
+}
 
-    // Make → Model → Variant cascading
+
+
+$('#searchBtn').on('click', function() {
+    let makeId = $('#make_id').val();
+    let modelId = $('#model_id').val();
+
+ 
+    if (!makeId || !modelId) {
+        toastr.error('Please select both Make and Model before searching.');
+        return; 
+    }
+
+    let filters = {
+        make_id: makeId,
+        model_id: modelId,
+        variant_id: $('#variant_id').val(),
+        year: $('#year').val(),
+        mileage_from: $('#mileage_from').val(),
+        mileage_to: $('#mileage_to').val(),
+        transmission: $('#transmission').val(),
+        fuel: $('#fuel').val(),
+        grade: $('#grade').val(),
+        platform_id: $('#platform_id').val(),
+    };
+
+    // 🔹 Load only head if make + model provided
+    loadComparisonHead(filters);
+});
+
+
+
+ 
     $('#make_id').on('change', function() {
         var makeId = $(this).val();
         $('#model_id').empty().append('<option value="">Select Model</option>');

@@ -4,6 +4,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="{{asset('public/theme/css/toastr.min.css')}}">
     @include('admin.partial.head')
+    <style>
+
+#toast-container > .toast-error {
+    background-color: #dc2626 !important;  
+    color: #fff !important;
+    font-weight: 500;
+    border-left: 5px solid #b91c1c !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.5);
+}
+
+    </style>
     @yield('css')
 </head>
 <body>

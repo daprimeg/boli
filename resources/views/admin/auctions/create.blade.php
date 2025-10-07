@@ -77,8 +77,6 @@
                                  <option value=""> --Status--</option>
                                  <option value="Planned"{{old('status')=='Planned' ? 'selected':''}} >Planned</option>
                                  <option value="In Progress"{{old('status')=='In Progress' ? 'selected':''}}>InProgress</option>
-                                 <option value="Update" {{old('status')=='Update' ? 'selected':''}}>Update</option>
-                                 <option value="Cancel" {{old('status')=='Cancel' ? 'selected':''}} >Cancel</option>
                               </select>
                               </div>
                            </div>

@@ -359,8 +359,14 @@
                     success: function (response) {
                         
                         // console.log(response);
-                        alert("Form submitted successfully!");
-                        window.location.href = "{{url('/dashboard')}}";
+                      
+                      if(response.success && response.redirect_url){
+                            // Redirect to the URL returned by server
+                            window.location.href = response.redirect_url;
+                            // Or open in new tab: window.open(response.redirect_url, '_blank');
+                        } else {
+                            alert(response.message || "Form submitted successfully!");
+                        }
                         $('button[type=submit]').prop('disabled', false);
                         $('button[type=submit]').text("Submit Application");
 

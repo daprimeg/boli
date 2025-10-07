@@ -43,15 +43,16 @@ public function index(Request $request)
         $today = now()->toDateString();
         $auctionFilter = $request->auction_filter ?? 'Today';
 
+        // ✅ Select auction IDs based on filter
         $auctionIds = DB::table('auctions')
             ->when($auctionFilter === 'Upcoming', function ($q) use ($today) {
-                $q->whereDate('auction_date', '>=', $today);
+                $q->whereDate('auction_date', '>', $today);
             }, function ($q) use ($today) {
                 $q->whereDate('auction_date', '=', $today);
             })
             ->pluck('id');
 
-  
+        // ✅ Base vehicle query
         $query = DB::table('vehicles')
             ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
             ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
@@ -60,12 +61,32 @@ public function index(Request $request)
             ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
             ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
             ->whereIn('vehicles.auction_id', $auctionIds)
-            ->whereExists(function ($subQuery) use ($today) {
+            
+            // ✅ If Today → include only vehicles that have previous record before today
+            // ✅ If Upcoming → include only vehicles that have any record before the upcoming date
+            ->whereExists(function ($subQuery) use ($today, $auctionFilter) {
                 $subQuery->select(DB::raw(1))
                     ->from('vehicles as v2')
                     ->join('auctions as a2', 'a2.id', '=', 'v2.auction_id')
                     ->whereColumn('v2.reg', 'vehicles.reg')
-                    ->whereDate('a2.auction_date', '<', $today);
+                    ->when($auctionFilter === 'Upcoming', function ($q) use ($today) {
+                        $q->whereDate('a2.auction_date', '<=', $today);
+                    }, function ($q) use ($today) {
+                        $q->whereDate('a2.auction_date', '<', $today);
+                    });
+            })
+            
+            // ✅ Always pick latest entry per reg (based on filter)
+            ->whereIn('vehicles.id', function ($sub) use ($today, $auctionFilter) {
+                $sub->select(DB::raw('MAX(v3.id)'))
+                    ->from('vehicles as v3')
+                    ->join('auctions as a3', 'a3.id', '=', 'v3.auction_id')
+                    ->when($auctionFilter === 'Upcoming', function ($q) use ($today) {
+                        $q->whereDate('a3.auction_date', '>', $today);
+                    }, function ($q) use ($today) {
+                        $q->whereDate('a3.auction_date', '=', $today);
+                    })
+                    ->groupBy('v3.reg');
             })
             ->select(
                 'vehicles.*',
@@ -77,7 +98,7 @@ public function index(Request $request)
                 'model_variant.name as model_variant_name'
             );
 
-
+        // 🔍 Filter by interest
         if ($request->filled('interest_id')) {
             $interest = Interest::find($request->interest_id);
             if ($interest) {
@@ -87,6 +108,7 @@ public function index(Request $request)
             }
         }
 
+        // 🔍 Search
         if ($request->filled('search.value')) {
             $search = $request->input('search.value');
             $query->where(function ($q) use ($search) {
@@ -99,17 +121,18 @@ public function index(Request $request)
             });
         }
 
+        // ✅ Filter in-progress
         if ($request->inprogress_check == 1) {
             $query->where('vehicles.bidding_status', 'inprogress');
         }
 
-    
         $totalRecords = (clone $query)->count();
         $start = $request->input('start', 0);
         $length = $request->input('length', 10);
 
         $vehicles = $query->skip($start)->take($length)->get();
 
+        // Platforms & Centers (same)
         $platforms = DB::table('auctions')
             ->join('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
             ->whereIn('auctions.id', $auctionIds)
@@ -126,7 +149,7 @@ public function index(Request $request)
             ->filter()
             ->values();
 
-
+        // 🔁 Format Data
         $data = $vehicles->map(function ($vehicle) use ($today) {
             $bids = DB::table('vehicles')
                 ->join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
@@ -180,11 +203,10 @@ public function index(Request $request)
                 $vehicle->last_bid ?? 'N/A',
                 $vehicle->bidding_status ?? 'N/A',
                 $diffText,
-                \Carbon\Carbon::parse($vehicle->created_at)->format('Y-m-d H:i'),
+                \Carbon\Carbon::parse($vehicle->auction_date)->format('Y-m-d H:i'),
                 $actions
             ];
         });
-
 
         return response()->json([
             'draw' => intval($request->input('draw')),
@@ -209,9 +231,12 @@ public function index(Request $request)
 
 
 
+
 public function information(Request $request)
 {
     $reg = str_replace('+', ' ', $request->input('reg'));
+    $upcoming = $request->input('upcoming'); // 1 = upcoming checked
+    $today = now()->toDateString();
 
     $vehicles = Vehicle::query()
         ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
@@ -221,18 +246,27 @@ public function information(Request $request)
         ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
         ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
         ->where('vehicles.reg', 'LIKE', "%{$reg}%")
+        ->when($upcoming == 1, function ($q) use ($today) {
+            // ✅ Show today's and future auctions
+            $q->whereDate('auctions.auction_date', '>=', $today);
+        }, function ($q) use ($today) {
+            // ✅ Show only previous auctions
+            $q->whereDate('auctions.auction_date', '<', $today);
+        })
         ->select(
             'vehicles.*',
             'make.name as make_name',
             'model.name as model_name',
             'model_variant.name as model_variant_name',
             'auction_platform.name as platform_name',
-            'auction_center.name as center_name'
+            'auction_center.name as center_name',
+            'auctions.auction_date'
         )
+        ->orderBy('auctions.auction_date', 'desc')
         ->get();
 
     if ($vehicles->isEmpty()) {
-        return response()->json(['error' => 'Vehicle not found'], 404);
+        return response()->json([]);
     }
 
     $response = [];
@@ -246,7 +280,7 @@ public function information(Request $request)
             'last_bid'   => $vehicle->last_bid,
             'status'     => $vehicle->bidding_status,
             'difference' => 'Waiting',
-            'time' => \Carbon\Carbon::parse($vehicle->created_at)->format('Y-m-d H:i'),
+            'time'       => \Carbon\Carbon::parse($vehicle->auction_date)->format('Y-m-d H:i'),
         ];
     }
 
