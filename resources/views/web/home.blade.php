@@ -55,29 +55,16 @@
                         </div>
                     </div>
                     <img src="{{ asset('public/theme/assets/web/images/Reauction.png') }}" alt
-                        class="absolute -right-60 bottom-12 w-auto h-[800px] object-cover pointer-events-none -rotate-6 rounded-md" />
-
-                    <!-- Right: Image -->
-                    <!-- <div class="flex-1 animate-in-right relative">
-                                                                                              <div
-                                                                                                class=""
-                                                                                              >
-                                                                                                <img
-                                                                                                  src="/assets/images/Reauction.png"
-                                                                                                  alt="AutoBoli auction preview"
-                                                                                                  class="w-full h-[700px] object-fill rounded-2xl -rotate-6"
-                                                                                                />
-                                                                                              </div>
-                                                                                            </div> -->
+                        class="absolute -right-60 bottom-12 w-auto hidden xl:block xl:h-[550px] 2xl:h-[800px]  object-cover pointer-events-none -rotate-6 rounded-md" />
                 </div>
             </div>
     </section>
     </section>
 
     <div class="bg-[#f5f6f7] dark:bg-[#0f1c2c]">
-        <section class="w-full mx-auto space-y-8 py-20">
+        <section class="w-full  mx-auto space-y-8 py-20">
             <!-- Big Companies -->
-            <div class="mx-auto max-w-7xl flex gap-x-24 items-center justify-between">
+            <div class="mx-auto max-w-md  lg:max-w-7xl flex gap-x-5 lg:gap-x-24 items-center justify-between">
                 <img src="https://imgs.search.brave.com/xrplqjvdppbclNQwn6dchA3Lv3ysy0nZ6AcJRMW9nYo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cG5nYWxsLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMTMvWm9v/bS1Mb2dvLnBuZw"
                     width="8%" alt />
                 <img src="https://imgs.search.brave.com/0SrVHhsedWleOhtFNh7fto6Pi7OxgRZYqGYnL7_r83Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9sb2dv/cy13b3JsZC5uZXQv/d3AtY29udGVudC91/cGxvYWRzLzIwMjAv/MDkvTWljcm9zb2Z0/LUxvZ28tNzAweDM5/NC5wbmc"
