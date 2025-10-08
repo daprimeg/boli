@@ -54,21 +54,21 @@
                             No card required • Cancel anytime • UK & JP auction coverage
                         </div>
                     </div>
-                    <img src="/assets/images/Reauction.png" alt
+                    <img src="{{ asset('public/theme/assets/web/images/Reauction.png') }}" alt
                         class="absolute -right-60 bottom-12 w-auto h-[800px] object-cover pointer-events-none -rotate-6 rounded-md" />
 
                     <!-- Right: Image -->
                     <!-- <div class="flex-1 animate-in-right relative">
-                                                                                          <div
-                                                                                            class=""
-                                                                                          >
-                                                                                            <img
-                                                                                              src="/assets/images/Reauction.png"
-                                                                                              alt="AutoBoli auction preview"
-                                                                                              class="w-full h-[700px] object-fill rounded-2xl -rotate-6"
-                                                                                            />
-                                                                                          </div>
-                                                                                        </div> -->
+                                                                                              <div
+                                                                                                class=""
+                                                                                              >
+                                                                                                <img
+                                                                                                  src="/assets/images/Reauction.png"
+                                                                                                  alt="AutoBoli auction preview"
+                                                                                                  class="w-full h-[700px] object-fill rounded-2xl -rotate-6"
+                                                                                                />
+                                                                                              </div>
+                                                                                            </div> -->
                 </div>
             </div>
     </section>
