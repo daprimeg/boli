@@ -1,9 +1,9 @@
-    <header id="siteNav" class="sticky top-0 z-40 transition-all duration-300">
+    <header id="siteNav" class="sticky top-0 z-40 transition-all duration-300 bg-transparent">
         <nav class="container h-14 py-2 mx-auto p-4">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <div>
-                    <img src="{{asset('public/theme/assets/web/images/nave-icon.png')}}" alt="Logo" />
+                    <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="Logo" />
                 </div>
 
                 <!-- Nav Links -->
@@ -39,7 +39,7 @@
               Account</a> -->
 
                     <!-- Login Button -->
-                    <a class="text-white dark:text-white rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm hidden lg:block"
+                    <a class="dark:text-white rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm hidden lg:block"
                         href="{{ url('/login') }}">Sign In</a>
                     <!-- Account Button -->
                     <a class=" hover:bg-[#0080ff] bg-[#0f1c2c] border border-[#E2E8F0] dark:border-[#353F4C] text-white dark:text-white rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm hidden lg:block"
