@@ -71,115 +71,94 @@
 
 @section('content')
 
-    <div class="text-white d-flex flex-column" >
-        <div class="container">
-            <div class="row my-5">
-                <div class="col-12 col-md-8 col-lg-6">
-                <div class="text-start mb-5 ps-4 text-center">
-                    <h1 class="display-5 fw-bold mb-3">
-                    Sign in to <span style="color: var(--text-color)">AUTOBILI</span>
-                    </h1>
-                    <p class="text-muted">Send, spend and save smarter</p>
-                </div>
+<div class="text-white flex flex-col min-h-screen bg-gray-900">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-center items-center my-12">
+      <div class="w-full max-w-md">
 
-                  @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                  @endif
-
-                  @if(session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                  @endif
-
-                <div class="px-4 mb-4 d-flex col-md-12">
-                    <a href="{{ route('google.login') }}" class="w-100 py-3 mx-3 login-btn d-block text-center" style="text-decoration:none;">
-                        <i class="fab fa-google me-2"></i> Sign In with Google
-                    </a>
-                    <button class="w-100 py-3l login-btn">
-                    <i class="fab fa-apple me-2"></i> Sign In with Apple
-                    </button>
-                </div>
-                <div class="text-start px-4 mb-4 form-wrapper">Or continue with</div>
-
-                <form class="px-4" action="{{ url('/login_submit') }}" method="POST">
-                     @csrf
-                    <div class="mb-3">
-                    <input
-                        type="email"
-                        name="email"
-                        value="{{old('email')}}"
-                        class="login-btn text-white py-3 login-input px-2"
-                        placeholder="Username or email"
-                        style="border-radius: 8px"
-                    />
-                    @error('email')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                    </div>
-                    <div class="mb-3 position-relative">
-                    <input
-                        type="password"
-                        name="password"
-                        value=""
-                        class="login-btn text-white py-3 login-input px-2"
-                        placeholder="Password"
-                        id="passwordField"
-                        style="border-radius: 8px"
-                    />
-                    
-                    <button
-                        type="button"
-                        class="position-absolute top-50 translate-middle-y me-2 text-muted border-0 bg-transparent"
-                        style="left: 92%"
-                        onclick="togglePassword()"
-                    >
-                        <i class="fas fa-eye" id="eyeIcon"></i>
-                    </button>
-
-                        @error('password')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-4 mx-3">
-                    <div class="form-check">
-                        <input class="form-check-input custom-checkbox" type="checkbox" id="rememberMe"/>
-                        <label class="form-check-label text-white " for="rememberMe" style="cursor: pointer;">Remember me</label>
-                    </div>
-                    <a
-                        href="{{ url("forgot-password") }}"
-                        class="text-decoration-none"
-                        style="color: var(--text-color)"
-                        >Forgot Password?</a
-                    >
-                    </div>
-
-                    <button
-                    type="submit"
-                    class=" login-input login-btn py-3 mb-4 fw-semibold"
-                    style="  background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%) !important; "
-                    >
-                    Sign In
-                    </button>
-                </form>
-
-                <div class="text-center px-4 mb-5">
-                    <span class="text-center">Don't have an account? </span>
-                    <a href="{{url('/register')}}" class="text-white text-decoration-none fw-semibold">Sign Up</a>
-                </div>
-
-                <footer class="text-center py-4 mt-auto">
-                        <div class="mb-3">
-                        <a href="#" class=" text-white text-decoration-none me-4">Terms & Condition</a>
-                        <a href="#" class=" text-white text-decoration-none me-4">Privacy Policy</a>
-                        <a href="#" class=" text-white text-decoration-none me-4">Help</a>
-                        <a href="#" class=" text-white text-decoration-none">English</a>
-                        </div>
-                        <p class=" text-white mb-0">© 2023 Bankco. All Right Reserved.</p>
-                </footer>
-                </div>
-            </div>
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold mb-2">
+            Sign in to <span class="text-blue-500">AUTOBILI</span>
+          </h1>
+          <p class="text-gray-400">Send, spend and save smarter</p>
         </div>
+
+        <!-- Alerts -->
+        @if(session('success'))
+          <div class="bg-green-600 text-white text-sm p-3 rounded mb-4">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+          <div class="bg-red-600 text-white text-sm p-3 rounded mb-4">{{ session('error') }}</div>
+        @endif
+
+        <!-- Social Logins -->
+        <div class="flex gap-3 mb-6">
+          <a href="{{ route('google.login') }}" 
+             class="flex items-center justify-center w-1/2 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition">
+            <i class="fab fa-google mr-2"></i> Sign In with Google
+          </a>
+          <button class="flex items-center justify-center w-1/2 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition">
+            <i class="fab fa-apple mr-2"></i> Sign In with Apple
+          </button>
+        </div>
+
+        <div class="text-center text-gray-400 mb-6">Or continue with</div>
+
+        <!-- Login Form -->
+        <form action="{{ url('/login_submit') }}" method="POST" class="space-y-5">
+          @csrf
+
+          <div>
+            <input type="email" name="email" value="{{ old('email') }}"
+              class="w-full py-3 px-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Username or email" />
+            @error('email')
+              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div class="relative">
+            <input type="password" name="password" id="passwordField"
+              class="w-full py-3 px-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Password" />
+            <button type="button"
+              class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
+              onclick="togglePassword()">
+              <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+            @error('password')
+              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div class="flex justify-between items-center text-sm text-gray-300">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" id="rememberMe" class="form-checkbox text-blue-500 rounded" />
+              <span>Remember me</span>
+            </label>
+            <a href="{{ url('forgot-password') }}" class="text-blue-500 hover:underline">Forgot Password?</a>
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 rounded-lg font-semibold bg-gradient-to-r from-blue-500 to-blue-700 hover:opacity-90 transition">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-gray-300 text-sm">
+          <p>Don't have an account? 
+            <a href="{{ url('/register') }}" class="text-white font-semibold hover:underline">Sign Up</a>
+          </p>
+        </div>
+
+        
+      </div>
     </div>
+  </div>
+</div>
 @endsection
 
 @section('js')
