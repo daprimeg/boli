@@ -367,7 +367,39 @@ class AuctionFinderController extends Controller
             }
 
 
-          return view('user.auctionscheduler.index');
+             $today = Carbon::today();
+                $next7Days = Carbon::today()->addDays(6);
+
+                $dailyAuctions = Auctions::whereBetween('auction_date', [$today, $next7Days])
+                    ->select(
+                        DB::raw('DATE(auction_date) as date'),
+                        DB::raw('COUNT(*) as count')
+                    )
+                    ->groupBy(DB::raw('DATE(auction_date)'))
+                    ->orderBy('date', 'asc')
+                    ->get()
+                    ->keyBy('date');
+
+                $days = [];
+                for ($i = 0; $i < 7; $i++) {
+                    $date = Carbon::today()->addDays($i);
+                    $formattedDate = $date->format('Y-m-d');
+
+                    $days[] = [
+                        'label' => $i === 0 ? 'Today' : $date->format('D'), 
+                        'date' => $formattedDate,
+                        'display' => $date->format('d M'),
+                        'count' => $dailyAuctions[$formattedDate]->count ?? 0,
+                    ];
+                }
+         
+        $platforms = AuctionPlatform::select('id', 'name')->get();
+        $centers = AuctionCenter::select('id', 'name')->get();
+
+       
+
+
+          return view('user.auctionscheduler.index',compact('platforms', 'centers','days'));
     }
 
 
