@@ -2,99 +2,184 @@
 
 @section('hideNavbar', true)
 @section('hideFooter', true)
+
 @section('css')
     <style>
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
 
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slideUp {
+            animation: slideUpFade 0.9s ease-out forwards;
+        }
+
+        /* Transition for smooth color change */
+        html {
+            transition: background-color 0.3s, color 0.3s;
+        }
     </style>
 @endsection
 
 @section('content')
-    <div class="text-white flex flex-col min-h-screen mx-auto bg-gray-900">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center items-center my-12">
-                <div class="w-full max-w-md">
+
+    <!-- Minimal header for auth pages -->
+    <header class="absolute inset-x-0 top-0 z-20">
+        <div class="mx-auto  px-8 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{{ url('/') }}" class="flex items-center gap-2">
+                <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="AutoBoli" class="h-8 w-auto block">
+            </a>
+
+            <div class="flex items-center gap-3">
+
+
+                <!-- Theme toggle button -->
+                <button data-theme-toggle
+                    class="flex items-center justify-center p-2 rounded-md text-sm font-medium border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition"
+                    aria-label="Toggle theme">
+                    <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
+                </button>
+
+
+                <a href="{{ url('/') }}"
+                    class="text-white dark:text-gray-900 rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm border border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition bg-transparent ">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Page -->
+    <div
+        class="relative min-h-screen flex items-center justify-center bg-[#000f21] dark:bg-gray-100 overflow-hidden pt-20 transition-colors">
+
+
+
+        <!-- decorative bottom background -->
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] ">
+            <div class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[#0080ff]"></div>
+            <div
+                class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[radial-gradient(#7b3fe6_1.2px,transparent_1.2px)] [background-size:16px_16px] opacity-30">
+            </div>
+        </div>
+
+        <!-- Login Card -->
+        <div class="container mx-auto px-4 py-12">
+            <div class="mx-auto w-full max-w-lg">
+                <div
+                    class="rounded bg-[#0f1c2c] dark:bg-white shadow-2xl px-6 sm:px-16 py-10 relative z-10 animate-slideUp transition-colors">
 
                     <!-- Header -->
-                    <div class="text-center mb-8">
-                        <h1 class="text-4xl font-bold mb-2">
-                            Sign in to <span class="text-blue-500">AUTOBILI</span>
-                        </h1>
-                        <p class="text-gray-400">Send, spend and save smarter</p>
-                    </div>
+                    <h1 class="text-center text-3xl font-bold mb-3 text-white dark:text-gray-900">Welcome back!</h1>
 
                     <!-- Alerts -->
                     @if (session('success'))
-                        <div class="bg-green-600 text-white text-sm p-3 rounded mb-4">{{ session('success') }}</div>
+                        <div class="mb-4 rounded-md bg-green-50 text-green-800 text-sm px-4 py-3">{{ session('success') }}
+                        </div>
                     @endif
-
                     @if (session('error'))
-                        <div class="bg-red-600 text-white text-sm p-3 rounded mb-4">{{ session('error') }}</div>
+                        <div class="mb-4 rounded-md bg-red-50 text-red-700 text-sm px-4 py-3">{{ session('error') }}</div>
                     @endif
 
-                    <!-- Social Logins -->
-                    <div class="flex gap-3 mb-6">
+                    <!-- Continue with Google -->
+                    <div class="mb-8">
                         <a href="{{ route('google.login') }}"
-                            class="flex items-center justify-center w-1/2 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition">
-                            <i class="fab fa-google mr-2"></i> Sign In with Google
+                            class="w-full inline-flex items-center justify-center gap-3 rounded-lg border border-slate-300 bg-transparent px-4 py-3 text-white dark:text-gray-800 hover:text-slate-800 font-medium hover:bg-slate-50 transition">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="h-5 w-5"
+                                alt="G">
+                            Continue with Google
                         </a>
-                        <button
-                            class="flex items-center justify-center w-1/2 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition">
-                            <i class="fab fa-apple mr-2"></i> Sign In with Apple
-                        </button>
                     </div>
 
-                    <div class="text-center text-gray-400 mb-6">Or continue with</div>
+                    <!-- Divider -->
+                    <div class="relative my-4 mt-5">
+                        <div class="h-px bg-gray-600 dark:bg-gray-300"></div>
+                        <span
+                            class="absolute inset-0 -top-3 m-auto w-fit px-2 text-xs font-semibold tracking-wide text-white dark:text-gray-700 bg-[#0f1c2c] dark:bg-white">
+                            OR
+                        </span>
+                    </div>
 
-                    <!-- Login Form -->
-                    <form action="{{ url('/login_submit') }}" method="POST" class="space-y-5">
+                    <!-- Form -->
+                    <form action="{{ url('/login_submit') }}" method="POST" class="space-y-4">
                         @csrf
 
-                        <div>
-                            <input type="email" name="email" value="{{ old('email') }}"
-                                class="w-full py-3 px-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                placeholder="Username or email" />
+                        <!-- Email -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-semibold text-slate-200 dark:text-gray-700 mb-1">Work
+                                Email</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5L4 8V6l8 5 8-5v2Z" />
+                                    </svg>
+                                </span>
+                                <input type="email" name="email" value="{{ old('email') }}"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 pl-10 pr-3 py-3 text-white dark:text-gray-900"
+                                    placeholder="Enter your work email">
+                            </div>
                             @error('email')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <div class="relative">
-                            <input type="password" name="password" id="passwordField"
-                                class="w-full py-3 px-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                placeholder="Password" />
-                            <button type="button"
-                                class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
-                                onclick="togglePassword()">
-                                <i class="fas fa-eye" id="eyeIcon"></i>
-                            </button>
+                        <!-- Password -->
+                        <div class="space-y-2">
+                            <label
+                                class="block text-xs font-semibold text-slate-200 dark:text-gray-700 mb-1">Password</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M17 8h-1V6a4 4 0 1 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2ZM10 6a2 2 0 1 1 4 0v2h-4V6Zm2 10a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z" />
+                                    </svg>
+                                </span>
+                                <input type="password" name="password" id="passwordField"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 pl-10 pr-12 py-3 text-white dark:text-gray-900"
+                                    placeholder="Enter password">
+                                <button type="button"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+                                    onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="eyeIcon"></i>
+                                </button>
+                            </div>
                             @error('password')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                             @enderror
+
+                            <div class="pt-3 mt-2 flex items-center justify-between text-sm">
+                                <label class="inline-flex items-center gap-2 text-slate-600 dark:text-gray-700">
+                                    <input type="checkbox" id="rememberMe"
+                                        class="rounded border-slate-300 text-white dark:text-gray-900">
+                                    <span class="text-white dark:text-gray-700">Remember me</span>
+                                </label>
+                                <a href="{{ url('forgot-password') }}"
+                                    class="text-[#0080ff] font-medium hover:underline">Forgot Password?</a>
+                            </div>
                         </div>
 
-                        <div class="flex justify-between items-center text-sm text-gray-300">
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="rememberMe" class="form-checkbox text-blue-500 rounded" />
-                                <span>Remember me</span>
-                            </label>
-                            <a href="{{ url('forgot-password') }}" class="text-blue-500 hover:underline">Forgot
-                                Password?</a>
-                        </div>
-
+                        <!-- Submit -->
                         <button type="submit"
-                            class="w-full py-3 rounded-lg font-semibold bg-gradient-to-r from-blue-500 to-blue-700 hover:opacity-90 transition">
-                            Sign In
+                            class="w-full rounded-lg bg-[#0080ff] hover:bg-[#0059B3] text-white font-semibold py-3 shadow-md transition">
+                            Log In
                         </button>
                     </form>
 
-                    <!-- Footer -->
-                    <div class="text-center mt-8 text-gray-300 text-sm">
-                        <p>Don't have an account?
-                            <a href="{{ url('/register') }}" class="text-white font-semibold hover:underline">Sign Up</a>
-                        </p>
-                    </div>
-
-
+                    <!-- SSO -->
+                    <p class="mt-6 text-center text-white dark:text-gray-800 text-sm">
+                        Don’t have an account?
+                        <a href="{{ url('/register') }}"
+                            class="font-semibold text-[#0080ff] hover:text-[#0059B3] hover:underline">Sign up</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -114,5 +199,33 @@
                 eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
             }
         }
+
+        // Theme Toggle Logic
+        // const html = document.documentElement;
+        // const themeToggle = document.getElementById("themeToggle");
+        // const themeIcon = document.getElementById("themeIcon");
+        // const themeLabel = document.getElementById("themeLabel");
+
+        // // Load saved preference
+        // if (localStorage.theme === "light") {
+        //     html.classList.remove("dark");
+        //     themeIcon.classList.replace("fa-moon", "fa-sun");
+        // } else {
+        //     html.classList.add("dark");
+        //     themeIcon.classList.replace("fa-sun", "fa-moon");
+        // }
+
+        // // Toggle on click
+        // themeToggle.addEventListener("click", () => {
+        //     if (html.classList.contains("dark")) {
+        //         html.classList.remove("dark");
+        //         localStorage.theme = "light";
+        //         themeIcon.classList.replace("fa-moon", "fa-sun");
+        //     } else {
+        //         html.classList.add("dark");
+        //         localStorage.theme = "dark";
+        //         themeIcon.classList.replace("fa-sun", "fa-moon");
+        //     }
+        // });
     </script>
 @endsection
