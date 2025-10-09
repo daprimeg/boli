@@ -17,8 +17,6 @@
 
             --radius: 10px;
         }
-
-        /* Containers */
         .acsi-theme .card,
         .acsi-theme .table-wrap {
             background: var(--acsi-surface);
@@ -26,14 +24,10 @@
             border-radius: var(--radius);
             transition: all 0.3s ease;
         }
-
-        /* Headings / labels */
         .acsi-theme .label-muted {
             color: var(--acsi-muted);
             font-size: 0.875rem;
         }
-
-        /* Pills (Watchlist / Alerts) */
         .acsi-theme .nav-pills .nav-link {
             color: var(--acsi-muted);
             background: transparent;
@@ -52,8 +46,6 @@
             color: var(--acsi-accent);
             border-radius: 0;
         }
-
-        /* Active tab underline */
         .acsi-theme .nav-pills .nav-link.active::after {
             content: "";
             position: absolute;
@@ -65,8 +57,6 @@
             border-radius: 2px;
             transition: all 0.3s ease;
         }
-
-        /* Inputs / Selects */
         .acsi-theme .form-select,
         .acsi-theme .form-control {
             color: var(--acsi-foreground);
@@ -82,7 +72,6 @@
             box-shadow: 0 0 0 .2rem rgba(0, 128, 255, 0.25);
         }
 
-        /* Table */
         .acsi-theme .table {
             color: var(--acsi-foreground);
             margin-bottom: 0;
@@ -104,14 +93,10 @@
         .acsi-theme tbody tr:hover {
             background: rgba(255, 255, 255, 0.05);
         }
-
-        /* Muted cells */
         .acsi-theme .cell-muted {
             color: var(--acsi-muted);
             font-size: .8125rem;
         }
-
-        /* Price links / accent links */
         .acsi-theme .cell-price a,
         .acsi-theme .link-accent {
             color: var(--acsi-accent);
@@ -124,8 +109,6 @@
         .acsi-theme .cell-price a:hover {
             text-decoration: underline;
         }
-
-        /* Chips / Badges */
         .acsi-theme .chip {
             display: inline-block;
             padding: 0.125rem 0.5rem;
@@ -149,8 +132,6 @@
             background: rgba(255, 77, 79, .08);
             color: var(--acsi-danger);
         }
-
-        /* Tiny thumbnails */
         .acsi-theme .thumb {
             width: 48px;
             height: 36px;
@@ -164,8 +145,6 @@
             transform: scale(1.05);
             border-color: var(--acsi-accent);
         }
-
-        /* Utilities */
         .acsi-theme .soft-sep {
             border-top: 1px solid var(--acsi-border);
         }
@@ -173,8 +152,6 @@
         .acsi-theme .fit {
             white-space: nowrap;
         }
-
-        /* Expandable rows */
         .expandable-row {
             position: relative;
             transition: all 0.3s ease;
@@ -210,8 +187,6 @@
         border: 0 !important;
         box-shadow: none !important;
         }
-
-        /* 🔹 Elegant Close Button (matches nav-btn style) */
         .close-btn-custom {
         width: 44px;
         height: 44px;
@@ -238,7 +213,7 @@
         transform: scale(0.95);
         }
 
-        /* 🔹 Image */
+
         #previewImage {
         border-radius: calc(var(--acsi-radius) + 0.25rem);
         border: 1px solid var(--acsi-border);
@@ -246,7 +221,7 @@
         background: rgba(0, 0, 0, 0.2);
         }
 
-        /* 🔹 Navigation Buttons */
+
         .nav-btn {
         width: 44px;
         height: 44px;
@@ -271,7 +246,6 @@
         transform: translateY(0);
         }
 
-        /* 🔹 Caption */
         .modal-caption {
         color: var(--acsi-muted);
         font-size: 0.95rem;
@@ -331,23 +305,35 @@
 
 
                 <div class="d-flex gap-2 align-items-center">
-                <select id="make1" class="form-select form-select-sm select2-filter" style="width: 160px;">
-                    <option value="">Select Make</option>
-                </select>
+                  
+                    <div style="position: relative;width:190px;">
+                        <input type="text" id="reg_search" class="form-control form-control-sm" placeholder="Search by Reg Number" 
+                            style="padding-left: 30px; border-radius: 6px; background-color: #000f21; color: #fff; border: 1px solid #2b3b4f; width: 193px; padding-top: 6px;padding-bottom: 6px;">
+                        <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: #888;">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
 
-                <!-- Model -->
-                <select id="model1" class="form-select form-select-sm select2-filter" style="width: 160px;" disabled>
-                    <option value="">Select Model</option>
-                </select>
+           
+                    <select id="make1" class="form-select form-select-sm select2-filter" style="width: 160px;">
+                        <option value="">Select Make</option>
+                    </select>
 
+    
+                    <select id="model1" class="form-select form-select-sm select2-filter" style="width: 160px;" disabled>
+                        <option value="">Select Model</option>
+                    </select>
 
-                    <select class="form-select year" style="width: 110px;">
+              
+                    <select id="year1" class="form-select year select2-filter" style="width: 110px;">
                         <option value="">All Years</option>
-                           @foreach ($years as $year)
+                        @foreach ($years as $year)
                             <option value="{{ $year }}">{{ $year }}</option>
-                            @endforeach
+                        @endforeach
                     </select>
                 </div>
+
+
             </div>
 
 
@@ -367,6 +353,7 @@
                             <tr>
                                 <th style="width:28px"></th>
                                 <th>Vehicle</th>
+                                <th class="fit">Reg</th>
                                 <th class="fit">Clean</th>
                                 <th class="fit">Average</th>
                                 <th class="fit">Below</th>
@@ -392,6 +379,7 @@
                             <tr>
                                 <th style="width:28px"></th>
                                 <th>Vehicle</th>
+                                <th class="fit">Reg</th>
                                 <th class="fit">Clean</th>
                                 <th class="fit">Average</th>
                                 <th class="fit">Below</th>
@@ -544,6 +532,7 @@
                                 <div class="extra-images d-flex gap-2 mt-2">${imagesHtml}</div>
                             </div>
                         </td>
+                        <td>${a.vehicle.reg ?? '-'}</td>
                         <td>${a.vehicle.cap_clean ?? '-'}</td>
                         <td>${a.vehicle.cap_average ?? '-'}</td>
                         <td>${a.vehicle.cap_below ?? '-'}</td>
@@ -570,6 +559,7 @@
                         make: $('#make1').val(),
                         model: $('#model1').val(),
                         year: $('.year').val(),
+                        reg_search: $('#reg_search').val(),
                         length: length 
                     },
                     success: function(res) {
@@ -643,6 +633,9 @@
 
 
             $('#make1, #model1, .year').on('change', function() {
+                loadTables();
+            });
+            $('#reg_search').on('keyup', function() {
                 loadTables();
             });
 

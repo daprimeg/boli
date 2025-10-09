@@ -71,14 +71,15 @@ public function getAuctionData(Request $request)
     $make  = $request->input('make');
     $model = $request->input('model');
     $year  = $request->input('year');
+    $reg  = $request->input('reg_search');
 
 
     $length = $request->input('length', 50); 
     $page   = $request->input('page', 1);
     $offset = ($page - 1) * $length;
-    $alertsQuery = Notification::with(['vehicle' => function ($q) use ($make, $model, $year) {
+    $alertsQuery = Notification::with(['vehicle' => function ($q) use ($make, $model, $year,$reg) {
         $q->select(
-            'id', 'title as vehicle', 'year', 'cc', 'images as image',
+            'id', 'title as vehicle', 'year', 'cc', 'images as image','reg',
             'mileage', 'transmission', 'auction_id', 'last_bid','cap_clean','cap_below','cap_average','autotrader_retail_value'
         )
         ->with(['auction:id,name,auction_date,auction_type,end_date']);
@@ -92,6 +93,9 @@ public function getAuctionData(Request $request)
             if (!empty($year)) {
                 $q->where('year', $year);
             }
+            if (!empty($reg)) {
+                 $q->where('reg', 'like', '%' . $reg . '%');
+            }
     }])
     ->where('user_id', $userId);
 
@@ -99,9 +103,9 @@ public function getAuctionData(Request $request)
     $alerts = $alertsQuery->latest()->skip($offset)->take($length)->get();
 
 
-    $recentQuery = RecentView::with(['vehicle' => function ($q) use ($make, $model, $year) {
+    $recentQuery = RecentView::with(['vehicle' => function ($q) use ($make, $model, $year,$reg) {
         $q->select(
-                'id', 'title as vehicle', 'year', 'cc', 'images as image',
+                'id', 'title as vehicle', 'year', 'cc', 'images as image','reg',
             'mileage', 'transmission', 'auction_id', 'last_bid','cap_clean','cap_below','cap_average','autotrader_retail_value'
         )
         ->with(['auction:id,name,auction_date,auction_type,end_date']);
@@ -114,6 +118,9 @@ public function getAuctionData(Request $request)
     }
     if (!empty($year)) {
         $q->where('year', $year);
+    }
+    if (!empty($reg)) {
+       $q->where('reg', 'like', '%' . $reg . '%');
     }
        
     }])

@@ -16,8 +16,6 @@
         <script src="{{ asset('public/themeadmin/assets/js/main.js') }}"></script>
         <script src="public/themeadmin/assets/js/toastr.min.js"></script>
         {{-- <script src="{{ asset('public/themeadmin/assets/js/app-academy-course-details.js') }}"></script> --}}
-
-        {{-- Libs --}}
          <script src="{{asset('public/themeadmin/assets/js/select2.js')}}"></script>
          <script src="{{asset('public/themeadmin/assets/js/jquertdatatable.js')}}"></script>
          <script>
@@ -136,5 +134,29 @@
                 
                                 
             });
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeButtons = document.querySelectorAll('[data-bs-theme-value]');
+            const savedTheme = localStorage.getItem('site-theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+            themeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-bs-theme-value');
+                    setTheme(theme);
+                    localStorage.setItem('site-theme', theme); 
+                });
+            });
+
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+                themeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-bs-theme-value') === theme) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        });
 
         </script>
