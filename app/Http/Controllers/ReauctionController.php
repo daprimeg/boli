@@ -74,7 +74,6 @@ public function index(Request $request)
                     });
             })
             
-            // ✅ Always pick latest entry per reg (based on filter)
             ->whereIn('vehicles.id', function ($sub) use ($today, $auctionFilter) {
                 $sub->select(DB::raw('MAX(v3.id)'))
                     ->from('vehicles as v3')
@@ -96,7 +95,7 @@ public function index(Request $request)
                 'model_variant.name as model_variant_name'
             );
 
-        // 🔍 Filter by interest
+  
         if ($request->filled('interest_id')) {
             $interest = Interest::find($request->interest_id);
             if ($interest) {
@@ -105,12 +104,10 @@ public function index(Request $request)
                       ->when($interest->variant_id, fn($q) => $q->where('vehicles.variant_id', $interest->variant_id));
             }
         }
-      if ($request->filled('auction_date')) {
-            $query->whereDate('auctions.auction_date', $request->auction_date);
-        }
+        if ($request->filled('auction_date')) {
+                $query->whereDate('auctions.auction_date', $request->auction_date);
+            }
 
-
-        // 🔍 Search
         if ($request->filled('search.value')) {
             $search = $request->input('search.value');
             $query->where(function ($q) use ($search) {
@@ -123,7 +120,7 @@ public function index(Request $request)
             });
         }
 
-        // ✅ Filter in-progress
+
         if ($request->inprogress_check == 1) {
             $query->where('vehicles.bidding_status', 'inprogress');
         }
@@ -134,7 +131,7 @@ public function index(Request $request)
 
         $vehicles = $query->skip($start)->take($length)->get();
 
-        // Platforms & Centers (same)
+   
         $platforms = DB::table('auctions')
             ->join('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
             ->whereIn('auctions.id', $auctionIds)
@@ -151,19 +148,52 @@ public function index(Request $request)
             ->filter()
             ->values();
 
-        // 🔁 Format Data
-        $data = $vehicles->map(function ($vehicle) use ($today) {
-            $bids = DB::table('vehicles')
-                ->join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
-                ->where('vehicles.reg', $vehicle->reg)
-                ->orderBy('auctions.auction_date', 'asc')
-                ->pluck('vehicles.last_bid')
-                ->toArray();
 
-            $diff = (end($bids) ?? 0) - ($bids[0] ?? 0);
-            $diffText = $diff > 0
-                ? "<span style='color:green;'>+{$diff}</span>"
-                : "<span style='color:red;'>{$diff}</span>";
+        $data = $vehicles->map(function ($vehicle) use ($today) {
+        $bids = DB::table('vehicles')
+            ->join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
+            ->where('vehicles.reg', $vehicle->reg)
+            ->orderBy('auctions.auction_date', 'asc')
+            ->get(['vehicles.cap_clean', 'vehicles.cap_average']);
+
+        $first = $bids->first();
+        $last  = $bids->last();
+
+        if ($first && $last) {
+            if (!empty($first->cap_clean) && $first->cap_clean > 0 && !empty($last->cap_clean)) {
+                $capCleanChange = (($last->cap_clean - $first->cap_clean) / $first->cap_clean) * 100;
+
+                if ($capCleanChange > 0) {
+                    $capCleanText = $vehicle->cap_clean."<span style='color:green;'> ▲ " . number_format($capCleanChange, 2) . "%</span>";
+                } elseif ($capCleanChange < 0) {
+                    $capCleanText = $vehicle->cap_clean."<span style='color:red;'> ▼ " . number_format(abs($capCleanChange), 2) . "%</span>";
+                } else {
+                    $capCleanText = "<span style='color:gray;'>0</span>";
+                }
+            } else {
+                $capCleanText = "<span style='color:gray;'>No CAP Clean Data</span>";
+            }
+
+            if (!empty($first->cap_average) && $first->cap_average > 0 && !empty($last->cap_average)) {
+                $capAvgChange = (($last->cap_average - $first->cap_average) / $first->cap_average) * 100;
+
+                if ($capAvgChange > 0) {
+                    $capAvgText = $vehicle->cap_average."<span style='color:green;'> ▲ " . number_format($capAvgChange, 2) . "%</span>";
+                } elseif ($capAvgChange < 0) {
+                    $capAvgText = $vehicle->cap_average."<span style='color:red;'> ▼ " . number_format(abs($capAvgChange), 2) . "%</span>";
+                } else {
+                    $capAvgText = "<span style='color:gray;'> 0 </span>";
+                }
+            } else {
+                $capAvgText = "<span style='color:gray;'>No CAP Average Data</span>";
+            }
+
+        } else {
+            $capCleanText = "<span style='color:gray;'>No Data</span>";
+            $capAvgText   = "<span style='color:gray;'>No Data</span>";
+        }
+
+
 
             $vehicleName = '
                 <div style="max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
@@ -195,17 +225,19 @@ public function index(Request $request)
                         ' . $previousCount . ' ↑
                     </button>
                 </div>';
-
+            $auctionDateTime = \Carbon\Carbon::parse($vehicle->auction_date)->format('Y-m-d') 
+            . '<br>' . \Carbon\Carbon::parse($vehicle->auction_date)->format('h:i A');
+            
             return [
                 $vehicleName,
                 $vehicle->reg ?? 'N/A',
                 $PreviousBtn,
                 $vehicle->platform_name ?? 'N/A',
                 $vehicle->center_name ?? 'N/A',
-                $vehicle->last_bid ?? 'N/A',
+                $capCleanText  ?? 'N/A',
+                $capAvgText ?? 'N/A',
                 $vehicle->bidding_status ?? 'N/A',
-                $diffText,
-                \Carbon\Carbon::parse($vehicle->auction_date)->format('Y-m-d H:i'),
+                $auctionDateTime,
                 $actions
             ];
         });
@@ -324,8 +356,23 @@ public function information(Request $request)
         return response()->json([]);
     }
 
+
     $response = [];
     foreach ($vehicles as $vehicle) {
+            $diff = $vehicle->last_bid ?? 0 - $vehicle->cap_clean ?? 0;
+
+        $percentDiff = 0;
+        if ($vehicle->cap_clean > 0) {
+            $percentDiff = ($diff / $vehicle->cap_clean) * 100;
+        }
+
+        if ($percentDiff > 0) {
+            $result1 = "<span style='color:green;'>▲ " . number_format($percentDiff, 2) . "</span>";
+        } elseif ($percentDiff < 0) {
+            $result1 = "<span style='color:red;'>▼ " . number_format(abs($percentDiff), 2) . "</span>";
+        } else {
+            $result1 = "<span style='color:gray;'>= At CAP Clean</span>";
+        }
         $response[] = [
             'name'       => strtoupper($vehicle->make_name) . ' - ' . $vehicle->model_name,
             'variant'    => $vehicle->model_variant_name,
@@ -333,8 +380,9 @@ public function information(Request $request)
             'platform'   => $vehicle->platform_name,
             'center'     => $vehicle->center_name,
             'last_bid'   => $vehicle->last_bid,
+            'cap_clean'   => $vehicle->cap_clean,
             'status'     => $vehicle->bidding_status,
-            'difference' => 'Waiting',
+            'difference' => $result1,
             'time'       => \Carbon\Carbon::parse($vehicle->auction_date)->format('Y-m-d H:i'),
         ];
     }

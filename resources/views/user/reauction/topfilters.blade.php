@@ -11,28 +11,24 @@
 
         <div class="">
             <div class="platform-info">
-                <div class="inner-tag" style="display: flex; gap:10px;align-items: center;">
+                <div class="inner-tag" style="display: flex; gap:10px; align-items: center;">
                     <div>
-                        <h6 style=" margin-top: 0;margin-bottom: 0rem;" class="platform-title">Platform</h6>
+                        <h6 style="margin-top:0; margin-bottom:0;" class="platform-title">Platform</h6>
                     </div>
                     <div>
-                        <div class="platform-badges">
-                            
-                        </div>
-
+                        <div class="platform-badges platforms-container"></div>
                     </div>
                 </div>
-                <div class="inner-tag" style="display: flex; gap:10px;align-items: center;">
+
+                <div class="inner-tag" style="display: flex; gap:10px; align-items: center;">
                     <div>
-                        <h6 style=" margin-top: 0;margin-bottom: 0rem;" class="platform-title">Center</h6>
+                        <h6 style="margin-top:0; margin-bottom:0;" class="platform-title">Center</h6>
                     </div>
                     <div>
-                        <div class="platform-badges platefrom_mar">
-
-                            
-                        </div>
+                        <div class="platform-badges centers-container"></div>
                     </div>
                 </div>
+
 
 
             </div>

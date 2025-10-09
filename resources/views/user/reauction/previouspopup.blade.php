@@ -19,6 +19,7 @@
                       <th>Platform</th>
                       <th>Center</th>
                       <th>Last Bid</th>
+                      <th>Cap Clean</th>
                       <th>Status</th>
                       <th>Difference</th>
                       <th>Time</th>

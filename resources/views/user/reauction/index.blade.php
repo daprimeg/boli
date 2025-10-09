@@ -245,9 +245,9 @@
                                         <th>Previous</th>
                                         <th>Platform</th>
                                         <th>Center</th>
-                                        <th>Last Bid</th>
+                                        <th>Cap clean</th>
+                                        <th>Cap Avg</th>
                                         <th>Status</th>
-                                        <th>Difference</th>
                                         <th>Time</th>
                                         <th>Action</th>
                                     </tr>
@@ -300,26 +300,26 @@ $(document).ready(function() {
         }
     });
 
-    // Page info
+
     table.on('draw.dt', function() {
         var info = table.page.info();
         $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
     });
 
-    // Search
+
     $("input[name='search']").on('keyup change', function() {
         table.search(this.value).draw();
     });
 
-    // Length
+
     $("select[name='length']").on('change', function() {
         table.page.len($(this).val()).draw();
     }).trigger('change');
 
-    // Checkbox filter
+
     $('#inprogress_check').on('change', function() { table.ajax.reload(); });
 
-    // Interest dropdown
+
     $('#interestDropdown').on('click', '.dropdown-item', function(e) {
         e.preventDefault();
         $('#selected_interest_id').val($(this).data('id'));
@@ -327,33 +327,41 @@ $(document).ready(function() {
         table.ajax.reload();
     });
 
-    // Date filter: Select2 dropdown
+
     $('#auctionSelector').on('change', function() {
         table.ajax.reload();
     });
 
-    // Platform & Center UI update
-    function updatePlatformCenterUI(platforms, centers, recordsTotal) {
-        const platformContainer = $('.platform-badges');
-        const centerContainer = $('.platefrom_mar');
-        const vehicleCountToday = $('#vehicleCountToday');
 
-        platformContainer.empty();
-        centerContainer.empty();
-        vehicleCountToday.text(recordsTotal || 0);
+function updatePlatformCenterUI(platforms, centers, recordsTotal) {
+    const platformContainer = $('.platforms-container');
+    const centerContainer = $('.centers-container');
+    const vehicleCountToday = $('#vehicleCountToday');
 
-        if(platforms?.length) {
-            $.each(platforms, function(i, p){
-                platformContainer.append(`<span class="platform-badge ${i===0?'active':''}">${p}</span>`);
-            });
-        } else platformContainer.append(`<span style="color: gray;">No Platforms</span>`);
 
-        if(centers?.length) {
-            $.each(centers, function(i, c){
-                centerContainer.append(`<span style="font-size: var(--font-p3); color: var(--dimtext)">${c}</span>`);
-            });
-        } else centerContainer.append(`<span style="color: gray;">No Centers</span>`);
+    platformContainer.empty();
+    centerContainer.empty();
+    vehicleCountToday.text(recordsTotal || 0);
+
+
+    if(platforms?.length) {
+        $.each(platforms, function(i, p){
+            platformContainer.append(`<span class="platform-badge">${p}</span>`);
+        });
+    } else {
+        platformContainer.append(`<span style="color: gray;">No Platforms</span>`);
     }
+
+
+    if(centers?.length) {
+        $.each(centers, function(i, c){
+            centerContainer.append(`<span class="center-badge" style="font-size: var(--font-p3); color: var(--dimtext)">${c}</span>`);
+        });
+    } else {
+        centerContainer.append(`<span style="color: gray;">No Centers</span>`);
+    }
+}
+
 
 });
 
@@ -367,7 +375,6 @@ $(document).on('click', '.PreviousBtnRec', function() {
     let reg = $(this).data('ref');
     if (!reg) return;
 
-    // ✅ Check whether Upcoming checkbox is checked
     let isUpcoming = $('#Upcoming').is(':checked') ? 1 : 0;
 
     $.ajax({
@@ -375,7 +382,7 @@ $(document).on('click', '.PreviousBtnRec', function() {
         method: 'POST',
         data: {
             reg: reg,
-            upcoming: isUpcoming, // ✅ send flag to backend
+            upcoming: isUpcoming, 
             _token: '{{ csrf_token() }}'
         },
         success: function(response) {
@@ -397,6 +404,7 @@ $(document).on('click', '.PreviousBtnRec', function() {
                         <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.platform}</td>
                         <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.center}</td>
                         <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.last_bid}</td>
+                        <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.cap_clean}</td>
                         <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.status}</td>
                         <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.difference}</td>
                         <td style="font-size: var(--font-p2); color: var(--bs-heading-color);">${item.time}</td>
