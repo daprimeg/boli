@@ -505,6 +505,29 @@ class AuctionFinderDataController extends Controller
 
     }
 
+    public function getModels2(Request $request)
+        {
+            DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");
+
+            $data = DB::table('model')
+                ->join('make', 'make.id', '=', 'model.make_id')
+                ->join('vehicles', 'vehicles.model_id', '=', 'model.id')
+                ->select([
+                    'model.id',
+                    'model.name as text', // ✅ renamed to text for Select2
+                    'make.name as make', 
+                    DB::raw('COUNT(model.id) as count')
+                ])
+                ->whereIn('model.make_id', explode(',', $request->make_id))
+                ->groupBy('model.id')
+                ->orderBy('count', 'desc')
+                ->get();
+
+            return response()->json([
+                "results" => $data // ✅ flattened for Select2
+            ]);
+        }
+
         public function getVariants(Request $request)
     {
          DB::statement("SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''))");

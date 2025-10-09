@@ -408,6 +408,7 @@ Route::middleware(['auth', CheckUserStatus::class])->group(function () {
     Route::get('/auction-finder/data/getVehicleTypes', [AuctionFinderDataController::class, 'getVehicleTypes']);
     Route::get('/auction-finder/data/getMakes', [AuctionFinderDataController::class, 'getMakes']);
     Route::get('/auction-finder/data/getModels', [AuctionFinderDataController::class, 'getModels']);
+    Route::get('/auction-finder/data/getModels2', [AuctionFinderDataController::class, 'getModels2']);
     Route::get('/auction-finder/data/getVariants', [AuctionFinderDataController::class, 'getVariants']);
     Route::get('/auction-finder/data/getYears', [AuctionFinderDataController::class, 'getYears']);
     Route::get('/auction-finder/data/getTransmissions', [AuctionFinderDataController::class, 'getTransmissions']);

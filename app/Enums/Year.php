@@ -14,13 +14,14 @@ class Year
      * @param bool $descending
      * @return array
      */
-    public static function list(int $startYear = 1940, bool $descending = false): array
-    {
-        $currentYear = date('Y');
-        $years = range($startYear, $currentYear);
+        public static function list(int $startYear = 1940, bool $descending = false): array
+        {
+            $currentYear = date('Y');
+            $years = range($startYear, $currentYear);
 
-        return $descending ? array_reverse($years) : $years;
-    }
+            // ✅ always reverse order so it starts from current year
+            return array_reverse($years);
+        }
     
 
 }
