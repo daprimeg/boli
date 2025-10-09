@@ -224,11 +224,7 @@
 <script>
 
 $(document).ready(function() {
-
-    // Disable child selects initially
     $('#model_id, #variant_id').prop('disabled', true);
-
-    // 🏎️ Make Select2
     $('#make_id').select2({
         placeholder: 'Select Make',
         allowClear: true,
@@ -246,7 +242,6 @@ $(document).ready(function() {
         $('#variant_id').val(null).trigger('change').prop('disabled', true);
     });
 
-    // 🚗 Model Select2
     $('#model_id').select2({
         placeholder: 'Select Model',
         allowClear: true,
@@ -269,7 +264,6 @@ $(document).ready(function() {
         $('#variant_id').val(null).trigger('change').prop('disabled', !hasModel);
     });
 
-    // 🧩 Variant Select2
     $('#variant_id').select2({
         placeholder: 'Select Variant',
         allowClear: true,
