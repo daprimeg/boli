@@ -36,6 +36,16 @@
         </div>
     </div>
 
+    <div class="col-md-4 mt-3">
+        <div class="form-group">
+            <label class="form-label">Plan Type</label>
+            <select name="is_officer" class="form-control">
+                <option value="0" {{ (old('is_officer', $plan->is_officer ?? 0) == 0) ? 'selected' : '' }}>Simple</option>
+                <option value="1" {{ (old('is_officer', $plan->is_officer ?? 0) == 1) ? 'selected' : '' }}>Discount / Officer</option>
+            </select>
+        </div>
+    </div>
+
     <div class="col-md-12">
         <div class="form-group">
              <label class="form-label">Description</label>

@@ -7,6 +7,10 @@ use App\Models\Plan;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\URL;
+use App\Models\User;
+use App\Mail\PlanUpdatedMail;
+use Illuminate\Support\Facades\Mail;
+use App\Events\NotificationEvent;
 
 class PlanController extends Controller
 {
@@ -37,10 +41,15 @@ class PlanController extends Controller
             ->get()
             ->map(function ($item) {
 
+                //  $html = '<a href="' .URL::to('/admin/plans/'.$item->id.'/edit').'" class="btn btn-sm btn-warning">Edit</a>
+                //     <form method="POST" action="' .URL::to('/admin/plans/'.$item->id). '" style="display:inline-block">
+                //         ' . csrf_field() . method_field('DELETE') . '
+                //         <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                //     </form>';
                  $html = '<a href="' .URL::to('/admin/plans/'.$item->id.'/edit').'" class="btn btn-sm btn-warning">Edit</a>
                     <form method="POST" action="' .URL::to('/admin/plans/'.$item->id). '" style="display:inline-block">
                         ' . csrf_field() . method_field('DELETE') . '
-                        <button class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                       
                     </form>';
 
                   return [
@@ -91,6 +100,36 @@ class PlanController extends Controller
         return view('admin.plans.edit', compact('plan'));
     }
 
+    protected function notifyUsersAboutPlan(Plan $plan)
+    {
+      
+        $users = User::whereIn('id', function($query) {
+            $query->select('user_id')
+                ->from('user_notification_settings')
+                ->where('type', 'membership_billing')
+                ->where('email', 1)
+                ->where(function($q) {
+                    $q->where('send_preference', 'anytime')
+                        ->orWhereNull('send_preference');
+                });
+        })->get(); 
+
+              $link = url('/pricing');
+        $image = "https://www.clipartmax.com/png/middle/127-1272128_competitive-pricing-price-tag-icon-png.png";
+        $title = "Plan Updated: " . $plan->plan_name;
+        $message = "The plan '{$plan->plan_name}' has been updated.";
+        foreach ($users as $user) {
+            Mail::to($user->personalEmail)->queue(new PlanUpdatedMail($plan, $user));
+             event(new NotificationEvent($user, $title, $message, $link, $image));
+        }
+
+
+
+        
+    }
+
+
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -103,6 +142,9 @@ class PlanController extends Controller
 
         $plan = Plan::findOrFail($id);
         $plan->update($request->all());
+        if ($plan->is_officer) {
+                $this->notifyUsersAboutPlan($plan);
+        }
 
         return redirect('/admin/plans')->with('success', 'Plan updated successfully.');
     }

@@ -13,6 +13,7 @@ class Plan extends Model
         'short_desc',
         'description',
         'price',
+        'is_officer',
         'duration_unit',
         'duration_value'
     ];
