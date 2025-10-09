@@ -1,586 +1,343 @@
 @extends('user.partial.app')
 @push('title')
-    Auction Finder
+    Auction Scheduler
 @endpush
 @section('css')
-    <style>
-        .form-label {
-            padding-top: 18px;
-            padding-bottom: 6px;
-            font-size: 15px;
-        }
-
-        .auction-tabs a {
-            border: 1px solid #1b2737;
-        }
-
-
-
-        .auction-tabs .active {
-            background: #0080ff;
-        }
-
-        .auction-tabs .active:hover {
-            color: var(--bs-heading-color) !important;
-        }
-
-        .auction-tabs .active:focus {
-            color: var(--bs-heading-color) !important;
-        }
-
-        .dataTables_length {
-            display: none !important;
-        }
-
-
-        .select2-container--default .select2-selection--single {
-            background: #1d2632 !important;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 33px !important;
-        }
-
-
-        .centers {
-            /* min-width: 400px; */
-            display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-            height: 30px;
-        }
-
-        .centers:hover {
-            min-width: auto;
-            height: auto;
-            overflow: inherit
-        }
-
-
-        .centers span {
-            display: block;
-            padding: 2px;
-            color: var(--bs-heading-color);
-            margin: 1px 2px;
-        }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-            background: var(--bs-primary) !important;
-            border: none !important;
-            opacity: 1 !important;
-            color: var(--bs-heading-color) !important;
-            font-size: var(--font-p1) !important;
-
-
-        }
-
-        .costome-slect .select2-selection__rendered {
-            background: #0f1c2c !important;
-        }
-
-        .costome-slect .select2-selection__rendered {
-            background: #0f1c2c !important;
-        }
-
-        .tb-data-fonts tr td {
-            font-size: var(--font-p1) !important;
-            color: var(--bs-body-color) !important;
-
-
-        }
-
-        .tb-data-fonts .badge {
-            font-size: var(--font-p2) !important;
-            /* color:  var(--bs-body-color) !important; */
-            color: black;
-        }
-
-        .bg-danger-red {
-            background: red !important;
-        }
-
-        .centers span {
-            color: var(--bs-body-color) !important;
-        }
-    </style>
-
-    <style>
-        .autionshadular {
-            position: relative;
-            width: 100%;
-            background-image: url("{{ url('/public/theme/assets/Dots.png') }}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            overflow-x: hidden;
-        }
-
-
-        .tabs-container {
-            background-color: #1e293b;
-            border-radius: 8px;
-            padding: 4px;
-        }
-
-        .custom-tab {
-            background-color: #475569;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px 16px;
-            margin: 0 2px;
-            transition: all 0.2s ease;
-            min-width: 120px;
-            font-weight: 500;
-        }
-
-        .custom-tab:hover {
-            background-color: #64748b;
-            color: white;
-        }
-
-        .custom-tab.active {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .tab-content-area {
-            border-radius: 8px;
-            margin-top: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .tab-numbers {
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-
-        .table-dark-custom {
-            background-color: #1a1f2e;
-            border-color: #2d3748;
-            margin-bottom: 0px;
-        }
-
-        .table-dark-custom th,
-        .table-dark-custom td {
-            border-color: #2d3748;
-            padding: 1rem;
-            vertical-align: middle;
-        }
-
-        .table-dark-custom th {
-            background-color: #1a1f2e;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .platform-text {
-            color: #3b82f6;
-            font-weight: 500;
-        }
-
-        .status-badge {
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            border: none;
-        }
-
-        .status-in-progress {
-            background-color: #dc2626;
-            color: white;
-            font-size: 10px;
-        }
-
-        .status-planned {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .status-cancel {
-            background-color: #f59e0b;
-            color: white;
-        }
-
-        .action-link {
-            color: #9ca3af;
-            text-decoration: none;
-        }
-
-        .action-link:hover {
-            color: #ffffff;
-        }
-
-        .menucoustome-scrolbar {
-            scrollbar-width: thin;
-            scrollbar-color: #007bff rgba(255, 255, 255, 0.137);
-        }
-    </style>
+    @include('user.auctionscheduler.style')
 @endsection
 @section('content')
 <div class="autionshadular">
         <div class="py-5">
+            <div class="tab-content my-4">
+                <div class="tab-pane fade show active" id="tab1">
 
 
-            <div class="tab-content my-4 ">
-                <div class="tab-pane fade show active " id="tab1">
                     <div class="d-flex gap-4 align-items-center text-white my-4 container">
 
 
-                        <div class="dropdown me-3">
-                            <span style="color: #ccc; font-weight: 500;">Platform:</span>
-                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                style="color: #0d6efd; background: transparent; border: none; font-weight: 600; padding: 0;">
-                                Select Platform
-                            </button>
-                            <ul class="dropdown-menu menucoustome-scrolbar"
-                                style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
+                        <div class="me-3">
+                            <label style="color: #ccc; font-weight: 500;">Platform:</label>
+                            <select id="selectedPlatform"
+                                style="color: #fff; background-color: #1a2533; border: 1px solid #2b3b4f; border-radius: 6px; padding: 5px 10px;">
+                                <option value="">Select Platform</option>
                                 @foreach ($platforms as $platform)
-                                    <li>
-                                        <a class="dropdown-item text-white platform-option" href="#"
-                                            data-id="{{ $platform->id }}">
-                                            {{ $platform->name }}
-                                        </a>
-                                    </li>
+                                    <option value="{{ $platform->id }}">{{ $platform->name }}</option>
                                 @endforeach
-                            </ul>
+                            </select>
                         </div>
 
-
-                        <div class="dropdown">
-                            <span style="color: #ccc; font-weight: 500;">Center:</span>
-                            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                style="color: #0d6efd; background: transparent; border: none; font-weight: 600; padding: 0;">
-                                Select Center
-                            </button>
-                            <ul class="dropdown-menu menucoustome-scrolbar"
-                                style="background-color: #1a2533; max-height: 200px; overflow-y: auto;">
+                        <!-- Center -->
+                        <div>
+                            <label style="color: #ccc; font-weight: 500;">Center:</label>
+                            <select id="selectedCenter"
+                                style="color: #fff; background-color: #1a2533; border: 1px solid #2b3b4f; border-radius: 6px; padding: 5px 10px;">
+                                <option value="">Select Center</option>
                                 @foreach ($centers as $center)
-                                    <li>
-                                        <a class="dropdown-item text-white center-option" href="#"
-                                            data-id="{{ $center->id }}">
-                                            {{ $center->name }}
-                                        </a>
-                                    </li>
+                                    <option value="{{ $center->id }}">{{ $center->name }}</option>
                                 @endforeach
-                            </ul>
+                            </select>
                         </div>
 
 
-                        <div class="dropdown">
-                            <span style="color: #ccc; font-weight: 500;">Status:</span>
-                            <button class=" dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                style="color: #0d6efd; background: transparent; border: none ; font-weight: 600; padding: 0;">
-                                Center
-                            </button>
-                            <ul class="dropdown-menu menucoustome-scrolbar" style="background-color: #1a2533;">
-                                <li><a class="dropdown-item text-white" href="#" data-id="all">All</a></li>
-                                <li><a class="dropdown-item text-white" href="#" data-id="in_Progress"> In Progress
-                                    </a></li>
-                            </ul>
+                        <!-- Status -->
+                        <div>
+                            <label style="color: #ccc; font-weight: 500;">Status:</label>
+                            <select id="selectedStatus"
+                                style="color: #fff; background-color: #1a2533; border: 1px solid #2b3b4f; border-radius: 6px; padding: 5px 10px;">
+                                <option value="">All</option>
+                                <option value="in_progress">In Progress</option>
+                            </select>
                         </div>
 
                     </div>
 
+                    <!-- Tabs Section -->
+                    <div class="row">
+                        <div class="tabs-container container"
+                            style="
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            overflow-x: auto;
+                            overflow-y: hidden;
+                            padding-bottom: 10px;
+                            scrollbar-width: thin;
+                            scrollbar-color: #0d6efd #1a2533;
+                        ">
+
+                            @foreach ($days as $index => $day)
+                                <button class="custom-tab flex-fill {{ $index === 0 ? 'active' : '' }}"
+                                    data-date="{{ $day['date'] }}"
+                                    style="
+                                    background-color: {{ $index === 0 ? '#1a2533' : '#1b2737' }};
+                                    border: 1px solid {{ $index === 0 ? '#0d6efd' : '#2b3b4f' }};
+                                    color: #fff;
+                                    padding: 10px 15px;
+                                    border-radius: 10px;
+                                    min-width: 120px;
+                                    text-align: center;
+                                    transition: all 0.3s ease;
+                                    white-space: nowrap;
+                                    font-weight: {{ $index === 0 ? '600' : '400' }};
+                                ">
+                                    <span style="display: block;">{{ $day['label'] }}</span>
+
+                                    <div class="tab-numbers d-flex gap-3 align-items-center text-white"
+                                        style="margin-top: 4px; justify-content: space-between !important;">
+                                        <small class="d-flex align-items-center gap-1"
+                                            style="font-size: 12px; color: #ccc;">
+                                            <i class="fas fa-gavel text-primary"></i>
+                                            {{ $day['auctions'] }} Auctions
+                                        </small>
+                                        <small class="d-flex align-items-center gap-1"
+                                            style="font-size: 12px; color: #ccc;">
+                                            <i class="fas fa-car text-info"></i>
+                                            {{ $day['vehicles'] }} Vehicles
+                                        </small>
+                                    </div>
+                                </button>
+                            @endforeach
+
+                        </div>
+
+                        <!-- ✅ Add this hidden input right after tabs -->
+                        <input type="hidden" id="selectedDate" value="{{ $days[0]['date'] ?? '' }}">
+                    </div>
 
 
-                    <!-- days tabs -->
 
-                    <div class="row ">
-                        <div class=" ">
-                            <!-- Tabs Navigation -->
-                            <div class="tabs-container d-flex flex-wrap gap-1 container">
-                                @foreach ($days as $index => $day)
-                                    <button class="custom-tab flex-fill {{ $index === 0 ? 'active' : '' }}"
-                                        data-date="{{ $day['date'] }}"
-                                        style="display: flex; flex-direction: column; align-items: center;">
-                                        <span>{{ $day['label'] }}</span>
-                                        <div class="tab-numbers d-flex justify-content-between w-100">
-                                            <span>{{ $day['display'] }}</span>
-                                            <span>{{ $day['count'] }}</span>
-                                        </div>
-                                    </button>
-                                @endforeach
+                    <div class="container-fluid" style="background: #0f1c2c; height: 100%;">
+                        <div class="row container-fluid" style="padding-top: 20px;">
+                            <div class="col-md-12">
+                                @if (session('success'))
+                                    <div class="alert alert-success">{{ session('success') }}</div>
+                                @endif
                             </div>
 
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body" style="padding: 10px;">
+                                        <div class="table-responsive text-nowrap" style="border-color: #1b2737 !important;">
+                                            <table class="table" style="border-color: #1b2737 !important;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="font-size: var(--font-p2) !important;">Platform</th>
+                                                        <th style="font-size: var(--font-p2) !important;">Center</th>
+                                                        <th style="font-size: var(--font-p2) !important;">Total Vehicles
+                                                        </th>
+                                                        <th style="font-size: var(--font-p2) !important;">Time</th>
+                                                        <th style="font-size: var(--font-p2) !important;">Status</th>
+                                                        <th style="font-size: var(--font-p2) !important;">Interest</th>
+                                                        <th style="font-size: var(--font-p2) !important;">Action</th>
+                                                    </tr>
+                                                </thead>
 
-                            <div class="container-fluid" style="background: #0f1c2c; height: 100%;">
-                                <div class="row  container-fluid" style="padding-top: 20px">
-                                    <div class="col-md-12">
-                                        @if (session('success'))
-                                            <div class="alert alert-success">{{ session('success') }}</div>
-                                        @endif
-                                    </div>
-
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-body" style="padding: 10px ">
-                                                <div class="table-responsive text-nowrap"
-                                                    style="border-color: #1b2737 !important;">
-                                                    <table class="table" style="border-color: #1b2737 !important;">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="font-size: var(--font-p2) !important; ">Platform
-                                                                </th>
-                                                                <th style="font-size: var(--font-p2) !important; ">Center
-                                                                </th>
-                                                                <th style="font-size: var(--font-p2) !important; ">Total
-                                                                    Vehicles</th>
-                                                                <th style="font-size: var(--font-p2) !important;">Time</th>
-                                                                <th style="font-size: var(--font-p2) !important; ;">Status
-                                                                </th>
-                                                                <th style="font-size: var(--font-p2) !important; ;">Interest
-                                                                </th>
-                                                                <th style="font-size: var(--font-p2) !important; ">Action
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody class="table-border-bottom-0 tb-data-fonts"
-                                                            style="border-color: #1b2737">
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                                <tbody class="table-border-bottom-0 tb-data-fonts"
+                                                    style="border-color: #1b2737;">
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 
 
-
-        <div class="modal fade" id="vehicleModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="text-center mb-4">
-                            <h4 class="mb-2">Vehicle Auction History</h4>
-                            <h5 class="vehicleName"></h5>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover text-center">
-                                <thead>
-                                    <tr>
-                                        <th>Interest Name</th>
-                                        <th>Make</th>
-                                        <th>Model</th>
-                                        <th>Variant</th>
-                                        <th>Total Vehicles</th>
-                                        <th>Your Interest Vehicles</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="vehicleModalTableBody">
-                                    <!-- dynamically fill -->
-                                </tbody>
-                            </table>
-
-                        </div>
+    <div class="modal fade" id="vehicleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center mb-4">
+                        <h4 class="mb-2">Vehicle Auction History</h4>
+                        <h5 class="vehicleName"></h5>
                     </div>
-                </div>
-            </div>
-        </div>
-    @endsection
-    @section('js')
-        <script>
-            document.addEventListener("click", function(e) {
-                if (e.target.classList.contains("open-vehicle-modal")) {
-                    let el = e.target;
-
-                    let auctionId = el.dataset.auctionId;
-                    let interestId = el.dataset.interestId || el.dataset.interestIds;
-                    let auctionName = el.dataset.platform;
-                    let platformId = el.dataset.platformId;
-
-                    // Title set karo
-                    $(".vehicleName").html(auctionName);
-
-                    // Loading row
-                    $("#vehicleModalTableBody").html("<tr><td colspan='5'>Loading...</td></tr>");
-
-                    // AJAX request
-                    $.ajax({
-                        url: "{{ url('auction/intrest') }}",
-                        type: "POST",
-                        data: {
-                            auction_id: auctionId,
-                            interest_id: interestId,
-                            platform_id: platformId,
-                            _token: "{{ csrf_token() }}"
-                        },
-                        dataType: "json",
-                        success: function(data) {
-                            let rows = "";
-                            if (data.length > 0) {
-                                data.forEach(function(item, index) {
-                                    let make = item.make_id ?? "";
-                                    let model = item.model_id ?? "";
-                                    let variant = item.variant_id ?? "";
-                                    let platform = item.platform_id ?? "";
-
-                                    let viewUrl =
-                                        `/autoboli/auction-finder?make=${make}&model=${model}&variant=${variant}&platform=${platform}`;
-
-                                    rows += `
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover text-center">
+                            <thead>
                                 <tr>
-                                    <td>${item.interest_name ?? '-'}</td>
-                                    <td>${item.make_name ?? '-'}</td>
-                                    <td>${item.model_name ?? '-'}</td>
-                                    <td>${item.variant_name ?? '-'}</td>
-                                    <td>${item.total_vehicles ?? 0}</td>
-                                    <td>${item.interest_vehicles ?? 0}</td>
-                                    <td>
-                                        <a href="${viewUrl}" target="_blank" class="btn btn-sm btn-primary">
-                                            View
-                                        </a>
-                                    </td>
+                                    <th>Interest Name</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Variant</th>
+                                    <th>Total Vehicles</th>
+                                    <th>Your Interest Vehicles</th>
+                                    <th>Action</th>
                                 </tr>
-                            `;
-                                });
-                            } else {
-                                rows = "<tr><td colspan='7'>No history found</td></tr>";
-                            }
-                            $("#vehicleModalTableBody").html(rows);
-                        },
+                            </thead>
+                            <tbody id="vehicleModalTableBody">
 
-                        error: function(xhr, status, error) {
-                            console.error("AJAX Error:", error, xhr.responseText);
-                            $("#vehicleModalTableBody").html(
-                                "<tr><td colspan='5'>Error loading data</td></tr>");
-                        }
-                    });
+                            </tbody>
+                        </table>
 
-                    // Modal show
-                    let modal = new bootstrap.Modal(document.getElementById("vehicleModal"));
-                    modal.show();
-                }
-            });
-        </script>
-
-
-
-
-        <script>
-            $(document).ready(function() {
-
-                let table = $('.table').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ordering: false,
-                    ajax: {
-                        url: "{{ url('auctionscheduler') }}",
-                        data: function(d) {
-
-                            d.platform_id = $('#platform_id').val();
-                            d.center_id = $('#center_id').val();
-                            d.date_range = $('select[name=date_range]').val();
-
-                        }
-                    },
-                });
-
-
-                table.on('draw.dt', function() {
-                    var info = table.page.info();
-                    $('.pageinfo').html(
-                        `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
-                });
-
-                $('select[name=center_id]').change(function(e) {
-                    table.search(this.value).draw();
-                });
-
-                $('select[name=platform_id]').change(function(e) {
-                    table.search(this.value).draw();
-                });
-
-                $('select[name=date_range]').change(function(e) {
-                    table.search(this.value).draw();
-                });
-
-                $("input[name='search']").on('keyup change', function() {
-                    table.search(this.value).draw();
-                });
-
-                $("select[name='length']").on('change', function() {
-                    const length = $(this).val();
-                    table.page.len(length).draw();
-                }).trigger('change');
-
-                $('#searchBtn').on('click', function() {
-                    table.ajax.reload();
-                });
-
-
-                $('select[name=platform_id]').select2({
-                    placeholder: 'Select Platform',
-                    allowClear: true,
-                    ajax: {
-                        url: "{{ url('/admin/masters/platforms/getPlatforms') }}",
-                        dataType: 'json',
-                    }
-                }).on('change', function() {
-                    // $('select[name=center_id]').val(null).trigger('change');
-                });
-
-
-                $('select[name=center_id]').select2({
-                    placeholder: 'Select Center',
-                    allowClear: true,
-                    ajax: {
-                        url: "{{ url('/admin/masters/centers/getCenters') }}",
-                        dataType: 'json',
-                        data: function(params) {
-                            return {
-                                q: params.term,
-                                // platform_id: $('select[name=platform_id]').val()
-                            };
-                        }
-                    }
-                }).on('change', function() {
-
-                });
-
-            });
-
-
-
-            $(document).on("click", ".alert-btn", function() {
-                let auctionId = $(this).data("auction");
-                let platformId = $(this).data("platform");
-
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('js')
+    <script>
+        document.addEventListener("click", function(e) {
+            if (e.target.classList.contains("open-vehicle-modal")) {
+                let el = e.target;
+                let auctionId = el.dataset.auctionId;
+                let interestId = el.dataset.interestId || el.dataset.interestIds;
+                let auctionName = el.dataset.platform;
+                let platformId = el.dataset.platformId;
+                $(".vehicleName").html(auctionName);
+                $("#vehicleModalTableBody").html("<tr><td colspan='5'>Loading...</td></tr>");
                 $.ajax({
-                    url: "{{ url('alert-platefrom/store') }}",
+                    url: "{{ url('auction/intrest') }}",
                     type: "POST",
                     data: {
                         auction_id: auctionId,
+                        interest_id: interestId,
                         platform_id: platformId,
                         _token: "{{ csrf_token() }}"
                     },
-                    success: function(response) {
-                        if (response.success) {
-                            toastr.success(response.message);
+                    dataType: "json",
+                    success: function(data) {
+                        let rows = "";
+                        if (data.length > 0) {
+                            data.forEach(function(item, index) {
+                                let make = item.make_id ?? "";
+                                let model = item.model_id ?? "";
+                                let variant = item.variant_id ?? "";
+                                let platform = item.platform_id ?? "";
+                                let viewUrl =
+                                    `/autoboli/auction-finder?make=${make}&model=${model}&variant=${variant}&platform=${platform}`;
+                                rows += `
+                        <tr>
+                            <td>${item.interest_name ?? '-'}</td>
+                            <td>${item.make_name ?? '-'}</td>
+                            <td>${item.model_name ?? '-'}</td>
+                            <td>${item.variant_name ?? '-'}</td>
+                            <td>${item.total_vehicles ?? 0}</td>
+                            <td>${item.interest_vehicles ?? 0}</td>
+                            <td>
+                                <a href="${viewUrl}" target="_blank" class="btn btn-sm btn-primary">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                            `;
+                            });
                         } else {
-                            toastr.warning(response.message);
+                            rows = "<tr><td colspan='7'>No history found</td></tr>";
                         }
+                        $("#vehicleModalTableBody").html(rows);
                     },
-                    error: function() {
-                        toastr.error("Something went wrong, please try again.");
+
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", error, xhr.responseText);
+                        $("#vehicleModalTableBody").html(
+                            "<tr><td colspan='5'>Error loading data</td></tr>");
                     }
                 });
+                let modal = new bootstrap.Modal(document.getElementById("vehicleModal"));
+                modal.show();
+            }
+        });
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function() {
+
+            // Initialize DataTable
+            let table = $('.table').DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                ajax: {
+                    url: "{{ url('auctionscheduler') }}",
+                    data: function(d) {
+                        d.platform_id = $('#selectedPlatform').val();
+                        d.center_id = $('#selectedCenter').val();
+                        d.status = $('#selectedStatus').val();
+                        d.date = $('#selectedDate').val();
+                    }
+                }
             });
-        </script>
-    @endsection
+
+
+            function reloadTable() {
+                table.ajax.reload();
+            }
+
+
+            $('#selectedStatus').on('change', function() {
+                reloadTable();
+            });
+
+            $('#selectedPlatform').on('change', function() {
+                reloadTable();
+            });
+
+
+            $('#selectedCenter').on('change', function() {
+                reloadTable();
+            });
+
+
+            $('.custom-tab').on('click', function() {
+
+                $('.custom-tab').removeClass('active').css({
+                    'background-color': '#1b2737',
+                    'border': '1px solid #2b3b4f',
+                    'font-weight': '400'
+                });
+                $(this).addClass('active').css({
+                    'background-color': '#1a2533',
+                    'border': '1px solid #0d6efd',
+                    'font-weight': '600'
+                });
+
+                let date = $(this).data('date');
+                $('#selectedDate').val(date);
+
+                reloadTable();
+            });
+
+        });
+
+
+
+
+        $(document).on("click", ".alert-btn", function() {
+            let auctionId = $(this).data("auction");
+            let platformId = $(this).data("platform");
+
+            $.ajax({
+                url: "{{ url('alert-platefrom/store') }}",
+                type: "POST",
+                data: {
+                    auction_id: auctionId,
+                    platform_id: platformId,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                    } else {
+                        toastr.warning(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error("Something went wrong, please try again.");
+                }
+            });
+        });
+    </script>
+@endsection

@@ -43,7 +43,7 @@ public function index(Request $request)
         $today = now()->toDateString();
         $auctionFilter = $request->auction_filter ?? 'Today';
 
-        // ✅ Select auction IDs based on filter
+     
         $auctionIds = DB::table('auctions')
             ->when($auctionFilter === 'Upcoming', function ($q) use ($today) {
                 $q->whereDate('auction_date', '>', $today);
@@ -52,7 +52,7 @@ public function index(Request $request)
             })
             ->pluck('id');
 
-        // ✅ Base vehicle query
+   
         $query = DB::table('vehicles')
             ->leftJoin('auctions', 'auctions.id', '=', 'vehicles.auction_id')
             ->leftJoin('auction_platform', 'auction_platform.id', '=', 'auctions.platform_id')
@@ -61,9 +61,7 @@ public function index(Request $request)
             ->leftJoin('model', 'model.id', '=', 'vehicles.model_id')
             ->leftJoin('model_variant', 'model_variant.id', '=', 'vehicles.variant_id')
             ->whereIn('vehicles.auction_id', $auctionIds)
-            
-            // ✅ If Today → include only vehicles that have previous record before today
-            // ✅ If Upcoming → include only vehicles that have any record before the upcoming date
+  
             ->whereExists(function ($subQuery) use ($today, $auctionFilter) {
                 $subQuery->select(DB::raw(1))
                     ->from('vehicles as v2')
@@ -107,6 +105,10 @@ public function index(Request $request)
                       ->when($interest->variant_id, fn($q) => $q->where('vehicles.variant_id', $interest->variant_id));
             }
         }
+      if ($request->filled('auction_date')) {
+            $query->whereDate('auctions.auction_date', $request->auction_date);
+        }
+
 
         // 🔍 Search
         if ($request->filled('search.value')) {
@@ -226,6 +228,59 @@ public function index(Request $request)
 }
 
 
+public function getReauctionStats()
+{
+    $today = Carbon::today()->toDateString();
+
+    // 🔹 Step 1: Get all past auctions
+    $pastAuctions = DB::table('auctions')
+        ->whereDate('auction_date', '<', $today)
+        ->pluck('id');
+
+    $pastRegs = [];
+    if ($pastAuctions->isNotEmpty()) {
+        $pastRegs = DB::table('vehicles')
+            ->whereIn('auction_id', $pastAuctions)
+            ->whereNotNull('reg')
+            ->pluck('reg')
+            ->toArray();
+    }
+
+    // 🔹 Step 2: Get today + future auctions
+    $futureAuctions = DB::table('auctions')
+        ->whereDate('auction_date', '>=', $today)
+        ->orderBy('auction_date', 'asc')
+        ->get();
+
+    $summary = [];
+
+    foreach ($futureAuctions as $auction) {
+        $vehicles = DB::table('vehicles')
+            ->where('auction_id', $auction->id)
+            ->whereNotNull('reg')
+            ->pluck('reg')
+            ->toArray();
+
+        $reauctioned = $pastRegs ? array_intersect($pastRegs, $vehicles) : [];
+        $date = Carbon::parse($auction->auction_date)->format('Y-m-d');
+
+        if (!isset($summary[$date])) {
+            $summary[$date] = [
+                'Total_auction' => 0,
+                'auction_date' => $date,
+                'reauction_count' => 0,
+            ];
+        }
+
+        // ✅ Count auctions, not vehicles
+        $summary[$date]['Total_auction'] += 1;
+
+        // ✅ Count reauction vehicles for this auction
+        $summary[$date]['reauction_count'] += count($reauctioned);
+    }
+
+    return response()->json(array_values($summary));
+}
 
 
 

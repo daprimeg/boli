@@ -42,7 +42,7 @@
 
 
 
-<div class="tab-content mt-5" id="myTabContent">
+{{-- <div class="tab-content mt-5" id="myTabContent">
 
     <div class="container-fluid">
 
@@ -81,5 +81,5 @@
 
 
     </div>
-</div>
+</div> --}}
 </div>

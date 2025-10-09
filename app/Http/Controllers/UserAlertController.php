@@ -16,7 +16,6 @@ use App\Models\Make;
 use App\Models\VehicleModel;
 use App\Models\ModelVariant;
 use App\Models\Notification;
-use App\Models\Year;
 use App\Models\BodyType;
 use App\Models\Color;
 use App\Models\Vehicle;
@@ -26,15 +25,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Models\RecentView;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\Year;
 
 class UserAlertController extends Controller
 {
-public function index()
+    public function index()
     {
-
-       
-
-        return view('user.alert.index');
+        $years = Year::list(); 
+        return view('user.alert.index',compact('years'));
 
     }
 
@@ -42,27 +40,19 @@ public function getVehicleFilters(Request $request)
 {
     $makeId = $request->input('make_id');
     $modelId = $request->input('model_id');
-
-    // Always return makes (sabhi makes)
     $makes = Make::whereIn('id', Vehicle::pluck('make_id'))->get();
-
-    // Agar make select hua ho to models us make ke
     $models = collect();
     if ($makeId) {
         $models = VehicleModel::where('make_id', $makeId)
             ->whereIn('id', Vehicle::pluck('model_id'))
             ->get();
     }
-
-    // Agar model select hua ho to variants us model ke
     $variants = collect();
     if ($modelId) {
         $variants = ModelVariant::where('model_id', $modelId)
             ->whereIn('id', Vehicle::pluck('variant_id'))
             ->get();
     }
-
-    // Years and fuel types (global)
     $years = Vehicle::select('year')->distinct()->get();
     $fuel_types = Vehicle::select('fuel_type')->distinct()->get();
 
@@ -78,64 +68,54 @@ public function getVehicleFilters(Request $request)
 public function getAuctionData(Request $request)
 {
     $userId = auth()->id();
-    $filters = $request->input('filters', []);
+    $make  = $request->input('make');
+    $model = $request->input('model');
+    $year  = $request->input('year');
 
-    $length = $request->input('length', 50); // default 50
+
+    $length = $request->input('length', 50); 
     $page   = $request->input('page', 1);
     $offset = ($page - 1) * $length;
-
-    // Alerts
-    $alertsQuery = Notification::with(['vehicle' => function ($q) use ($filters) {
+    $alertsQuery = Notification::with(['vehicle' => function ($q) use ($make, $model, $year) {
         $q->select(
             'id', 'title as vehicle', 'year', 'cc', 'images as image',
-            'mileage', 'transmission', 'auction_id', 'last_bid'
+            'mileage', 'transmission', 'auction_id', 'last_bid','cap_clean','cap_below','cap_average','autotrader_retail_value'
         )
         ->with(['auction:id,name,auction_date,auction_type,end_date']);
 
-        if (!empty($filters['make'])) {
-            $q->whereIn('make_id', $filters['make']);
-        }
-        if (!empty($filters['model'])) {
-            $q->whereIn('model_id', $filters['model']);
-        }
-        if (!empty($filters['variant'])) {
-            $q->whereIn('variant_id', $filters['variant']);
-        }
-        if (!empty($filters['year'])) {
-            $q->whereIn('year', $filters['year']);
-        }
-        if (!empty($filters['fuel'])) {
-            $q->whereIn('fuel_type', $filters['fuel']);
-        }
+           if (!empty($make)) {
+            $q->where('make_id', $make);
+            }
+            if (!empty($model)) {
+                $q->where('model_id', $model);
+            }
+            if (!empty($year)) {
+                $q->where('year', $year);
+            }
     }])
     ->where('user_id', $userId);
 
     $alertsCount = $alertsQuery->count();
     $alerts = $alertsQuery->latest()->skip($offset)->take($length)->get();
 
-    // Recent Views
-    $recentQuery = RecentView::with(['vehicle' => function ($q) use ($filters) {
+
+    $recentQuery = RecentView::with(['vehicle' => function ($q) use ($make, $model, $year) {
         $q->select(
-            'id', 'title as vehicle', 'year', 'cc', 'images as image',
-            'mileage', 'transmission', 'auction_id', 'last_bid'
+                'id', 'title as vehicle', 'year', 'cc', 'images as image',
+            'mileage', 'transmission', 'auction_id', 'last_bid','cap_clean','cap_below','cap_average','autotrader_retail_value'
         )
         ->with(['auction:id,name,auction_date,auction_type,end_date']);
 
-        if (!empty($filters['make'])) {
-            $q->whereIn('make_id', $filters['make']);
-        }
-        if (!empty($filters['model'])) {
-            $q->whereIn('model_id', $filters['model']);
-        }
-        if (!empty($filters['variant'])) {
-            $q->whereIn('variant_id', $filters['variant']);
-        }
-        if (!empty($filters['year'])) {
-            $q->whereIn('year', $filters['year']);
-        }
-        if (!empty($filters['fuel'])) {
-            $q->whereIn('fuel_type', $filters['fuel']);
-        }
+    if (!empty($make)) {
+        $q->where('make_id', $make);
+    }
+    if (!empty($model)) {
+        $q->where('model_id', $model);
+    }
+    if (!empty($year)) {
+        $q->where('year', $year);
+    }
+       
     }])
     ->where('user_id', $userId);
 
@@ -151,7 +131,16 @@ public function getAuctionData(Request $request)
         'page' => $page
     ]);
 }
+public function destroy($id)
+{
+    $alert = Notification::find($id);
+    if (!$alert) {
+        return response()->json(['message' => 'Alert not found'], 404);
+    }
 
+    $alert->delete();
+    return response()->json(['message' => 'Alert deleted successfully']);
+}
 
 
 

@@ -344,6 +344,8 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             
             // Reauction
             Route::get('/reauction', [ReauctionController::class,'index'])->name('reauction');
+            Route::get('/get-reauction-stats', [ReauctionController::class, 'getReauctionStats']);
+
             Route::get('/reauction/interest', [ReauctionController::class,'interest'])->name('reauction-interest');
             Route::post('/reauction/info', [ReauctionController::class,'information'])->name('reauctioninfo');
             Route::get('/autionshadule', [WebController::class, 'AutionShadule'])->name('autionshadule');
@@ -383,7 +385,9 @@ Route::middleware(['auth',CheckUserStatus::class])->group(function () {
             // myalert
             Route::get('/viewhistory', [UserAlertController::class,'index']);
             Route::get('/viewhistory/get-filters', [UserAlertController::class, 'getVehicleFilters'])->name('get.filters');
-            Route::post('viewhistory/auction-data', [UserAlertController::class, 'getAuctionData'])->name('get.auction.data');
+            Route::post('/viewhistory/auction-data', [UserAlertController::class, 'getAuctionData'])->name('get.auction.data');
+            Route::delete('/viewhistory/alerts/{id}', [UserAlertController::class, 'destroy']);
+
 
 
             Route::post('/notifications/mark-read/{id}', function ($id) {

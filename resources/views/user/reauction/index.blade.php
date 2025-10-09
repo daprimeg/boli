@@ -178,82 +178,63 @@
 
 
                     <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="card-title ">Reauction Details</h4>
-                            </div>
+                        <div class="container-fluid">
+                                <!-- Header -->
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <h4 class="card-title">Reauction Details</h4>
+                                    </div>
+                                </div>
 
-                        </div>
+                                <!-- Filters Section -->
+                                <div class="row align-items-center mb-3">
+                                    <!-- Page Length Selector -->
+                                    <div class="col-md-8 d-flex align-items-center">
+                                        <select id="pageLength" class="form-select me-2" style="max-width: 120px;">
+                                            <option value="10">10</option>
+                                            <option value="100">100</option>
+                                            <option value="200">200</option>
+                                            <option value="500">500</option>
+                                        </select>
+                                        <span class="pageinfo">0</span>
+                                    </div>
 
-                        <div class="row pt-5">
-                            <div class="col-md-8">
+                                    <!-- Auction Selector + Search + Interest -->
+                                    <div class="col-md-4 d-flex justify-content-end gap-2">
+                                        <!-- Auction Selector -->
+                                        <select id="auctionSelector" class="form-select" style="min-width: 250px;">
+                                            <option value="">Select Auction Date</option>
+                                        </select>
 
-                                <select style="max-width:200px;padding:5px;" name="length" class="">
-                                    <option value="10">10</option>
-                                    <option value="100">100</option>
-                                    <option value="200">200</option>
-                                    <option value="500">500</option>
-                                </select>
-                                <span style="padding-left: 5px" class="pl-2 pageinfo">0</span>
-                            </div>
+                                        <!-- Search by Registration -->
+                                        <input type="text" name="search" class="form-control" placeholder="Search by Reg" style="min-width: 180px;" />
 
-
-                            <div class="col-md-4 text-end">
-                                <div class="container-fluid">
-                                    <div class="row custom-nav">
-                                        <div class="col-md-4 mt-2">
-                                            <div class="nav-item">
-                                                <input type="checkbox" id="Upcoming" value="Upcoming">
-                                                <label for="Upcoming">Upcoming</label>
-                                            </div>
-                                        
-
-                                        </div>
-
-                                        <div class="col-md-4 text-center">
-                                            <input type="text" name="search" class="form-control"
-                                                placeholder="Search by Reg" />
-                                        </div>
-
-                                        <div class="col-md-4 text-end mt-1">
-                                            <div class="row custom-dropdown">
-                                                <div class="col-md-12">
-                                                    <div class="dropdown">
-                                                        <button class="custom-btn dropdown-toggle" type="button"
-                                                            id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                            Select Interest
-                                                        </button>
-                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"
-                                                            id="interestDropdown">
-                                                            <li>
-                                                                <a class="dropdown-item" data-id="">
-                                                                    Select Interest
-                                                                </a>
-                                                            </li>
-                                                            @forelse($interests as $interest)
-                                                                <li>
-                                                                    <a class="dropdown-item" href="#"
-                                                                        data-id="{{ $interest->id }}">
-                                                                        {{ $interest->title }}
-                                                                    </a>
-                                                                </li>
-                                                            @empty
-                                                                <li><span class="dropdown-item text-muted">No interests
-                                                                        found</span></li>
-                                                            @endforelse
-                                                        </ul>
-                                                    </div>
-
-                                                    <input type="hidden" id="selected_interest_id" value="">
-
-                                                </div>
-                                            </div>
+                                        <!-- Interest Dropdown -->
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="interestDropdownBtn"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Interest
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="interestDropdownBtn" id="interestDropdown">
+                                                <li>
+                                                    <a class="dropdown-item" data-id="">Select Interest</a>
+                                                </li>
+                                                @forelse($interests as $interest)
+                                                    <li>
+                                                        <a class="dropdown-item" href="#" data-id="{{ $interest->id }}">
+                                                            {{ $interest->title }}
+                                                        </a>
+                                                    </li>
+                                                @empty
+                                                    <li><span class="dropdown-item text-muted">No interests found</span></li>
+                                                @endforelse
+                                            </ul>
+                                            <input type="hidden" id="selected_interest_id" value="">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
 
                         <div class="pt-5 table-responsive text-nowrap">
                             <table id="blogTable" class="table table-bordered">
@@ -287,6 +268,20 @@
 @section('js')
     <script>
 $(document).ready(function() {
+
+    // Get today's date in Y-m-d
+    function getTodayDate() {
+        let today = new Date();
+        let yyyy = today.getFullYear();
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let dd = String(today.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    // Initialize default filter
+    let defaultDate = getTodayDate();
+    $('#auctionSelector').val(defaultDate).trigger('change');
+
     let table = $('#blogTable').DataTable({
         processing: true,
         ordering: false,
@@ -296,95 +291,72 @@ $(document).ready(function() {
             data: function(d) {
                 d.inprogress_check = $('#inprogress_check').is(':checked') ? 1 : 0;
                 d.interest_id = $('#selected_interest_id').val();
-                d.auction_filter = $('#Upcoming').is(':checked') ? 'Upcoming' : 'Today';
+                d.auction_date = $('#auctionSelector').val(); // date filter
             },
             dataSrc: function(json) {
-               
-                updatePlatformCenterUI(json.platforms, json.centers,json.recordsTotal);
-              
+                updatePlatformCenterUI(json.platforms, json.centers, json.recordsTotal);
                 return json.data;
-
             }
         }
     });
 
-
+    // Page info
     table.on('draw.dt', function() {
         var info = table.page.info();
-        $('.pageinfo').html(
-            `Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
+        $('.pageinfo').html(`Showing ${info.start + 1} to ${info.end} of ${info.recordsDisplay} entries`);
     });
 
-    
+    // Search
     $("input[name='search']").on('keyup change', function() {
         table.search(this.value).draw();
     });
 
-   
+    // Length
     $("select[name='length']").on('change', function() {
-        const length = $(this).val();
-        table.page.len(length).draw();
+        table.page.len($(this).val()).draw();
     }).trigger('change');
 
-   
-    $('#inprogress_check').on('change', function() {
-        table.ajax.reload();
-    });
+    // Checkbox filter
+    $('#inprogress_check').on('change', function() { table.ajax.reload(); });
 
-  
+    // Interest dropdown
     $('#interestDropdown').on('click', '.dropdown-item', function(e) {
         e.preventDefault();
-        const selectedId = $(this).data('id');
-        $('#selected_interest_id').val(selectedId);
+        $('#selected_interest_id').val($(this).data('id'));
         $('#dropdownMenuButton').text($(this).text());
         table.ajax.reload();
     });
 
-  
-    $('#Upcoming').on('change', function() {
+    // Date filter: Select2 dropdown
+    $('#auctionSelector').on('change', function() {
         table.ajax.reload();
     });
 
-    
-function updatePlatformCenterUI(platforms, centers, recordsTotal) {
-    const platformContainer = $('.platform-badges');
-    const centerContainer = $('.platefrom_mar');
-    const vehicleCountToday = $('#vehicleCountToday');
+    // Platform & Center UI update
+    function updatePlatformCenterUI(platforms, centers, recordsTotal) {
+        const platformContainer = $('.platform-badges');
+        const centerContainer = $('.platefrom_mar');
+        const vehicleCountToday = $('#vehicleCountToday');
 
-    platformContainer.empty();
-    centerContainer.empty();
+        platformContainer.empty();
+        centerContainer.empty();
+        vehicleCountToday.text(recordsTotal || 0);
 
-    // ✅ Update the Today count
-    if (recordsTotal !== undefined && recordsTotal > 0) {
-        vehicleCountToday.text(recordsTotal);
-    } else {
-        vehicleCountToday.text(0);
+        if(platforms?.length) {
+            $.each(platforms, function(i, p){
+                platformContainer.append(`<span class="platform-badge ${i===0?'active':''}">${p}</span>`);
+            });
+        } else platformContainer.append(`<span style="color: gray;">No Platforms</span>`);
+
+        if(centers?.length) {
+            $.each(centers, function(i, c){
+                centerContainer.append(`<span style="font-size: var(--font-p3); color: var(--dimtext)">${c}</span>`);
+            });
+        } else centerContainer.append(`<span style="color: gray;">No Centers</span>`);
     }
-
-    // ✅ Platforms
-    if (platforms && platforms.length > 0) {
-        $.each(platforms, function(index, platform) {
-            platformContainer.append(
-                `<span class="platform-badge ${index === 0 ? 'active' : ''}">${platform}</span>`
-            );
-        });
-    } else {
-        platformContainer.append(`<span style="color: gray;">No Platforms</span>`);
-    }
-
-    // ✅ Centers
-    if (centers && centers.length > 0) {
-        $.each(centers, function(index, center) {
-            centerContainer.append(
-                `<span style="font-size: var(--font-p3); color: var(--dimtext)">${center}</span>`
-            );
-        });
-    } else {
-        centerContainer.append(`<span style="color: gray;">No Centers</span>`);
-    }
-}
 
 });
+
 
 
 
@@ -464,74 +436,74 @@ $(document).on('click', '.PreviousBtnRec', function() {
     </script>
 
     <script>
-        $(document).ready(function() {
+        // $(document).ready(function() {
 
 
-            function loadInterests(interestId = null) {
-                $.ajax({
-                    url: '{{ route('reauction-interest') }}',
-                    method: 'GET',
-                    data: interestId ? {
-                        secondary: interestId
-                    } : {},
-                    dataType: 'json',
-                    success: function(interests) {
-                        let html = '';
+        //     function loadInterests(interestId = null) {
+        //         $.ajax({
+        //             url: '{{ route('reauction-interest') }}',
+        //             method: 'GET',
+        //             data: interestId ? {
+        //                 secondary: interestId
+        //             } : {},
+        //             dataType: 'json',
+        //             success: function(interests) {
+        //                 let html = '';
 
-                        interests.forEach(function(interest) {
-                            html += `
-                    <div class="col-auto" style="width: 22%;">
-                        <div class="card h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
-                            <div class="card-body pb-1 text-start">
-                                <div class="d-flex align-items-start mb-2">
-                                    <div class="dot-box"
-                                        style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px;">
-                                        <div class="dot"
-                                            style="width: 30px; height: 30px; background-color: #0d6efd; border-radius: 50%;">
-                                        </div>
-                                    </div>
-                                    <h4 class="mb-0 ms-2">
-                                        <span class="auction-count">${interest.matched_reauction_cars}</span>
-                                    </h4>
-                                </div>
-                                <p class="text-start mb-1 total_auctions">${interest.title}</p>
-                                <p class="mb-0 text-start">
-                                    <label class="d-flex align-items-center cursor-pointer mb-2">
-                                        <input type="checkbox" 
-                                               class="secondary-toggle me-2" 
-                                               data-id="${interest.interest_id}"
-                                               ${interestId == interest.interest_id ? 'checked' : ''}>
-                                        <small style="font-size:var(--font-p2)">Include Secondary</small>
-                                    </label>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-                        });
+        //                 interests.forEach(function(interest) {
+        //                     html += `
+        //             <div class="col-auto" style="width: 22%;">
+        //                 <div class="card h-100" style="border-bottom: 4px solid var(--bs-primary)!important;">
+        //                     <div class="card-body pb-1 text-start">
+        //                         <div class="d-flex align-items-start mb-2">
+        //                             <div class="dot-box"
+        //                                 style="width: 40px;height: 40px; background-color: #003164; border-radius: 8px;display: flex;align-items: center;justify-content: center;margin-right: 10px;">
+        //                                 <div class="dot"
+        //                                     style="width: 30px; height: 30px; background-color: #0d6efd; border-radius: 50%;">
+        //                                 </div>
+        //                             </div>
+        //                             <h4 class="mb-0 ms-2">
+        //                                 <span class="auction-count">${interest.matched_reauction_cars}</span>
+        //                             </h4>
+        //                         </div>
+        //                         <p class="text-start mb-1 total_auctions">${interest.title}</p>
+        //                         <p class="mb-0 text-start">
+        //                             <label class="d-flex align-items-center cursor-pointer mb-2">
+        //                                 <input type="checkbox" 
+        //                                        class="secondary-toggle me-2" 
+        //                                        data-id="${interest.interest_id}"
+        //                                        ${interestId == interest.interest_id ? 'checked' : ''}>
+        //                                 <small style="font-size:var(--font-p2)">Include Secondary</small>
+        //                             </label>
+        //                         </p>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //             `;
+        //                 });
 
-                        $('#scrollableRow').html(html);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        $('#scrollableRow').html(
-                        '<p class="text-danger">Failed to load interests.</p>');
-                    }
-                });
-            }
-
-
-            loadInterests();
+        //                 $('#scrollableRow').html(html);
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error('AJAX Error:', error);
+        //                 $('#scrollableRow').html(
+        //                 '<p class="text-danger">Failed to load interests.</p>');
+        //             }
+        //         });
+        //     }
 
 
-            $(document).on('change', '.secondary-toggle', function() {
-                const interestId = $(this).data('id');
-                const isChecked = $(this).is(':checked');
+        //     loadInterests();
 
 
-                loadInterests(isChecked ? interestId : null);
-            });
-        });
+        //     $(document).on('change', '.secondary-toggle', function() {
+        //         const interestId = $(this).data('id');
+        //         const isChecked = $(this).is(':checked');
+
+
+        //         loadInterests(isChecked ? interestId : null);
+        //     });
+        // });
     </script>
 
 
@@ -568,9 +540,65 @@ $(document).on('click', '.PreviousBtnRec', function() {
     </script>
 
     <script>
-        let btn = document.querySelector('.add-notification');
+$(document).ready(function () {
 
-        // Ye browser ke native API ka use karega
-        console.log(getEventListeners(btn));
+    // Initialize Select2
+    $('#auctionSelector').select2({
+        placeholder: 'Select Auction Date',
+        allowClear: true,
+        width: '100%'
+    });
+
+    $.ajax({
+        url: "{{ url('get-reauction-stats') }}",
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            let dropdown = $('#auctionSelector');
+            dropdown.empty();
+            dropdown.append('<option value="">Select Auction Date</option>');
+
+            let today = new Date();
+            let tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+
+            $.each(response, function (index, item) {
+             
+                let parts = item.auction_date.split('-');
+                let auctionDate = new Date(parts[0], parts[1] - 1, parts[2]);
+
+                let label = '';
+                if (auctionDate.toDateString() === today.toDateString()) {
+                    label = 'Today';
+                } else if (auctionDate.toDateString() === tomorrow.toDateString()) {
+                    label = 'Tomorrow';
+                } else {
+                    label = auctionDate.toLocaleDateString('en-US', { weekday: 'long' });
+                }
+
+                let optionText = `${label} ( ${item.reauction_count} )`;
+                dropdown.append(`<option value="${item.auction_date}">${optionText}</option>`);
+            });
+
+            // Reinitialize Select2 after data load
+            dropdown.trigger('change.select2');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
 @endsection

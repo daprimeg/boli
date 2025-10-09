@@ -1,467 +1,494 @@
 @extends('user.partial.app')
 @push('title') Watchlist @endpush
 @section('css')
-<style>
+ <style>
+  
+   :root {
+    --acsi-bg: #0f172a;          
+    --acsi-surface: #111827;    
+    --acsi-border: #223047;    
+    --acsi-foreground: #e5e7eb; 
+    --acsi-muted: #94a3b8;      
 
-   .form-label{
-      padding-top: 18px;
-      padding-bottom: 6px;
-      font-size: 15px;
-   }
+    --acsi-accent: #0080ff;      
+    --acsi-accent-ink: #081523;  
+    --acsi-danger: #ff4d4f;      
 
-   .auction-tabs a{
-      border: 1px solid var(--bs-border-color);
-      background-color: var(--bs-paper-bg);
-   }
-
-   .auction-tabs .active{
-      background: #0080ff;
-   }
-
-   .auction-tabs .active:hover{
-      color: white!important;
-   }
-
-   .auction-tabs .active:focus{
-      color: white!important;
-   }
-
-   .select2-container--default .select2-selection--single .select2-selection__rendered {
-      color: #444;
-      line-height: 33px;
-   }
-
-   .select2-container {
-      width: 236px;
-      margin-right: 5px;
-   }
-
-   .select2-container--default .select2-selection--single {
-      background-color: var(--bs-paper-bg) !important;
-      border: 1px solid var(--bs-b-color) !important;
-   }
-
-   .filter .select2-container--default .select2-selection--single {
-    background-color: var(--bs-body-bg)!important;
-   
-   }
-
-   .my_btn{
-      background: transparent;
-       border: none;
-   }
-
-   .auction-table tr{
-      vertical-align: baseline;
-   }
-
-   .auction-table .extra{
-      display: none;
-   }
-
-   .auction-table .showing .extra{
-      display: block;
-      margin-top: 10px;
-   }
-
-   .auction-table .report-link{
-      padding: 2px 7px;
-      font-size: 10px;      
-   }
-
-
-   .auction-table img{
-      width:60px;
-   }
-
-   .show_entries_div{
-
-   }
-   .skyblue-badge {
-    background-color: #0080ff;
-    color: #ffffff; 
+    --radius: 10px;
 }
-   
-</style>
+
+/* Containers */
+.acsi-theme .card,
+.acsi-theme .table-wrap {
+    background: var(--acsi-surface);
+    border: 1px solid var(--acsi-border);
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+}
+
+/* Headings / labels */
+.acsi-theme .label-muted {
+    color: var(--acsi-muted);
+    font-size: 0.875rem;
+}
+
+/* Pills (Watchlist / Alerts) */
+.acsi-theme .nav-pills .nav-link {
+    color: var(--acsi-muted);
+    background: transparent;
+    border-radius: 999px;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.acsi-theme .nav-pills .nav-link:hover {
+    color: var(--acsi-accent);
+}
+
+.acsi-theme .nav-pills .nav-link.active {
+    color: var(--acsi-accent);
+    border-radius: 0;
+}
+
+/* Active tab underline */
+.acsi-theme .nav-pills .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--acsi-accent);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Inputs / Selects */
+.acsi-theme .form-select,
+.acsi-theme .form-control {
+    color: var(--acsi-foreground);
+    background: #0e1626;
+    border: 1px solid var(--acsi-border);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.acsi-theme .form-select:focus,
+.acsi-theme .form-control:focus {
+    border-color: var(--acsi-accent);
+    box-shadow: 0 0 0 .2rem rgba(0, 128, 255, 0.25);
+}
+
+/* Table */
+.acsi-theme .table {
+    color: var(--acsi-foreground);
+    margin-bottom: 0;
+}
+
+.acsi-theme .table > :not(caption) > * > * {
+    background: transparent !important;
+    border-bottom: 1px solid var(--acsi-border);
+    transition: background 0.3s ease;
+}
+
+.acsi-theme thead th {
+    color: var(--acsi-muted);
+    font-weight: 600;
+    white-space: nowrap;
+    background: #0e1626 !important;
+}
+
+.acsi-theme tbody tr:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Muted cells */
+.acsi-theme .cell-muted {
+    color: var(--acsi-muted);
+    font-size: .8125rem;
+}
+
+/* Price links / accent links */
+.acsi-theme .cell-price a,
+.acsi-theme .link-accent {
+    color: var(--acsi-accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.acsi-theme .link-accent:hover,
+.acsi-theme .cell-price a:hover {
+    text-decoration: underline;
+}
+
+/* Chips / Badges */
+.acsi-theme .chip {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    border: 1px solid var(--acsi-border);
+    border-radius: 999px;
+    color: var(--acsi-foreground);
+    background: #0e1626;
+    font-size: .75rem;
+    line-height: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.acsi-theme .chip-accent {
+    border-color: rgba(46,168,255,.35);
+    background: rgba(46,168,255,.1);
+    color: var(--acsi-accent);
+}
+
+.acsi-theme .chip-danger {
+    border-color: rgba(255,77,79,.35);
+    background: rgba(255,77,79,.08);
+    color: var(--acsi-danger);
+}
+
+/* Tiny thumbnails */
+.acsi-theme .thumb {
+    width: 48px;
+    height: 36px;
+    border-radius: 6px;
+    background: #0e1626;
+    border: 1px solid var(--acsi-border);
+    transition: all 0.3s ease;
+}
+
+.acsi-theme .thumb:hover {
+    transform: scale(1.05);
+    border-color: var(--acsi-accent);
+}
+
+/* Utilities */
+.acsi-theme .soft-sep {
+    border-top: 1px solid var(--acsi-border);
+}
+
+.acsi-theme .fit {
+    white-space: nowrap;
+}
+
+/* Expandable rows */
+.expandable-row {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.extra-content {
+    display: none;
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--acsi-foreground);
+    background: rgba(0,128,255,0.05);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.expandable-row.expanded .extra-content {
+    display: block;
+    animation: expandFade 0.3s ease forwards;
+}
+
+@keyframes expandFade {
+    0% { opacity: 0; transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+
+
+    </style>
 @endsection
 @section('content')
 
+<main class="acsi-theme container-fluid py-4">
 
-<div class="py-5 container-fluid filter">
+<div class="mb-3">
 
-      <div class="d-flex flex-wrap justify-content-between">
-         <div class="auction-tabs">
-               <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-             <ul class="nav nav-pills flex-row">
-                    <li class="nav-item me-2">
-                        <a data-id="auction-table" class="display_type nav-link active" href="javascript:void(0);">My Alert</a>
-                    </li>
-                    <li class="nav-item">
-                        <a data-id="recent-table" class="display_type nav-link" href="javascript:void(0);">Recent View</a>
-                    </li>
-                </ul>
-
-               </div>
-         </div>
-         <div  class="text-right ">
-            <div class="d-flex justify-content-between">
-               <div class=" align-self-center show_entries_div">
-                  <span style="padding-right: 5px" >Show Entries</span>
-                  <select style="height: 38px;padding: 0px 10px;" name="length">
-                     {{-- <option value="10">10</option> --}}
-                     <option value="50">50</option>
-                     <option value="100">100</option>
-                     <option value="500">500</option>
-                  </select>
-               </div>
-        
-            </div>
-         </div>
-      </div>
-
-      <div class="row">
-         <div class="col-lg-3">
-            <div class="card p-2">
-                  <div class="d-flex justify-content-between align-items-center px-1 pt-1">
-                     <h5 class="mb-0">Filters</h5>
-                     <div>
-                        <a href="{{url('/viewhistory')}}" class="text-decoration-none">Clear all</a>
-                     </div>
-                  </div>
-             
-                  <hr>
-                  <div class="accordion" id="filterAccordion">
-                        @include('user.alert.sidebar')
-                  </div>
-
-         
-            </div>
-         </div>
-
-      
-         <div class="col-lg-9">
-            <div class="card">
-              <div class="table-responsive text-nowrap mt-3">
-
-           
-                    <table id="auction-table" class="auction-table table table-hover table-switch">
-                    <thead>
-                        <tr>
-                            <th>Vehicle</th>
-                            <th>Year</th>
-                            <th>CC</th>
-                            <th>Image</th>
-                            <th>Mileage</th>
-                            <th>Transmission</th>
-                            <th>Auction</th>
-                            <th>Auction Time</th>
-                            <th>Last Bid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                    </table>
-
-                  
-                    <table id="recent-table" class="auction-table table table-hover table-switch d-none">
-                    <thead>
-                        <tr>
-                            <th>Vehicle</th>
-                            <th>Year</th>
-                            <th>CC</th>
-                            <th>Image</th>
-                            <th>Mileage</th>
-                            <th>Transmission</th>
-                            <th>Auction</th>
-                            <th>Auction Time</th>
-                            <th>Last Bid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                    </table>
+  <ul class="nav nav-pills flex-row mb-2" id="myTab" role="tablist">
+    <li class="nav-item me-2" role="presentation">
+      <button class="nav-link active" id="watchlist-tab" data-bs-toggle="tab" data-bs-target="#watchlist" type="button" role="tab" aria-controls="watchlist" aria-selected="true">
+        Watchlist
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="alerts-tab" data-bs-toggle="tab" data-bs-target="#alerts" type="button" role="tab" aria-controls="alerts" aria-selected="false">
+        Your Alerts
+      </button>
+    </li>
+  </ul>
+  
 
 
-                </div>
+    <div class="d-flex justify-content-between align-items-center mb-2 mt-10">
+        <div class="d-flex align-items-center gap-2">
+            <span class="label-muted">Show Entries</span>
+            <select class="form-select entries-length" style="width: 90px;">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+            </select>
+        </div>
 
-               <div class=" d-flex align-items-center justify-content-center gap-4 pt-4" >
-                     <div class="dt-paging">
-                           <nav aria-label="pagination">
-                                 <ul class="pagination">
 
-                                 </ul>
-                           </nav>
-                     </div>
-               </div>
-            </div>
-         </div>
-      </div>
+    <div class="d-flex gap-2 align-items-center">
+        <select class="form-select make" style="width: 140px;">
+            <option value="">Make</option>
+        </select>
+
+        <select class="form-select model" style="width: 140px;">
+            <option value="">Model</option>
+        </select>
+
+        <select class="form-select year" style="width: 110px;">
+            <option value="">All Years</option>
+            @foreach($years as $year)
+                <option value="{{ $year }}">{{ $year }}</option>
+            @endforeach
+        </select>
+    </div>
+    </div>
+
+
+ 
+
 </div>
+
+
+  <!-- Tab Contents -->
+  <div class="tab-content">
+    <!-- Watchlist Table -->
+    <section class="tab-pane fade show active card p-0 overflow-hidden" id="watchlist" role="tabpanel" aria-labelledby="watchlist-tab">
+      <div class="table-responsive table-wrap">
+        <table class="table align-middle" id="auction-table">
+            <thead>
+                <tr>
+                    <th style="width:28px"></th>
+                    <th>Vehicle</th>
+                    <th class="fit">Clean</th>
+                    <th class="fit">Average</th>
+                    <th class="fit">Below</th>
+                    <th class="fit">Autotrader</th>
+                    <th class="fit">Auction</th>
+                    <th class="fit">Last Bid</th>
+                    <th class="fit">AutoBoli</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+      </div>
+    </section>
+
+    <!-- Alerts Table -->
+    <section class="tab-pane fade card p-0 overflow-hidden" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
+      <div class="table-responsive table-wrap">
+                <table class="alert-table align-middle table table-hover" id="alert-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:28px"></th>
+                                <th>Vehicle</th>
+                                <th class="fit">Clean</th>
+                                <th class="fit">Average</th>
+                                <th class="fit">Below</th>
+                                <th class="fit">Autotrader</th>
+                                <th class="fit">Auction</th>
+                                <th class="fit">Last Bid</th>
+                                <th class="fit">AutoBoli</th>
+                                <th class="fit">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+    </section>
+  </div>
+</main>
+
+
+
+
+
 @endsection
 @section('js')
 
 <script>
-   document.querySelectorAll('.display_type').forEach(link => {
-      link.addEventListener('click', function() {
-         document.querySelectorAll('.display_type').forEach(el => el.classList.remove('active'));
-         this.classList.add('active');
-         document.querySelectorAll('.table-switch').forEach(tbl => tbl.classList.add('d-none'));
-         let target = this.getAttribute('data-id');
-         document.getElementById(target).classList.remove('d-none');
-      });
-   });
-</script>
+$('#auction-table, .alert-table').on('mouseenter', '.expandable-row', function() {
+    $(this).addClass('expanded');
+});
+
+$('#auction-table, .alert-table').on('mouseleave', '.expandable-row', function() {
+    $(this).removeClass('expanded');
+});
 
 
+$(document).ready(function(){
 
-
-<script>
-$(document).ready(function () {
-
-  
-function loadFilters(makeId = null, modelId = null) {
-    $.ajax({
-        url: "{{ route('get.filters') }}",
-        type: "GET",
-        data: { make_id: makeId, model_id: modelId },
-        success: function (data) {
-            let selected = getFilters();
-
-       
-            $('.tags-make').html(createCheckboxList(data.makes, 'filter-make'));
-
-       
-            if (makeId) {
-                $('.tags-model').html(createCheckboxList(data.models, 'filter-model'));
-            } else {
-                $('.tags-model').html('');
-            }
-
-        
-            if (modelId) {
-                $('.tags-variant').html(createCheckboxList(data.variants, 'filter-variant'));
-            } else {
-                $('.tags-variant').html('');
-            }
-
-            $('.tags-year').html(createCheckboxList(data.years, 'filter-year'));
-            $('.tags-fuel_type').html(createCheckboxList(data.fuel_types, 'filter-fuel'));
-
-           
-            updateCheckboxStates(selected);
-
-            bindFilterEvents();
+    // Initialize Select2
+    $('.make').select2({
+        placeholder: 'Select Make',
+        allowClear: true,
+        ajax: {
+            url: "{{ url('/admin/masters/makes/getMakes') }}",
+            dataType: 'json'
         }
     });
-}
 
-
-
-function updateCheckboxStates(selected) {
-    $.each(selected, function (key, values) {
-        values.forEach(function (val) {
-            $(`.filter-${key}[value="${val}"]`).prop('checked', true);
-        });
-    });
-}
-function bindFilterEvents() {
-  
-    $(document).off('change', '.filter-make').on('change', '.filter-make', function () {
-        let makeId = $(this).val();
-        if ($(this).is(':checked')) {
-            loadFilters(makeId, null);
-        } else {
-            loadFilters();
+    $('.model').select2({
+        placeholder: 'Select Model',
+        allowClear: true,
+        ajax: {
+            url: "{{ url('/admin/masters/models/getModels') }}",
+            dataType: 'json'
         }
-        updateSelectedFilters();
-        loadTables();
     });
 
- 
-    $(document).off('change', '.filter-model').on('change', '.filter-model', function () {
-        let modelId = $(this).val();
-        if ($(this).is(':checked')) {
-            let makeId = $('.filter-make:checked').val();
-            loadFilters(makeId, modelId);
-        } else {
-            let makeId = $('.filter-make:checked').val();
-            loadFilters(makeId, null);
-        }
-        updateSelectedFilters();
-        loadTables();
-    });
+    // Date formatting
+    function formatDateTime(dateStr) {
+        if(!dateStr) return '';
+        const d = new Date(dateStr);
+        const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+        return d.toLocaleString('en-US', options);
+    }
 
-  
-    $(document).off('change', '.filter-variant, .filter-year, .filter-fuel')
-        .on('change', '.filter-variant, .filter-year, .filter-fuel', function () {
-            updateSelectedFilters();
-            loadTables();
-        });
-
-   
-    $(document).off('click', '.remove-filter').on('click', '.remove-filter', function () {
-        let checkboxId = $(this).parent().data('checkbox');
-        $('#' + checkboxId).prop('checked', false).trigger('change');
-        loadTables();
-    });
-}
-
-
-
-function createCheckboxList(items, className) {
-    let html = '';
-    $.each(items, function (i, item) {
-        let id = item.id ?? item.year ?? item.fuel_type;
-        let name = item.name ?? item.year ?? item.fuel_type;
-        html += `<div class="form-check">
-                    <input class="form-check-input ${className}" type="checkbox" value="${id}" id="${className}-${i}">
-                    <label class="form-check-label" for="${className}-${i}">${name}</label>
+    // Render table row
+    function renderRow(a, isAlert = false) {
+        let imagesHtml = '';
+        if(a.vehicle.image){
+            const images = a.vehicle.image.split(',');
+            images.slice(0, 4).forEach(imgUrl => {
+                imagesHtml += `<div class="thumb">
+                    <img src="${imgUrl.trim()}" alt="vehicle" style="width:48px;height:36px;border-radius:6px;object-fit:cover;">
                 </div>`;
-    });
-    return html;
-}
-
-function updateSelectedFilters() {
-  
-    $('#selected-filters_make').html('');
-    $('#selected-filters_model').html('');
-    $('#selected-filters_variant').html('');
-    $('#selected-filters_year').html('');
-    $('#selected-filters_fuel_type').html('');
-
-    $('input[type=checkbox]:checked').each(function () {
-        let val = $(this).next('label').text();
-        let id = $(this).attr('id');
-        let className = $(this).attr('class').split(' ')[1]; 
-        let key = className.replace('filter-', ''); 
-
-        let badgeHtml = `<span class="badge skyblue-badge me-1 mb-1" data-checkbox="${id}">
-                            ${val} <span class="remove-filter" style="cursor:pointer;">&times;</span>
-                         </span>`;
-
-
-        $(`#selected-filters_${key}`).append(badgeHtml);
-    });
-}
-
-
-function getFilters() {
-    let filters = {};
-
-    $('input[type=checkbox]:checked').each(function () {
-      
-        let className = $(this).attr('class').split(' ')[1]; 
-        let key = className.replace('filter-', ''); 
-
-        if (!filters[key]) {
-            filters[key] = [];
-        }
-        filters[key].push($(this).val());
-    });
-
-    return filters;
-}
-
-let currentPage = 1;
-
-function loadTables() {
-    let filters = getFilters();
-    let length = $("select[name='length']").val(); 
-
-    $.ajax({
-        url: "{{ route('get.auction.data') }}",
-        type: "POST",
-        data: {
-            _token: "{{ csrf_token() }}",
-            filters: filters,
-            page: currentPage,
-            length: length
-        },
-        success: function (res) {
-            
-            let auctionHtml = '';
-            $.each(res.auctionData, function (i, row) {
-                if (row.vehicle) {
-                    auctionHtml += `<tr>
-                        <td>${row.vehicle.vehicle}</td>
-                        <td>${row.vehicle.year}</td>
-                        <td>${row.vehicle.cc}</td>
-                        <td><img src="${row.vehicle.image}" width="50"></td>
-                        <td>${row.vehicle.mileage}</td>
-                        <td>${row.vehicle.transmission}</td>
-                        <td>${row.vehicle.auction.name}</td>
-                        <td>${row.vehicle.auction.auction_date}</td>
-                        <td>${row.vehicle.last_bid}</td>
-                    </tr>`;
-                }
             });
-            $('#auction-table tbody').html(auctionHtml);
+        }
 
-      
-            let recentHtml = '';
-            $.each(res.recentData, function (i, row) {
-                if (row.vehicle) {
-                    recentHtml += `<tr>
-                        <td>${row.vehicle.vehicle}</td>
-                        <td>${row.vehicle.year}</td>
-                        <td>${row.vehicle.cc}</td>
-                        <td><img src="${row.vehicle.image}" width="50"></td>
-                        <td>${row.vehicle.mileage}</td>
-                        <td>${row.vehicle.transmission}</td>
-                        <td>${row.vehicle.auction.name}</td>
-                        <td>${row.vehicle.auction.auction_date}</td>
-                        <td>${row.vehicle.last_bid}</td>
-                    </tr>`;
+        let actionBtn = '';
+    if(isAlert){
+        actionBtn = `<td class="fit">
+            <button class="btn btn-sm btn-danger delete-btn" title="Delete Alert" data-id="${a.id}">
+                <i class="bi bi-trash"></i>
+            </button>
+        </td>`;
+    }
+
+        return `
+        <tr class="expandable-row">
+            <td class="fit expand-btn">+</td>
+            <td>
+                <div class="fw-semibold">${a.vehicle.vehicle}</div>
+                <div class="cell-muted">${a.vehicle.title ?? ''}</div>
+                <div class="extra-content">
+                    <div class="extra-images d-flex gap-2 mt-2">${imagesHtml}</div>
+                </div>
+            </td>
+            <td>${a.vehicle.cap_clean ?? '-'}</td>
+            <td>${a.vehicle.cap_average ?? '-'}</td>
+            <td>${a.vehicle.cap_below ?? '-'}</td>
+            <td>${a.vehicle.autotrader_retail_value ?? '-'}</td>
+            <td class="fit"><span class="chip">${a.vehicle.auction.name ?? ''}</span></td>
+            <td class="fit">
+                <div>${formatDateTime(a.vehicle.auction.auction_date)}</div>
+                <div class="cell-muted">${a.vehicle.last_bid ?? ''}</div>
+            </td>
+            <td class="cell-price"><a href="#">0</a></td>
+            ${actionBtn}
+        </tr>`;
+    }
+
+
+    function loadTables(){
+        let length = $('.entries-length').val() || 50; // get selected length
+
+        $.ajax({
+            url: "{{ route('get.auction.data') }}",
+            type: "POST",
+            data: {
+                _token: '{{ csrf_token() }}',
+                make: $('.make').val(),
+                model: $('.model').val(),
+                year: $('.year').val(),
+                length: length // pass to backend
+            },
+            success: function(res){
+                let auctionTbody = $('#auction-table tbody').empty();
+                let alertTbody = $('#alert-table tbody').empty();
+
+                if(res.auctionData.length === 0 && res.recentData.length === 0){
+                    auctionTbody.append('<tr><td colspan="10" class="text-center">No vehicles found</td></tr>');
+                    alertTbody.append('<tr><td colspan="10" class="text-center">No vehicles found</td></tr>');
+                    return;
                 }
-            });
-            $('#recent-table tbody').html(recentHtml);
 
-          
-            renderPagination(res.page, res.length, res.auctionTotal);
-        }
-    });
-}
-
-
-    function renderPagination(page, length, total) {
-        let totalPages = Math.ceil(total / length);
-        let html = '';
-
-        for (let i = 1; i <= totalPages; i++) {
-            html += `<li class="page-item ${i === page ? 'active' : ''}">
-                        <a class="page-link" href="#">${i}</a>
-                    </li>`;
-        }
-
-        $('.pagination').html(html);
-
-
-        $('.pagination .page-link').off('click').on('click', function (e) {
-            e.preventDefault();
-            currentPage = parseInt($(this).text());
-            loadTables();
+                res.recentData.forEach(a => auctionTbody.append(renderRow(a)));
+                res.auctionData.forEach(a => alertTbody.append(renderRow(a, true)));
+            },
+            error: function(err){
+                console.error(err);
+            }
         });
     }
 
 
-    $("select[name='length']").on('change', function () {
-        currentPage = 1; 
-        loadTables();
+
+    loadTables();
+
+
+    $('#auction-table, .alert-table').on('click', '.expand-btn', function(){
+        $(this).closest('tr').toggleClass('expanded');
     });
 
 
+$('#alert-table').on('click', '.delete-btn', function(){
+    let btn = $(this);
+    let alertId = btn.data('id');
+
+    if(confirm('Are you sure you want to delete this alert?')){
+        $.ajax({
+            url: '{{ url("/viewhistory/alerts/") }}' + '/' + alertId, 
+            type: 'DELETE',
+            data: { _token: '{{ csrf_token() }}' },
+            success: function(res){
+            
+                btn.closest('tr').fadeOut(300, function(){
+                    $(this).remove();
+                });
+
+                toastr.success('Alert deleted successfully!');
+            },
+            error: function(err){
+                console.error(err);
+
+  
+                toastr.error('Failed to delete alert!');
+            }
+        });
+    }
+});
 
 
 
-    loadFilters();
-    loadTables();
+
+    $('.make, .model, .year').on('change', function(){
+        loadTables();
+    });
+
+    $('.entries-length').on('change', function(){
+        loadTables();
+    });
+
 });
 
 
 
 </script>
+
+
+
 
 
 
