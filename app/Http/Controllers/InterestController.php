@@ -17,7 +17,7 @@ use App\Mail\InterestCreatedMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Enums\PriceEnum;
 class InterestController extends Controller
 {
 
@@ -158,11 +158,13 @@ class InterestController extends Controller
         ->orderBy('cc')
         ->pluck('cc');
 
-        $price = Vehicle::whereNotNull('last_bid')
-        ->where('last_bid', '!=', '')
-        ->distinct()
-        ->orderBy('last_bid')
-        ->pluck('last_bid');
+        // $price = Vehicle::whereNotNull('last_bid')
+        // ->where('last_bid', '!=', '')
+        // ->distinct()
+        // ->orderBy('last_bid')
+        // ->pluck('last_bid');
+
+        $price = PriceEnum::options();
 
         return view('user.interests.create', [
             'fuel_types' => FuelType::list(),
@@ -251,12 +253,12 @@ class InterestController extends Controller
         ->orderBy('cc')
         ->pluck('cc');
 
-        $price = Vehicle::whereNotNull('last_bid')
-        ->where('last_bid', '!=', '')
-        ->distinct()
-        ->orderBy('last_bid')
-        ->pluck('last_bid');
-
+        // $price = Vehicle::whereNotNull('last_bid')
+        // ->where('last_bid', '!=', '')
+        // ->distinct()
+        // ->orderBy('last_bid')
+        // ->pluck('last_bid');
+        $price = PriceEnum::options();
         return view('user.interests.edit', [
             'model' => $interest,
             'fuel_types' => FuelType::list(),

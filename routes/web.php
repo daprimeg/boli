@@ -497,16 +497,4 @@ Route::get('/send_interest_notify/{token?}', [NotifyIntrestController::class, 's
 Route::get('/send-daily-summary', [NotifyIntrestController::class, 'sendDailySummary']);
 
 
-Route::get('mail', function () {
 
-    $data = [
-        'name' => 'Test User',
-        'link' => 'https://example.com/reset-password'
-    ];
-
-    Mail::send('emails.password_reset', $data, function ($mesage) use ($data) {
-
-        $mesage->from("man411210@gmail.com", "Test");
-        $mesage->to("iamowaisazam@gmail.com", "test")->subject('Email Verification');
-    });
-});

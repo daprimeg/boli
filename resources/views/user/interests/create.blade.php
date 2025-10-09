@@ -68,20 +68,28 @@
                                     <input type="text" value="{{ old('title') }}" name="title" class="form-control" required>
                                 </div>
 
-                                <div class="mb-3 col-md-4">
-                                    <label for="make_id" class="form-label">Make <span class="text-danger">*</span></label>
-                                    <select name="make_id" id="make_id" class="form-select select2" required></select>
-                                </div>          
+                        
+                                    <div class="mb-3 col-md-4">
+                                        <label for="make_id" class="form-label">
+                                            Make <span class="text-danger">*</span>
+                                        </label>
+                                        <select name="make_id" id="make_id" class="form-select select2" required></select>
+                                    </div>
 
-                                <div class="mb-3 col-md-4">
-                                    <label for="model_id" class="form-label">Model <span class="text-danger">*</span></label>
-                                    <select name="model_id" id="model_id" class="form-select select2" required></select>
-                                </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label for="model_id" class="form-label">
+                                            Model <span class="text-danger">*</span>
+                                        </label>
+                                        <select name="model_id" id="model_id" class="form-select select2" required disabled></select>
+                                    </div>
 
-                                <div class="mb-3 col-md-4">
-                                    <label for="variant_id" class="form-label">Model Variant</label>
-                                    <select name="variant_id" id="variant_id" class="form-select select2"></select>
-                            </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label for="variant_id" class="form-label">
+                                            Model Variant
+                                        </label>
+                                        <select name="variant_id" id="variant_id" class="form-select select2" disabled></select>
+                                    </div>
+                        
 
 
                                 <div class="mb-3 col-md-4">
@@ -111,10 +119,14 @@
                                     <label class="form-label">Mileage</label>
                                     <div class="d-flex">
                                         <div class="box w-100">
-                                            <input name="mileage_from" value="{{old('mileage_from')}}" step="any" placeholder="From" type="number" class="form-control"  />
+                                            <select name="mileage_from" id="mileage_from" class="form-select">
+                                                <option value="">From</option>
+                                            </select>
                                         </div>
                                         <div class="box w-100">
-                                            <input name="mileage_to" value="{{old('mileage_to')}}" step="any" placeholder="To" type="number" class="form-control"  />
+                                            <select name="mileage_to" id="mileage_to" class="form-select">
+                                                <option value="">To</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -161,10 +173,14 @@
                                     <label class="form-label">Price (CAP Clean)</label>
                                     <div class="d-flex">
                                         <div class="box w-100">
-                                            <input name="price_from" value="{{old('price_from')}}" step="any" placeholder="From" type="number" class="form-control"  />
+                                            <select name="price_from" id="price_from" class="form-select">
+                                                <option value="">From</option>
+                                            </select>
                                         </div>
                                         <div class="box w-100">
-                                            <input name="price_to" step="any" value="{{old('price_to')}}" placeholder="To" type="number" class="form-control"  />
+                                            <select name="price_to" id="price_to" class="form-select">
+                                                <option value="">To</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -207,8 +223,12 @@
 
 <script>
 
-$(document).ready(function () {
-    // Make
+$(document).ready(function() {
+
+    // Disable child selects initially
+    $('#model_id, #variant_id').prop('disabled', true);
+
+    // 🏎️ Make Select2
     $('#make_id').select2({
         placeholder: 'Select Make',
         allowClear: true,
@@ -216,18 +236,17 @@ $(document).ready(function () {
             url: "{{ url('/admin/masters/makes/getMakes') }}",
             dataType: 'json',
             delay: 250,
-            processResults: function (data) {
-                return {
-                    results: data.results // Laravel se {id, text}
-                };
+            processResults: function(data) {
+                return { results: data.results };
             }
         }
-    }).on('change', function () {
-        $('#model_id').val(null).trigger('change'); // reset model
-        $('#variant_id').val(null).trigger('change'); // reset variant
+    }).on('change', function() {
+        const hasMake = !!$(this).val();
+        $('#model_id').val(null).trigger('change').prop('disabled', !hasMake);
+        $('#variant_id').val(null).trigger('change').prop('disabled', true);
     });
 
-    // Model
+    // 🚗 Model Select2
     $('#model_id').select2({
         placeholder: 'Select Model',
         allowClear: true,
@@ -235,23 +254,22 @@ $(document).ready(function () {
             url: "{{ url('/admin/masters/models/getModels') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
-                    q: params.term, // search term
-                    make_id: $('#make_id').val() // filter by make
+                    q: params.term,
+                    make_id: $('#make_id').val()
                 };
             },
-            processResults: function (data) {
-                return {
-                    results: data.results
-                };
+            processResults: function(data) {
+                return { results: data.results };
             }
         }
-    }).on('change', function () {
-        $('#variant_id').val(null).trigger('change'); // reset variant
+    }).on('change', function() {
+        const hasModel = !!$(this).val();
+        $('#variant_id').val(null).trigger('change').prop('disabled', !hasModel);
     });
 
-    // Variant
+    // 🧩 Variant Select2
     $('#variant_id').select2({
         placeholder: 'Select Variant',
         allowClear: true,
@@ -259,23 +277,73 @@ $(document).ready(function () {
             url: "{{ url('/admin/masters/variants/getVariants') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     q: params.term,
-                    model_id: $('#model_id').val() // filter by model
+                    model_id: $('#model_id').val()
                 };
             },
-            processResults: function (data) {
-                return {
-                    results: data.results
-                };
+            processResults: function(data) {
+                return { results: data.results };
             }
         }
     });
 });
 
-   
 
+   
+document.addEventListener('DOMContentLoaded', function () {
+
+    const priceFrom = document.getElementById('price_from');
+    const priceTo = document.getElementById('price_to');
+
+
+    const priceSteps = [];
+    for (let i = 0; i <= 10000000; i += 50000) {
+        priceSteps.push(i);
+    }
+
+
+    priceSteps.forEach(price => {
+        priceFrom.insertAdjacentHTML('beforeend', `<option value="${price}">${price.toLocaleString()}</option>`);
+        priceTo.insertAdjacentHTML('beforeend', `<option value="${price}">${price.toLocaleString()}</option>`);
+    });
+
+
+    priceFrom.addEventListener('change', function () {
+        const fromVal = parseInt(this.value) || 0;
+        priceTo.innerHTML = '<option value="">To</option>';
+        priceSteps
+            .filter(p => p > fromVal)
+            .forEach(p => {
+                priceTo.insertAdjacentHTML('beforeend', `<option value="${p}">${p.toLocaleString()}</option>`);
+            });
+    });
+
+    const mileageFrom = document.getElementById('mileage_from');
+    const mileageTo = document.getElementById('mileage_to');
+
+    const mileageSteps = [];
+    for (let i = 100; i <= 990000; i += 5000) {
+        mileageSteps.push(i);
+    }
+
+    mileageSteps.forEach(m => {
+        mileageFrom.insertAdjacentHTML('beforeend', `<option value="${m}">${m.toLocaleString()} km</option>`);
+        mileageTo.insertAdjacentHTML('beforeend', `<option value="${m}">${m.toLocaleString()} km</option>`);
+    });
+
+    mileageFrom.addEventListener('change', function () {
+        const fromVal = parseInt(this.value) || 0;
+        mileageTo.innerHTML = '<option value="">To</option>';
+        mileageSteps
+            .filter(m => m > fromVal)
+            .forEach(m => {
+                mileageTo.insertAdjacentHTML('beforeend', `<option value="${m}">${m.toLocaleString()} km</option>`);
+            });
+    });
+
+});
 
 </script>
 

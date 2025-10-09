@@ -113,13 +113,13 @@
 
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label">Mileage</label>
-                                    <div class="d-flex">
-                                        <div class="box w-100">
-                                            <input name="mileage_from" value="{{$model->mileage_from}}" step="any" placeholder="From" type="number" class="form-control"  />
-                                        </div>
-                                        <div class="box w-100">
-                                            <input name="mileage_to" value="{{$model->mileage_to}}" step="any" placeholder="To" type="number" class="form-control"  />
-                                        </div>
+                                    <div class="d-flex gap-2">
+                                        <select name="mileage_from" id="mileage_from" class="form-select">
+                                            <option value="">From</option>
+                                        </select>
+                                        <select name="mileage_to" id="mileage_to" class="form-select">
+                                            <option value="">To</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -162,16 +162,15 @@
                                 
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label">Price (CAP Clean)</label>
-                                    <div class="d-flex">
-                                        <div class="box w-100">
-                                            <input name="price_from" value="{{$model->price_from}}" step="any" placeholder="From" type="number" class="form-control"  />
-                                        </div>
-                                        <div class="box w-100">
-                                            <input name="price_to" step="any" value="{{$model->price_to}}" placeholder="To" type="number" class="form-control"  />
-                                        </div>
+                                    <div class="d-flex gap-2">
+                                        <select name="price_from" id="price_from" class="form-select">
+                                            <option value="">From</option>
+                                        </select>
+                                        <select name="price_to" id="price_to" class="form-select">
+                                            <option value="">To</option>
+                                        </select>
                                     </div>
                                 </div>
-
                                 <div class="mb-3 col-md-4">
                                     <label for="transmission" class="form-label">Transmission</label>
                                     <select name="transmission" class="form-select">
@@ -283,6 +282,68 @@ $(document).ready(function () {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+
+
+    const priceSteps = [];
+    for (let i = 0; i <= 10000000; i += i < 1000 ? 100 : i < 10000 ? 500 : i < 100000 ? 2000 : i < 500000 ? 10000 : 50000) {
+        priceSteps.push(i);
+    }
+
+    const priceFrom = document.getElementById('price_from');
+    const priceTo = document.getElementById('price_to');
+
+    const selectedPriceFrom = "{{ $model->price_from ?? '' }}";
+    const selectedPriceTo = "{{ $model->price_to ?? '' }}";
+
+    priceSteps.forEach(val => {
+        priceFrom.innerHTML += `<option value="${val}" ${val == selectedPriceFrom ? 'selected' : ''}>${val.toLocaleString()}</option>`;
+    });
+
+    function updatePriceTo() {
+        const fromVal = parseFloat(priceFrom.value) || 0;
+        priceTo.innerHTML = `<option value="">To</option>`;
+        priceSteps.forEach(val => {
+            if (val > fromVal) {
+                priceTo.innerHTML += `<option value="${val}" ${val == selectedPriceTo ? 'selected' : ''}>${val.toLocaleString()}</option>`;
+            }
+        });
+    }
+
+    priceFrom.addEventListener('change', updatePriceTo);
+    updatePriceTo();
+
+
+
+    const mileageSteps = [];
+    for (let i = 0; i <= 990000; i += i < 20000 ? 5000 : i < 100000 ? 10000 : 50000) {
+        mileageSteps.push(i);
+    }
+
+    const mileageFrom = document.getElementById('mileage_from');
+    const mileageTo = document.getElementById('mileage_to');
+
+    const selectedMileageFrom = "{{ $model->mileage_from ?? '' }}";
+    const selectedMileageTo = "{{ $model->mileage_to ?? '' }}";
+
+    mileageSteps.forEach(val => {
+        mileageFrom.innerHTML += `<option value="${val}" ${val == selectedMileageFrom ? 'selected' : ''}>${val.toLocaleString()} km</option>`;
+    });
+
+    function updateMileageTo() {
+        const fromVal = parseFloat(mileageFrom.value) || 0;
+        mileageTo.innerHTML = `<option value="">To</option>`;
+        mileageSteps.forEach(val => {
+            if (val > fromVal) {
+                mileageTo.innerHTML += `<option value="${val}" ${val == selectedMileageTo ? 'selected' : ''}>${val.toLocaleString()} km</option>`;
+            }
+        });
+    }
+
+    mileageFrom.addEventListener('change', updateMileageTo);
+    updateMileageTo();
+
+});
 
 
 </script>

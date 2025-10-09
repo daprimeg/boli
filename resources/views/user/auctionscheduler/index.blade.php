@@ -40,18 +40,26 @@
 
 
                         <!-- Status -->
-                        <div>
-                            <label style="color: #ccc; font-weight: 500;">Status:</label>
-                            <select id="selectedStatus"
-                                style="color: #fff; background-color: #1a2533; border: 1px solid #2b3b4f; border-radius: 6px; padding: 5px 10px;">
-                                <option value="">All</option>
-                                <option value="in_progress">In Progress</option>
-                            </select>
-                        </div>
+                        <div class="form-check form-switch d-flex align-items-center gap-2">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="selectedStatus"
+                                style="width: 2.3rem; height: 1.3rem; cursor: pointer;"
+                            />
+                            <label
+                                class="form-check-label text-light"
+                                for="selectedStatus"
+                                style="font-weight: 500; color: #ccc;"
+                            >
+                                In Progress
+                            </label>
+                            </div>
+
 
                     </div>
 
-                    <!-- Tabs Section -->
+                
                     <div class="row">
                         <div class="tabs-container container"
                             style="
@@ -88,6 +96,8 @@
                                             style="font-size: 12px; color: #ccc;">
                                             <i class="fas fa-gavel text-primary"></i>
                                             {{ $day['auctions'] }} Auctions
+
+
                                         </small>
                                         <small class="d-flex align-items-center gap-1"
                                             style="font-size: 12px; color: #ccc;">
@@ -253,65 +263,83 @@
 
 
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
 
-            // Initialize DataTable
-            let table = $('.table').DataTable({
-                processing: true,
-                serverSide: true,
-                ordering: false,
-                ajax: {
-                    url: "{{ url('auctionscheduler') }}",
-                    data: function(d) {
-                        d.platform_id = $('#selectedPlatform').val();
-                        d.center_id = $('#selectedCenter').val();
-                        d.status = $('#selectedStatus').val();
-                        d.date = $('#selectedDate').val();
-                    }
+        let table = $('.table').DataTable({
+            processing: true,
+            serverSide: true,
+            ordering: false,
+            ajax: {
+                url: "{{ url('auctionscheduler') }}",
+                data: function(d) {
+                    d.platform_id = $('#selectedPlatform').val();
+                    d.center_id = $('#selectedCenter').val();
+                    d.status = $('#selectedStatus').is(':checked') ? 'In Progress' : '';
+                    d.date = $('#selectedDate').val();
                 }
-            });
-
-
-            function reloadTable() {
-                table.ajax.reload();
             }
-
-
-            $('#selectedStatus').on('change', function() {
-                reloadTable();
-            });
-
-            $('#selectedPlatform').on('change', function() {
-                reloadTable();
-            });
-
-
-            $('#selectedCenter').on('change', function() {
-                reloadTable();
-            });
-
-
-            $('.custom-tab').on('click', function() {
-
-                $('.custom-tab').removeClass('active').css({
-                    'background-color': '#1b2737',
-                    'border': '1px solid #2b3b4f',
-                    'font-weight': '400'
-                });
-                $(this).addClass('active').css({
-                    'background-color': '#1a2533',
-                    'border': '1px solid #0d6efd',
-                    'font-weight': '600'
-                });
-
-                let date = $(this).data('date');
-                $('#selectedDate').val(date);
-
-                reloadTable();
-            });
-
         });
 
+        function reloadTable() {
+            table.ajax.reload();
+        }
+        $('#selectedStatus').on('change', function() {
+            const isChecked = $(this).is(':checked');
+
+            if (isChecked) {
+                const todayTab = $('.custom-tab').filter(function() {
+                    return $(this).text().trim().toLowerCase().includes('today');
+                });
+
+                if (todayTab.length) {
+                    $('.custom-tab').removeClass('active').css({
+                        'background-color': '#1b2737',
+                        'border': '1px solid #2b3b4f',
+                        'font-weight': '400'
+                    });
+
+                    todayTab.addClass('active').css({
+                        'background-color': '#1a2533',
+                        'border': '1px solid #0d6efd',
+                        'font-weight': '600'
+                    });
+                    const todayDate = new Date().toISOString().split('T')[0];
+                    $('#selectedDate').val(todayDate);
+                }
+            } else {
+                $('#selectedDate').val('');
+            }
+
+            reloadTable();
+        });
+        $('#selectedPlatform, #selectedCenter').on('change', function() {
+            reloadTable();
+        });
+        $('.custom-tab').on('click', function(e) {
+            const isInProgress = $('#selectedStatus').is(':checked');
+            const tabText = $(this).text().trim().toLowerCase();
+
+            if (isInProgress && !tabText.includes('today')) {
+                e.preventDefault();
+                toastr.error("You can only view 'Today' while In Progress is active.", "Not Allowed");
+                return;
+            }
+
+            $('.custom-tab').removeClass('active').css({
+                'background-color': '#1b2737',
+                'border': '1px solid #2b3b4f',
+                'font-weight': '400'
+            });
+            $(this).addClass('active').css({
+                'background-color': '#1a2533',
+                'border': '1px solid #0d6efd',
+                'font-weight': '600'
+            });
+
+            $('#selectedDate').val($(this).data('date'));
+            reloadTable();
+        });
+    });
 
 
 
