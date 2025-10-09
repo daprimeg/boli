@@ -103,6 +103,8 @@ Route::prefix('admin')->middleware(['auth',IsAdmin::class])->group(function () {
             Route::get('/create', [PlanController::class, 'create']);
             Route::post('/store', [PlanController::class, 'store']);
             Route::put('/update/{plan}', [PlanController::class, 'update']);
+            Route::get('/sort', [PlanController::class, 'sort']);
+            Route::post('/sort', [PlanController::class, 'updateOrder'])->name('admin.plans.updateOrder');
 
             Route::get('/{plan}/edit', [PlanController::class, 'edit']);
         

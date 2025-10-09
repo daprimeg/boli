@@ -122,4 +122,21 @@ class PlanController extends Controller
         return redirect('/admin/plans')->with('success', 'Plan deleted successfully.');
     }
 
+        public function sort()
+    {
+        $plans = Plan::all();
+        return view('admin.plans.sort',compact('plans'));
+    }
+
+        public function updateOrder(Request $request)
+        {
+            $order = $request->order;
+
+            foreach($order as $item) {
+                Plan::where('id', $item['id'])->update(['sort_by' => $item['position']]);
+            }
+
+            return response()->json(['success' => true]);
+        }
+
 }

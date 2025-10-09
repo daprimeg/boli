@@ -39,14 +39,20 @@
 
                 <div class="card">
                     <div class="card-header border-bottom">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5 class="card-title ">Plans</h5>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-md-4">
+                                <h5 class="card-title mb-0">Plans</h5>
                             </div>
-                            <div class="col-md-6 text-end">
-                                 <a href="{{URL::to('/admin/plans/create')}}" class="btn btn-primary">Add New Plan</a>
+                            <div class="col-md-8 text-end d-flex justify-content-end gap-2">
+                                <a href="{{ URL::to('/admin/plans/create') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus me-1"></i> Add New Plan
+                                </a>
+                                <a href="{{ URL::to('/admin/plans/sort') }}" class="btn btn-secondary">
+                                    <i class="fas fa-sort me-1"></i> Sort Plan
+                                </a>
                             </div>
                         </div>
+
                     </div>
                     <div class="card-body">
 
