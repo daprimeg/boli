@@ -154,181 +154,175 @@
 
 @yield('js')
 <script>
-    // Loader hide logic
+    // 🌀 Loader hide logic
     window.addEventListener("load", () => {
         setTimeout(() => {
             const loader = document.getElementById("loader");
-            loader.classList.add("opacity-0");
-            setTimeout(() => {
-                loader.style.display = "none";
-            }, 500);
+            if (loader) {
+                loader.classList.add("opacity-0");
+                setTimeout(() => {
+                    loader.style.display = "none";
+                }, 500);
+            }
         }, 1500);
     });
 
-
-    // Simple button-controlled scroll for the snap carousel
+    // 🧭 Simple button-controlled scroll for carousel
     (function() {
-        const track = document.getElementById('resTrack');
-        const prev = document.getElementById('resPrev');
-        const next = document.getElementById('resNext');
+        const track = document.getElementById("resTrack");
+        const prev = document.getElementById("resPrev");
+        const next = document.getElementById("resNext");
+        if (!track) return;
 
         function move(dir = 1) {
-            // one card width + gap
-            const card = track.querySelector('article');
+            const card = track.querySelector("article");
             if (!card) return;
             const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 24;
             const delta = (card.getBoundingClientRect().width + gap) * dir;
             track.scrollBy({
                 left: delta,
-                behavior: 'smooth'
+                behavior: "smooth"
             });
         }
 
-        prev.addEventListener('click', () => move(-1));
-        next.addEventListener('click', () => move(1));
-
-        // keyboard accessibility when track is focused
-        track.setAttribute('tabindex', '0');
-        track.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') move(1);
-            if (e.key === 'ArrowLeft') move(-1);
-        });
-    })();
-
-
-    (() => {
-        const els = document.querySelectorAll('.stat-number');
-        if (!els.length) return;
-
-        // Count-up with easing
-        function animate(el) {
-            const target = Number(el.dataset.target || 0);
-            const suffix = el.dataset.suffix || '';
-            const dur = 1200; // ms
-            const start = performance.now();
-
-            function tick(now) {
-                const p = Math.min(1, (now - start) / dur);
-                // easeOutCubic
-                const eased = 1 - Math.pow(1 - p, 3);
-                const value = Math.floor(target * eased);
-                el.textContent = value.toLocaleString() + suffix;
-                if (p < 1) requestAnimationFrame(tick);
-            }
-            requestAnimationFrame(tick);
+        if (prev && next) {
+            prev.addEventListener("click", () => move(-1));
+            next.addEventListener("click", () => move(1));
         }
 
-        const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    animate(e.target);
-                    obs.unobserve(e.target);
-                }
-            });
-        }, {
-            threshold: 0.4
+        // Keyboard navigation
+        track.setAttribute("tabindex", "0");
+        track.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight") move(1);
+            if (e.key === "ArrowLeft") move(-1);
         });
-
-        els.forEach(el => io.observe(el));
     })();
 
+    // 📈 Animated counters (stat-number and counter)
     (function() {
-        const els = document.querySelectorAll('.counter');
+        const els = document.querySelectorAll(".stat-number, .counter");
         if (!els.length) return;
 
         function animate(el) {
             const target = +el.dataset.target || 0;
-            const dur = 1200; // ms
+            const suffix = el.dataset.suffix || "";
+            const dur = 1200;
             const start = performance.now();
 
             function tick(now) {
                 const p = Math.min(1, (now - start) / dur);
-                const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
-                el.textContent = Math.floor(target * eased).toLocaleString();
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.floor(target * eased).toLocaleString() + suffix;
                 if (p < 1) requestAnimationFrame(tick);
             }
             requestAnimationFrame(tick);
         }
 
-        // reveal-on-view (run once)
-        const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    animate(e.target);
-                    obs.unobserve(e.target);
-                }
-            });
-        }, {
-            threshold: 0.4
-        });
+        const io = new IntersectionObserver(
+            (entries, obs) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting) {
+                        animate(e.target);
+                        obs.unobserve(e.target);
+                    }
+                });
+            }, {
+                threshold: 0.4
+            }
+        );
 
-        els.forEach(el => io.observe(el));
+        els.forEach((el) => io.observe(el));
     })();
 
+    // 🧍 Sticky shadow on navbar
+    (function() {
+        const siteNav = document.getElementById("siteNav");
+        if (!siteNav) return;
 
-    // --- Sticky, blurry navbar on scroll ---
-    const siteNav = document.getElementById("siteNav");
-
-    function updateNavOnScroll() {
-        const scrolled = window.scrollY > 8; // tweak threshold if you like
-        // siteNav.classList.toggle("backdrop-blur-xl", scrolled);
-        // siteNav.classList.toggle("bg-white/60", scrolled);
-        // siteNav.classList.toggle("dark:bg-gray-900/40", scrolled);
-        // siteNav.classList.toggle("border-b", scrolled);
-        // siteNav.classList.toggle("border-white/40", scrolled);
-        // siteNav.classList.toggle("dark:border-white/10", scrolled);
-        siteNav.classList.toggle("shadow-sm", scrolled);
-    }
-
-    // Run once on load and on scroll
-    updateNavOnScroll();
-    window.addEventListener("scroll", updateNavOnScroll, {
-        passive: true
-    });
-
-    const toggleBtn = document.getElementById("themeToggle");
-    const html = document.documentElement;
-    const iconImg = document.getElementById("themeIcon");
-
-    // Function to update icon based on current theme
-    function updateIcon() {
-        const icon = document.getElementById("themeIcon");
-        const isDark = html.classList.contains("dark");
-
-        // Change the icon name
-        icon.textContent = isDark ? "dark_mode" : "light_mode";
-
-        icon.src = isDark ?
-
-            "{{ asset('public/theme/assets/web/images/night-mode.png') }}" :
-            "{{ asset('public/theme/assets/web/images/day-mode.png') }}";
-        icon.alt = isDark ? "Night Mode" : "Day Mode";
-    }
-
-    if (localStorage.theme === "dark") {
-        html.classList.add("dark");
-    }
-    updateIcon(); // Set correct icon on load
-
-    // Toggle theme on button click
-    toggleBtn.addEventListener("click", () => {
-        if (html.classList.contains("dark")) {
-            html.classList.remove("dark");
-            localStorage.theme = "light";
-        } else {
-            html.classList.add("dark");
-            localStorage.theme = "dark";
+        function updateNavOnScroll() {
+            const scrolled = window.scrollY > 8;
+            siteNav.classList.toggle("shadow-sm", scrolled);
         }
-        updateIcon();
-    });
 
-    // Reveal the four cards on scroll (once)
+        updateNavOnScroll();
+        window.addEventListener("scroll", updateNavOnScroll, {
+            passive: true
+        });
+    })();
+
+    // --- GLOBAL THEME HANDLER (works across all pages & buttons) ---
+    (function() {
+        const HTML = document.documentElement;
+        const TOGGLE_SELECTOR = '[data-theme-toggle]';
+        const ICON_SELECTOR = '[data-theme-icon]';
+
+        // Pick initial theme (localStorage > system preference > light)
+        function getInitialTheme() {
+            if (localStorage.theme) return localStorage.theme;
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            HTML.classList.toggle('dark', isDark);
+            localStorage.theme = theme;
+
+            // Update all icons (there can be multiple toggles on the page)
+            document.querySelectorAll(ICON_SELECTOR).forEach((icon) => {
+                // If you're using Material Symbols:
+                if (icon.classList.contains('material-symbols-outlined')) {
+                    icon.textContent = isDark ? 'dark_mode' : 'light_mode';
+                }
+                // If you're using Font Awesome:
+                if (icon.classList.contains('fa')) {
+                    icon.classList.toggle('fa-moon', !isDark);
+                    icon.classList.toggle('fa-sun', isDark);
+                }
+            });
+        }
+
+        function toggleTheme() {
+            applyTheme(HTML.classList.contains('dark') ? 'light' : 'dark');
+        }
+
+        // Init once on each page
+        applyTheme(getInitialTheme());
+
+        // Wire up any toggle buttons on the page (navbar, login header, etc.)
+        function wireToggles() {
+            document.querySelectorAll(TOGGLE_SELECTOR).forEach((btn) => {
+                if (!btn.__wired) {
+                    btn.addEventListener('click', toggleTheme);
+                    btn.__wired = true;
+                }
+            });
+        }
+
+        // Wire on DOM ready (covers pages where navbar is hidden & custom header exists)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', wireToggles);
+        } else {
+            wireToggles();
+        }
+
+        // Also re-wire if the DOM changes (optional safety)
+        const mo = new MutationObserver(wireToggles);
+        mo.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Sync across tabs
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme' && e.newValue) applyTheme(e.newValue);
+        });
+    })();
+
+    // 💨 Reveal animation for feature cards
     (function() {
         const cards = document.querySelectorAll("#features .feat-card");
-        if (!("IntersectionObserver" in window) || !cards.length) {
-            cards.forEach((c) => c.classList.add("revealed"));
-            return;
-        }
+        if (!cards.length) return;
+
         const io = new IntersectionObserver(
             (entries, obs) => {
                 entries.forEach((e) => {
@@ -344,5 +338,6 @@
         cards.forEach((c) => io.observe(c));
     })();
 </script>
+
 
 </html>

@@ -1,179 +1,195 @@
-    @extends('web.partial.layout')
-    @section('css')
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;ampdisplay=swap"
-            rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/fonts/iconify-icons.css') }}" />
-        <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/core.css') }}" />
+@extends('web.partial.layout')
 
-        <!-- Page CSS -->
-        <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/pages/page-auth.css') }}">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-        <style>
-            .layout-menu-fixed .layout-navbar-full .layout-menu,
-            .layout-menu-fixed-offcanvas .layout-navbar-full .layout-menu {
-                top: 0px !important;
+@section('hideNavbar', true)
+@section('hideFooter', true)
+
+@section('css')
+    <style>
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
             }
 
-            .layout-page {
-                padding-top: 0px !important;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
 
-            .content-wrapper {
-                padding-bottom: 0px !important;
-            }
+        .animate-slideUp {
+            animation: slideUpFade .9s ease-out forwards;
+        }
 
-            .cover {
-                background: linear-gradient(to right,
-                        #010b16d8 40%,
-                        #010b16 100%,
-                        rgba(0, 0, 0, 0) 110%),
-                      url("{{ asset('/public/theme/assets/largecar.jpg') }}");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-            }
+        /* Smooth theme transition */
+        html {
+            transition: background-color .3s, color .3s;
+        }
+    </style>
+@endsection
 
-   
-
-            .bgcolor {
-                background-color: #000f21 !important;
-                padding: 2rem;
-                transition: background-color 0.3s ease;
-            }
-
-            .bgcolor h4,
-            .bgcolor p,
-            .bgcolor label,
-            .bgcolor small {
-                color: var(--dimtext) !important;
-            }
-
-            .bgcolor input.form-control {
-                color: #ffffff;
-                border: 1px solid var(--bs-b-color);
-            }
-
-            .bgcolor input.form-control::placeholder {
-                color: #ffffff;
-            }
-
-            .bgcolor .btn-primary {
-                border-color: var(--bs-primary);
-                font-size: var(--font-p1)
-            }
-
-             .btn-primary:hover {
-                /* background-color: #010b16ee; */
-                /* border-color: #3569ad; */
-                background-color: #0b5edbec!important;
-            }
-
-
-
-            .navbar {
-                display: none;
-            }
-
-            footer {
-                display: none;
-            }
-        </style>
-    @endsection
-    {{-- @section('images')
-    <img src="{{ asset('/public/theme/assets/CarGroup.png') }}" alt="auth-forgot-password-cover" class="my-5 auth-illustration d-lg-block d-none" data-app-light-img="illustrations/auth-forgot-password-illustration-light.png" data-app-dark-img="illustrations/auth-forgot-password-illustration-dark.png" style="visibility: visible;">
-    @endsection --}}
-
-    @section('content')
-        <div class="authentication-wrapper authentication-cover cover" style="height:100vh !important">
-            <a href="index.html" class="app-brand auth-cover-brand">
-                <span class="app-brand-logo demo mt-3">
-                    <span class="text-primary">
-                        <img src="{{ asset('public/themeadmin/images/logo/logo.png') }}" />
-                    </span>
-                </span>
+@section('content')
+    <!-- Minimal header (logo + theme toggle) -->
+    <header class="absolute inset-x-0 top-0 z-20">
+        <div class="mx-auto px-8 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{{ url('/') }}" class="flex items-center gap-2">
+                <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="AutoBoli" class="h-8 w-auto block">
             </a>
 
+            <div class="flex items-center gap-3">
+                <!-- Theme toggle -->
+                <button id="themeToggle"
+                    class="flex items-center justify-center gap-2 p-2 rounded-md text-sm font-medium
+                 border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900
+                 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition">
+                    <i id="themeIcon" class="fas fa-moon"></i>
+                    <span id="themeLabel" class="sr-only">Toggle theme</span>
+                </button>
 
-
-            <div class="authentication-inner row m-0">
-                  <div class="d-none d-xl-flex col-xl-8 p-0">
-                <div class="auth-cover-bg d-flex justify-content-center align-items-center">
-
-                </div>
+                <a href="{{ url('/') }}"
+                    class="text-white dark:text-gray-900 rounded-md px-3 py-2 text-sm font-medium border
+                  border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition">
+                    Back to Home
+                </a>
             </div>
-                <div class="d-flex col-12 col-xl-4 align-items-center p-sm-12 p-6 bgcolor">
-                    <div class="w-px-400 mx-auto mt-12 mt-5">
-                        <h4 class="mb-1">Forgot Password?</h4>
-                        <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
-                        <form id="resetPasswordForm" class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework">
-                            @csrf
-                            <div class="mb-6 form-control-validation fv-plugins-icon-container">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="Enter your email" required autofocus>
-                                <div class="invalid-feedback" id="emailError"></div>
-                            </div>
-                            <button type="submit" class="btn btn-primary d-grid w-100 waves-effect waves-light"
-                                style=" box-shadow: none;">
-                                Send Reset Link
-                            </button>
-                        </form>
+        </div>
+    </header>
 
-                        <div class="text-center">
-                            <a href="{{ url('login') }}" class="d-flex justify-content-center" style="color: #ffffff;">
-                                <i class="icon-base ti tabler-chevron-left scaleX-n1-rtl me-1_5"></i>
-                                Back to login
-                            </a>
+    <!-- Page -->
+    <div
+        class="relative min-h-screen flex items-center justify-center bg-[#000f21] dark:bg-gray-100 overflow-hidden pt-20 transition-colors">
+        <!-- Decorative diagonal brand band + dotted texture -->
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]">
+            <div class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[#0080ff]"></div>
+            <div
+                class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right
+                  bg-[radial-gradient(#7b3fe6_1.2px,transparent_1.2px)]
+                  [background-size:16px_16px] opacity-30">
+            </div>
+        </div>
+
+        <!-- Card -->
+        <div class="container mx-auto px-4 py-12">
+            <div class="mx-auto w-full max-w-lg">
+                <div
+                    class="rounded bg-[#0f1c2c] dark:bg-white shadow-2xl px-6 sm:px-12 py-10 relative z-10 animate-slideUp transition-colors">
+
+                    <!-- Title -->
+                    <h1 class="text-3xl font-extrabold mb-6 text-white dark:text-gray-900">
+                        Forgot your password?
+                    </h1>
+
+                    <p class="text-sm text-slate-300 dark:text-slate-600 mb-6">
+                        Enter your email and we’ll send you a reset link.
+                    </p>
+
+                    <!-- Form (unchanged ids & names for your AJAX) -->
+                    <form id="resetPasswordForm" class="space-y-5 fv-plugins-bootstrap5 fv-plugins-framework">
+                        @csrf
+
+                        <div class="space-y-2">
+                            <label for="email"
+                                class="block text-xs font-semibold text-slate-200 dark:text-gray-700">Email</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-gray-500">
+                                    <!-- mail icon -->
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5L4 8V6l8 5 8-5v2Z" />
+                                    </svg>
+                                </span>
+                                <input type="email" id="email" name="email"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100
+                              pl-10 pr-3 py-3 text-white dark:text-gray-900 placeholder:text-slate-400"
+                                    placeholder="Enter your email" required autofocus>
+                            </div>
+                            <div class="text-red-500 text-sm" id="emailError"></div>
                         </div>
+
+                        <button type="submit"
+                            class="w-full rounded-lg bg-[#0080ff] hover:bg-[#0059B3] text-white font-semibold py-3 shadow-md transition">
+                            Send me the link
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <a href="{{ url('login') }}"
+                            class="text-[#353F4C] hover:text-[#0080ff] hover:underline font-medium text-sm">or sign in</a>
                     </div>
                 </div>
-
             </div>
-          </div>
+        </div>
+    </div>
+@endsection
 
-        @endsection
+@section('js')
+    <script>
+        // Theme toggle (same as login)
+        const html = document.documentElement;
+        const themeToggle = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
 
-        @section('js')
-            <script>
-                $(document).ready(function() {
-                    $('#resetPasswordForm').on('submit', function(e) {
-                        e.preventDefault();
+        if (localStorage.theme === "light") {
+            html.classList.remove("dark");
+            themeIcon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            html.classList.add("dark");
+            themeIcon.classList.replace("fa-sun", "fa-moon");
+        }
 
-                        let form = $(this);
-                        let email = $('#email').val();
-                        let token = $('input[name="_token"]').val();
+        themeToggle.addEventListener("click", () => {
+            if (html.classList.contains("dark")) {
+                html.classList.remove("dark");
+                localStorage.theme = "light";
+                themeIcon.classList.replace("fa-moon", "fa-sun");
+            } else {
+                html.classList.add("dark");
+                localStorage.theme = "dark";
+                themeIcon.classList.replace("fa-sun", "fa-moon");
+            }
+        });
+    </script>
 
-                        // Clear old errors
-                        $('#emailError').text('');
-                        $('#email').removeClass('is-invalid');
+    {{-- Your existing AJAX logic (unchanged) --}}
+    <script>
+        $(document).ready(function() {
+            $('#resetPasswordForm').on('submit', function(e) {
+                e.preventDefault();
 
-                        $.ajax({
-                            url: "{{ route('password.email') }}",
-                            method: 'POST',
-                            data: {
-                                _token: token,
-                                email: email
-                            },
-                            success: function(response) {
-                                toastr.success("Reset link sent successfully!");
-                                form.trigger('reset');
-                            },
-                            error: function(xhr) {
-                                if (xhr.status === 422) {
-                                    let errors = xhr.responseJSON.errors;
-                                    if (errors.email) {
-                                        $('#emailError').text(errors.email[0]);
-                                        $('#email').addClass('is-invalid');
-                                        toastr.error(errors.email[0]);
-                                    }
-                                } else {
-                                    toastr.error("Something went wrong.");
-                                }
+                let form = $(this);
+                let email = $('#email').val();
+                let token = $('input[name="_token"]').val();
+
+                // Clear old errors
+                $('#emailError').text('');
+                $('#email').removeClass('is-invalid');
+
+                $.ajax({
+                    url: "{{ route('password.email') }}",
+                    method: 'POST',
+                    data: {
+                        _token: token,
+                        email: email
+                    },
+                    success: function(response) {
+                        toastr.success("Reset link sent successfully!");
+                        form.trigger('reset');
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            if (errors.email) {
+                                $('#emailError').text(errors.email[0]);
+                                $('#email').addClass('is-invalid');
+                                toastr.error(errors.email[0]);
                             }
-                        });
-                    });
+                        } else {
+                            toastr.error("Something went wrong.");
+                        }
+                    }
                 });
-            </script>
-        @endsection
+            });
+        });
+    </script>
+@endsection

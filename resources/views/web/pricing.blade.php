@@ -1,1308 +1,301 @@
 @extends('web.partial.layout')
 @section('css')
     <style>
-        .pricing-card {
-            background-color: #000f2170 !important;
-            border: 1px solid var(--items-border-colur) !important;
-            margin-top: 16px;
-            transition: .5s;
-        }
-
-        .pricing-card:hover {
-            background-color: #000f21 !important;
-            cursor: pointer;
-        }
-
-        .pricing-card-popular {
-            background: #0080ff40 !important;
-            border: 1px solid var(--text-color) !important;
-            position: relative;
-            border-radius: 10px;
-            transition: all 0.8s ease;
-            margin-top: 0px !important;
-
-
-        }
-
-
-        .pricing-card-popular:hover {
-            background: #0080ff60 !important;
-            backdrop-filter: blur(4px);
-            /* Blur on hover */
-            -webkit-backdrop-filter: blur(1px);
-        }
-
-        .popular-badge {
+        .card-sheen::after {
+            content: "";
             position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text-color) !important;
-            border: none !important;
-            padding: 6px 12px !important;
-            font-size: var(--font-p2) !important;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(120deg, rgba(255, 255, 255, .06), transparent 40%);
+            opacity: .4;
+            mix-blend-lighten;
+            border-radius: inherit;
         }
 
-        .price-original {
-            color: #666 !important;
-            text-decoration: line-through;
-            font-size: 17px;
+        .dotline {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, .12) 33%, rgba(255, 255, 255, 0) 0);
+            background-size: 8px 1px;
+            background-repeat: repeat-x;
+            background-position: bottom;
         }
 
-        .price-current style="font-size: var(--font-h6);color: var(--dimtext) " {
-            color: white !important;
-            font-size: 20px;
-            font-weight: bold;
+        .table-sticky thead th,
+        .table-sticky thead td {
+            position: sticky;
+            top: 72px;
+            z-index: 20
         }
 
-        .price-period {
-            color: #999 !important;
-            font-size: 16px;
-            font-weight: normal;
-        }
-
-        .billing-info {
-            color: #999 !important;
-
-        }
-
-        .credits-info {
-            color: var(--white-text) !important;
-            font-size: 17px;
-        }
-
-        .feature-text {
-            color: #ccc !important;
-            font-size: 14px;
-        }
-
-        .feature-subtext {
-            color: #999 !important;
-            font-size: 12px;
-        }
-
-        .btn-get-starteds {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-
-
-
-
-        .btn-light-custom {
-            background: white !important;
-            border: 1px solid white !important;
-            color: black !important;
-        }
-
-        .btn-primary-custom {
-            background: white !important;
-            border: 1px solid var(--items-border-colur) !important;
-            color: black !important;
-        }
-
-        .inline-bottom-border {
-            border-bottom: 1px solid var(--items-border-colur) !important;
-            /* display: inline-block; */
-            padding-bottom: 4px;
-        }
-
-
-
-
-
-
-
-
-        .pricing-table-container {
-            background-color: #000f2170 !important
-                /* Darker background for the table container */
-                border-radius: 0.5rem;
-            /* overflow: hidden; */
-            /* Ensures rounded corners apply to table */
-        }
-
-        .table {
-            --bs-table-bg: #000f2170 !important;
-            --bs-table-color: #e0e0e0;
-        }
-
-        .table th,
-        .table td {
-            /* border-color: #333; */
-            border: none !important;
-            /* Ensure all borders are dark */
-            padding: 0.75rem 1rem;
-
-        }
-
-        .table thead th {
-            color: var(--dimtext)
-                /* Header text color */
-                font-weight: 400;
-
-        }
-        .table tbody tr:hover {
-            background: var(--background-color2);
-            color: var(--white-text)
-            
-        }
-        .table tbody tr td {
-           text-align: center;
-            
-        }
-        .table tbody tr:hover .highlight-column{
-            background: red;
-            color: var(--white-text)
-            
-        }
-
-        .table tbody th {
-            text-align: left;
-            color: var(--dimtext);
-            /* Feature name color */
-        }
-
-        .table tbody td {
-            text-align: left;
-            color: white;
-            font-size: var(--font-p1);
-
-            /* Feature value color */
-        }
-
-        .category-header {
-            background-color: #222;
-            font-size: var(--font-h6) !important;
-            color: var(--white-text) !important;
-            text-align: left;
-        }
-
-        .highlight-column {
-            background-color: #0080ff31 !important;
-
-        }
-
-        .check-icon {
-            color: var(--text-color);
-        }
-
-        .x-icon {
-            color: #ef4444;
-            font-weight: bold;
-        }
-
-        .underline-dotted {
-            text-decoration: underline dotted !important;
-        }
-
-        .table-position tr {
-            position: sticky !important;
-            top: 0;
-            background-color: white;
-            /* Ya apni background color rakhain */
-            z-index: 10000 !important;
-        }
-
-        .cinoe {
-            display: flex;
-            margin: 10px !important;
-            gap: 10px;
-        }
-
-        .chek {
-            height: 20px;
-            border-radius: 50%;
-            width: 20px;
-            display: flex;
-            justify-content: center !important;
-            align-items: center !important;
-            background: var(--text-color) !important;
-            padding: 13px !important;
-
-        }
-
-        @media screen and (max-width: 560px) {
-            .responsve-prisingcards {
-                width: 110%;
-            }
-
-            .pricing-card-popular {
-                position: relative;
-                top: 0px;
-            }
-
+        /* subtle focus ring for keyboard users */
+        .focusable:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 128, 255, .35)
         }
     </style>
 @endsection
 
 @section('content')
-    <div class="responsve-prisingcards"
-        style="padding-top: 6rem !important; background-color: var(--items-background) !important;">
+    <section class="min-h-screen w-full bg-[#0b1624] text-white pt-28 pb-20">
+        <div class="max-w-7xl mx-auto px-6">
 
-
-        <div class="pb-12 container text-white" style="margin: 60px auto">
-            <h2 class="">Flexible plans
-                for AI content creators</h2>
-            <p>Choose
-                the best plan for your needs.</p>
-        </div>
-
-        <div class="container">
-            <div class="d-flex justify-content-center gx-3 gy-4">
-                <!-- Free Plan -->
-                <div class="" style="width: 25%;">
-                    <div class="pricing-card h-100"
-                        style="border-radius: 12px 0 0 12px; background-color: var(--item-background);  border-right: none !important;">
-                        <div class="px-4 pt-4">
-                            <h6 class="text-white mb-3 ">Free</h6>
-                            <div class="mb-3">
-                                <div class="price-current" style="font-size: var(--font-h6);color: var(--dimtext) ">$0 <span
-                                        class="price-period">/month</span></div>
-                            </div>
-                            <a href="{{ url('/register?plan_id=2') }}" class="btn btn-get-starteds mb-4"
-                                style="border: 1px solid white; color: #ccc;">Get
-                                Started</a>
-                        </div>
-                        <div class="border-top border-bottom text-center py-3 px-4"
-                            style="border-color:var(--items-border-colur) !important;">
-                            <i class="bi bi-lightning-charge text-warning mb-2"></i>
-
-                            <p class="billing-info mb-2">For small dealers.</p>
-                        </div>
-                        <ul class=" py-4 " style="color: white; text-decoration: none">
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-
-                        </ul>
-                    </div>
+            {{-- Header --}}
+            <div class="text-center mb-8 md:mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm">
+                    <span class="opacity-80">Monthly</span>
+                    <span class="opacity-30">•</span>
+                    <span class="opacity-80">Yearly</span>
+                    <span class="ml-1 text-[#8abfff] text-xs">Up to 20% OFF</span>
                 </div>
+                <h1 class="mt-5 text-3xl md:text-4xl font-extrabold">Flexible plans for AI content creators</h1>
+                <p class="mt-2 text-white/70">Choose the best plan for your needs.</p>
+            </div>
 
-                <!-- Entry Plan -->
-                <div class="" style="width: 25%;">
-                    <div class="card pricing-card h-100">
-                        <div class="px-4 pt-4">
-                            <h6 class="text-white mb-3 ">Entry</h6>
-                            <div class="d-flex align-items-center">
-
-                                <span class="price-current" style="font-size: var(--font-h6);color: var(--dimtext) ">$30
-                                    <span class="price-period">/month</span></span>
-                            </div>
-                            <a href="{{ url('/register?plan_id=5') }}"
-                                class="btn btn-light-custom btn-get-starteds mb-4 mt-3">Get Started</a>
-                        </div>
-                        <div class="border-top border-bottom text-center py-3 px-4"
-                            style="border-color:var(--items-border-colur) !important;">
-                            <i class="bi bi-lightning-charge text-warning mb-2"></i>
-
-                            <p class="billing-info mb-2">For small dealers.</p>
-                        </div>
-                        <ul class=" py-4 " style="color: white">
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Plus Plan -->
-                <div class="" style="width: 25%;">
-                    <div class="card pricing-card pricing-card-popular h-100">
-                        <span class="badge popular-badge"><i class="bi bi-lightning-fill me-1"></i>Most popular</span>
-                        <div class="px-4" style=" padding-top: 40px !important;">
-                            <h6 class="text-white mb-3 ">Plus</h6>
-                            <div class="d-flex align-items-center">
-
-                                <span class="price-current" style="font-size: var(--font-h6);color: var(--dimtext) ">$50
-                                    <span class="price-period">/month</span></span>
-                            </div>
-                            <a href="{{ url('/register?plan_id=4') }}"
-                                class="btn btn-primary-custom btn-get-starteds mb-4 mt-3">Get Started</a>
-                        </div>
-                        <div class="border-top border-bottom text-center py-3 px-4"
-                            style="border-color:#bcc4cb7d !important">
-                            <i class="bi bi-lightning-charge text-warning mb-2"></i>
-
-                            <p class="billing-info mb-2">For medium-sized businesses.</p>
-                        </div>
-                        <ul class=" py-4 " style="color: white">
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Ultra Plan -->
-                <div class="" style="width: 25%;">
-                    <div class="card pricing-card h-100" style="border-radius: 0 12px 12px 0;">
-                        <div class="px-4 pt-4">
-                            <h6 class="text-white mb-3 ">Ultra</h6>
-                            <div class="d-flex align-items-center">
-
-                                <span class="price-current" style="font-size: var(--font-h6);color: var(--dimtext) ">$100
-                                    <span class="price-period">/month</span></span>
-                            </div>
-                            <a href="{{ url('/register?plan_id=3') }}"
-                                class="btn btn-light-custom btn-get-starteds mb-4 mt-3">Get Started</a>
-                        </div>
-                        <div class="border-top border-bottom text-center py-3 px-4"
-                            style="border-color:var(--items-border-colur) !important;">
-                            <i class="bi bi-lightning-charge text-warning mb-2"></i>
-
-                            <p class="billing-info mb-2">For larger operations.</p>
-                        </div>
-                        <ul class=" py-4 " style="color: white">
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-                            <li class="cinoe">
-                                <span class="chek cione"><i class="fa-solid fa-check"></i></span>
-                                ujasidjsaik
-                            </li>
-
-                        </ul>
-                    </div>
+            {{-- Billing Toggle --}}
+            <div class="flex items-center justify-center mb-8">
+                <div class="inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
+                    <button id="billMonthly"
+                        class="focusable tab-btn active px-4 py-2 text-sm rounded-lg bg-[#1a2640] border border-white/10">Monthly</button>
+                    <button id="billYearly" class="focusable tab-btn px-4 py-2 text-sm rounded-lg hover:bg-white/5">Yearly
+                        <span class="ml-1 text-[#8abfff]">–20%</span></button>
                 </div>
             </div>
-        </div>
 
-
-        <div class="container py-5">
-            <h5 style="color: white; margin-top: 80px; margin-bottom: 50px;">Compare features and model access across all
-                plans
-
-            </h5>
-
-
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <div class="pricing-table-container">
-                        <div class="">
-
-
-
-
-                            <table class="table " style="background: #000f21">
-
-                                <thead
-                                    style="position:sticky!important; top: 28px; background:  #000f21; z-index: 51; border: 1px solid var(--items-border-colur) !imprtant">
-                                    <tr>
-                                        <td>
-                                            <div class="px-2 pt-4">
-                                                <h6 class="text-white " style="margin-bottom: 80px; width: 70%;">
-                                                    Choose Your plane</h6>
-
-                                            </div>
-                                        </td>
-                                        <th>
-                                            <div class="px-4 pt-5">
-                                                <h6 class="text-white mb-3 ">Free</h6>
-                                                <div class="mb-3">
-                                                    <div class="price-current"
-                                                        style="font-size: var(--font-h6);color: var(--dimtext) ">$0 <span
-                                                            class="price-period">/month</span>
-                                                    </div>
-                                                </div>
-                                                <a href="{{ url('/register?plan_id=2') }}"
-                                                    class="btn btn-get-starteds mb-4"
-                                                    style=" border: 1px solid var(--items-border-colur); color: #ccc;">Get
-                                                    Started</a>
-                                            </div>
-                                        </th>
-                                        <th>
-                                            <div class="px-4 pt-4">
-                                                <h6 class="text-white mb-3 ">Entry</h6>
-                                                <div class="d-flex align-items-center">
-
-                                                    <span class="price-current"
-                                                        style="font-size: var(--font-h6);color: var(--dimtext) ">$30 <span
-                                                            class="price-period">/month</span></span>
-                                                </div>
-                                                <a href="{{ url('/register?plan_id=5') }}"
-                                                    class="btn btn-light-custom btn-get-starteds mb-4 mt-3">Get Started</a>
-                                            </div>
-                                        </th>
-
-                                        <th class="highlight-column">
-                                            <div class="px-2 pt-4">
-                                                <h6 class="text-white mb-3 ">Plus</h6>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="price-original me-2">$60</span>
-                                                    <span class="price-current"
-                                                        style="font-size: var(--font-h6);color: var(--dimtext) ">$50 <span
-                                                            class="price-period">/month</span></span>
-                                                </div>
-                                                <a href="{{ url('/register?plan_id=4') }}"
-                                                    class="btn btn-primary-custom btn-get-starteds mb-4 mt-3">Get
-                                                    Started</a>
-                                            </div>
-                                        </th>
-                                        <th>
-                                            <div class="px-2 pt-4">
-                                                <h6 class="text-white mb-3 ">Ultra</h6>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="price-original me-2">$110</span>
-                                                    <span class="price-current"
-                                                        style="font-size: var(--font-h6);color: var(--dimtext) ">$100 <span
-                                                            class="price-period">/month</span></span>
-                                                </div>
-                                                <a href="{{ url('/register?plan_id=3') }}"
-                                                    class="btn btn-light-custom btn-get-starteds mb-4 mt-3">Get Started</a>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th class="category-header">Dashboard & Insights</th>
-                                        <td>
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-                                        <td class="highlight-column">
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Auction Overview </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                     <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Intereste Based </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Watched List</div>
-                                        </th>
-                                        <td>
-                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Alerted List </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;
-                                                </span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                              
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                                
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Vehicle Sales Overview </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span>
-                                               </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                               
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                              
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-
-                                    <!-- Category -->
-                                    <tr>
-                                        <th class="category-header">Intereste Based </th>
-                                        <td>
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-                                        <td class="highlight-column">
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-
-
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Save Custom Search (Interest)</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Discover Matching Auctions</div>
-                                        </th>
-                                        <td>
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Past Auction Records</div>
-                                        </th>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border"><span class="underline-dotted">3-Month Price
-                                                    Trend Graph</span></div>
-                                        </th>
-                                        <td>
-                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Real-Time Vehicle Valuation</div>
-                                        </th>
-                                        <td>
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                         <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Best Auction Match Finder</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                           <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                          <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="category-header">Auction Data</th>
-                                        <td>
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-                                        <td class="highlight-column">
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Auction Market Snapshot</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Live Online Auctions</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Scheduled Timed Auctions</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Auction Vehicle Insights</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Auction Alerts & Notifications</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Live Auction Screen</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Auction Schedule </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Reaction Tracker </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Upcoming Auction Vehicles </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Historical Auction Data </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th class="category-header">Vehicle Valuation </th>
-                                        <td>
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-                                        <td class="highlight-column">
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-
-
-
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Instant Vehicle Valuation </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Smart Bid Recommendation </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-
-
-                                    </tr>
-
-                                    <tr>
-                                        <th class="category-header">More </th>
-                                        <td>
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-
-                                        <td class="highlight-column">
-
-                                        </td>
-                                        <td>
-
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Comparison Tool </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">VIN Report Credits </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Industry News & Insights </div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Sub-User Account Access</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Light/Dark Mode</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <div class="inline-bottom-border">Advanced Search Filters</div>
-                                        </th>
-                                        <td>
-                                            <div class="inline-bottom-border"><span class="x-icon">&#10006;</span></div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-
-                                        <td class="highlight-column">
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="inline-bottom-border"><span
-                                                    class="material-symbols-outlined check-icon">check_circle</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-
-                                </tbody>
-                            </table>
-
-                        </div>
+            {{-- Pricing Grid --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+                {{-- Free --}}
+                <div class="relative rounded-2xl border border-white/10 bg-[#0f1c2c]/70 p-5 lg:p-6 card-sheen">
+                    <h3 class="text-xl font-semibold">Free</h3>
+                    <div class="mt-2">
+                        <span class="text-3xl font-bold" data-price data-month="0" data-plan="Free">$0</span>
+                        <span class="text-white/60">/month</span>
                     </div>
+
+                    <a href="{{ url('/register?plan_id=2') }}"
+                        class="mt-6 inline-flex w-full items-center justify-center rounded-lg border border-white/20 bg-transparent px-4 py-2.5 font-semibold hover:bg-white/10 transition focusable">
+                        Get Started
+                    </a>
+
+                    <div class="mt-5 dotline pb-3 text-sm text-white/70">40 credits / <span class="lowercase">day</span>
+                    </div>
+
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Generation — 3 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Editing — 1 project</li>
+                    </ul>
+                </div>
+
+                {{-- Entry --}}
+                <div class="relative rounded-2xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
+                    <h3 class="text-xl font-semibold">Entry</h3>
+                    <div class="mt-2">
+                        <span class="text-3xl font-bold" data-price data-month="10" data-plan="Entry">$10</span>
+                        <span class="text-white/60">/month</span>
+                    </div>
+
+                    <a href="{{ url('/register?plan_id=5') }}"
+                        class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-white text-black font-semibold px-4 py-2.5 hover:bg-white/90 transition focusable">
+                        Get Started
+                    </a>
+
+                    <div class="mt-5 dotline pb-3 text-sm text-white/70">3k credits / <span class="lowercase">month</span>
+                    </div>
+
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Generation — 9 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Video
+                            Generation — 18 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Editing — 5 projects</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Parallel
+                            jobs — 2 gens at a time</li>
+                    </ul>
+                </div>
+
+                {{-- Core --}}
+                <div class="relative rounded-2xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
+                    <h3 class="text-xl font-semibold">Core</h3>
+                    <div class="mt-2">
+                        <span class="text-3xl font-bold" data-price data-month="30" data-plan="Core">$30</span>
+                        <span class="text-white/60">/month</span>
+                    </div>
+
+                    <a href="{{ url('/register') }}"
+                        class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-white text-black font-semibold px-4 py-2.5 hover:bg-white/90 transition focusable">
+                        Get Started
+                    </a>
+
+                    <div class="mt-5 dotline pb-3 text-sm text-white/70">15k credits / <span class="lowercase">month</span>
+                    </div>
+
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Generation — 10 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Video
+                            Generation — 24 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Editing — 15 projects</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Parallel
+                            jobs — 4 gens at a time</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Model
+                            Training</li>
+                    </ul>
+                </div>
+
+                {{-- Plus (Most popular) --}}
+                <div
+                    class="relative rounded-2xl border-2 border-[#0080ff]/60 bg-[#0f1c2c] p-5 lg:p-6 ring-1 ring-[#0080ff]/20 shadow-[0_0_0_4px_rgba(0,128,255,.05)]">
+                    <span
+                        class="absolute right-4 -top-3 text-xs bg-[#0080ff] text-white px-2 py-1 rounded-md font-semibold shadow">Most
+                        popular</span>
+                    <h3 class="text-xl font-semibold">Plus</h3>
+                    <div class="mt-2">
+                        <span class="text-3xl font-extrabold" data-price data-month="65" data-plan="Plus">$65</span>
+                        <span class="text-white/60">/month</span>
+                    </div>
+
+                    <a href="{{ url('/register?plan_id=4') }}"
+                        class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-[#0080ff] font-semibold px-4 py-2.5 hover:bg-[#006fe0] transition focusable">
+                        Get Started
+                    </a>
+
+                    <div class="mt-5 dotline pb-3 text-sm text-white/80">35k credits / <span class="lowercase">month</span>
+                    </div>
+
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Generation — 10 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Video
+                            Generation — 24 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Editing — 50 projects</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Parallel
+                            jobs — 8 gens at a time</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Model
+                            Training</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Top-up
+                            Credits</li>
+                    </ul>
+                </div>
+
+                {{-- Ultra --}}
+                <div class="relative rounded-2xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
+                    <h3 class="text-xl font-semibold">Ultra</h3>
+                    <div class="mt-2">
+                        <span class="text-3xl font-bold" data-price data-month="175" data-plan="Ultra">$175</span>
+                        <span class="text-white/60">/month</span>
+                    </div>
+
+                    <a href="{{ url('/register?plan_id=3') }}"
+                        class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-white text-black font-semibold px-4 py-2.5 hover:bg-white/90 transition focusable">
+                        Get Started
+                    </a>
+
+                    <div class="mt-5 dotline pb-3 text-sm text-white/70">100k credits / <span
+                            class="lowercase">month</span></div>
+
+                    <ul class="mt-4 space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Generation — 10 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Video
+                            Generation — 24 AI models</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
+                            Editing — Unlimited projects</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Parallel
+                            jobs — 10 gens at a time</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Model
+                            Training</li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Top-up
+                            Credits</li>
+                    </ul>
                 </div>
             </div>
-        </div>
 
-    </div>
+            {{-- Comparison Table --}}
+            <div class="mt-16">
+                <h2 class="text-2xl font-semibold mb-5">Compare features and model access across all plans</h2>
+                <div class="overflow-x-auto rounded-2xl border border-white/10 table-sticky">
+                    <table class="min-w-[900px] w-full text-left bg-[#0f1c2c]">
+                        <thead class="bg-[#0b1624] border-b border-white/10">
+                            <tr class="text-sm text-white/80">
+                                <th class="py-4 px-4">Choose Your Plan</th>
+                                <th class="py-4 px-4">Free</th>
+                                <th class="py-4 px-4">Entry</th>
+                                <th class="py-4 px-4">Core</th>
+                                <th class="py-4 px-4">Plus</th>
+                                <th class="py-4 px-4">Ultra</th>
+                            </tr>
+                        </thead>
+                        <tbody class="[&>tr:nth-child(even)]:bg-white/5">
+                            {{-- Example block (you can paste your existing rows here; I kept the structure lean) --}}
+                            <tr>
+                                <th class="py-3 px-4 text-white/90">Auction Overview</th>
+                                <td class="py-3 px-4">✖</td>
+                                <td class="py-3 px-4">✖</td>
+                                <td class="py-3 px-4">✖</td>
+                                <td class="py-3 px-4"><span
+                                        class="material-symbols-outlined text-[#8abfff] align-middle">check_circle</span>
+                                </td>
+                                <td class="py-3 px-4"><span
+                                        class="material-symbols-outlined text-[#8abfff] align-middle">check_circle</span>
+                                </td>
+                            </tr>
+
+                            {{-- Paste the rest of your rows from the old table here.
+                 Keep the same content; the styling will carry over. --}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
 @endsection
 
 @section('js')
-    <script></script>
+    <script>
+        // Billing toggle logic (Monthly vs Yearly)
+        const monthlyBtn = document.getElementById('billMonthly');
+        const yearlyBtn = document.getElementById('billYearly');
+        const priceEls = document.querySelectorAll('[data-price]');
+
+        function setActive(btn, active) {
+            btn.classList.toggle('bg-[#1a2640]', active);
+            btn.classList.toggle('border', active);
+            btn.classList.toggle('border-white/10', active);
+        }
+
+        function asCurrency(v) {
+            return '$' + v.toString();
+        }
+
+        function applyBilling(mode) {
+            priceEls.forEach(el => {
+                const month = Number(el.dataset.month || 0);
+                let display = month;
+                if (mode === 'yearly') {
+                    display = Math.round(month * 12 * 0.8); // 20% off
+                }
+                el.textContent = asCurrency(display);
+            });
+            if (mode === 'yearly') {
+                setActive(yearlyBtn, true);
+                setActive(monthlyBtn, false);
+                yearlyBtn.classList.add('bg-[#1a2640]', 'border', 'border-white/10');
+                monthlyBtn.classList.remove('bg-[#1a2640]', 'border', 'border-white/10');
+            } else {
+                setActive(monthlyBtn, true);
+                setActive(yearlyBtn, false);
+                monthlyBtn.classList.add('bg-[#1a2640]', 'border', 'border-white/10');
+                yearlyBtn.classList.remove('bg-[#1a2640]', 'border', 'border-white/10');
+            }
+        }
+
+        monthlyBtn.addEventListener('click', () => applyBilling('monthly'));
+        yearlyBtn.addEventListener('click', () => applyBilling('yearly'));
+        // default
+        applyBilling('monthly');
+    </script>
 @endsection

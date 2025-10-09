@@ -1,232 +1,240 @@
-    @extends('web.partial.layout')
-    @section('css')
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;ampdisplay=swap"
-            rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/fonts/iconify-icons.css') }}" />
-        <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/core.css') }}" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('public/themeadmin/assets/vendor/css/pages/page-auth.css') }}">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-        <style>
-            .bgcolor {
-                background-color: #000f21 !important;
-                color: #f1f1f1;
-                padding: 2rem;
-                transition: background-color 0.3s ease;
+@extends('web.partial.layout')
+@section('hideNavbar', true)
+@section('hideFooter', true)
+
+@section('css')
+    <style>
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
             }
 
-            .bgcolor h4,
-            .bgcolor p,
-            .bgcolor label,
-            .bgcolor small {
-                color: var(--dimtext);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
 
+        .animate-slideUp {
+            animation: slideUpFade .9s ease-out forwards;
+        }
 
+        html {
+            transition: background-color .3s, color .3s;
+        }
 
-            .bgcolor input.form-control::placeholder {
-                color: #ffffff;
-            }
+        /* smooth theme */
+    </style>
+@endsection
 
-            .bgcolor .btn-primary {
-                border-color: var(--bs-primary);
-                 font-size: var(--font-p1);
-            }
+@section('content')
+    <!-- Minimal header (logo + theme toggle) -->
+    <header class="absolute inset-x-0 top-0 z-20">
+        <div class="mx-auto px-8 py-4 flex items-center justify-between">
+            <a href="{{ url('/') }}" class="flex items-center gap-2">
+                <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="AutoBoli" class="h-8 w-auto block">
+            </a>
 
-             .btn-primary:hover {
-                /* background-color: #010b16ee; */
-                /* border-color: #3569ad; */
-                background-color: #0b5edbec!important;
-            }
-
-
-
-            .layout-menu-fixed .layout-navbar-full .layout-menu,
-            .layout-menu-fixed-offcanvas .layout-navbar-full .layout-menu {
-                top: 0px !important;
-            }
-
-            .layout-page {
-                padding-top: 0px !important;
-            }
-
-            .content-wrapper {
-                padding-bottom: 0px !important;
-            }
-
-            .cover {
-                background: linear-gradient(to right,
-                        #010b16d8 40%,
-                        #010b16 100%,
-                        rgba(0, 0, 0, 0) 110%),
-                    url("{{ asset('/public/theme/assets/largecar.jpg') }}");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-            }
-
-          
-
-            .navbar {
-                display: none;
-            }
-
-            footer {
-                display: none;
-            }
-        </style>
-    @endsection
-
-
-
-
-    <div class="authentication-wrapper authentication-cover cover">
-        <a href="index.html" class="app-brand auth-cover-brand">
-            <span class="app-brand-logo demo">
-                <span class="text-primary">
-                    <img src="{{ asset('public/themeadmin/images/logo/logo.png') }}" />
-                </span>
-            </span>
-        </a>
-        <div class="authentication-inner row m-0">
-
-            <div class="d-none d-xl-flex col-xl-8 p-0">
-                <div class="auth-cover-bg d-flex justify-content-center align-items-center">
-
-                   
-                </div>
+            <div class="flex items-center gap-3">
+                <button id="themeToggle"
+                    class="flex items-center justify-center gap-2 p-2 rounded-md text-sm font-medium
+                 border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900
+                 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition">
+                    <i id="themeIcon" class="fas fa-moon"></i><span class="sr-only">Toggle theme</span>
+                </button>
+                <a href="{{ url('/') }}"
+                    class="text-white dark:text-gray-900 rounded-md px-3 py-2 text-sm font-medium border
+                  border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition">
+                    Back to Home
+                </a>
             </div>
+        </div>
+    </header>
 
+    <!-- Page -->
+    <div
+        class="relative min-h-screen flex items-center justify-center bg-[#000f21] dark:bg-gray-100 overflow-hidden pt-20 transition-colors">
+        <!-- Decorative diagonal brand band + dotted texture -->
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]">
+            <div class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[#0080ff]"></div>
+            <div
+                class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right
+                  bg-[radial-gradient(#7b3fe6_1.2px,transparent_1.2px)]
+                  [background-size:16px_16px] opacity-30">
+            </div>
+        </div>
 
-            <div class="d-flex col-12 col-xl-4 align-items-center p-sm-12 p-6 bgcolor">
-                <div class="w-px-400 mx-auto mt-12 pt-5">
-                    <h4 class="mb-1">Reset Password </h4>
-                    <p class="mb-6"><span>Your new password must be different from previously used
-                            passwords</span></p>
-                    <form class="mb-6 fv-plugins-bootstrap5 fv-plugins-framework" id="resetPasswordForm">
+        <!-- Card -->
+        <div class="container mx-auto px-4 py-12">
+            <div class="mx-auto w-full max-w-lg">
+                <div
+                    class="rounded bg-[#0f1c2c] dark:bg-white shadow-2xl px-6 sm:px-12 py-10 relative z-10 animate-slideUp transition-colors">
+                    <h1 class="text-3xl font-extrabold mb-2 text-white dark:text-gray-900">Reset Password</h1>
+                    <p class="text-sm text-slate-300 dark:text-slate-600 mb-6">
+                        Your new password must be different from previously used passwords.
+                    </p>
+
+                    <!-- Form (ids & names unchanged) -->
+                    <form class="space-y-5 fv-plugins-bootstrap5 fv-plugins-framework" id="resetPasswordForm">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
                         <input type="hidden" name="email" value="{{ $email }}">
 
-                        <div class="mb-4 form-password-toggle">
-                            <label style="font-size:var(--font-p1)" class="form-label " for="password">New
-                                Password</label>
-                            <div class="input-group input-group-merge" style="border: 1px solid var(--bs-b-color)">
-                                <input  type="password" id="password" name="password" class="form-control"
-                                    placeholder="············" style="background-color: #000f21; color: white;border: none">
-                                <span class="input-group-text cursor-pointer toggle-password" data-target="password"
-                                    style="border: none">
-                                    <i style="color: var(--dimtext)" class="icon-base ti tabler-eye-off "></i>
-                                </span>
+                        <!-- New Password -->
+                        <div class="space-y-2">
+                            <label for="password" class="block text-xs font-semibold text-slate-200 dark:text-gray-700">
+                                New Password
+                            </label>
+                            <div class="relative">
+                                <input type="password" id="password" name="password"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100
+                              pr-12 py-3 px-3 text-white dark:text-gray-900 placeholder:text-slate-400"
+                                    placeholder="•••••••••••">
+                                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 toggle-password"
+                                    data-target="password" aria-label="Toggle password">
+                                    <i class="fas fa-eye text-slate-400 hover:text-slate-600"></i>
+                                </button>
                             </div>
-                            <div class="invalid-feedback" id="passwordError" style="display: none;"></div>
+                            <div class="text-red-500 text-sm" id="passwordError" style="display:none;"></div>
                         </div>
 
-                        <div class="mb-4 form-password-toggle">
-                            <label style="font-size:var(--font-p1)" class="form-label "
-                                for="password_confirmation">Confirm Password</label>
-                            <div class="input-group input-group-merge" style="border: 1px solid var(--bs-b-color)">
+                        <!-- Confirm Password -->
+                        <div class="space-y-2">
+                            <label for="password_confirmation"
+                                class="block text-xs font-semibold text-slate-200 dark:text-gray-700">
+                                Confirm Password
+                            </label>
+                            <div class="relative">
                                 <input type="password" id="password_confirmation" name="password_confirmation"
-                                    class="form-control border-1" placeholder="············"
-                                    style=" color: white;border: none">
-                                <span class="input-group-text cursor-pointer toggle-password"
-                                    data-target="password_confirmation"
-                                    style="border-left: 0;border: none">
-                                    <i style="color: var(--dimtext)" class="icon-base ti tabler-eye-off "></i>
-                                </span>
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100
+                              pr-12 py-3 px-3 text-white dark:text-gray-900 placeholder:text-slate-400"
+                                    placeholder="•••••••••••">
+                                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 toggle-password"
+                                    data-target="password_confirmation" aria-label="Toggle password">
+                                    <i class="fas fa-eye text-slate-400 hover:text-slate-600"></i>
+                                </button>
                             </div>
-                            <div class="invalid-feedback" id="confirmError" style="display: none;"></div>
+                            <div class="text-red-500 text-sm" id="confirmError" style="display:none;"></div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary d-grid w-100 waves-effect waves-light">Set new password</button>
+                        <button type="submit"
+                            class="w-full rounded-lg bg-[#0080ff] hover:bg-[#0059B3] text-white font-semibold py-3 shadow-md transition">
+                            Set new password
+                        </button>
                     </form>
-                    <div class="text-center">
-                        <a href="{{ url('login') }}" class="d-flex justify-content-center" style="color: #ffffff;">
-                            <i class="icon-base ti tabler-chevron-left scaleX-n1-rtl me-1_5"></i>
-                            Back to login
-                        </a>
+
+                    <div class="mt-6 text-center">
+                        <a href="{{ url('login') }}"
+                            class="text-[#353F4C] hover:text-[#0080ff] hover:underline font-medium text-sm">Back to
+                            login</a>
                     </div>
-                    <input type="hidden"></form>
                 </div>
             </div>
-
         </div>
     </div>
+@endsection
 
+@section('js')
+    <script>
+        // theme toggle (same behavior as other auth pages)
+        const html = document.documentElement;
+        const themeToggle = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
 
+        if (localStorage.theme === "light") {
+            html.classList.remove("dark");
+            themeIcon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            html.classList.add("dark");
+            themeIcon.classList.replace("fa-sun", "fa-moon");
+        }
 
-    @section('content')
-    @endsection
+        themeToggle?.addEventListener("click", () => {
+            if (html.classList.contains("dark")) {
+                html.classList.remove("dark");
+                localStorage.theme = "light";
+                themeIcon.classList.replace("fa-moon", "fa-sun");
+            } else {
+                html.classList.add("dark");
+                localStorage.theme = "dark";
+                themeIcon.classList.replace("fa-sun", "fa-moon");
+            }
+        });
 
-    @section('js')
-        <script>
-            $(document).ready(function() {
-                $('#resetPasswordForm').on('submit', function(e) {
-                    e.preventDefault();
+        // eye toggles (keep your .toggle-password + data-target contract)
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.toggle-password');
+            if (!btn) return;
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const icon = btn.querySelector('i');
+            if (!input) return;
 
-                    let form = $(this);
-                    let token = $('input[name="token"]').val();
-                    let email = $('input[name="email"]').val();
-                    let password = $('#password').val();
-                    let confirmPassword = $('#password_confirmation').val();
-                    let csrf = $('input[name="_token"]').val();
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    </script>
 
-                    $('#passwordError, #confirmError').text('').hide();
-                    $('#password, #password_confirmation').removeClass('is-invalid');
+    {{-- Your existing AJAX logic unchanged --}}
+    <script>
+        $(document).ready(function() {
+            $('#resetPasswordForm').on('submit', function(e) {
+                e.preventDefault();
 
-                    $.ajax({
-                        url: "{{ route('reset.password.submit') }}",
-                        type: 'POST',
-                        data: {
-                            _token: csrf,
-                            token: token,
-                            email: email,
-                            password: password,
-                            password_confirmation: confirmPassword
-                        },
-                        success: function(response) {
-                            toastr.success('Password has been reset successfully!');
-                            form.trigger('reset');
-                            setTimeout(() => {
-                                window.location.href = "{{ url('/login') }}";
-                            }, 1500);
-                        },
-                        error: function(xhr) {
-                            if (xhr.status === 422) {
-                                let errors = xhr.responseJSON.errors;
-                                if (errors.password) {
-                                    $('#password').addClass('is-invalid');
-                                    $('#passwordError').text(errors.password[0]).show();
-                                    toastr.error(errors.password[0]);
-                                }
-                                if (errors.password_confirmation) {
-                                    $('#password_confirmation').addClass('is-invalid');
-                                    $('#confirmError').text(errors.password_confirmation[0]).show();
-                                    toastr.error(errors.password_confirmation[0]);
-                                }
-                            } else {
-                                toastr.error('Something went wrong. Please try again.');
+                let form = $(this);
+                let token = $('input[name="token"]').val();
+                let email = $('input[name="email"]').val();
+                let password = $('#password').val();
+                let confirmPassword = $('#password_confirmation').val();
+                let csrf = $('input[name="_token"]').val();
+
+                $('#passwordError, #confirmError').text('').hide();
+                $('#password, #password_confirmation').removeClass('is-invalid');
+
+                $.ajax({
+                    url: "{{ route('reset.password.submit') }}",
+                    type: 'POST',
+                    data: {
+                        _token: csrf,
+                        token: token,
+                        email: email,
+                        password: password,
+                        password_confirmation: confirmPassword
+                    },
+                    success: function(response) {
+                        toastr.success('Password has been reset successfully!');
+                        form.trigger('reset');
+                        setTimeout(() => {
+                            window.location.href = "{{ url('/login') }}";
+                        }, 1500);
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            if (errors.password) {
+                                $('#password').addClass('is-invalid');
+                                $('#passwordError').text(errors.password[0]).show();
+                                toastr.error(errors.password[0]);
                             }
+                            if (errors.password_confirmation) {
+                                $('#password_confirmation').addClass('is-invalid');
+                                $('#confirmError').text(errors.password_confirmation[0]).show();
+                                toastr.error(errors.password_confirmation[0]);
+                            }
+                        } else {
+                            toastr.error('Something went wrong. Please try again.');
                         }
-                    });
+                    }
                 });
             });
-
-
-            $(document).on('click', '.toggle-password', function() {
-                let targetId = $(this).data('target');
-                let input = $('#' + targetId);
-                let icon = $(this).find('i');
-
-                if (input.attr('type') === 'password') {
-                    input.attr('type', 'text');
-                    icon.removeClass('tabler-eye-off').addClass('tabler-eye');
-                } else {
-                    input.attr('type', 'password');
-                    icon.removeClass('tabler-eye').addClass('tabler-eye-off');
-                }
-            });
-        </script>
-    @endsection
+        });
+    </script>
+@endsection

@@ -14,44 +14,82 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
+
 class WebController extends Controller
 {
 
     public function index()
     {
 
-    
+
         return view('web.home');
     }
 
     public function features()
     {
 
-    
+
         return view('web.features');
     }
-    
 
-    public function pricing ()
+    public function privacy()
+    {
+
+
+        return view('web.privacy');
+    }
+
+    public function terms()
+    {
+
+
+        return view('web.terms');
+    }
+
+    public function faq()
+    {
+
+
+        return view('web.faq');
+    }
+
+    public function cookiepolicy()
+    {
+
+
+        return view('web.cookiepolicy');
+    }
+
+    public function disclaimer()
+    {
+
+
+        return view('web.disclaimer');
+    }
+
+
+
+
+    public function pricing()
     {
         return view('web.pricing');
     }
 
-    public function privecy ()
+    public function privecy()
     {
         return view('web.privecy');
     }
-    public function faqs ()
+    public function faqs()
     {
         return view('web.faqs');
     }
-    public function newss ()
+    public function newss()
     {
         return view('web.newss');
     }
     public function AutionShadule(Request $request)
     {
-         if ($request->ajax()) {
+        if ($request->ajax()) {
 
             $query = Auctions::query()
                 ->leftJoin('auction_platform', 'auctions.platform_id', '=', 'auction_platform.id')
@@ -68,88 +106,89 @@ class WebController extends Controller
                 ->groupBy('auctions.id', 'auction_platform.name', 'auctions.auction_date', 'auctions.status')
                 ->orderBy('auctions.auction_date', 'desc');
 
-                    if ($request->platform_id) {
-                        $query->where('auction_platform.id', $request->platform_id);
-                    }
+            if ($request->platform_id) {
+                $query->where('auction_platform.id', $request->platform_id);
+            }
 
-                    if ($request->center_id) {
-                        $query->where('vehicles.center_id', $request->center_id);
-                    }
+            if ($request->center_id) {
+                $query->where('vehicles.center_id', $request->center_id);
+            }
 
-                    if ($request->status && $request->status !== 'all') {
-                        $query->where('auctions.status', 'In Progress');
-                    }
-                    if ($request->date) {
-                            $query->whereDate('auctions.auction_date', $request->date);
-                    }
+            if ($request->status && $request->status !== 'all') {
+                $query->where('auctions.status', 'In Progress');
+            }
+            if ($request->date) {
+                $query->whereDate('auctions.auction_date', $request->date);
+            }
 
-                    $auctions = $query->get();
+            $auctions = $query->get();
 
-                    $response = [];
-                    foreach ($auctions as $auction) {
-                        $status = $auction->status ?? 'Planned';
-                        $statusClass = strtolower(str_replace(' ', '-', $status));
-                        $statusHtml = '<span class="status-badge status-' . $statusClass . '">' . $status . '</span>';
+            $response = [];
+            foreach ($auctions as $auction) {
+                $status = $auction->status ?? 'Planned';
+                $statusClass = strtolower(str_replace(' ', '-', $status));
+                $statusHtml = '<span class="status-badge status-' . $statusClass . '">' . $status . '</span>';
 
-                        $response[] = [
-                            'platform' => $auction->platform ?? 'N/A',
-                            'center' => $auction->center ?? 'N/A',
-                            'total_vehicles' => $auction->total_vehicles,
-                            'time' => date('d M Y, h:i A', strtotime($auction->time)),
-                            'status' => $statusHtml,
-                            'action' => '<a href="#" class="action-link">View/Alert/</a>',
-                        ];
-                    }
+                $response[] = [
+                    'platform' => $auction->platform ?? 'N/A',
+                    'center' => $auction->center ?? 'N/A',
+                    'total_vehicles' => $auction->total_vehicles,
+                    'time' => date('d M Y, h:i A', strtotime($auction->time)),
+                    'status' => $statusHtml,
+                    'action' => '<a href="#" class="action-link">View/Alert/</a>',
+                ];
+            }
 
-                    return response()->json(['data' => $response]);
-         }
+            return response()->json(['data' => $response]);
+        }
 
 
-         
-                $today = Carbon::today();
-                $next7Days = Carbon::today()->addDays(6);
 
-                $dailyAuctions = Auctions::whereBetween('auction_date', [$today, $next7Days])
-                    ->select(
-                        DB::raw('DATE(auction_date) as date'),
-                        DB::raw('COUNT(*) as count')
-                    )
-                    ->groupBy(DB::raw('DATE(auction_date)'))
-                    ->orderBy('date', 'asc')
-                    ->get()
-                    ->keyBy('date');
+        $today = Carbon::today();
+        $next7Days = Carbon::today()->addDays(6);
 
-                $days = [];
-                for ($i = 0; $i < 7; $i++) {
-                    $date = Carbon::today()->addDays($i);
-                    $formattedDate = $date->format('Y-m-d');
+        $dailyAuctions = Auctions::whereBetween('auction_date', [$today, $next7Days])
+            ->select(
+                DB::raw('DATE(auction_date) as date'),
+                DB::raw('COUNT(*) as count')
+            )
+            ->groupBy(DB::raw('DATE(auction_date)'))
+            ->orderBy('date', 'asc')
+            ->get()
+            ->keyBy('date');
 
-                    $days[] = [
-                        'label' => $i === 0 ? 'Today' : $date->format('D'), 
-                        'date' => $formattedDate,
-                        'display' => $date->format('d M'),
-                        'count' => $dailyAuctions[$formattedDate]->count ?? 0,
-                    ];
-                }
-         
+        $days = [];
+        for ($i = 0; $i < 7; $i++) {
+            $date = Carbon::today()->addDays($i);
+            $formattedDate = $date->format('Y-m-d');
+
+            $days[] = [
+                'label' => $i === 0 ? 'Today' : $date->format('D'),
+                'date' => $formattedDate,
+                'display' => $date->format('d M'),
+                'count' => $dailyAuctions[$formattedDate]->count ?? 0,
+            ];
+        }
+
         $platforms = AuctionPlatform::select('id', 'name')->get();
         $centers = AuctionCenter::select('id', 'name')->get();
 
-        return view('web.AutionShadule', compact('platforms', 'centers','days'));
+        return view('web.AutionShadule', compact('platforms', 'centers', 'days'));
     }
 
 
-    public function ExploreEvery ()
+    public function ExploreEvery()
     {
         return view('web.ExploreEvery');
     }
-  
-    public function compairaution ()
+
+    public function compairaution()
     {
         return view('web.compairaution');
     }
-  
-    public function support(){
+
+    public function support()
+    {
         return view('web.support');
     }
     public function send(Request $request)
@@ -173,5 +212,4 @@ class WebController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Message sent successfully!']);
     }
-    
 }

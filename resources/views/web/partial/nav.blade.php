@@ -27,12 +27,12 @@
             <!-- Actions -->
             <div class="flex items-center gap-x-2 md:gap-x-4">
                 <!-- Theme Toggle Button -->
-                <button id="themeToggle"
-                    class="cursor-pointer p-1  flex items-center justify-center active:scale-95 transition-all duration-300 shadow-sm text-gray-100 hover:text-[#0080ff]  dark:shadow-md hover:bg-[#0f1c2c] hover:border-gray-600 rounded-full">
-                    <span id="themeIcon"
-                        class="material-symbols-outlined transition-transform duration-300 hover:rotate-12 text-xl">flare
-                    </span>
+                <button data-theme-toggle
+                    class="cursor-pointer p-1 flex items-center justify-center active:scale-95 transition-all duration-300 shadow-sm text-gray-100 hover:text-[#0080ff] hover:bg-[#0f1c2c] hover:border-gray-600 rounded-full"
+                    aria-label="Toggle theme">
+                    <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
                 </button>
+
 
                 <!-- <a
                             href="{{ url('/dashboard') }}"
