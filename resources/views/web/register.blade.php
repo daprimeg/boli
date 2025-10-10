@@ -173,9 +173,9 @@
                             </div>
 
                             <div>
-                                <select name="motorTradeInsurance"
+                                <select name="motorTradeInsurance" required
                                     class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900">
-                                    <option value="">Motor Trade Insurance? (Optional)</option>
+                                    <option value="">Motor Trade Insurance?</option>
                                     <option selected value="yes">Yes</option>
                                     <option value="no">No</option>
                                     <option value="pending">Pending</option>
@@ -235,7 +235,7 @@
                             <div>
                                 <input type="email" value="iamowaisazam@gmail1.com" name="personalEmail"
                                     class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Personal Email" />
+                                    placeholder="Personal Email OR Login Email" />
                                 <small class="error error-personalEmail text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
@@ -282,7 +282,24 @@
                                     class="flex-1 px-4 py-3 outline-none text-white dark:text-slate-900 bg-transparent dark:bg-gray-100 border-l border-slate-300 dark:border-gray-300"
                                     placeholder="Phone Number" />
                             </div>
-                            <small class="error error-phone text-red-400 dark:text-red-600 md:col-span-2"></small>
+                            <div
+                                class="flex rounded-lg overflow-hidden border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100">
+                                <select name="ReferralSource" required
+                                    class="flex-1 px-4 py-3 outline-none text-white dark:text-slate-900 bg-transparent dark:bg-gray-100 border-l border-slate-300 dark:border-gray-300"
+                                    placeholder="Referral Source" />
+                                <option value="">Referral Source?</option>
+                                <option value="Google">Google</option>
+                                <option value="Social Media">Social Media</option>
+                                <option value="Online Advertisement">Online Advertisement</option>
+                                <option value="Friend / Colleague Referral">Friend / Colleague Referral</option>
+                                <option value="Dealership Partner">Dealership Partner</option>
+                                <option value="Trade Event or Expo">Trade Event or Expo</option>
+                                <option value="Vehicle Trader Forum">Vehicle Trader Forum</option>
+                                <option value="Other (please specify)">Other (please specify)</option>
+
+                                </select>
+                            </div>
+
                         </div>
                     </section>
 
@@ -303,13 +320,55 @@
                         <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
                     </section>
 
+                    {{-- Proof --}}
+                    <section class="mb-8">
+                        <h2 class="text-xl font-extrabold text-white dark:text-slate-900 py-4">Proof</h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="font-semibold text-white dark:text-slate-900">Proof of motor trade <span
+                                        class="text-red-400 dark:text-red-600">*</span></label>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <label
+                                        class="w-56 text-center cursor-pointer rounded-lg border border-slate-300 dark:border-gray-300 px-4 py-3 bg-transparent dark:bg-gray-100 text-white dark:text-slate-800">
+                                        Select file (Max. 4MB)
+                                        <input name="avatar" type="file" class="fileName"
+                                            accept=".jpg,.jpeg,.png,.pdf" hidden />
+                                    </label>
+                                    <div id="fileName" class="text-white/80 dark:text-slate-600">No file chosen.</div>
+                                </div>
+                                <small class="error error-avatar text-red-400 dark:text-red-600 block mt-1"></small>
+                                <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
+                            </div>
+                            <div>
+                                <label class="font-semibold text-white dark:text-slate-900">Proof of address <span
+                                        class="text-red-400 dark:text-red-600">*</span></label>
+                                <div class="mt-2 flex items-center gap-3">
+                                    <label
+                                        class="w-56 text-center cursor-pointer rounded-lg border border-slate-300 dark:border-gray-300 px-4 py-3 bg-transparent dark:bg-gray-100 text-white dark:text-slate-800">
+                                        Select file (Max. 4MB)
+                                        <input name="avatar" type="file" class="fileName"
+                                            accept=".jpg,.jpeg,.png,.pdf" hidden />
+                                    </label>
+                                    <div id="fileName" class="text-white/80 dark:text-slate-600">No file chosen.</div>
+                                </div>
+                                <small class="error error-avatar text-red-400 dark:text-red-600 block mt-1"></small>
+                                <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
+                            </div>
+
+
+                        </div>
+                    </section>
+
                     {{-- Terms --}}
                     <p class="text-white/80 dark:text-slate-600 text-sm mb-6">
                         By submitting this form, you agree to the
-                        <a href="#" class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Terms &
+                        <a href="/autoboli//terms" target="_blank"
+                            class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Terms &
                             Conditions</a>
                         and
-                        <a href="#" class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Privacy
+                        <a href="/autoboli/privacy" target="_blank"
+                            class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Privacy
                             Policy</a>
                         applied by Autoboli LTD.
                     </p>
