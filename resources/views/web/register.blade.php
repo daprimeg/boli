@@ -1,282 +1,258 @@
 @extends('web.partial.layout')
+
 @section('hideNavbar', true)
 @section('hideFooter', true)
 
 @section('css')
     <style>
-        :root {
-            --primary: #0080ff;
-        }
-
-        /* Component styles using Tailwind via @apply */
-        @layer components {
-            .sign-input {
-                @apply block w-full rounded-xl bg-white border border-slate-200 px-4 py-3 text-slate-900 placeholder-slate-400 transition ease-out duration-200;
-            }
-
-            .sign-input:focus {
-                @apply outline-none ring-4 ring-[color:var(--primary)]/15 border-[color:var(--primary)] translate-y-[-1px];
-            }
-
-            .card {
-                @apply rounded-2xl border border-slate-200/60 bg-white/90 backdrop-blur-md shadow-xl;
-                box-shadow: 0 24px 60px -30px rgba(2, 8, 23, .35);
-            }
-
-            .btn-primary {
-                @apply inline-flex items-center justify-center rounded-xl font-semibold text-white px-5 py-3 transition duration-150 ease-out;
-                background: linear-gradient(135deg, var(--primary) 0%, #0051D5 100%);
-            }
-
-            .btn-primary:hover {
-                filter: brightness(1.06);
-                transform: translateY(-1px);
-            }
-
-            .btn-primary:active {
-                transform: translateY(0);
-            }
-        }
-
-        /* Divider */
-        .divider {
-            position: relative;
-            margin: 1rem 0
-        }
-
-        .divider::before {
-            content: "";
-            display: block;
-            height: 1px;
-            background: rgba(2, 8, 23, .12)
-        }
-
-        .divider>span {
-            position: absolute;
-            left: 50%;
-            top: -.65rem;
-            transform: translateX(-50%);
-            padding: 0 .5rem;
-            background: #fff;
-            color: #64748b;
-            font-weight: 700;
-            font-size: .7rem;
-            letter-spacing: .15em;
-            border-radius: 999px;
-        }
-
-        /* Animations */
-        @keyframes slideUp {
+        @keyframes slideUpFade {
             from {
                 opacity: 0;
-                transform: translateY(28px)
+                transform: translateY(40px);
             }
 
             to {
                 opacity: 1;
-                transform: none
+                transform: translateY(0);
             }
         }
 
         .animate-slideUp {
-            animation: slideUp .7s cubic-bezier(.2, .7, .2, 1) both;
+            animation: slideUpFade .9s ease-out forwards;
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(14px);
-            transition: all .6s cubic-bezier(.2, .7, .2, 1);
-        }
-
-        .reveal.in {
-            opacity: 1;
-            transform: none;
+        html {
+            transition: background-color .3s, color .3s;
         }
     </style>
 @endsection
 
 @section('content')
-    <section class="relative min-h-screen overflow-hidden bg-gradient-to-b from-white to-white/95">
+    {{-- Minimal header (same as login) --}}
+    <header class="absolute inset-x-0 top-0 z-20">
+        <div class="mx-auto px-8 py-4 flex items-center justify-between">
+            <a href="{{ url('/') }}" class="flex items-center gap-2">
+                <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="AutoBoli" class="h-8 w-auto block">
+            </a>
 
-        <!-- Diagonal brand band + dotted texture -->
-        {{-- <div class="pointer-events-none absolute bottom-0 left-0 w-full h-[42%]">
-            <div class="absolute inset-0 -skew-y-3 origin-bottom-left bg-[color:var(--primary)]"></div>
-            <div
-                class="absolute inset-0 -skew-y-3 origin-bottom-left opacity-25
-                bg-[radial-gradient(#6b21a8_1.2px,transparent_1.2px)]
-                [background-size:18px_18px]">
+            <div class="flex items-center gap-3">
+                <!-- Theme toggle (shared helper binds via data attributes) -->
+                <button data-theme-toggle
+                    class="flex items-center justify-center p-2 rounded-md text-sm font-medium border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition"
+                    aria-label="Toggle theme">
+                    <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
+                </button>
+
+                <a href="{{ url('/') }}"
+                    class="text-white dark:text-gray-900 rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm border border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition bg-transparent">
+                    Back to Home
+                </a>
             </div>
-        </div> --}}
+        </div>
+    </header>
+
+    {{-- Full-height screen like login --}}
+    <section class="relative min-h-screen overflow-hidden bg-[#000f21] dark:bg-gray-100 pt-20 transition-colors">
+
+        {{-- Decorative diagonal band (same pattern as login) --}}
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]">
+            <div class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[#0080ff]"></div>
+            <div
+                class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[radial-gradient(#7b3fe6_1.2px,transparent_1.2px)] [background-size:16px_16px] opacity-30">
+            </div>
+        </div>
 
         <div class="relative z-10 max-w-6xl mx-auto px-4 py-10">
-            <!-- Heading -->
-            <header class="text-center mb-8 animate-slideUp">
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
+            {{-- Heading (mirrors login typography/colors) --}}
+            <header class="text-center mb-8 animate-slideUp ">
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white dark:text-slate-900">
                     Create your Autoboli Account
                 </h1>
-                <p class="mt-2 text-slate-600">Built for dealers & traders — fast onboarding, powerful insights.</p>
+                <p class="mt-2 text-white/80 dark:text-slate-600">
+                    Built for dealers & traders — fast onboarding, powerful insights.
+                </p>
             </header>
 
-            <!-- Card -->
-            <div class="card p-6 md:p-8 animate-slideUp bg-white">
-                <!-- Alert (kept) -->
-                <div class="rounded-xl border border-red-500/30 bg-red-500/10 text-red-800 p-3 text-sm mb-6">
+            {{-- Card (same container styling as login) --}}
+            <div
+                class="rounded bg-[#0f1c2c] dark:bg-white shadow-2xl px-6 sm:px-10 md:px-12 py-8 md:py-10 relative z-10 animate-slideUp transition-colors">
+                {{-- Alert (kept) --}}
+                <div
+                    class="rounded-md border border-red-500/30 bg-red-500/10 text-red-200 dark:text-red-800 p-3 text-sm mb-6">
                     <p class="mb-2">
                         <strong>AUTOBOLI LTD</strong> is exclusively for independent dealers, motor dealers, traders, and
-                        individuals
-                        engaged in the motor business. By using our platform, you confirm that you meet this criterion.
+                        individuals engaged in the motor business. By using our platform, you confirm that you meet this
+                        criterion.
                     </p>
                     <p>
                         <em>We may suspend/terminate accounts that do not meet eligibility.</em>
-                        <a href="#" class="text-[color:var(--primary)] underline underline-offset-2">Read more</a>
+                        <a href="#" class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Read
+                            more</a>
                     </p>
                 </div>
 
-                <!-- Google -->
-                <div class="mb-4">
-                    <a href="{{ route('google.login') }}"
-                        class="w-full inline-flex items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3
-                  text-slate-800 font-medium hover:bg-slate-50 transition">
-                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="h-5 w-5"
-                            alt="G">
-                        Continue with Google
-                    </a>
-                </div>
 
-                <div class="divider"><span>OR</span></div>
-
+                {{-- Form (your original fields, styled to match login dark/light) --}}
                 <form class="register-form" enctype="multipart/form-data" action="{{ url('/register_submit') }}"
                     method="post">
                     <input type="hidden" name="payment_method" value="" />
                     @csrf
 
-                    <!-- Company Details -->
+                    {{-- Company Details --}}
                     <section class="mb-8">
-                        <h2 class="text-xl font-extrabold text-slate-900">Company Details</h2>
-                        <div class="h-1 w-24 rounded bg-gradient-to-r from-[color:var(--primary)] to-[#0051D5] mt-1 mb-4">
-                        </div>
-
+                        <h2 class="text-xl font-extrabold text-white dark:text-slate-900 py-4">Company Details</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <input name="companyName" value="My Company" type="text" class="sign-input"
+                                <input name="companyName" value="My Company" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Company / Trading or Business Name" />
-                                <small class="error error-companyName text-red-600"></small>
+                                <small class="error error-companyName text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="companyAddress1" value="Company Address 1" type="text" class="sign-input"
+                                <input name="companyAddress1" value="Company Address 1" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Company Address 1" />
-                                <small class="error error-companyAddress1 text-red-600"></small>
+                                <small class="error error-companyAddress1 text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <select name="businessType" class="sign-input">
+                                <select name="businessType"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900">
                                     <option value="">Business Type</option>
                                     <option selected value="dealer">Motor Dealer</option>
                                     <option value="trader">Motor Trader</option>
                                     <option value="independent">Independent Dealer</option>
                                     <option value="other">Other</option>
                                 </select>
-                                <small class="error error-businessType text-red-600"></small>
+                                <small class="error error-businessType text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="companyAddress2" value="Company Address 2" type="text" class="sign-input"
+                                <input name="companyAddress2" value="Company Address 2" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Company Address 2 (Optional)" />
-                                <small class="error error-companyAddress2 text-red-600"></small>
+                                <small class="error error-companyAddress2 text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <input name="companyReg" value="Company Reg. Number" type="text" class="sign-input"
+                                <input name="companyReg" value="Company Reg. Number" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Company Reg. Number (Optional)" />
-                                <small class="error error-companyReg text-red-600"></small>
+                                <small class="error error-companyReg text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="townCity" value="Town / City" type="text" class="sign-input"
+                                <input name="townCity" value="Town / City" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Town / City" />
-                                <small class="error error-townCity text-red-600"></small>
+                                <small class="error error-townCity text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <input name="website" value="https://autodroid.co.uk/" type="url" class="sign-input"
+                                <input name="website" value="https://autodroid.co.uk/" type="url"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Website (Optional)" />
-                                <small class="error error-website text-red-600"></small>
+                                <small class="error error-website text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="country" value="Country" type="text" class="sign-input"
+                                <input name="country" value="Country" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Country" />
-                                <small class="error error-country text-red-600"></small>
+                                <small class="error error-country text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <input name="businessEmail" value="business@gmail.com" type="email" class="sign-input"
+                                <input name="businessEmail" value="business@gmail.com" type="email"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Business Email (Optional)" />
-                                <small class="error error-businessEmail text-red-600"></small>
+                                <small class="error error-businessEmail text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="postcode" value="123" type="text" class="sign-input"
+                                <input name="postcode" value="123" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Postcode / Zip code" />
-                                <small class="error error-postcode text-red-600"></small>
+                                <small class="error error-postcode text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <select name="motorTradeInsurance" class="sign-input">
+                                <select name="motorTradeInsurance"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900">
                                     <option value="">Motor Trade Insurance? (Optional)</option>
                                     <option selected value="yes">Yes</option>
                                     <option value="no">No</option>
                                     <option value="pending">Pending</option>
                                 </select>
-                                <small class="error error-postcode text-red-600"></small>
+                                <small class="error error-postcode text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="telephone" value="03112239342" type="tel" class="sign-input"
+                                <input name="telephone" value="03112239342" type="tel"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="Telephone" />
-                                <small class="error error-telephone text-red-600"></small>
+                                <small class="error error-telephone text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <input name="vatNumber" value="123" type="text" class="sign-input"
+                                <input name="vatNumber" value="123" type="text"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
                                     placeholder="VAT Number (if applicable)" />
-                                <small class="error error-vatNumber text-red-600"></small>
+                                <small class="error error-vatNumber text-red-400 dark:text-red-600"></small>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Personal Information -->
+                    {{-- Personal Information --}}
                     <section class="mb-8">
-                        <h2 class="text-xl font-extrabold text-slate-900">Personal Information</h2>
-                        <div class="h-1 w-24 rounded bg-gradient-to-r from-[color:var(--primary)] to-[#0051D5] mt-1 mb-3">
-                        </div>
-                        <p class="text-slate-600 text-sm mb-4">
+                        <h2 class="text-xl font-extrabold text-white dark:text-slate-900 py-4">Personal Information</h2>
+                        <p class="text-white/80 dark:text-slate-600 text-sm mb-4">
                             Add details for proprietors/partners/directors and your authorized buyer. Include proof of
-                            identity
-                            (driving license or passport in .jpg, .png, or .pdf).
+                            identity (driving license or passport in .jpg, .png, or .pdf).
                         </p>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <input name="firstName" class="sign-input" value="Owais" placeholder="First Name" />
-                                <small class="error error-firstName text-red-600"></small>
+                                <input name="firstName"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
+                                    value="Owais" placeholder="First Name" />
+                                <small class="error error-firstName text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="surname" class="sign-input" value="Azam" placeholder="Surname" />
-                                <small class="error error-surname text-red-600"></small>
+                                <input name="surname"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
+                                    value="Azam" placeholder="Surname" />
+                                <small class="error error-surname text-red-400 dark:text-red-600"></small>
                             </div>
                             <div>
-                                <input name="title" class="sign-input" value="Owais Azam" placeholder="Title" />
-                                <small class="error error-title text-red-600"></small>
+                                <input name="title"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
+                                    value="Owais Azam" placeholder="Title" />
+                                <small class="error error-title text-red-400 dark:text-red-600"></small>
                             </div>
 
                             <div>
-                                <input name="jobTitle" value="Dev" class="sign-input" placeholder="Job Title" />
-                                <small class="error error-jobTitle text-red-600"></small>
+                                <input name="jobTitle" value="Dev"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
+                                    placeholder="Job Title" />
+                                <small class="error error-jobTitle text-red-400 dark:text-red-600"></small>
                             </div>
-
-                            <!-- Custom phone select (kept) -->
-                            <div class="flex rounded-xl overflow-hidden border border-slate-200 bg-white">
-                                <div class="custom-select-wrapper" id="customSelect">
-                                    <div class="custom-select-selected px-3 flex items-center gap-2" id="selectedOption">
+                            <div>
+                                <input type="email" value="iamowaisazam@gmail1.com" name="personalEmail"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
+                                    placeholder="Personal Email" />
+                                <small class="error error-personalEmail text-red-400 dark:text-red-600"></small>
+                            </div>
+                            <div>
+                                <input type="password" value="owais123" name="password"
+                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
+                                    placeholder="Password" />
+                                <small class="error error-password text-red-400 dark:text-red-600"></small>
+                            </div>
+                            {{-- Phone with country select (kept) --}}
+                            <div
+                                class="flex rounded-lg overflow-hidden border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100">
+                                <div class="relative" id="customSelect">
+                                    <div class="custom-select-selected px-3 flex items-center gap-2 h-full cursor-pointer"
+                                        id="selectedOption">
                                         <img src="https://flagcdn.com/w40/gb.png" alt="GB"
                                             class="h-5 w-5 rounded-sm">
-                                        <span class="text-slate-700">+44</span>
+                                        <span class="text-white dark:text-slate-700">+44</span>
                                     </div>
                                     <div class="custom-select-options hidden absolute z-20 mt-1 w-40 rounded-lg border border-slate-200 bg-white shadow-md"
                                         id="optionList">
@@ -303,94 +279,68 @@
                                     </div>
                                 </div>
                                 <input name="phone" type="tel" value="03112239342"
-                                    class="flex-1 px-4 py-3 outline-none" style="border-left:1px solid rgba(15,23,42,.12)"
+                                    class="flex-1 px-4 py-3 outline-none text-white dark:text-slate-900 bg-transparent dark:bg-gray-100 border-l border-slate-300 dark:border-gray-300"
                                     placeholder="Phone Number" />
                             </div>
-                            <small class="error error-phone text-red-600 md:col-span-2"></small>
-
-                            <div>
-                                <input type="email" value="iamowaisazam@gmail1.com" name="personalEmail"
-                                    class="sign-input" placeholder="Personal Email" />
-                                <small class="error error-personalEmail text-red-600"></small>
-                            </div>
-                            <div>
-                                <input type="password" value="owais123" name="password" class="sign-input"
-                                    placeholder="Password" />
-                                <small class="error error-password text-red-600"></small>
-                            </div>
+                            <small class="error error-phone text-red-400 dark:text-red-600 md:col-span-2"></small>
                         </div>
                     </section>
 
-                    <!-- File upload -->
+                    {{-- File upload --}}
                     <section class="mb-6 max-w-md">
-                        <label class="font-semibold text-slate-900">Profile Image <span
-                                class="text-red-600">*</span></label>
+                        <label class="font-semibold text-white dark:text-slate-900">Profile Image <span
+                                class="text-red-400 dark:text-red-600">*</span></label>
                         <div class="mt-2 flex items-center gap-3">
-                            <label class="sign-input cursor-pointer w-56 text-center">
+                            <label
+                                class="w-56 text-center cursor-pointer rounded-lg border border-slate-300 dark:border-gray-300 px-4 py-3 bg-transparent dark:bg-gray-100 text-white dark:text-slate-800">
                                 Select file (Max. 4MB)
                                 <input name="avatar" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf"
                                     hidden />
                             </label>
-                            <div id="fileName" class="text-slate-600">No file chosen.</div>
+                            <div id="fileName" class="text-white/80 dark:text-slate-600">No file chosen.</div>
                         </div>
-                        <small class="error error-avatar text-red-600 block mt-1"></small>
-                        <small class="text-slate-500">Upload must be .jpg, .png or .pdf.</small>
+                        <small class="error error-avatar text-red-400 dark:text-red-600 block mt-1"></small>
+                        <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
                     </section>
 
-                    <!-- Terms -->
-                    <p class="text-slate-600 text-sm mb-6">
+                    {{-- Terms --}}
+                    <p class="text-white/80 dark:text-slate-600 text-sm mb-6">
                         By submitting this form, you agree to the
-                        <a href="#" class="text-[color:var(--primary)] underline underline-offset-2">Terms &
+                        <a href="#" class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Terms &
                             Conditions</a>
                         and
-                        <a href="#" class="text-[color:var(--primary)] underline underline-offset-2">Privacy
+                        <a href="#" class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Privacy
                             Policy</a>
                         applied by Autoboli LTD.
                     </p>
 
-                    <!-- Submit -->
-                    <div class="grid">
-                        <button type="submit" class="btn-primary">Submit Application</button>
+                    {{-- Submit --}}
+                    <div>
+                        <button type="submit"
+                            class="w-full rounded-lg bg-[#0080ff] hover:bg-[#0059B3] text-white font-semibold py-3 shadow-md transition">
+                            Submit Application
+                        </button>
                     </div>
                 </form>
-            </div>
 
-            <p class="text-center mt-6 text-slate-600">
-                Already have an account?
-                <a href="{{ url('/login') }}" class="text-[color:var(--primary)] font-semibold hover:underline">Log in</a>
-            </p>
+                <p class="mt-6 text-center text-white/90 dark:text-slate-600">
+                    Already have an account?
+                    <a href="{{ url('/login') }}"
+                        class="font-semibold text-[#8abfff] dark:text-[#0080ff] hover:underline">Log in</a>
+                </p>
+            </div>
         </div>
     </section>
 @endsection
 
 @section('js')
     <script>
-        // Reveal-on-scroll for small motion
-        (function() {
-            const els = document.querySelectorAll('.reveal');
-            if (!('IntersectionObserver' in window)) {
-                els.forEach(e => e.classList.add('in'));
-                return;
-            }
-            const io = new IntersectionObserver((entries, obs) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) {
-                        e.target.classList.add('in');
-                        obs.unobserve(e.target);
-                    }
-                });
-            }, {
-                threshold: .15
-            });
-            els.forEach(el => io.observe(el));
-        })();
-
-        // --- Your existing AJAX flow (unchanged) ---
+        // AJAX submit (kept)
         $(document).ready(function() {
-            $('.register-form').on('submit', async function(e) {
+            $('.register-form').on('submit', function(e) {
                 e.preventDefault();
                 $('.error').text('');
-                const $btn = $('button[type=submit]').prop('disabled', true).text('Loading');
+                const $btn = $('button[type=submit]').prop('disabled', true).text('Loading...');
                 const form = this;
                 const formData = new FormData(form);
 
@@ -423,18 +373,16 @@
             });
         });
 
-        // Country code dropdown (kept, but Tailwind-friendly)
+        // Country code dropdown (kept)
         const selected = document.getElementById("selectedOption");
         const options = document.getElementById("optionList");
-        selected?.addEventListener("click", () => {
-            options.classList.toggle('hidden');
-        });
+        selected?.addEventListener("click", () => options.classList.toggle('hidden'));
         options?.querySelectorAll(".custom-select-option")?.forEach((item) => {
             item.addEventListener("click", () => {
                 const flag = item.getAttribute("data-flag");
                 const code = item.getAttribute("data-code");
                 selected.innerHTML =
-                    `<img src="https://flagcdn.com/w40/${flag}.png" alt="${flag}" class="h-5 w-5 rounded-sm"> <span class="text-slate-700">${code}</span>`;
+                    `<img src="https://flagcdn.com/w40/${flag}.png" alt="${flag}" class="h-5 w-5 rounded-sm"> <span class="text-white dark:text-slate-700">${code}</span>`;
                 options.classList.add('hidden');
             });
         });
