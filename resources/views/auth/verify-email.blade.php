@@ -32,12 +32,12 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <!-- Global theme toggle (hooked by the helper in layout) -->
                 <button data-theme-toggle
-                    class="flex items-center justify-center p-2 rounded-md text-sm font-medium border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition"
+                    class="flex items-center justify-center p-2 rounded-full text-sm font-medium text-white dark:text-gray-900 bg-transparent transition"
                     aria-label="Toggle theme">
                     <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
                 </button>
+
 
                 <a href="{{ url('/') }}"
                     class="text-white dark:text-gray-900 rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm border border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition bg-transparent">

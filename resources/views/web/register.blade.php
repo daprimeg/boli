@@ -86,11 +86,21 @@
     </header>
 
 
-    <section class="h-screen w-full flex  bg-[#000f21] dark:bg-gray-100 pt-20 md:pt-0">
+    <section class="min-h-screen w-full flex md:pt-0">
+
+
+        <!-- decorative bottom background -->
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] ">
+            <div class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[#0080ff]"></div>
+            <div
+                class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[radial-gradient(#7b3fe6_1.2px,transparent_1.2px)] [background-size:16px_16px] opacity-30">
+            </div>
+        </div>
+
+
         {{-- LEFT: Content + Step Form --}}
         <div
-            class="h-[calc(100vh)] w-full lg:w-3/5 overflow-y-auto
-                   bg-[var(--light-theme-secondary)] dark:bg-[var(--dark-theme-secondary)]
+            class="h-full w-full max-w-4xl mx-auto overflow-y-auto
                    flex flex-col gap-6 lg:gap-10 p-6 md:p-10 lg:p-14">
             {{-- Heading --}}
             <div class="mt-2">
@@ -103,9 +113,68 @@
                 </p>
             </div>
 
+
+            {{-- Stepper (inline, compact) --}}
+            <div class="relative rounded-lg px-4 py-3 bg-white dark:bg-[var(--dark-theme-secondary)]  ">
+                <ol class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <li class="flex items-center gap-3 step-item step-active" data-step-li="1">
+                        <span class="flex h-9 w-9 items-center justify-center rounded bg-[#0080ff] shadow ">
+                            1
+                        </span>
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-black dark:text-white truncate">Company</p>
+                            <p class="text-xs text-black/60 dark:text-white/60 truncate">Business details</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center gap-3 step-item" data-step-li="2">
+                        <span
+                            class="flex h-9 w-9 items-center justify-center rounded bg-black/10 dark:bg-white/10 text-black dark:text-white">
+                            2
+                        </span>
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-black dark:text-white truncate">User</p>
+                            <p class="text-xs text-black/60 dark:text-white/60 truncate">Personal Info</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center gap-3 step-item" data-step-li="3">
+                        <span
+                            class="flex h-9 w-9 items-center justify-center rounded bg-black/10 dark:bg-white/10 text-black dark:text-white">
+                            3
+                        </span>
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-black dark:text-white truncate">Proofs</p>
+                            <p class="text-xs text-black/60 dark:text-white/60 truncate">Docs</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center gap-3 step-item" data-step-li="4">
+                        <span
+                            class="flex h-9 w-9 items-center justify-center rounded bg-black/10 dark:bg-white/10 text-black dark:text-white">
+                            4
+                        </span>
+                        <div class="min-w-0">
+                            <p class="text-sm font-semibold text-black dark:text-white truncate">Login Details</p>
+                            <p class="text-xs text-black/60 dark:text-white/60 truncate">Email & password</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div class="-mt-4">
+                <div class="h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
+                    <div id="progressBar"
+                        class="h-full w-0 bg-gradient-to-r from-[#0080ff] to-[#46a1ff] progress-sheen transition-[width] duration-500 ease-out">
+                    </div>
+                </div>
+                <div class="mt-2 flex items-center justify-end text-xs text-black/60 dark:text-white/60">
+                    <span>Step <span id="progressText">1</span> of 4</span>
+
+                </div>
+            </div>
+
+
+
             {{-- Card + Progress --}}
             <div
-                class="w-full max-w-5xl mx-auto rounded-lg
+                class="w-full max-w-5xl mx-auto rounded-lg -mt-4
                        bg-[var(--light-theme-primary)] dark:bg-[var(--dark-theme-secondary)]
                        shadow-2xl p-5 md:p-8 animate-slideUp">
                 <div id="stepHeader" class="mb-4">
@@ -117,18 +186,6 @@
                     <p class="mt-1 text-sm text-black/70 dark:text-white/70" data-step-sub>
                         Provide your company details.
                     </p>
-
-                    <div class="mt-4">
-                        <div class="h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
-                            <div id="progressBar"
-                                class="h-full w-0 bg-gradient-to-r from-[#0080ff] to-[#46a1ff] progress-sheen transition-[width] duration-500 ease-out">
-                            </div>
-                        </div>
-                        <div class="mt-2 flex items-center justify-between text-xs text-black/60 dark:text-white/60">
-                            <span>Step <span id="progressText">1</span> of 4</span>
-                            <span id="progressHint">Company → User → Proofs → Security</span>
-                        </div>
-                    </div>
                 </div>
 
                 {{-- Inline error --}}
@@ -146,7 +203,7 @@
                     <div class="step-pane active space-y-6" data-step="1">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <input name="companyName"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -154,14 +211,14 @@
                                 value="{{ old('companyName', 'My Company') }}">
 
                             <input name="companyAddress1"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Company Address 1" value="{{ old('companyAddress1', 'Company Address 1') }}">
 
                             <select name="businessType"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                            text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                            px-4 py-3 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25">
                                 <option value="">Business Type</option>
@@ -171,8 +228,10 @@
                                 <option value="other">Other</option>
                             </select>
 
+
+
                             <input name="companyAddress2"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -180,7 +239,7 @@
                                 value="{{ old('companyAddress2', 'Company Address 2') }}">
 
                             <input name="companyReg"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -188,27 +247,27 @@
                                 value="{{ old('companyReg', 'Company Reg. Number') }}">
 
                             <input name="townCity"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25 dark:text-white"
                                 placeholder="Town / City" value="{{ old('townCity', 'Town / City') }}">
 
                             <input name="website" type="url"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Website (Optional)" value="{{ old('website', 'https://autodroid.co.uk/') }}">
 
                             <input name="country"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Country" value="{{ old('country', 'Country') }}">
 
                             <input name="businessEmail" type="email"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -216,14 +275,14 @@
                                 value="{{ old('businessEmail', 'business@gmail.com') }}">
 
                             <input name="postcode"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Postcode / Zip code" value="{{ old('postcode', '123') }}">
 
                             <select name="motorTradeInsurance"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 
+                                class="w-full rounded border border-black/20 dark:border-white/20 
              bg-transparent
            text-gray-900 dark:text-white
            px-4 py-3 focus:outline-none 
@@ -239,14 +298,14 @@
 
 
                             <input name="telephone" type="tel"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Telephone" value="{{ old('telephone', '03112239342') }}">
 
                             <input name="vatNumber"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -258,28 +317,28 @@
                     <div class="step-pane hidden space-y-6" data-step="2">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <input name="firstName"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="First Name" value="{{ old('firstName', 'Owais') }}">
 
                             <input name="surname"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Surname" value="{{ old('surname', 'Azam') }}">
 
                             <input name="title"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Title" value="{{ old('title', 'Owais Azam') }}">
 
                             <input name="jobTitle"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -303,7 +362,7 @@
 
                             <div>
                                 <select name="ReferralSource"
-                                    class="w-full rounded-lg border border-black/20 dark:border-white/20
+                                    class="w-full rounded border border-black/20 dark:border-white/20
            bg-transparent
            text-gray-900 dark:text-white
            px-4 py-3
@@ -392,7 +451,7 @@
                     <div class="step-pane hidden space-y-6" data-step="4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <input type="email" name="personalEmail"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -400,7 +459,7 @@
                                 value="{{ old('personalEmail', 'iamowaisazam@gmail1.com') }}">
 
                             <input type="password" name="password"
-                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent
                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
                                           px-4 py-3 placeholder-black/50 dark:placeholder-white/50
                                           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
@@ -448,96 +507,7 @@
             </div>
         </div>
 
-        {{-- RIGHT: Decorative vertical lines panel --}}
-        <div
-            class="hidden lg:flex w-2/5 h-screen bg-[var(--light-theme-primary)] dark:bg-[var(--dark-theme-primary)] items-center justify-center relative overflow-hidden">
 
-            <!-- Stepper container -->
-            <div class="relative z-10 px-6 text-center w-full max-w-md">
-                <div
-                    class="space-y-6 bg-[var(--light-theme-primary)] dark:bg-[var(--dark-theme-secondary)] p-8 rounded-2xl shadow-lg ">
-
-
-                    <ol class="relative space-y-12 ml-12">
-                        <!-- Step 1 - Active -->
-                        <li class="pointer-events-none relative step-item step-active group" data-step-li="1">
-                            <div class="absolute -left-12 top-0">
-                                <span
-                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
-                                    1
-                                </span>
-                            </div>
-                            <div class="text-left">
-                                <p
-                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
-                                    Company
-                                </p>
-                                <p class="text-sm text-black/60 dark:text-white/60">
-                                    Business details
-                                </p>
-                            </div>
-                        </li>
-
-                        <!-- Step 2 -->
-                        <li class="pointer-events-none relative step-item group" data-step-li="2">
-                            <div class="absolute -left-12 top-0">
-                                <span
-                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
-                                    2
-                                </span>
-                            </div>
-                            <div class="text-left">
-                                <p
-                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
-                                    User
-                                </p>
-                                <p class="text-sm text-black/60 dark:text-white/60">
-                                    Info & avatar
-                                </p>
-                            </div>
-                        </li>
-
-                        <!-- Step 3 -->
-                        <li class="pointer-events-none relative step-item group" data-step-li="3">
-                            <div class="absolute -left-12 top-0">
-                                <span
-                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
-                                    3
-                                </span>
-                            </div>
-                            <div class="text-left">
-                                <p
-                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
-                                    Proofs
-                                </p>
-                                <p class="text-sm text-black/60 dark:text-white/60">
-                                    Docs
-                                </p>
-                            </div>
-                        </li>
-
-                        <!-- Step 4 -->
-                        <li class="pointer-events-none relative step-item group" data-step-li="4">
-                            <div class="absolute -left-12 top-0">
-                                <span
-                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
-                                    4
-                                </span>
-                            </div>
-                            <div class="text-left">
-                                <p
-                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
-                                    Security
-                                </p>
-                                <p class="text-sm text-black/60 dark:text-white/60">
-                                    Email & password
-                                </p>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-        </div>
 
     </section>
 
@@ -601,14 +571,15 @@
 
                 if (badge) {
                     // Reset badge
-                    badge.classList.remove('text-white', 'bg-[#0080ff]', 'shadow', 'bg-neutral-500');
-                    badge.classList.add('bg-black/10', 'dark:bg-white/10', 'text-black', 'dark:text-white');
+                    badge.classList.remove('text-[#0080ff]', 'bg-[#0080ff]', 'shadow', 'bg-[#0F1C2C]');
+                    badge.classList.add('bg-black/10', 'dark:bg-white/10', 'text-[#0080ff]', 'dark:text-white');
                 }
 
                 if (n < currentStep) {
                     if (badge) {
-                        badge.classList.remove('bg-black/10', 'dark:bg-white/10', 'text-black', 'dark:text-white');
-                        badge.classList.add('bg-neutral-500', 'text-white');
+                        badge.classList.remove('bg-black/10', 'dark:bg-white/10', 'text-[#0080ff]',
+                            'dark:text-white');
+                        badge.classList.add('bg-[#0F1C2C]', 'text-white');
                     }
                 }
                 if (n === currentStep) {
