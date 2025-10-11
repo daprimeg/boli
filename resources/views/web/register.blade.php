@@ -5,457 +5,779 @@
 
 @section('css')
     <style>
+        /* Animations (minimal, necessary) */
         @keyframes slideUpFade {
             from {
                 opacity: 0;
-                transform: translateY(40px);
+                transform: translateY(28px)
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0)
             }
         }
 
         .animate-slideUp {
-            animation: slideUpFade .9s ease-out forwards;
+            animation: slideUpFade .6s ease-out forwards
         }
 
-        html {
-            transition: background-color .3s, color .3s;
+        /* Progress shimmer */
+        .progress-sheen {
+            position: relative;
+            isolation: isolate
+        }
+
+        .progress-sheen::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .22) 40%, transparent 80%);
+            transform: translateX(-100%);
+            animation: sheenMove 2.2s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sheenMove {
+            to {
+                transform: translateX(100%)
+            }
+        }
+
+        /* Respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .animate-slideUp {
+                animation: none
+            }
+
+            .progress-sheen::after {
+                animation: none
+            }
+
+            .stripes {
+                animation: none
+            }
         }
     </style>
 @endsection
 
 @section('content')
-    {{-- Minimal header (same as login) --}}
-    <header class="absolute inset-x-0 top-0 z-20">
-        <div class="mx-auto px-8 py-4 flex items-center justify-between">
+
+
+    <header class="absolute inset-x-0 top-0 z-20 b bg-transparent">
+        <div class="mx-auto px-6 md:px-8 py-4 flex items-center justify-between">
             <a href="{{ url('/') }}" class="flex items-center gap-2">
                 <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="AutoBoli" class="h-8 w-auto block">
             </a>
-
             <div class="flex items-center gap-3">
-                <!-- Theme toggle (shared helper binds via data attributes) -->
+                <!-- Theme toggle button -->
                 <button data-theme-toggle
-                    class="flex items-center justify-center p-2 rounded-md text-sm font-medium border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition"
+                    class="flex items-center justify-center p-2 rounded-full text-sm font-medium text-gray-900 dark:text-white bg-transparent transition"
                     aria-label="Toggle theme">
                     <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
                 </button>
 
                 <a href="{{ url('/') }}"
-                    class="text-white dark:text-gray-900 rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm border border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition bg-transparent">
+                    class="rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm border border-[#353F4C] dark:border-gray-300 text-gray-900 bg-[#0080ff] hover:bg-[#0080ff] text-white hover:border-[#0080ff] transition">
                     Back to Home
                 </a>
             </div>
         </div>
     </header>
 
-    {{-- Full-height screen like login --}}
-    <section class="relative min-h-screen overflow-hidden bg-[#000f21] dark:bg-gray-100 pt-20 transition-colors">
 
-        {{-- Decorative diagonal band (same pattern as login) --}}
-        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[42%]">
-            <div class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[#0080ff]"></div>
-            <div
-                class="absolute right-0 bottom-0 w-[120%] h-full -skew-y-3 origin-bottom-right bg-[radial-gradient(#7b3fe6_1.2px,transparent_1.2px)] [background-size:16px_16px] opacity-30">
-            </div>
-        </div>
-
-        <div class="relative z-10 max-w-6xl mx-auto px-4 py-10">
-            {{-- Heading (mirrors login typography/colors) --}}
-            <header class="text-center mb-8 animate-slideUp ">
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white dark:text-slate-900">
+    <section class="h-screen w-full flex  bg-[#000f21] dark:bg-gray-100">
+        {{-- LEFT: Content + Step Form --}}
+        <div
+            class="h-[calc(100vh)] w-full lg:w-3/5 overflow-y-auto
+                   bg-[var(--light-theme-secondary)] dark:bg-[var(--dark-theme-secondary)]
+                   flex flex-col gap-6 lg:gap-10 p-6 md:p-10 lg:p-14">
+            {{-- Heading --}}
+            <div class="mt-2">
+                <h1
+                    class="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
                     Create your Autoboli Account
                 </h1>
-                <p class="mt-2 text-white/80 dark:text-slate-600">
+                <p class="text-[#353F4C] dark:text-[var(--dark-text-secondary)]/80 text-base md:text-lg">
                     Built for dealers & traders — fast onboarding, powerful insights.
                 </p>
-            </header>
+            </div>
 
-            {{-- Card (same container styling as login) --}}
+            {{-- Card + Progress --}}
             <div
-                class="rounded bg-[#0f1c2c] dark:bg-white shadow-2xl px-6 sm:px-10 md:px-12 py-8 md:py-10 relative z-10 animate-slideUp transition-colors">
-                {{-- Alert (kept) --}}
-                <div
-                    class="rounded-md border border-red-500/30 bg-red-500/10 text-red-200 dark:text-red-800 p-3 text-sm mb-6">
-                    <p class="mb-2">
-                        <strong>AUTOBOLI LTD</strong> is exclusively for independent dealers, motor dealers, traders, and
-                        individuals engaged in the motor business. By using our platform, you confirm that you meet this
-                        criterion.
+                class="w-full max-w-5xl mx-auto rounded-lg
+                       bg-[var(--light-theme-primary)] dark:bg-[var(--dark-theme-secondary)]
+                       shadow-2xl p-5 md:p-8 animate-slideUp">
+                <div id="stepHeader" class="mb-4">
+                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight
+                               text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]"
+                        data-step-title>
+                        Company information
+                    </h2>
+                    <p class="mt-1 text-sm text-black/70 dark:text-white/70" data-step-sub>
+                        Provide your company details.
                     </p>
-                    <p>
-                        <em>We may suspend/terminate accounts that do not meet eligibility.</em>
-                        <a href="#" class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Read
-                            more</a>
-                    </p>
+
+                    <div class="mt-4">
+                        <div class="h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
+                            <div id="progressBar"
+                                class="h-full w-0 bg-gradient-to-r from-[#0080ff] to-[#46a1ff] progress-sheen transition-[width] duration-500 ease-out">
+                            </div>
+                        </div>
+                        <div class="mt-2 flex items-center justify-between text-xs text-black/60 dark:text-white/60">
+                            <span>Step <span id="progressText">1</span> of 4</span>
+                            <span id="progressHint">Company → User → Proofs → Security</span>
+                        </div>
+                    </div>
                 </div>
 
+                {{-- Inline error --}}
+                <div id="inlineError"
+                    class="hidden mt-3 rounded-md border border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-200 p-3 text-sm">
+                </div>
 
-                {{-- Form (your original fields, styled to match login dark/light) --}}
+                {{-- FORM --}}
                 <form class="register-form" enctype="multipart/form-data" action="{{ url('/register_submit') }}"
-                    method="post">
-                    <input type="hidden" name="payment_method" value="" />
+                    method="POST" id="stepForm">
                     @csrf
+                    <input type="hidden" name="payment_method" value="">
 
-                    {{-- Company Details --}}
-                    <section class="mb-8">
-                        <h2 class="text-xl font-extrabold text-white dark:text-slate-900 py-4">Company Details</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <input name="companyName" value="My Company" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Company / Trading or Business Name" />
-                                <small class="error error-companyName text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="companyAddress1" value="Company Address 1" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Company Address 1" />
-                                <small class="error error-companyAddress1 text-red-400 dark:text-red-600"></small>
-                            </div>
-
-                            <div>
-                                <select name="businessType"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900">
-                                    <option value="">Business Type</option>
-                                    <option selected value="dealer">Motor Dealer</option>
-                                    <option value="trader">Motor Trader</option>
-                                    <option value="independent">Independent Dealer</option>
-                                    <option value="other">Other</option>
-                                </select>
-                                <small class="error error-businessType text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="companyAddress2" value="Company Address 2" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Company Address 2 (Optional)" />
-                                <small class="error error-companyAddress2 text-red-400 dark:text-red-600"></small>
-                            </div>
-
-                            <div>
-                                <input name="companyReg" value="Company Reg. Number" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Company Reg. Number (Optional)" />
-                                <small class="error error-companyReg text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="townCity" value="Town / City" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Town / City" />
-                                <small class="error error-townCity text-red-400 dark:text-red-600"></small>
-                            </div>
-
-                            <div>
-                                <input name="website" value="https://autodroid.co.uk/" type="url"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Website (Optional)" />
-                                <small class="error error-website text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="country" value="Country" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Country" />
-                                <small class="error error-country text-red-400 dark:text-red-600"></small>
-                            </div>
-
-                            <div>
-                                <input name="businessEmail" value="business@gmail.com" type="email"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Business Email (Optional)" />
-                                <small class="error error-businessEmail text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="postcode" value="123" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Postcode / Zip code" />
-                                <small class="error error-postcode text-red-400 dark:text-red-600"></small>
-                            </div>
-
-                            <div>
-                                <select name="motorTradeInsurance" required
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900">
-                                    <option value="">Motor Trade Insurance?</option>
-                                    <option selected value="yes">Yes</option>
-                                    <option value="no">No</option>
-                                    <option value="pending">Pending</option>
-                                </select>
-                                <small class="error error-postcode text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="telephone" value="03112239342" type="tel"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Telephone" />
-                                <small class="error error-telephone text-red-400 dark:text-red-600"></small>
-                            </div>
-
-                            <div>
-                                <input name="vatNumber" value="123" type="text"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="VAT Number (if applicable)" />
-                                <small class="error error-vatNumber text-red-400 dark:text-red-600"></small>
-                            </div>
-                        </div>
-                    </section>
-
-                    {{-- Personal Information --}}
-                    <section class="mb-8">
-                        <h2 class="text-xl font-extrabold text-white dark:text-slate-900 py-4">Personal Information</h2>
-                        <p class="text-white/80 dark:text-slate-600 text-sm mb-4">
-                            Add details for proprietors/partners/directors and your authorized buyer. Include proof of
-                            identity (driving license or passport in .jpg, .png, or .pdf).
-                        </p>
-
+                    {{-- STEP 1: Company (NO proofs here) --}}
+                    <div class="step-pane active space-y-6" data-step="1">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <input name="firstName"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    value="Owais" placeholder="First Name" />
-                                <small class="error error-firstName text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="surname"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    value="Azam" placeholder="Surname" />
-                                <small class="error error-surname text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input name="title"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    value="Owais Azam" placeholder="Title" />
-                                <small class="error error-title text-red-400 dark:text-red-600"></small>
-                            </div>
+                            <input name="companyName"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Company / Trading or Business Name"
+                                value="{{ old('companyName', 'My Company') }}">
 
-                            <div>
-                                <input name="jobTitle" value="Dev"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Job Title" />
-                                <small class="error error-jobTitle text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input type="email" value="iamowaisazam@gmail1.com" name="personalEmail"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Personal Email OR Login Email" />
-                                <small class="error error-personalEmail text-red-400 dark:text-red-600"></small>
-                            </div>
-                            <div>
-                                <input type="password" value="owais123" name="password"
-                                    class="w-full rounded-lg border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100 px-4 py-3 text-white dark:text-gray-900"
-                                    placeholder="Password" />
-                                <small class="error error-password text-red-400 dark:text-red-600"></small>
-                            </div>
-                            {{-- Phone with country select (kept) --}}
-                            <div
-                                class="flex rounded-lg overflow-hidden border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100">
-                                <div class="relative" id="customSelect">
-                                    <div class="custom-select-selected px-3 flex items-center gap-2 h-full cursor-pointer"
-                                        id="selectedOption">
-                                        <img src="https://flagcdn.com/w40/gb.png" alt="GB"
-                                            class="h-5 w-5 rounded-sm">
-                                        <span class="text-white dark:text-slate-700">+44</span>
-                                    </div>
-                                    <div class="custom-select-options hidden absolute z-20 mt-1 w-40 rounded-lg border border-slate-200 bg-white shadow-md"
-                                        id="optionList">
-                                        <div class="custom-select-option px-3 py-2 flex items-center gap-2 hover:bg-slate-50 cursor-pointer"
-                                            data-code="+44" data-flag="gb">
-                                            <img src="https://flagcdn.com/w40/gb.png" alt="GB"
-                                                class="h-4 w-4 rounded-sm"><span>+44 (GB)</span>
-                                        </div>
-                                        <div class="custom-select-option px-3 py-2 flex items-center gap-2 hover:bg-slate-50 cursor-pointer"
-                                            data-code="+1" data-flag="us">
-                                            <img src="https://flagcdn.com/w40/us.png" alt="US"
-                                                class="h-4 w-4 rounded-sm"><span>+1 (US)</span>
-                                        </div>
-                                        <div class="custom-select-option px-3 py-2 flex items-center gap-2 hover:bg-slate-50 cursor-pointer"
-                                            data-code="+92" data-flag="pk">
-                                            <img src="https://flagcdn.com/w40/pk.png" alt="PK"
-                                                class="h-4 w-4 rounded-sm"><span>+92 (PK)</span>
-                                        </div>
-                                        <div class="custom-select-option px-3 py-2 flex items-center gap-2 hover:bg-slate-50 cursor-pointer"
-                                            data-code="+61" data-flag="au">
-                                            <img src="https://flagcdn.com/w40/au.png" alt="AU"
-                                                class="h-4 w-4 rounded-sm"><span>+61 (AU)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <input name="phone" type="tel" value="03112239342"
-                                    class="flex-1 px-4 py-3 outline-none text-white dark:text-slate-900 bg-transparent dark:bg-gray-100 border-l border-slate-300 dark:border-gray-300"
-                                    placeholder="Phone Number" />
-                            </div>
-                            <div
-                                class="flex rounded-lg overflow-hidden border border-slate-300 dark:border-gray-300 bg-transparent dark:bg-gray-100">
-                                <select name="ReferralSource" required
-                                    class="flex-1 px-4 py-3 outline-none text-white dark:text-slate-900 bg-transparent dark:bg-gray-100 border-l border-slate-300 dark:border-gray-300"
-                                    placeholder="Referral Source" />
-                                <option value="">Referral Source?</option>
-                                <option value="Google">Google</option>
-                                <option value="Social Media">Social Media</option>
-                                <option value="Online Advertisement">Online Advertisement</option>
-                                <option value="Friend / Colleague Referral">Friend / Colleague Referral</option>
-                                <option value="Dealership Partner">Dealership Partner</option>
-                                <option value="Trade Event or Expo">Trade Event or Expo</option>
-                                <option value="Vehicle Trader Forum">Vehicle Trader Forum</option>
-                                <option value="Other (please specify)">Other (please specify)</option>
+                            <input name="companyAddress1"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Company Address 1" value="{{ old('companyAddress1', 'Company Address 1') }}">
 
-                                </select>
-                            </div>
+                            <select name="businessType"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                           text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                           px-4 py-3 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25">
+                                <option value="">Business Type</option>
+                                <option value="dealer" selected>Motor Dealer</option>
+                                <option value="trader">Motor Trader</option>
+                                <option value="independent">Independent Dealer</option>
+                                <option value="other">Other</option>
+                            </select>
 
+                            <input name="companyAddress2"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Company Address 2 (Optional)"
+                                value="{{ old('companyAddress2', 'Company Address 2') }}">
+
+                            <input name="companyReg"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Company Reg. Number (Optional)"
+                                value="{{ old('companyReg', 'Company Reg. Number') }}">
+
+                            <input name="townCity"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25 dark:text-white"
+                                placeholder="Town / City" value="{{ old('townCity', 'Town / City') }}">
+
+                            <input name="website" type="url"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Website (Optional)" value="{{ old('website', 'https://autodroid.co.uk/') }}">
+
+                            <input name="country"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Country" value="{{ old('country', 'Country') }}">
+
+                            <input name="businessEmail" type="email"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Business Email (Optional)"
+                                value="{{ old('businessEmail', 'business@gmail.com') }}">
+
+                            <input name="postcode"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Postcode / Zip code" value="{{ old('postcode', '123') }}">
+
+                            <select name="motorTradeInsurance"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 
+             bg-transparent
+           text-gray-900 dark:text-white
+           px-4 py-3 focus:outline-none 
+           focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25">
+                                <option class="dark:bg-gray-800" value="">Motor
+                                    Trade Insurance?</option>
+                                <option class="dark:bg-gray-800" value="yes" selected>Yes</option>
+                                <option class="dark:bg-gray-800" value="no">No
+                                </option>
+                                <option class="dark:bg-gray-800" value="pending">
+                                    Pending</option>
+                            </select>
+
+
+                            <input name="telephone" type="tel"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Telephone" value="{{ old('telephone', '03112239342') }}">
+
+                            <input name="vatNumber"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="VAT Number (if applicable)" value="{{ old('vatNumber', '123') }}">
                         </div>
-                    </section>
+                    </div>
 
-                    {{-- File upload --}}
-                    <section class="mb-6 max-w-md">
-                        <label class="font-semibold text-white dark:text-slate-900">Profile Image <span
-                                class="text-red-400 dark:text-red-600">*</span></label>
-                        <div class="mt-2 flex items-center gap-3">
+                    {{-- STEP 2: User Info + Profile Image --}}
+                    <div class="step-pane hidden space-y-6" data-step="2">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input name="firstName"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="First Name" value="{{ old('firstName', 'Owais') }}">
+
+                            <input name="surname"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Surname" value="{{ old('surname', 'Azam') }}">
+
+                            <input name="title"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Title" value="{{ old('title', 'Owais Azam') }}">
+
+                            <input name="jobTitle"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Job Title" value="{{ old('jobTitle', 'Dev') }}">
+
+                            <div>
+                                <div class="flex rounded-lg overflow-hidden border border-black/20 dark:border-white/20">
+                                    <select
+                                        class="bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-3 py-3">
+                                        <option value="+44">+44</option>
+                                        <option value="+1">+1</option>
+                                        <option value="+92" selected>+92</option>
+                                        <option value="+61">+61</option>
+                                    </select>
+                                    <input name="phone" type="tel"
+                                        class="flex-1 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 focus:outline-none"
+                                        placeholder="Phone Number" value="{{ old('phone', '03112239342') }}">
+                                </div>
+                                <small class="error error-phone text-red-500"></small>
+                            </div>
+
+                            <div>
+                                <select name="ReferralSource"
+                                    class="w-full rounded-lg border border-black/20 dark:border-white/20
+           bg-transparent
+           text-gray-900 dark:text-white
+           px-4 py-3
+           focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25">
+                                    <option class="dark:bg-gray-800" value="">Referral Source?</option>
+                                    <option class="dark:bg-gray-800" value="Google">Google</option>
+                                    <option class="dark:bg-gray-800" value="Social Media">Social Media</option>
+                                    <option class="dark:bg-gray-800" value="Online Advertisement">Online Advertisement
+                                    </option>
+                                    <option class="dark:bg-gray-800" value="Friend / Colleague Referral">Friend /
+                                        Colleague Referral</option>
+                                    <option class="dark:bg-gray-800" value="Dealership Partner">Dealership Partner
+                                    </option>
+                                    <option class="dark:bg-gray-800" value="Trade Event or Expo">Trade Event or Expo
+                                    </option>
+                                    <option class="dark:bg-gray-800" value="Vehicle Trader Forum">Vehicle Trader Forum
+                                    </option>
+                                    <option class="dark:bg-gray-800" value="Other (please specify)">Other (please specify)
+                                    </option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        {{-- Profile Image (moved here) --}}
+                        <div>
+                            <label class="block text-sm text-black/80 dark:text-white/80 mb-1">Profile Image <span
+                                    class="text-red-500">*</span></label>
                             <label
-                                class="w-56 text-center cursor-pointer rounded-lg border border-slate-300 dark:border-gray-300 px-4 py-3 bg-transparent dark:bg-gray-100 text-white dark:text-slate-800">
+                                class="inline-flex items-center justify-center rounded-lg border border-dashed border-black/25 dark:border-white/25 px-4 py-3 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition">
                                 Select file (Max. 4MB)
                                 <input name="avatar" type="file" class="fileName" accept=".jpg,.jpeg,.png,.pdf"
-                                    hidden />
+                                    hidden>
                             </label>
-                            <div id="fileName" class="text-white/80 dark:text-slate-600">No file chosen.</div>
+                            <div class="mt-2 text-sm text-black/60 dark:text-white/60" data-file="avatar">No file chosen.
+                            </div>
+                            <small class="error error-avatar text-red-500"></small>
+                            <small class="block text-xs mt-1 text-black/50 dark:text-white/50">Accepted: .jpg, .png or
+                                .pdf</small>
                         </div>
-                        <small class="error error-avatar text-red-400 dark:text-red-600 block mt-1"></small>
-                        <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
-                    </section>
+                    </div>
 
-                    {{-- Proof --}}
-                    <section class="mb-8">
-                        <h2 class="text-xl font-extrabold text-white dark:text-slate-900 py-4">Proof</h2>
+                    {{-- STEP 3: Proof documents --}}
+                    <div class="step-pane hidden space-y-6" data-step="3">
+                        <h3
+                            class="text-lg font-semibold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
+                            Proof Documents</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm text-black/80 dark:text-white/80 mb-1">
+                                    Proof of motor trade <span class="text-red-500">*</span>
+                                </label>
+                                <label
+                                    class="inline-flex items-center justify-center rounded-lg border border-dashed border-black/25 dark:border-white/25 px-4 py-3 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition">
+                                    Select file (Max. 4MB)
+                                    <input name="proof_motor_trade" type="file" class="fileName"
+                                        accept=".jpg,.jpeg,.png,.pdf" hidden>
+                                </label>
+                                <div class="mt-2 text-sm text-black/60 dark:text-white/60" data-file="proof_motor_trade">
+                                    No file chosen.</div>
+                                <small class="error error-proof_motor_trade text-red-500"></small>
+                                <small class="block text-xs mt-1 text-black/50 dark:text-white/50">Accepted: .jpg, .png,
+                                    .pdf</small>
+                            </div>
 
+                            <div>
+                                <label class="block text-sm text-black/80 dark:text-white/80 mb-1">
+                                    Proof of address <span class="text-red-500">*</span>
+                                </label>
+                                <label
+                                    class="inline-flex items-center justify-center rounded-lg border border-dashed border-black/25 dark:border-white/25 px-4 py-3 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer transition">
+                                    Select file (Max. 4MB)
+                                    <input name="proof_address" type="file" class="fileName"
+                                        accept=".jpg,.jpeg,.png,.pdf" hidden>
+                                </label>
+                                <div class="mt-2 text-sm text-black/60 dark:text-white/60" data-file="proof_address">No
+                                    file chosen.</div>
+                                <small class="error error-proof_address text-red-500"></small>
+                                <small class="block text-xs mt-1 text-black/50 dark:text-white/50">Accepted: .jpg, .png,
+                                    .pdf</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- STEP 4: Credentials --}}
+                    <div class="step-pane hidden space-y-6" data-step="4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="font-semibold text-white dark:text-slate-900">Proof of motor trade <span
-                                        class="text-red-400 dark:text-red-600">*</span></label>
-                                <div class="mt-2 flex items-center gap-3">
-                                    <label
-                                        class="w-56 text-center cursor-pointer rounded-lg border border-slate-300 dark:border-gray-300 px-4 py-3 bg-transparent dark:bg-gray-100 text-white dark:text-slate-800">
-                                        Select file (Max. 4MB)
-                                        <input name="avatar" type="file" class="fileName"
-                                            accept=".jpg,.jpeg,.png,.pdf" hidden />
-                                    </label>
-                                    <div id="fileName" class="text-white/80 dark:text-slate-600">No file chosen.</div>
-                                </div>
-                                <small class="error error-avatar text-red-400 dark:text-red-600 block mt-1"></small>
-                                <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
-                            </div>
-                            <div>
-                                <label class="font-semibold text-white dark:text-slate-900">Proof of address <span
-                                        class="text-red-400 dark:text-red-600">*</span></label>
-                                <div class="mt-2 flex items-center gap-3">
-                                    <label
-                                        class="w-56 text-center cursor-pointer rounded-lg border border-slate-300 dark:border-gray-300 px-4 py-3 bg-transparent dark:bg-gray-100 text-white dark:text-slate-800">
-                                        Select file (Max. 4MB)
-                                        <input name="avatar" type="file" class="fileName"
-                                            accept=".jpg,.jpeg,.png,.pdf" hidden />
-                                    </label>
-                                    <div id="fileName" class="text-white/80 dark:text-slate-600">No file chosen.</div>
-                                </div>
-                                <small class="error error-avatar text-red-400 dark:text-red-600 block mt-1"></small>
-                                <small class="text-white/70 dark:text-slate-500">Upload must be .jpg, .png or .pdf.</small>
-                            </div>
+                            <input type="email" name="personalEmail"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Personal / Login Email"
+                                value="{{ old('personalEmail', 'iamowaisazam@gmail1.com') }}">
 
-
+                            <input type="password" name="password"
+                                class="w-full rounded-lg border border-black/20 dark:border-white/20 bg-transparent
+                                          text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                          px-4 py-3 placeholder-black/50 dark:placeholder-white/50
+                                          focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Password" value="{{ old('password', 'owais123') }}">
                         </div>
-                    </section>
 
-                    {{-- Terms --}}
-                    <p class="text-white/80 dark:text-slate-600 text-sm mb-6">
-                        By submitting this form, you agree to the
-                        <a href="/autoboli//terms" target="_blank"
-                            class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Terms &
-                            Conditions</a>
-                        and
-                        <a href="/autoboli/privacy" target="_blank"
-                            class="text-[#8abfff] dark:text-[#0080ff] underline underline-offset-2">Privacy
-                            Policy</a>
-                        applied by Autoboli LTD.
-                    </p>
+                        <p class="text-xs text-black/60 dark:text-white/60">
+                            By submitting this form, you agree to the
+                            <a href="/autoboli/terms" target="_blank" class="underline text-[#0080ff]">Terms &
+                                Conditions</a>
+                            and
+                            <a href="/autoboli/privacy" target="_blank" class="underline text-[#0080ff]">Privacy
+                                Policy</a>.
+                        </p>
+                    </div>
 
-                    {{-- Submit --}}
-                    <div>
+                    {{-- NAV BUTTONS --}}
+                    <div class="mt-8 flex flex-wrap items-center gap-3">
+                        <button type="button"
+                            class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/15 dark:border-white/15
+                                       bg-black/5 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]
+                                       hover:bg-black/10 dark:hover:bg-white/15 transition"
+                            id="prevStep">
+                            <span class="material-symbols-outlined">arrow_back</span> Back
+                        </button>
+
+                        <button type="button"
+                            class="inline-flex items-center gap-2 rounded-lg px-4 py-2 bg-[#0080ff] text-white hover:brightness-110 transition"
+                            id="nextStep">
+                            <span class="material-symbols-outlined">arrow_forward</span> Next step
+                        </button>
+
                         <button type="submit"
-                            class="w-full rounded-lg bg-[#0080ff] hover:bg-[#0059B3] text-white font-semibold py-3 shadow-md transition">
-                            Submit Application
+                            class="hidden inline-flex items-center gap-2 rounded-lg px-4 py-2 bg-[#0080ff] text-white hover:brightness-110 transition"
+                            id="submitBtn">
+                            <span class="material-symbols-outlined">check_circle</span> Submit Application
                         </button>
                     </div>
                 </form>
 
-                <p class="mt-6 text-center text-white/90 dark:text-slate-600">
+                <p class="mt-6 text-center text-black/70 dark:text-white/80">
                     Already have an account?
-                    <a href="{{ url('/login') }}"
-                        class="font-semibold text-[#8abfff] dark:text-[#0080ff] hover:underline">Log in</a>
+                    <a href="{{ url('/login') }}" class="font-semibold text-[#0080ff] hover:underline">Log in</a>
                 </p>
             </div>
         </div>
+
+        {{-- RIGHT: Decorative vertical lines panel --}}
+        <div
+            class="hidden lg:flex w-2/5 h-screen bg-[var(--light-theme-primary)] dark:bg-[var(--dark-theme-primary)] items-center justify-center relative overflow-hidden">
+
+            <!-- Stepper container -->
+            <div class="relative z-10 px-6 text-center w-full max-w-md">
+                <div
+                    class="space-y-6 bg-[var(--light-theme-primary)] dark:bg-[var(--dark-theme-secondary)] p-8 rounded-2xl shadow-lg ">
+
+
+                    <ol class="relative space-y-12 ml-12">
+                        <!-- Step 1 - Active -->
+                        <li class="pointer-events-none relative step-item step-active group" data-step-li="1">
+                            <div class="absolute -left-12 top-0">
+                                <span
+                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
+                                    1
+                                </span>
+                            </div>
+                            <div class="text-left">
+                                <p
+                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
+                                    Company
+                                </p>
+                                <p class="text-sm text-black/60 dark:text-white/60">
+                                    Business details
+                                </p>
+                            </div>
+                        </li>
+
+                        <!-- Step 2 -->
+                        <li class="pointer-events-none relative step-item group" data-step-li="2">
+                            <div class="absolute -left-12 top-0">
+                                <span
+                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
+                                    2
+                                </span>
+                            </div>
+                            <div class="text-left">
+                                <p
+                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
+                                    User
+                                </p>
+                                <p class="text-sm text-black/60 dark:text-white/60">
+                                    Info & avatar
+                                </p>
+                            </div>
+                        </li>
+
+                        <!-- Step 3 -->
+                        <li class="pointer-events-none relative step-item group" data-step-li="3">
+                            <div class="absolute -left-12 top-0">
+                                <span
+                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
+                                    3
+                                </span>
+                            </div>
+                            <div class="text-left">
+                                <p
+                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
+                                    Proofs
+                                </p>
+                                <p class="text-sm text-black/60 dark:text-white/60">
+                                    Docs
+                                </p>
+                            </div>
+                        </li>
+
+                        <!-- Step 4 -->
+                        <li class="pointer-events-none relative step-item group" data-step-li="4">
+                            <div class="absolute -left-12 top-0">
+                                <span
+                                    class="flex h-10 w-10 items-center justify-center rounded-full bg-black/10 dark:bg-white/10 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] shadow transition group-hover:scale-105">
+                                    4
+                                </span>
+                            </div>
+                            <div class="text-left">
+                                <p
+                                    class="text-2xl font-bold text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
+                                    Security
+                                </p>
+                                <p class="text-sm text-black/60 dark:text-white/60">
+                                    Email & password
+                                </p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
     </section>
+
 @endsection
 
 @section('js')
     <script>
-        // AJAX submit (kept)
+        // ------- Elements -------
+        const panes = [...document.querySelectorAll('.step-pane')];
+        const nextBtn = document.getElementById('nextStep');
+        const prevBtn = document.getElementById('prevStep');
+        const submitBtn = document.getElementById('submitBtn');
+        const inlineError = document.getElementById('inlineError');
+        const stepLis = [...document.querySelectorAll('[data-step-li]')];
+        const headerTitle = document.querySelector('[data-step-title]');
+        const headerSub = document.querySelector('[data-step-sub]');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        const meta = {
+            1: {
+                title: 'Company information',
+                sub: 'Provide your company details.'
+            },
+            2: {
+                title: 'User information & avatar',
+                sub: 'Add your personal details and profile image.'
+            },
+            3: {
+                title: 'Proof documents',
+                sub: 'Upload required proof documents.'
+            },
+            4: {
+                title: 'Security',
+                sub: 'Set your login email & password.'
+            },
+        };
+
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // ------- Helpers -------
+        function setProgress() {
+            const pct = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressBar.style.width = pct + '%';
+            if (progressText) progressText.textContent = currentStep;
+        }
+
+        function switchPane(next) {
+            const cur = panes.find(p => Number(p.dataset.step) === currentStep);
+            const nxt = panes.find(p => Number(p.dataset.step) === next);
+            if (!cur || !nxt) return;
+            cur.classList.add('hidden');
+            nxt.classList.remove('hidden');
+        }
+
+        function updateStepperUI() {
+            stepLis.forEach(li => {
+                const n = Number(li.dataset.stepLi);
+                const badge = li.querySelector('span');
+
+                if (badge) {
+                    // Reset badge
+                    badge.classList.remove('text-white', 'bg-[#0080ff]', 'shadow', 'bg-neutral-500');
+                    badge.classList.add('bg-black/10', 'dark:bg-white/10', 'text-black', 'dark:text-white');
+                }
+
+                if (n < currentStep) {
+                    if (badge) {
+                        badge.classList.remove('bg-black/10', 'dark:bg-white/10', 'text-black', 'dark:text-white');
+                        badge.classList.add('bg-neutral-500', 'text-white');
+                    }
+                }
+                if (n === currentStep) {
+                    if (badge) {
+                        badge.classList.remove('bg-black/10', 'dark:bg-white/10', 'text-black', 'dark:text-white',
+                            'bg-neutral-500');
+                        badge.classList.add('bg-[#0080ff]', 'text-white', 'shadow');
+                    }
+                }
+                li.setAttribute('aria-current', n === currentStep ? 'step' : 'false');
+            });
+        }
+
+        function updateHeader() {
+            headerTitle.textContent = meta[currentStep].title;
+            if (headerSub) headerSub.textContent = meta[currentStep].sub;
+        }
+
+        function updateButtons() {
+            prevBtn.classList.toggle('opacity-60', currentStep === 1);
+            prevBtn.classList.toggle('pointer-events-none', currentStep === 1);
+            nextBtn.classList.toggle('hidden', currentStep === totalSteps);
+            submitBtn.classList.toggle('hidden', currentStep !== totalSteps);
+        }
+
+        function showInlineError(msg) {
+            inlineError.textContent = msg || 'Please check the required fields.';
+            inlineError.classList.remove('hidden');
+        }
+
+        function clearInlineError() {
+            inlineError.classList.add('hidden');
+            inlineError.textContent = '';
+        }
+
+        // File rules
+        const FILE_MAX = 4 * 1024 * 1024;
+        const FILE_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
+
+        function validFile(input, required = false) {
+            const has = input.files && input.files.length;
+            if (!has) return !required ? true : (showInlineError('Please select required file.'), false);
+            const f = input.files[0];
+            if (f.size > FILE_MAX) {
+                showInlineError('Selected file is larger than 4MB.');
+                return false;
+            }
+            if (!FILE_TYPES.includes(f.type)) {
+                showInlineError('Invalid file type. Use JPG, PNG or PDF.');
+                return false;
+            }
+            return true;
+        }
+
+        function validateStep() {
+            // Required fields per step
+            const required = {
+                1: ['companyName', 'companyAddress1', 'businessType', 'townCity', 'country', 'postcode'],
+                2: ['firstName', 'surname', 'title', 'jobTitle', 'phone', 'avatar'], // avatar required here
+                3: ['proof_motor_trade', 'proof_address'],
+                4: ['personalEmail', 'password'],
+            } [currentStep] || [];
+
+            for (const name of required) {
+                const el = document.querySelector(`[name="${name}"]`);
+                if (!el) continue;
+
+                if (el.type === 'file') {
+                    if (!validFile(el, true)) return false;
+                } else if (!el.value || !el.value.trim()) {
+                    showInlineError('Please fill the required fields to continue.');
+                    el.focus();
+                    return false;
+                }
+            }
+
+            clearInlineError();
+            return true;
+        }
+
+        function go(step) {
+            const target = Math.max(1, Math.min(totalSteps, step));
+            if (target === currentStep) return;
+            switchPane(target);
+            currentStep = target;
+            updateHeader();
+            updateStepperUI();
+            updateButtons();
+            setProgress();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // ------- Events -------
+        // init
+        panes.forEach(p => p.classList.toggle('hidden', Number(p.dataset.step) !== 1));
+        updateHeader();
+        updateStepperUI();
+        updateButtons();
+        setProgress();
+
+        nextBtn.addEventListener('click', () => {
+            if (!validateStep()) return;
+            nextBtn.classList.add('opacity-60', 'pointer-events-none');
+            setTimeout(() => {
+                nextBtn.classList.remove('opacity-60', 'pointer-events-none');
+                go(currentStep + 1);
+            }, 200);
+        });
+
+        prevBtn.addEventListener('click', () => go(currentStep - 1));
+
+        stepLis.forEach(li => {
+            li.addEventListener('click', () => {
+                const target = Number(li.dataset.stepLi);
+                if (target > currentStep && !validateStep()) return;
+                go(target);
+            });
+        });
+
+        // file name preview
+        document.querySelectorAll('.fileName').forEach(input => {
+            input.addEventListener('change', function() {
+                const box = document.querySelector(`[data-file="${this.name}"]`);
+                if (box) box.textContent = this.files.length ? this.files[0].name : 'No file chosen.';
+            });
+        });
+
+        // AJAX submit
         $(document).ready(function() {
             $('.register-form').on('submit', function(e) {
                 e.preventDefault();
                 $('.error').text('');
-                const $btn = $('button[type=submit]').prop('disabled', true).text('Loading...');
-                const form = this;
-                const formData = new FormData(form);
+                $('#submitBtn').addClass('opacity-60 pointer-events-none').html(
+                    '<span class="material-symbols-outlined">hourglass_top</span> Submitting…'
+                );
 
+                const formData = new FormData(this);
                 $.ajax({
-                    url: $(form).attr('action'),
+                    url: $(this).attr('action'),
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
-                        if (response.success && response.redirect_url) {
-                            window.location.href = response.redirect_url;
+                    success: function(r) {
+                        if (r.success && r.redirect_url) {
+                            window.location.href = r.redirect_url;
                         } else {
-                            alert(response.message || "Form submitted successfully!");
+                            alert(r.message || 'Form submitted successfully!');
                         }
                     },
                     error: function(xhr) {
                         if (xhr?.responseJSON?.errors) {
-                            $.each(xhr.responseJSON.errors, function(key, messages) {
-                                $(`.error-${key}`).text(messages);
+                            $.each(xhr.responseJSON.errors, function(k, messages) {
+                                $(`.error-${k}`).text(messages);
                             });
+                            showInlineError('Please review the highlighted errors.');
                         } else {
-                            alert(xhr?.responseJSON?.message || "Something went wrong");
+                            alert(xhr?.responseJSON?.message || 'Something went wrong');
                         }
                     },
                     complete: function() {
-                        $btn.prop('disabled', false).text('Submit Application');
+                        $('#submitBtn').removeClass('opacity-60 pointer-events-none').html(
+                            '<span class="material-symbols-outlined">check_circle</span> Submit Application'
+                        );
                     }
                 });
-            });
-        });
-
-        // Country code dropdown (kept)
-        const selected = document.getElementById("selectedOption");
-        const options = document.getElementById("optionList");
-        selected?.addEventListener("click", () => options.classList.toggle('hidden'));
-        options?.querySelectorAll(".custom-select-option")?.forEach((item) => {
-            item.addEventListener("click", () => {
-                const flag = item.getAttribute("data-flag");
-                const code = item.getAttribute("data-code");
-                selected.innerHTML =
-                    `<img src="https://flagcdn.com/w40/${flag}.png" alt="${flag}" class="h-5 w-5 rounded-sm"> <span class="text-white dark:text-slate-700">${code}</span>`;
-                options.classList.add('hidden');
-            });
-        });
-        document.addEventListener("click", (e) => {
-            if (!document.getElementById("customSelect")?.contains(e.target)) {
-                options?.classList.add('hidden');
-            }
-        });
-
-        // File name preview (kept)
-        document.querySelectorAll('.fileName').forEach(function(input) {
-            input.addEventListener('change', function() {
-                const box = this.closest('section,div').querySelector('#fileName');
-                if (box) box.textContent = this.files.length ? this.files[0].name : 'No file chosen.';
             });
         });
     </script>

@@ -43,7 +43,7 @@
 
                 <!-- Theme toggle button -->
                 <button data-theme-toggle
-                    class="flex items-center justify-center p-2 rounded-md text-sm font-medium border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition"
+                    class="flex items-center justify-center p-2 rounded-full text-sm font-medium text-white dark:text-gray-900 bg-transparent transition"
                     aria-label="Toggle theme">
                     <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
                 </button>
@@ -199,33 +199,5 @@
                 eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
             }
         }
-
-        // Theme Toggle Logic
-        // const html = document.documentElement;
-        // const themeToggle = document.getElementById("themeToggle");
-        // const themeIcon = document.getElementById("themeIcon");
-        // const themeLabel = document.getElementById("themeLabel");
-
-        // // Load saved preference
-        // if (localStorage.theme === "light") {
-        //     html.classList.remove("dark");
-        //     themeIcon.classList.replace("fa-moon", "fa-sun");
-        // } else {
-        //     html.classList.add("dark");
-        //     themeIcon.classList.replace("fa-sun", "fa-moon");
-        // }
-
-        // // Toggle on click
-        // themeToggle.addEventListener("click", () => {
-        //     if (html.classList.contains("dark")) {
-        //         html.classList.remove("dark");
-        //         localStorage.theme = "light";
-        //         themeIcon.classList.replace("fa-moon", "fa-sun");
-        //     } else {
-        //         html.classList.add("dark");
-        //         localStorage.theme = "dark";
-        //         themeIcon.classList.replace("fa-sun", "fa-moon");
-        //     }
-        // });
     </script>
 @endsection
