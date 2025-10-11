@@ -163,6 +163,7 @@ class AuctionFinderDataController extends Controller
             ->select([
                 'vehicles.*',
                 'auction_platform.name',
+                'auction_platform.image as platefrom_image',
                 'auctions.auction_date as auction_date',
                 'make.name as make_name',
                 'model.name as model_name',
@@ -182,6 +183,7 @@ class AuctionFinderDataController extends Controller
                     'mileage' => $item->mileage,
                     'transmission' => $item->transmission,
                     'auction_name' => $item->name,
+                    'platefrom_image' => $item->platefrom_image,
                     'auction_date' => date('d-M-Y',strtotime($item->auction_date)),
                     'auction_time' => date('h:i A',strtotime($item->auction_date)),
                     'last_bid' => $item->last_bid,
@@ -249,23 +251,42 @@ class AuctionFinderDataController extends Controller
                  $query->where('auctions.platform_id',$request->platform);
             }
             
-            $dateRange = $request->date_range ? $request->date_range : 'past_3_months';
-            if($request->has('date_range') && $request->date_range != '') {
+            // $dateRange = $request->date_range ? $request->date_range : 'past_3_months';
+            // if($request->has('date_range') && $request->date_range != '') {
 
+            //     $now = \Carbon\Carbon::now();
+            //     $fromDate = match ($dateRange) {
+            //         'today' => $now->copy()->startOfDay(),
+            //         'yesterday' => $now->copy()->subDay()->startOfDay(),
+            //         'last_week' => $now->copy()->subWeek(),
+            //         'last_month' => $now->copy()->subMonth(),
+            //         'past_3_months' => $now->copy()->subMonths(3),
+            //         default => $now->copy()->subMonths(3),
+            //     };
+       
+
+            //     $toDate = $now->copy()->endOfDay();
+            //     $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
+            // }
+            $dateRange = $request->date_range ?? '';
+
+            if ($dateRange !== '') {
                 $now = \Carbon\Carbon::now();
-                $fromDate = match ($dateRange) {
-                    'today' => $now->copy()->startOfDay(),
-                    'yesterday' => $now->copy()->subDay()->startOfDay(),
-                    'last_week' => $now->copy()->subWeek(),
-                    'last_month' => $now->copy()->subMonth(),
-                    'past_3_months' => $now->copy()->subMonths(3),
-                    default => $now->copy()->subMonths(3),
-                };
-
+                $fromDate = $now->copy()->subMonths(3)->startOfDay();
                 $toDate = $now->copy()->endOfDay();
-                $query->whereBetween('vehicles.start_date', [$fromDate->toDateString(), $toDate->toDateString()]);
-            }
 
+                if ($dateRange === 'future') {
+                    $query->whereHas('auction', function ($q) use ($now) {
+                        $q->whereDate('auction_date', '>=', $now);
+                    });
+                } elseif ($dateRange === 'previous') {
+                    $query->whereHas('auction', function ($q) use ($now) {
+                        $q->whereDate('auction_date', '<', $now);
+                    });
+                } else {
+                    $query->whereBetween('vehicles.start_date', [$fromDate, $toDate]);
+                }
+            }
 
             // Count total BEFORE limit/offset
             $total = $query->count(); 

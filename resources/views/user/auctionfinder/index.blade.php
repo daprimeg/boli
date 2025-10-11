@@ -77,7 +77,58 @@
    .show_entries_div{
 
    }
-   
+   .auction-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 0.65rem;
+      color: #ffffffd6;
+ 
+      border:1px solid #0080ff;
+      border-radius: 5px;
+      box-shadow: 2px 0px 6px #0080ff;
+      font-weight: 500;
+      text-align: center;
+      }
+      .lightbox-overlay {
+         display: none;
+         position: fixed;
+         z-index: 9999;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0,0,0,0.9);
+         justify-content: center;
+         align-items: center;
+         display: flex;
+      }
+
+      .lightbox-overlay img {
+         max-width: 80%;
+         max-height: 80%;
+         border-radius: 8px;
+      }
+
+      .lightbox-prev,
+      .lightbox-next {
+         position: absolute;
+         top: 50%;
+         transform: translateY(-50%);
+         font-size: 2rem;
+         color: #fff;
+         background: rgba(0,0,0,0.5);
+         border: none;
+         padding: 10px;
+         cursor: pointer;
+         border-radius: 50%;
+      }
+
+      .lightbox-prev { left: 20px; }
+      .lightbox-next { right: 20px; }
+
+
+
+
 </style>
 @endsection
 @section('content')
@@ -177,10 +228,56 @@
          </div>
       </div>
 </div>
+
+<div class="lightbox-overlay" style="display:none;">
+    <button class="lightbox-prev">&#10094;</button>
+    <img src="" alt="Preview">
+    <button class="lightbox-next">&#10095;</button>
+</div>
 @endsection
 @section('js')
 
 <script>
+      $(document).on('mouseenter', '.table tbody tr', function() {
+         $(this).find('.extra').fadeIn(150);
+      });
+
+      $(document).on('mouseleave', '.table tbody tr', function() {
+         $(this).find('.extra').fadeOut(150);
+      });
+
+         let images = []; // store current row images
+         let currentIndex = 0;
+
+         // Open lightbox
+         $(document).on('click', '.lightbox-img', function() {
+            let row = $(this).closest('tr');
+            images = row.find('.lightbox-img').map(function(){ return $(this).attr('src'); }).get();
+            currentIndex = images.indexOf($(this).attr('src'));
+            $('.lightbox-overlay img').attr('src', images[currentIndex]);
+            $('.lightbox-overlay').fadeIn(200);
+         });
+
+         // Close on clicking overlay (outside image)
+         $('.lightbox-overlay').on('click', function(e){
+            if(!$(e.target).is('img') && !$(e.target).is('button')) $(this).fadeOut(200);
+         });
+
+         // Prev button
+         $('.lightbox-prev').on('click', function(e){
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            $('.lightbox-overlay img').attr('src', images[currentIndex]);
+         });
+
+         // Next button
+         $('.lightbox-next').on('click', function(e){
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % images.length;
+            $('.lightbox-overlay img').attr('src', images[currentIndex]);
+         });
+
+
       let url = "{{url('/')}}";
       const baseUrl = "{{ url('/auction-finder/vehicle') }}";
    $(document).ready(function () {

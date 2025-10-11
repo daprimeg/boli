@@ -1,5 +1,4 @@
 
-
     const auctions = {
         selected:{
             type:[],
@@ -185,7 +184,6 @@
 
             if(auctions.filters.display_type == 'auction'){
                 $('table thead').html(`<tr>
-                    <th>#</th>
                     <th>Vehicle</th>
                     <th>Year</th>
                     <th>CC</th>
@@ -197,7 +195,6 @@
                 </tr>`);
             }else{
                 $('table thead').html(`<tr>
-                    <th>#</th>
                     <th>Vehicle</th>
                     <th>Clean</th>
                     <th>Average</th>
@@ -235,36 +232,36 @@
 
                         response.data.forEach(element => {
 
-                                    let image1 = element.image1 ? "<span><img src= "+element.image1+" /> </span>" : '';
-                                    let image2 = element.image2 ? "<span><img src= "+element.image2+" /> </span>" : '';
+                                    let image1 = element.image1 ? `<span><img class="lightbox-img" src="${element.image1}" /> </span>` : '';
+                                    let image2 = element.image2 ? `<span><img class="lightbox-img" src="${element.image2}" /> </span>` : '';
+                                    // let platformIcon = element.platefrom_image ? `<img src="https://localhost/autoboli/public/uploads/platforms/${element.platefrom_image}" class="platform-icon" />` : '';
+
 
                                 if(auctions.filters.display_type == 'auction'){
 
                             
 
                                     $(`.table tbody`).append(`<tr>
-                                            <td>
-                                                <button class="my_btn" type="button"><i class="menu-icon icon-base ti tabler-pointer-heart"></i></button>
-                                            </td>
+                                         
                                             <td>
                                                 <a href="${baseUrl}/${element.id}" target="_blank">
                                                     ${element.make_name} ${element.model_name} ${element.variant_name}
+                                                    </a>
                                                     <div class="extra">
                                                     ${image1} ${image2}
                                                     </div>
-                                                </a>
                                                 </td>
 
                                             <td>${element.year}</td>
                                             <td>${element.cc}</td>
                                             <td>${element.mileage}</td>
                                             <td>${element.transmission}</td>
-                                            <td>${element.auction_name}</td>
-                                            <td>${element.auction_date} ${element.auction_time}</td>
+                                           <td><span class="auction-badge"> ${element.auction_name}</span></td>
+                                            <td>${element.auction_date} </br> ${element.auction_time}</td>
                                             <td>${element.last_bid}
-                                                <div class="extra">
+                                                    </br>
                                                    <a class="btn btn-primary report-link" target="_blank" href="${element.inspection_report}">View Report</a>
-                                                </div>
+                                              
                                             </td>
                                         </tr>`);
 
@@ -272,9 +269,7 @@
 
                                     $(`.table tbody`).append(`
                                     <tr>
-                                        <td>
-                                            <button class="my_btn" type="button"><i class="menu-icon icon-base ti tabler-pointer-heart"></i></button>
-                                        </td>
+                                   
                                         <td>${element.make_name} ${element.model_name} ${element.variant_name}
                                            <div class="extra">${image1} ${image2}</div>
                                         </td>
@@ -1493,3 +1488,5 @@
 
     
 });
+
+
