@@ -37,11 +37,10 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <button id="themeToggle"
-                    class="flex items-center justify-center gap-2 p-2 rounded-md text-sm font-medium
-                 border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900
-                 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition">
-                    <i id="themeIcon" class="fas fa-moon"></i><span class="sr-only">Toggle theme</span>
+                <button data-theme-toggle
+                    class="flex items-center justify-center p-2 rounded-full text-sm font-medium text-white dark:text-gray-900 bg-transparent transition"
+                    aria-label="Toggle theme">
+                    <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
                 </button>
                 <a href="{{ url('/') }}"
                     class="text-white dark:text-gray-900 rounded-md px-3 py-2 text-sm font-medium border

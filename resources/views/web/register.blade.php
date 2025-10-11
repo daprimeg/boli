@@ -64,7 +64,7 @@
 @section('content')
 
 
-    <header class="absolute inset-x-0 top-0 z-20 b bg-transparent">
+    <header class="absolute inset-x-0 top-0 z-20">
         <div class="mx-auto px-6 md:px-8 py-4 flex items-center justify-between">
             <a href="{{ url('/') }}" class="flex items-center gap-2">
                 <img src="{{ asset('public/theme/assets/web/images/nave-icon.png') }}" alt="AutoBoli" class="h-8 w-auto block">
@@ -86,7 +86,7 @@
     </header>
 
 
-    <section class="h-screen w-full flex  bg-[#000f21] dark:bg-gray-100">
+    <section class="h-screen w-full flex  bg-[#000f21] dark:bg-gray-100 pt-20 md:pt-0">
         {{-- LEFT: Content + Step Form --}}
         <div
             class="h-[calc(100vh)] w-full lg:w-3/5 overflow-y-auto

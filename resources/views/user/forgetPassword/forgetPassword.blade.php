@@ -39,12 +39,10 @@
 
             <div class="flex items-center gap-3">
                 <!-- Theme toggle -->
-                <button id="themeToggle"
-                    class="flex items-center justify-center gap-2 p-2 rounded-md text-sm font-medium
-                 border border-gray-600 dark:border-gray-300 text-white dark:text-gray-900
-                 bg-transparent hover:bg-gray-800 dark:hover:bg-gray-100 transition">
-                    <i id="themeIcon" class="fas fa-moon"></i>
-                    <span id="themeLabel" class="sr-only">Toggle theme</span>
+                <button data-theme-toggle
+                    class="flex items-center justify-center p-2 rounded-full text-sm font-medium text-white dark:text-gray-900 bg-transparent transition"
+                    aria-label="Toggle theme">
+                    <span class="material-symbols-outlined text-xl" data-theme-icon>flare</span>
                 </button>
 
                 <a href="{{ url('/') }}"
@@ -124,32 +122,6 @@
 @endsection
 
 @section('js')
-    <script>
-        // Theme toggle (same as login)
-        const html = document.documentElement;
-        const themeToggle = document.getElementById("themeToggle");
-        const themeIcon = document.getElementById("themeIcon");
-
-        if (localStorage.theme === "light") {
-            html.classList.remove("dark");
-            themeIcon.classList.replace("fa-moon", "fa-sun");
-        } else {
-            html.classList.add("dark");
-            themeIcon.classList.replace("fa-sun", "fa-moon");
-        }
-
-        themeToggle.addEventListener("click", () => {
-            if (html.classList.contains("dark")) {
-                html.classList.remove("dark");
-                localStorage.theme = "light";
-                themeIcon.classList.replace("fa-moon", "fa-sun");
-            } else {
-                html.classList.add("dark");
-                localStorage.theme = "dark";
-                themeIcon.classList.replace("fa-sun", "fa-moon");
-            }
-        });
-    </script>
 
     {{-- Your existing AJAX logic (unchanged) --}}
     <script>
