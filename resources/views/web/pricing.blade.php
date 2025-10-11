@@ -211,17 +211,23 @@
                     <span class="opacity-80">Monthly</span> <span class="opacity-30">•</span> <span
                         class="opacity-80">Yearly</span> <span class="ml-1 text-[#8abfff] text-xs">Up to 20% OFF</span>
                 </div>
-                <h1 class="mt-5 text-3xl md:text-4xl font-extrabold">Flexible plans for AI content creators</h1>
+                <h1 class="mt-5 text-3xl md:text-5xl font-bold">Flexible plans for AI content creators</h1>
                 <p class="mt-2 text-white/70">Choose the best plan for your needs.</p>
-            </div> {{-- Billing Toggle --}} <div class="flex items-center justify-center mb-8">
+            </div>
+            {{-- Billing Toggle --}}
+            <div class="flex items-center justify-center mb-8">
                 <div class="inline-flex rounded-xl border border-white/10 bg-white/5 p-1"> <button id="billMonthly"
                         class="focusable tab-btn active px-4 py-2 text-sm rounded-lg bg-[#1a2640] border border-white/10">Monthly</button>
                     <button id="billYearly" class="focusable tab-btn px-4 py-2 text-sm rounded-lg hover:bg-white/5">Yearly
                         <span class="ml-1 text-[#8abfff]">–20%</span></button>
                 </div>
-            </div> {{-- Pricing Grid --}} <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
-                {{-- Free --}} <div
-                    class="relative rounded-2xl border border-white/10 bg-[#0f1c2c]/70 p-5 lg:p-6 card-sheen">
+            </div>
+
+
+            {{-- Pricing Grid --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 py-14 gap-6 lg:gap-0">
+                {{-- Free --}}
+                <div class="relative rounded-l-xl border border-white/10 bg-[#0f1c2c]/70 p-5 lg:p-6 card-sheen">
                     <h3 class="text-xl font-semibold">Free</h3>
                     <div class="mt-2"> <span class="text-3xl font-bold" data-price data-month="0"
                             data-plan="Free">$0</span> <span class="text-white/60">/month</span> </div> <a
@@ -236,8 +242,10 @@
                         <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Image
                             Editing — 1 project</li>
                     </ul>
-                </div> {{-- Entry --}} <div
-                    class="relative rounded-2xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
+                </div>
+
+                {{-- Entry --}}
+                <div class="relative rounded lg:rounded-none border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
                     <h3 class="text-xl font-semibold">Entry</h3>
                     <div class="mt-2"> <span class="text-3xl font-bold" data-price data-month="10"
                             data-plan="Entry">$10</span> <span class="text-white/60">/month</span> </div> <a
@@ -256,8 +264,11 @@
                         <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Parallel
                             jobs — 2 gens at a time</li>
                     </ul>
-                </div> {{-- Core --}} <div
-                    class="relative rounded-2xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
+                </div>
+
+                {{-- Core --}}
+
+                <div class="relative rounded lg:rounded-none border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
                     <h3 class="text-xl font-semibold">Core</h3>
                     <div class="mt-2"> <span class="text-3xl font-bold" data-price data-month="30"
                             data-plan="Core">$30</span> <span class="text-white/60">/month</span> </div> <a
@@ -278,8 +289,11 @@
                         <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Model
                             Training</li>
                     </ul>
-                </div> {{-- Plus (Most popular) --}} <div
-                    class="relative rounded-2xl border-2 border-[#0080ff]/60 bg-[#0f1c2c] p-5 lg:p-6 ring-1 ring-[#0080ff]/20 shadow-[0_0_0_4px_rgba(0,128,255,.05)]">
+                </div>
+
+                {{-- Plus (Most popular) --}}
+                <div
+                    class="relative border-2 border-[#0080ff]/60 bg-[#0f1c2c] p-5 lg:p-6 ring-1 ring-[#0080ff]/20 shadow-[0_0_0_4px_rgba(0,128,255,.05)] lg:-my-10 rounded-xl">
                     <span
                         class="absolute right-4 -top-3 text-xs bg-[#0080ff] text-white px-2 py-1 rounded-md font-semibold shadow">Most
                         popular</span>
@@ -305,8 +319,9 @@
                         <li class="flex items-start gap-2"><i class="fa-solid fa-check mt-1 text-[#8abfff]"></i> Top-up
                             Credits</li>
                     </ul>
-                </div> {{-- Ultra --}} <div
-                    class="relative rounded-2xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
+                </div>
+                {{-- Ultra --}}
+                <div class="relative rounded-r-xl border border-white/10 bg-[#0f1c2c] p-5 lg:p-6 card-sheen">
                     <h3 class="text-xl font-semibold">Ultra</h3>
                     <div class="mt-2"> <span class="text-3xl font-bold" data-price data-month="175"
                             data-plan="Ultra">$175</span> <span class="text-white/60">/month</span> </div> <a

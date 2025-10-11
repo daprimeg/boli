@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="{{ asset('public/theme/assets/web/css/loader.css') }}" />
     <link rel="stylesheet" href="{{ asset('public/theme/assets/web/css/home.css') }}" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+      <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     <!-- Tailwind Dark Mode Configuration -->
     <script>

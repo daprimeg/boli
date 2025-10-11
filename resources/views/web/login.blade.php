@@ -49,8 +49,9 @@
                 </button>
 
 
+
                 <a href="{{ url('/') }}"
-                    class="text-white dark:text-gray-900 rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm border border-[#353F4C] dark:border-gray-300 hover:bg-[#0080ff] hover:border-[#0080ff] transition bg-transparent ">
+                    class="rounded-md px-2 lg:px-4 py-2 font-medium cursor-pointer transform text-sm  bg-[#0080ff] hover:bg-[#0080ff] text-white hover:border-[#0080ff] transition">
                     Back to Home
                 </a>
             </div>
