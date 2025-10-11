@@ -241,6 +241,11 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Vehicle Valuation</button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+                                
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content p-0" id="myTabContent" >
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -360,8 +365,18 @@
                                 <div class="vehicle-card mb-4 border-top" style="border-radius: 2px;">
                                 <button type="button" class="btn btn1 btn-primary w-100 dropdown-toggle text-start  collapsed waves-effect waves-light" style="justify-content: space-between; font-weight: 300; border-color:#44485e; box-shadow: none;" data-bs-toggle="collapse" data-bs-target="#vehicle-${element.id}" aria-controls="vehicle-${element.id}">
                                     <div class="text-left"> 
-                                        <p class="m-0" style="text-align: left; font-size: 15px;">${element.make_name}</p>
-                                        <p class="m-0" style="text-align: left; font-size: 15px;"> Astra 2013</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- Vehicle Image -->
+                                            <img src="${element.image}" alt="Vehicle Image" 
+                                                style="width: 60px; height: 45px; object-fit: cover; border-radius: 6px;">
+
+                                            <!-- Vehicle Info -->
+                                            <div class="text-left"> 
+                                                <p class="m-0" style="text-align: left; font-size: 15px;">${element.make_name}</p>
+                                                <p class="m-0" style="text-align: left; font-size: 15px;">${element.model_name} ${element.year}</p>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </button>
                             <a href="${element.id}">  

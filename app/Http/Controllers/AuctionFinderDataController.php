@@ -312,6 +312,7 @@ class AuctionFinderDataController extends Controller
                     return [
                         'id' => $item->id,
                         'platform_name' => $item->platform_name,
+                        'year' => $item->year,
                         'make_name' => $item->make_name,
                         'model_name' => $item->model_name,
                         'variant_name' =>  $item->variant_name,
