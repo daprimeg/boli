@@ -487,7 +487,8 @@ require __DIR__ . '/admin.php';
 Route::get('/send_interest_notify/{token?}', [NotifyIntrestController::class, 'sendInterestNotify']);
 Route::get('/send-daily-summary', [NotifyIntrestController::class, 'sendDailySummary']);
 
-Route::get('/invoice', [InvoiceController::class, 'view'])->name('invoice.view');
-Route::get('/invoice/pdf', [InvoiceController::class, 'downloadPDF'])->name('invoice.pdf');
+Route::get('/invoice/{id}', [InvoiceController::class, 'view'])->name('invoice.view');
+Route::get('/invoice/{id}/download', [InvoiceController::class, 'downloadPDF'])->name('invoice.pdf');
+
 
 

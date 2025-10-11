@@ -25,6 +25,21 @@ class MembershipPlan extends Model
         'status',
         'sort_by',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
+    // ✅ Relationship to plan
+    public function plan()
+    {
+        return $this->belongsTo(MembershipPlan::class, 'plan_id');
+    }
+
+    // ✅ Relationship to payment
+    public function payment()
+    {
+        return $this->hasOne(MembershipPayment::class, 'membership_id');
+    }
   
 }

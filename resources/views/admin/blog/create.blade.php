@@ -9,8 +9,27 @@
          font-size: 15px;
    }
 
-   .ck-editor__editable {
-        min-height: 300px !important;
+
+    /* Dark theme for CKEditor editable area */
+    .ck-editor__editable_inline {
+        background-color: #000f21 !important;
+        color: #ffffff !important;
+        caret-color: #ffffff; /* cursor color */
+        min-height: 300px;
+    }
+
+    /* Toolbar color adjustments (optional) */
+    .ck-toolbar {
+        background-color: #0a1930 !important;
+        border: none !important;
+    }
+
+    .ck-toolbar .ck-button {
+        color: #ffffff !important;
+    }
+
+    .ck-toolbar .ck-button:hover {
+        background-color: #1a2a45 !important;
     }
 </style>
 @endsection
@@ -63,7 +82,9 @@
 
 @endsection
 @section('js')
-    <script src="{{ asset('public/assets/ckeditor/build/ckeditor.js') }}"></script>
+    <script src="{{ asset('public/themeadmin/js/ckeditor.js') }}"></script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))

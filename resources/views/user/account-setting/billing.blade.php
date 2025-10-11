@@ -214,12 +214,12 @@ use Carbon\Carbon;
                                                 @if (isset($current) && $current->plan->id == $item->id)
                                                     <a href="{{ url('/checkout') }}?id={{ $item->id }}"
                                                         class="btn btn-label-success d-grid w-100 waves-effect" style="    margin-top: 30px;
-" >Your Current
+                                                    " >Your Current
                                                         Plan</a>
                                                 @else
                                                     <a href="{{ url('/checkout') }}?id={{ $item->id }}"
                                                         class="btn btn-label-primary d-grid w-100 waves-effect" style="    margin-top: 30px;
-">Select
+                                                    ">Select
                                                         Plan</a>
                                                 @endif
                                             </div>
@@ -255,6 +255,7 @@ use Carbon\Carbon;
                                         <th>Expiry</th>
                                         <th>Amount</th>
                                         <th>Status</th>
+                                        <th>Invoice</th> 
                                     </tr>
                                 </thead>
                                 <tbody class="py-5">
@@ -262,7 +263,7 @@ use Carbon\Carbon;
                                         @foreach ($membership as $key => $item)
                                             <tr class="li-chnge-color">
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ $item->created_at }}</td>
+                                                <td>{{ $item->created_at->format('d-M-Y') }}</td>
                                                 <td>{{ $item->plan->plan_name }}</td>
                                                 <td>{{ date('d-M-Y', strtotime($item->membership_start_date)) }}</td>
                                                 <td>{{ date('d-M-Y', strtotime($item->membership_expiry_date)) }}</td>
@@ -276,23 +277,44 @@ use Carbon\Carbon;
                                                         <span class="badge bg-secondary">Active</span>
                                                     @else
                                                         @if ($item->membership_status == 'Active')
-                                                            <span class="badge bg-danger">Expired </span>
+                                                            <span class="badge bg-danger">Expired</span>
                                                         @else
                                                             <span class="badge bg-danger">Disabled</span>
                                                         @endif
                                                     @endif
                                                 </td>
+                                                <td>
+                               
+                                                <div class="d-flex gap-2">
+                                      
+                                                    <button class="btn btn-sm btn-primary view-invoice-btn" 
+                                                        data-id="{{ Crypt::encryptString($item->id) }}" 
+                                                        title="View Invoice">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+
+                                     
+                                                    <a href="{{ route('invoice.pdf', Crypt::encryptString($item->id)) }}" 
+                                                        class="btn btn-sm btn-success" 
+                                                        title="Download Invoice" target="_blank">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                </div>
+
+
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr class="li-chnge-color">
-                                            <td colspan="7" class="text-center">
-                                                <a class="" href="{{ url('checkout') }}">No Record Purchase Plan</a>
+                                            <td colspan="8" class="text-center">
+                                                <a href="{{ url('checkout') }}">No Record Purchase Plan</a>
                                             </td>
                                         </tr>
                                     @endif
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -300,4 +322,49 @@ use Carbon\Carbon;
             </div>
         </div>
     </div>
+
+<div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invoice</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="invoiceContent">
+             
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+@section('js')
+
+<script>
+
+$(document).ready(function() {
+    $('.view-invoice-btn').on('click', function() {
+        var invoiceId = $(this).data('id');
+
+        $.ajax({
+            url: "{{ route('invoice.view', ':id') }}".replace(':id', invoiceId),  
+            type: 'GET',
+            success: function(html) {
+                $('#invoiceContent').html(html);
+                var invoiceModal = new bootstrap.Modal(document.getElementById('invoiceModal'));
+                invoiceModal.show();
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                alert('Unable to load invoice. Please try again.');
+            }
+        });
+    });
+});
+
+
+
+</script>
 @endsection
