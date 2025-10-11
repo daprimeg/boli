@@ -22,6 +22,7 @@ use App\Http\Controllers\UserAlertController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Middleware\CheckUserStatus;
 use App\Models\BodyType;
 use App\Models\Color;
@@ -47,19 +48,9 @@ use App\Http\Controllers\Auth\GoogleController;
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 // ya agar session auth use kar rahe ho to
 Broadcast::routes(['middleware' => ['auth']]);
-// Public routes
-use App\Events\NewBlogNotification;
 
-Route::get('/test-notify', function () {
-    $user = Auth::user();
 
-    // Event fire karna, DB entry event me ho jaayegi
-    event(new NewBlogNotification($user, 'Test Notification', 'This is a test'));
 
-    \Log::info('Event fired for user ' . $user->id);
-
-    return 'Event fired for user ' . $user->id;
-});
 
 
 Route::get('/', [WebController::class, 'index']);
@@ -496,5 +487,7 @@ require __DIR__ . '/admin.php';
 Route::get('/send_interest_notify/{token?}', [NotifyIntrestController::class, 'sendInterestNotify']);
 Route::get('/send-daily-summary', [NotifyIntrestController::class, 'sendDailySummary']);
 
+Route::get('/invoice', [InvoiceController::class, 'view'])->name('invoice.view');
+Route::get('/invoice/pdf', [InvoiceController::class, 'downloadPDF'])->name('invoice.pdf');
 
 

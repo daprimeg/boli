@@ -282,30 +282,43 @@ $(document).ready(function () {
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
 
+document.addEventListener('DOMContentLoaded', function () {
 
+    /** --------------------------
+     *  PRICE (CAP CLEAN)
+     *  -------------------------- */
     const priceSteps = [];
-    for (let i = 0; i <= 10000000; i += i < 1000 ? 100 : i < 10000 ? 500 : i < 100000 ? 2000 : i < 500000 ? 10000 : 50000) {
+    for (let i = 0; i <= 10000000; i += 
+        i < 1000 ? 100 : 
+        i < 10000 ? 500 : 
+        i < 100000 ? 2000 : 
+        i < 500000 ? 10000 : 50000
+    ) {
         priceSteps.push(i);
     }
 
     const priceFrom = document.getElementById('price_from');
-    const priceTo = document.getElementById('price_to');
+    const priceTo   = document.getElementById('price_to');
 
     const selectedPriceFrom = "{{ $model->price_from ?? '' }}";
-    const selectedPriceTo = "{{ $model->price_to ?? '' }}";
+    const selectedPriceTo   = "{{ $model->price_to ?? '' }}";
 
+    priceFrom.innerHTML = '<option value="">From</option>';
     priceSteps.forEach(val => {
-        priceFrom.innerHTML += `<option value="${val}" ${val == selectedPriceFrom ? 'selected' : ''}>${val.toLocaleString()}</option>`;
+        priceFrom.insertAdjacentHTML('beforeend',
+            `<option value="${val}" ${val == selectedPriceFrom ? 'selected' : ''}>${val.toLocaleString()}</option>`
+        );
     });
 
     function updatePriceTo() {
         const fromVal = parseFloat(priceFrom.value) || 0;
-        priceTo.innerHTML = `<option value="">To</option>`;
+        priceTo.innerHTML = '<option value="">To</option>';
         priceSteps.forEach(val => {
             if (val > fromVal) {
-                priceTo.innerHTML += `<option value="${val}" ${val == selectedPriceTo ? 'selected' : ''}>${val.toLocaleString()}</option>`;
+                priceTo.insertAdjacentHTML('beforeend',
+                    `<option value="${val}" ${val == selectedPriceTo ? 'selected' : ''}>${val.toLocaleString()}</option>`
+                );
             }
         });
     }
@@ -314,28 +327,38 @@ document.addEventListener('DOMContentLoaded', function() {
     updatePriceTo();
 
 
-
+    /** --------------------------
+     *  MILEAGE
+     *  -------------------------- */
     const mileageSteps = [];
-    for (let i = 0; i <= 990000; i += i < 20000 ? 5000 : i < 100000 ? 10000 : 50000) {
+    for (let i = 0; i <= 990000; i += 
+        i < 20000 ? 5000 : 
+        i < 100000 ? 10000 : 50000
+    ) {
         mileageSteps.push(i);
     }
 
     const mileageFrom = document.getElementById('mileage_from');
-    const mileageTo = document.getElementById('mileage_to');
+    const mileageTo   = document.getElementById('mileage_to');
 
     const selectedMileageFrom = "{{ $model->mileage_from ?? '' }}";
-    const selectedMileageTo = "{{ $model->mileage_to ?? '' }}";
+    const selectedMileageTo   = "{{ $model->mileage_to ?? '' }}";
 
+    mileageFrom.innerHTML = '<option value="">From</option>';
     mileageSteps.forEach(val => {
-        mileageFrom.innerHTML += `<option value="${val}" ${val == selectedMileageFrom ? 'selected' : ''}>${val.toLocaleString()} km</option>`;
+        mileageFrom.insertAdjacentHTML('beforeend',
+            `<option value="${val}" ${val == selectedMileageFrom ? 'selected' : ''}>${val.toLocaleString()} km</option>`
+        );
     });
 
     function updateMileageTo() {
         const fromVal = parseFloat(mileageFrom.value) || 0;
-        mileageTo.innerHTML = `<option value="">To</option>`;
+        mileageTo.innerHTML = '<option value="">To</option>';
         mileageSteps.forEach(val => {
             if (val > fromVal) {
-                mileageTo.innerHTML += `<option value="${val}" ${val == selectedMileageTo ? 'selected' : ''}>${val.toLocaleString()} km</option>`;
+                mileageTo.insertAdjacentHTML('beforeend',
+                    `<option value="${val}" ${val == selectedMileageTo ? 'selected' : ''}>${val.toLocaleString()} km</option>`
+                );
             }
         });
     }
@@ -344,6 +367,8 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMileageTo();
 
 });
+
+
 
 
 </script>

@@ -291,26 +291,37 @@ document.addEventListener('DOMContentLoaded', function () {
     const priceFrom = document.getElementById('price_from');
     const priceTo = document.getElementById('price_to');
 
+    // get price step & max from environment or default
+    const priceStep = 500;
+    const maxPrice = 100000;
 
     const priceSteps = [];
-    for (let i = 0; i <= 10000000; i += 50000) {
+    for (let i = 0; i <= maxPrice; i += priceStep) {
         priceSteps.push(i);
     }
 
+    // helper function for formatting with £ and commas
+    function formatPrice(p) {
+        return `£${p.toLocaleString()}`;
+    }
 
-    priceSteps.forEach(price => {
-        priceFrom.insertAdjacentHTML('beforeend', `<option value="${price}">${price.toLocaleString()}</option>`);
-        priceTo.insertAdjacentHTML('beforeend', `<option value="${price}">${price.toLocaleString()}</option>`);
+    // populate both selects
+    priceSteps.forEach((price, index) => {
+        const nextVal = price + 1; // like 501, 1001...
+        const label = index === 0 ? formatPrice(price) : formatPrice(nextVal);
+        priceFrom.insertAdjacentHTML('beforeend', `<option value="${nextVal}">${label}</option>`);
+        priceTo.insertAdjacentHTML('beforeend', `<option value="${nextVal}">${label}</option>`);
     });
 
-
+    // when price_from changes, filter price_to
     priceFrom.addEventListener('change', function () {
         const fromVal = parseInt(this.value) || 0;
         priceTo.innerHTML = '<option value="">To</option>';
         priceSteps
             .filter(p => p > fromVal)
             .forEach(p => {
-                priceTo.insertAdjacentHTML('beforeend', `<option value="${p}">${p.toLocaleString()}</option>`);
+                const val = p + 1;
+                priceTo.insertAdjacentHTML('beforeend', `<option value="${val}">£${val.toLocaleString()}</option>`);
             });
     });
 
