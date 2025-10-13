@@ -176,12 +176,12 @@
                     Compare features and model access across all plans
                 </h2>
 
-                <div class="overflow-x-auto rounded border border-transparent dark:border-gray-300 cmp-wrap">
+                <div class="overflow-x-auto rounded border-[1px] border-[#FFFFFF]/10 dark:border-[#E2E8F0] cmp-wrap">
                     <table class="cmp-table min-w-[980px] w-full text-left text-[15px]">
 
                         {{-- Header with plan names --}}
                         <thead
-                            class="z-10 border-b border-transparent dark:border-gray-300 text-white/85 dark:text-gray-900">
+                            class="z-10 border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0] text-white/85 dark:text-gray-900">
                             <tr class="text-xs md:text-sm">
                                 <th class="py-4 px-4 cmp-sticky-col font-semibold sticky  top-0"></th>
                                 <th class="py-4 px-4"><span
@@ -201,15 +201,15 @@
 
 
 
-                        <tbody class=" text-white/90 dark:text-gray-800">
-                            <tr class="align-top border-b">
+                        <tbody class=" ">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <td colspan="6" class="py-5 px-4">
-                                    <div class="text-white dark:text-gray-900 font-semibold">Dashboard & Insights
+                                    <div class="font-semibold">Dashboard & Insights
                                     </div>
                                 </td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2 flex items-center gap-2">
                                         Auction Overview
@@ -226,7 +226,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Interest Based </div>
                                 </th>
@@ -237,7 +237,7 @@
                                 <td class="py-3 px-4">10</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Watched List</div>
                                 </th>
@@ -248,7 +248,7 @@
                                 <td class="py-3 px-4">Unlimited</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Alerted List </div>
                                 </th>
@@ -263,7 +263,7 @@
                                         class="tick material-symbols-outlined align-middle">check_circle</span></td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Vehicle Sales Overview</div>
                                 </th>
@@ -278,13 +278,13 @@
                                         class="tick material-symbols-outlined align-middle">check_circle</span></td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <td colspan="6" class="py-6 px-4">
                                     <div class="text-white dark:text-gray-900 font-semibold">Interest Based </div>
                                 </td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Save Custom Search (Interest)</div>
                                 </th>
@@ -295,7 +295,7 @@
                                 <td class="py-3 px-4">100,000 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Discover Matching Auctions</div>
                                 </th>
@@ -307,7 +307,7 @@
                             </tr>
 
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Past Auction Records</div>
                                 </th>
@@ -318,7 +318,7 @@
                                 <td class="py-3 px-4">4,000 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">3-Month Price Trend Graph</div>
                                 </th>
@@ -329,7 +329,7 @@
                                 <td class="py-3 px-4">3,333 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Real-Time Vehicle Valuation</div>
                                 </th>
@@ -340,7 +340,7 @@
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Best Auction Match Finder</div>
                                 </th>
@@ -350,13 +350,13 @@
                                 <td class="py-3 px-4 is-plus">777 images</td>
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <td colspan="6" class="py-6 px-4">
                                     <div class="text-white dark:text-gray-900 font-semibold">Auction Data </div>
                                 </td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Auction Market Snapshot</div>
                                 </th>
@@ -367,7 +367,7 @@
                                 <td class="py-3 px-4">100,000 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Live Online Auctions</div>
                                 </th>
@@ -379,7 +379,7 @@
                             </tr>
 
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Scheduled Timed Auctions</div>
                                 </th>
@@ -390,7 +390,7 @@
                                 <td class="py-3 px-4">4,000 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Auction Vehicle Insights</div>
                                 </th>
@@ -401,7 +401,7 @@
                                 <td class="py-3 px-4">3,333 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Auction Alerts & Notifications</div>
                                 </th>
@@ -412,7 +412,7 @@
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Live Auction Screen</div>
                                 </th>
@@ -422,7 +422,7 @@
                                 <td class="py-3 px-4 is-plus">777 images</td>
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Auction Schedule </div>
                                 </th>
@@ -432,7 +432,7 @@
                                 <td class="py-3 px-4 is-plus">777 images</td>
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Reaction Tracker </div>
                                 </th>
@@ -442,7 +442,7 @@
                                 <td class="py-3 px-4 is-plus">777 images</td>
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Upcoming Auction Vehicles </div>
                                 </th>
@@ -452,7 +452,7 @@
                                 <td class="py-3 px-4 is-plus">777 images</td>
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Historical Auction Data </div>
                                 </th>
@@ -462,13 +462,13 @@
                                 <td class="py-3 px-4 is-plus">777 images</td>
                                 <td class="py-3 px-4">2,222 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <td colspan="6" class="py-6 px-4">
                                     <div class="text-white dark:text-gray-900 font-semibold">Vehicle Valuation </div>
                                 </td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Instant Vehicle Valuation</div>
                                 </th>
@@ -479,7 +479,7 @@
                                 <td class="py-3 px-4">100,000 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Smart Bid Recommendation</div>
                                 </th>
@@ -489,13 +489,13 @@
                                 <td class="py-3 px-4 is-plus">7,000 images</td>
                                 <td class="py-3 px-4">20,000 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <td colspan="6" class="py-6 px-4">
                                     <div class="text-white dark:text-gray-900 font-semibold">More </div>
                                 </td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Comparison Tool</div>
                                 </th>
@@ -506,7 +506,7 @@
                                 <td class="py-3 px-4">100,000 images</td>
                             </tr>
 
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">VIN Report Credits</div>
                                 </th>
@@ -516,7 +516,7 @@
                                 <td class="py-3 px-4 is-plus">7,000 images</td>
                                 <td class="py-3 px-4">20,000 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Industry News & Insights</div>
                                 </th>
@@ -526,7 +526,7 @@
                                 <td class="py-3 px-4 is-plus">7,000 images</td>
                                 <td class="py-3 px-4">20,000 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Sub-User Account Access</div>
                                 </th>
@@ -536,7 +536,7 @@
                                 <td class="py-3 px-4 is-plus">7,000 images</td>
                                 <td class="py-3 px-4">20,000 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Light/Dark Mode</div>
                                 </th>
@@ -546,7 +546,7 @@
                                 <td class="py-3 px-4 is-plus">7,000 images</td>
                                 <td class="py-3 px-4">20,000 images</td>
                             </tr>
-                            <tr class="align-top border-b">
+                            <tr class="align-top border-b border-[#FFFFFF]/10 dark:border-[#E2E8F0]">
                                 <th class="py-3 px-4 cmp-sticky-col">
                                     <div class="pb-2">Advanced Search Filters</div>
                                 </th>

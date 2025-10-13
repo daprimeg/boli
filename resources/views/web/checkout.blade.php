@@ -304,7 +304,7 @@
                                         <div class="space-y-3">
                                             <label class="block text-sm text-white/80 dark:text-gray-700">Card Info</label>
                                             <div id="card-element"
-                                                class="rounded border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-3.5 py-3 text-white dark:text-gray-900">
+                                                class="rounded border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-3.5 py-3 text-white ">
                                             </div>
                                             <div id="card-errors" class="text-red-500 text-sm"></div>
                                             <small class="error error-payment_method text-danger text-red-500"></small>
