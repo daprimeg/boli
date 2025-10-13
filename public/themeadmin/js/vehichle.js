@@ -176,7 +176,7 @@
             }
 
         $(`.tags-auction_house`).html('');
-        console.log(auctions.selected.auction_house);
+        console.log(auctions.filters);
         if (auctions.selected.auction_house && auctions.selected.auction_house.length) {
             auctions.selected.auction_house.forEach((item) => {
                 $(`.tags-auction_house`).append(
@@ -1104,10 +1104,13 @@ auctions.getAuctionHouse = function () {
         success: function (response) {
             $("#collapseAuctionHouse").html('');
             response.data.forEach(element => {
-                let selected = '';
-                if (Array.isArray(auctions.filters.auction_house) && auctions.filters.auction_house.includes(String(element.id))) {
-                    selected = 'checked';
-                }
+                 let selected = '';
+                    if(auctions.filters.no_of_service){
+                        let no_of_service = auctions.filters.no_of_service.split(',');
+                        if(no_of_service.includes(String(element.label))) {
+                            selected = 'checked';
+                        }
+                    }
 
                 $("#collapseAuctionHouse").append(`
                     <div class="accordion-body py-1">
