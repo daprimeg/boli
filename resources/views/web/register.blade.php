@@ -314,6 +314,9 @@
                                     <ul class="py-1 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
                                         <li @click="selected = 'Yes'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
+                                            Motor Trade Insurance?</li>
+                                        <li @click="selected = 'Yes'; open = false"
+                                            class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
                                             Yes</li>
                                         <li @click="selected = 'No'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
@@ -347,30 +350,6 @@
                                 class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 placeholder-black/50 dark:placeholder-white/50 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Surname" value="{{ old('surname', 'Azam') }}">
 
-                            <input name="title"
-                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 placeholder-black/50 dark:placeholder-white/50 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
-                                placeholder="Title" value="{{ old('title', 'Owais Azam') }}">
-
-                            <input name="jobTitle"
-                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 placeholder-black/50 dark:placeholder-white/50 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
-                                placeholder="Job Title" value="{{ old('jobTitle', 'Dev') }}">
-
-                            <div>
-                                <div class="flex rounded-lg overflow-hidden border border-black/20 dark:border-white/20">
-                                    <select
-                                        class="bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-3 py-3">
-                                        <option value="+44">+44</option>
-                                        <option value="+1">+1</option>
-                                        <option value="+92" selected>+92</option>
-                                        <option value="+61">+61</option>
-                                    </select>
-                                    <input name="phone" type="tel"
-                                        class="flex-1 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 focus:outline-none"
-                                        placeholder="Phone Number" value="{{ old('phone', '03112239342') }}">
-                                </div>
-                                <small class="error error-phone text-red-500"></small>
-                            </div>
-
                             <!-- Referral Source -->
                             <div x-data="{ open: false, selected: '' }" class="relative overflow-visible">
                                 <input type="hidden" name="ReferralSource" :value="selected">
@@ -392,18 +371,18 @@
                                 <div x-show="open" @click.outside="open = false" x-transition
                                     class="absolute z-40 mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg overflow-hidden">
                                     <ul class="py-1 text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)]">
-                                        <li @click="selected = 'Google'; open = false"
+                                        <li @click="selected = 'Google Search'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
-                                            Google</li>
+                                            Google Search</li>
                                         <li @click="selected = 'Social Media'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
                                             Social Media</li>
                                         <li @click="selected = 'Online Advertisement'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
                                             Online Advertisement</li>
-                                        <li @click="selected = 'Friend / Colleague Referral'; open = false"
+                                        <li @click="selected = 'Friend / Colleague '; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
-                                            Friend / Colleague Referral</li>
+                                            Friend / Colleague</li>
                                         <li @click="selected = 'Dealership Partner'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
                                             Dealership Partner</li>
@@ -413,13 +392,32 @@
                                         <li @click="selected = 'Vehicle Trader Forum'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
                                             Vehicle Trader Forum</li>
-                                        <li @click="selected = 'Other (please specify)'; open = false"
+                                        <li @click="selected = 'Other'; open = false"
                                             class="cursor-pointer px-4 py-2 hover:bg-blue-100 dark:hover:bg-blue-700 transition">
-                                            Other (please specify)</li>
+                                            Other</li>
                                     </ul>
                                 </div>
                             </div>
 
+                            <div>
+                                <div class="flex rounded-lg overflow-hidden border border-black/20 dark:border-white/20">
+                                    <select
+                                        class="bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-3 py-3">
+                                        <option value="+44">+44</option>
+                                        <option value="+1">+1</option>
+                                        <option value="+92" selected>+92</option>
+                                        <option value="+61">+61</option>
+                                    </select>
+                                    <input name="phone" type="tel"
+                                        class="flex-1 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 focus:outline-none"
+                                        placeholder="Phone Number" value="{{ old('phone', '03112239342') }}">
+                                </div>
+                                <small class="error error-phone text-red-500"></small>
+                            </div>
+
+                            <input name="position"
+                                class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 placeholder-black/50 dark:placeholder-white/50 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
+                                placeholder="Position" value="{{ old('position', 'Owais Azam') }}">
                         </div>
 
                         {{-- Profile Image --}}
