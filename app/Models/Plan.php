@@ -12,6 +12,7 @@ class Plan extends Model
         'plan_name',
         'short_desc',
         'description',
+        'icon',
         'price',
         'is_officer',
         'duration_unit',
