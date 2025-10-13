@@ -48,12 +48,6 @@
 
                 <!-- Hamburger Menu for Mobile -->
                 <div class="lg:hidden">
-                    <!-- Light Mode Icon -->
-                    <span class="material-symbols-outlined">flare</span>
-                    {{-- <img src="{{ asset('public/theme/assets/web/images/hamburger.png') }}" alt="Menu"
-                                            width="25" class="hidden dark:block transition-all duration-300" /> --}}
-
-                    <!-- Dark Mode Icon -->
                     <img src="{{ asset('public/theme/assets/web/images/hamburger.png') }}" alt="Menu"
                         width="25" class="block dark:hidden transition-all duration-300" />
                 </div>
