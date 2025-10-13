@@ -69,13 +69,8 @@
                 @csrf
 
                 <!-- header -->
-                <div class="text-center mb-8 md:mb-10 py-12">
-                    <h1 class="text-2xl md:text-5xl font-bold text-white dark:text-gray-900 mb-3">Complete your order</h1>
-                    <p class="max-w-2xl mx-auto text-white/70 dark:text-gray-600">
-                        AUTOBOLI LTD is exclusively designed for use by independent dealers, motor dealers, traders, and
-                        individuals
-                        engaged in the motor business. By using our platform, you confirm that you meet this criterion.
-                    </p>
+                <div class="text-center mb-8 md:mb-10 pt-8">
+                    <h1 class="text-2xl md:text-5xl font-bold text-white dark:text-gray-900 mb-3 text-left">Check Out</h1>
                 </div>
 
                 <!-- grid -->
@@ -84,7 +79,7 @@
                     <!-- left: form -->
                     <div class="lg:col-span-8">
                         <div
-                            class="animate-card rounded-2xl bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 shadow-2xl p-5 md:p-7">
+                            class="animate-card rounded-2xl bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 p-5 md:p-7">
                             <!-- accordion (single open) -->
                             <div class="rounded-xl overflow-hidden bg-transparent">
                                 <div class="border-b border-white/10 dark:border-gray-200">
@@ -243,7 +238,7 @@
                     <!-- right: summary -->
                     <div class="lg:col-span-4">
                         <aside
-                            class="animate-aside rounded-2xl bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 shadow-2xl p-5 md:p-6 sticky top-24">
+                            class="animate-aside rounded-2xl bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 p-5 md:p-6 sticky top-24">
                             <h5 class="text-white dark:text-gray-900 text-lg font-semibold">Order Summary</h5>
 
                             <div class="mt-6">
