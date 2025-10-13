@@ -90,7 +90,7 @@ class AuctionFinderDataController extends Controller
 
 
             if($request->has('year') && $request->year != ''){
-                $query->whereIn('vehicles.year',explode(',',$request->years));
+                $query->whereIn('vehicles.year',explode(',',$request->year));
             }
 
 
@@ -147,6 +147,15 @@ class AuctionFinderDataController extends Controller
             if($request->has('no_of_service') && $request->no_of_service != ''){
                 $query->whereIn('vehicles.no_of_services',explode(',',$request->no_of_service));
             }
+            if ($request->has('auction_house') && $request->auction_house != '') {
+                $query->whereIn('auctions.platform_id', explode(',', $request->auction_house));
+            }
+
+            if ($request->has('auction_center') && $request->auction_center != '') {
+                $query->whereIn('vehicles.center_id', explode(',', $request->auction_center));
+            }
+
+
 
 
             if($request->has('mileage_from') && $request->mileage_from != ''){

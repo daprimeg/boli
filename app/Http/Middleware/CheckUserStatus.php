@@ -31,7 +31,7 @@ class CheckUserStatus
             if ($membership) {
                 
             }else{
-                return redirect('/account-setting/billing')->with('error', 'No active membership found. Please subscribe or renew your plan.');
+                return redirect('/checkout')->with('error', 'No active membership found. Please subscribe or renew your plan.');
             }
             
         }

@@ -40,6 +40,38 @@
         <div class="col-md-6">
             <h3>{{ $vehicle->year }} {{ $vehicle->make->name ?? " " }} {{ $vehicle->model->name ?? " " }} –
                 {{ $vehicle->variant->name ?? " " }}</h3>
+
+            <section style="background:#061826; padding:20px;">
+                <div class="container" style="max-width:920px;">
+                    <div class="p-3" style="background:#0b2131; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.25); color:#e6edf3;">
+                    <div class="row gy-3 gx-4 align-items-center">
+                        <div class="col-6 col-md-3">
+                        <div class="text-uppercase" style="font-size:12px; letter-spacing:.02em; color:#9fb3c8;">Mileage</div>
+                        <div class="fw-semibold" style="font-size:22px; color:#fff;">5460</div>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                        <div class="text-uppercase" style="font-size:12px; letter-spacing:.02em; color:#9fb3c8;">Grade</div>
+                        <span class="d-inline-flex align-items-center justify-content-center" style="width:36px; height:36px; border-radius:999px; background:#1ed760; color:#063a1f; font-weight:700;">2</span>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                        <div class="text-uppercase" style="font-size:12px; letter-spacing:.02em; color:#9fb3c8;">Inspection</div>
+                        <button class="btn btn-sm" style="background:#14324a; color:#9cc7ff; border:none; border-radius:8px; font-weight:600; box-shadow:inset 0 0 0 1px rgba(255,255,255,0.06);">
+                            Report
+                        </button>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                        <div class="text-uppercase" style="font-size:12px; letter-spacing:.02em; color:#9fb3c8;">Reg</div>
+                        <span class="d-inline-block" style="background:#fff; color:#0b2131; border-radius:8px; padding:6px 10px; font-weight:800; letter-spacing:.04em; box-shadow:0 2px 0 rgba(0,0,0,0.15);">
+                            VN14 UCD
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </section>
             <div class="row " style=" border: solid #004890; border-radius: 15px; margin-bottom: 20px;">
                 <div class="row mt-2  align-self-center " style="border-radius: 5px; margin: 0px">
                     <div class="col-md-3">

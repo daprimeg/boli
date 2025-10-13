@@ -95,15 +95,20 @@
                                         <small class="d-flex align-items-center gap-1"
                                             style="font-size: 12px; color: #ccc;">
                                             <i class="fas fa-gavel text-primary"></i>
-                                            {{ $day['auctions'] }} Auctions
+                                            {{ $day['auctions'] }}
 
 
                                         </small>
                                         <small class="d-flex align-items-center gap-1"
                                             style="font-size: 12px; color: #ccc;">
                                             <i class="fas fa-car text-info"></i>
-                                            {{ $day['vehicles'] }} Vehicles
+                                            {{ $day['vehicles'] }} 
                                         </small>
+                                      <small class="d-flex align-items-center gap-1" style="font-size: 12px; color: #ccc;">
+                                            <i class="fas fa-heart text-danger"></i>
+                                            {{ $day['interest'] }}
+                                        </small>
+
                                     </div>
                                 </button>
                             @endforeach

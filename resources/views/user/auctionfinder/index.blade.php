@@ -157,7 +157,7 @@
   display: inline-block;
   width: 25px;
   height: 25px;
-  border-radius: 4px;
+  border-radius: 50px;
   color: white;
   font-weight: bold;
   text-align: center;
@@ -202,10 +202,7 @@
                </div>
                <div class="">
                   <div class="d-flex flex-wrap justify-content-end">
-                     <div class="invoice_status">
-                        <select id="auction_name" name="auction_name" class="form-select">
-                        </select>
-                     </div>
+                     
                      <div class="invoice_status">
                         <select name="date" class="form-select">
                            {{-- <option value="">Select Range</option> --}}

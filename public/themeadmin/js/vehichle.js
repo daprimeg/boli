@@ -175,6 +175,18 @@
               $('.tags-mileage_range').html(`<span class="badge mx-2">${auctions.filters.mileage_from} - ${auctions.filters.mileage_to}</span>`);
             }
 
+        $(`.tags-auction_house`).html('');
+        console.log(auctions.selected.auction_house);
+        if (auctions.selected.auction_house && auctions.selected.auction_house.length) {
+            auctions.selected.auction_house.forEach((item) => {
+                $(`.tags-auction_house`).append(
+                    `<span data-key="auction_house" data-value="${item.id}" class="badge mx-2">${item.label}X</span>`
+                );
+            });
+        }
+
+ 
+
     }
 
     
@@ -267,7 +279,7 @@
                                             <td>${element.mileage}</td>
                                             <td>${element.transmission}</td>
                                            <td>
-                                            <div class="grade-box" style="background-color: ${getGradeColor(element.grade)}">
+                                            <div class="grade-box" style="background-color: ${getGradeColor(element.grade)};color:black;">
                                                 ${element.grade}
                                             </div>
                                             </td>
@@ -303,7 +315,7 @@
                                                     </div>
                                         </td>
                                          <td>
-                                            <div class="grade-box" style="background-color: ${getGradeColor(element.grade)}">
+                                            <div class="grade-box" style="background-color: ${getGradeColor(element.grade)};color:black;">
                                                 ${element.grade}
                                                
                                             </div>
@@ -1085,6 +1097,80 @@
          });
     }
 
+auctions.getAuctionHouse = function () {      
+    $.ajax({
+        url: url + "/auction-finder/data/getAuctionHouse",
+        method: "GET",
+        success: function (response) {
+            $("#collapseAuctionHouse").html('');
+            response.data.forEach(element => {
+                let selected = '';
+                if (Array.isArray(auctions.filters.auction_house) && auctions.filters.auction_house.includes(String(element.id))) {
+                    selected = 'checked';
+                }
+
+                $("#collapseAuctionHouse").append(`
+                    <div class="accordion-body py-1">
+                        <div class="form-check d-flex justify-content-between align-items-center">
+                            <div>
+                                <input ${selected} class="form-check-input me-1" 
+                                    type="checkbox" 
+                                    name="auction_house[]" 
+                                    value="${element.id}" 
+                                    id="auction_house_${element.id}">
+                                <label class="form-check-label" for="auction_house_${element.id}">
+                                    ${element.label}
+                                </label>
+                            </div>
+                            <span class="badge bg-light text-muted">${element.vehicle_count}</span>
+                        </div>
+                    </div>
+                `);
+            });
+        },
+        error: function () {
+            $("#collapseAuctionHouse").html('');
+        },
+    });
+}
+
+auctions.getAuctionCenter = function () {      
+    $.ajax({
+        url: url + "/auction-finder/data/getAuctionCenter",
+        method: "GET",
+        success: function (response) {
+            $("#collapseAuctionCenter").html('');
+            response.data.forEach(element => {
+                let selected = '';
+                if (Array.isArray(auctions.filters.auction_center) && auctions.filters.auction_center.includes(String(element.id))) {
+                    selected = 'checked';
+                }
+
+                $("#collapseAuctionCenter").append(`
+                    <div class="accordion-body py-1">
+                        <div class="form-check d-flex justify-content-between align-items-center">
+                            <div>
+                                <input ${selected} class="form-check-input me-1" 
+                                    type="checkbox" 
+                                    name="auction_center[]" 
+                                    value="${element.id}" 
+                                    id="auction_center_${element.id}">
+                                <label class="form-check-label" for="auction_center_${element.id}">
+                                    ${element.label}
+                                </label>
+                            </div>
+                            <span class="badge bg-light text-muted">${element.vehicle_count}</span>
+                        </div>
+                    </div>
+                `);
+            });
+        },
+        error: function () {
+            $("#collapseAuctionCenter").html('');
+        },
+    });
+}
+
 
     
     $(document).on('click','.my_btn', function () {
@@ -1295,6 +1381,31 @@ $(document).ready(function() {
             auctions.onLoad();
     });
 
+    $(document).on('change', 'input[name="auction_house[]"]', function () {
+        let selected = [];
+        $('input[name="auction_house[]"]:checked').each(function () {
+            selected.push($(this).val());
+        });
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('auction_house', selected.toString());
+        history.pushState({}, '', url);
+        auctions.onLoad();
+    });
+
+
+    $(document).on('change', 'input[name="auction_center[]"]', function () {
+        let selected = [];
+        $('input[name="auction_center[]"]:checked').each(function () {
+            selected.push($(this).val());
+        });
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('auction_center', selected.toString());
+        history.pushState({}, '', url);
+        auctions.onLoad();
+    });
+
     $(document).on('change','input[name="transmission[]"]', function () {
             let selected = [];
             $('input[name="transmission[]"]:checked').each(function () {
@@ -1487,6 +1598,13 @@ $(document).ready(function() {
                 case 'no_of_service':
                    $("#collapsenumber_of_services").find(`input[value="${value}"]`).trigger('click');
                 break;
+
+                case 'auction_house':
+                    $("#collapseAuctionHouse").find(`input[value="${value}"]`).trigger('click');
+                    break;
+                case 'auction_center':
+                    $("#collapseAuctionCenter").find(`input[value="${value}"]`).trigger('click');
+                    break;
             
                 default:
 
@@ -1554,6 +1672,8 @@ $(document).ready(function() {
     auctions.getEngineSize();
     auctions.getFormerKeepers();
     auctions.getNoOfservices();
+    auctions.getAuctionHouse();
+    auctions.getAuctionCenter();
     // auctions.mileage();
 
 
@@ -1565,14 +1685,15 @@ $(document).ready(function() {
 
 function getGradeColor(grade) {
   switch (parseInt(grade)) {
-    case 1: return '#0080ff'; // bright blue
-    case 2: return '#1477d4ff';
-    case 3: return '#4227ddff';
-    case 4: return '#862bdbff';
-    case 5: return '#ff3333'; // red
-    default: return '#cccccc'; // fallback gray
+    case 1: return '#4CAF50'; 
+    case 2: return '#8BC34A'; 
+    case 3: return '#CDDC39'; 
+    case 4: return '#FFC107';
+    case 5: return '#FF5722'; 
+    default: return '#cccccc';
   }
 }
+
 
 
 

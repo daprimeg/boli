@@ -18,7 +18,8 @@ public function centers()
 {
     return $this->hasMany(AuctionCenter::class, 'auction_platform_id');
 }
-    
+
+
     
 
 

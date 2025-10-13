@@ -349,42 +349,74 @@ class AuctionFinderController extends Controller
                 ];
             }
 
+            $userId = auth()->id(); 
+            $today = Carbon::today();
+            $next7Days = Carbon::today()->addDays(6);
 
-        $today = Carbon::today();
-        $next7Days = Carbon::today()->addDays(6);
-        $dailyAuctions = Auctions::whereBetween('auction_date', [$today, $next7Days])
-            ->select(
-                DB::raw('DATE(auction_date) as date'),
-                DB::raw('COUNT(*) as auctions_count')
-            )
-            ->groupBy(DB::raw('DATE(auction_date)'))
-            ->orderBy('date', 'asc')
-            ->get()
-            ->keyBy('date');
-        $dailyVehicles = Vehicle::join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
-            ->whereBetween('auctions.auction_date', [$today, $next7Days])
-            ->select(
-                DB::raw('DATE(auctions.auction_date) as date'),
-                DB::raw('COUNT(vehicles.id) as vehicles_count')
-            )
-            ->groupBy(DB::raw('DATE(auctions.auction_date)'))
-            ->get()
-            ->keyBy('date');
+ 
+            $dailyAuctions = Auctions::whereBetween('auction_date', [$today, $next7Days])
+                ->select(
+                    DB::raw('DATE(auction_date) as date'),
+                    DB::raw('COUNT(*) as auctions_count')
+                )
+                ->groupBy(DB::raw('DATE(auction_date)'))
+                ->orderBy('date', 'asc')
+                ->get()
+                ->keyBy('date');
 
-        $days = [];
-        for ($i = 0; $i < 7; $i++) {
-            $date = Carbon::today()->addDays($i);
-            $formattedDate = $date->format('Y-m-d');
+       
+            $dailyVehicles = Vehicle::join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
+                ->whereBetween('auctions.auction_date', [$today, $next7Days])
+                ->select(
+                    DB::raw('DATE(auctions.auction_date) as date'),
+                    DB::raw('COUNT(vehicles.id) as vehicles_count')
+                )
+                ->groupBy(DB::raw('DATE(auctions.auction_date)'))
+                ->get()
+                ->keyBy('date');
 
-            $days[] = [
-                'label' => $i === 0 ? 'Today' : $date->format('D'),
-                'date' => $formattedDate,
-                'display' => $date->format('d M'),
-                'auctions' => $dailyAuctions[$formattedDate]->auctions_count ?? 0,
-                'vehicles' => $dailyVehicles[$formattedDate]->vehicles_count ?? 0,
-            ];
-        }
-         
+     
+            $interests = Interest::where('user_id', $userId)->get();
+
+    
+            $dailyInterestVehicles = Vehicle::join('auctions', 'vehicles.auction_id', '=', 'auctions.id')
+                ->whereBetween('auctions.auction_date', [$today, $next7Days])
+                ->where(function ($q) use ($interests) {
+                    foreach ($interests as $interest) {
+                        $q->orWhere(function ($sub) use ($interest) {
+                            $sub->where('vehicles.make_id', $interest->make_id)
+                                ->where('vehicles.model_id', $interest->model_id);
+
+                            if (!empty($interest->variant_id)) {
+                                $sub->where('vehicles.variant_id', $interest->variant_id);
+                            }
+                        });
+                    }
+                })
+                ->select(
+                    DB::raw('DATE(auctions.auction_date) as date'),
+                    DB::raw('COUNT(vehicles.id) as interest_vehicles_count')
+                )
+                ->groupBy(DB::raw('DATE(auctions.auction_date)'))
+                ->get()
+                ->keyBy('date');
+
+   
+            $days = [];
+            for ($i = 0; $i < 7; $i++) {
+                $date = Carbon::today()->addDays($i);
+                $formattedDate = $date->format('Y-m-d');
+
+                $days[] = [
+                    'label'     => $i === 0 ? 'Today' : $date->format('D'),
+                    'date'      => $formattedDate,
+                    'display'   => $date->format('d M'),
+                    'auctions'  => $dailyAuctions[$formattedDate]->auctions_count ?? 0,
+                    'vehicles'  => $dailyVehicles[$formattedDate]->vehicles_count ?? 0,
+                    'interest'  => $dailyInterestVehicles[$formattedDate]->interest_vehicles_count ?? 0,
+                ];
+            }
+
         $platforms = AuctionPlatform::select('id', 'name')->get();
         $centers = AuctionCenter::select('id', 'name')->get();
 
@@ -469,6 +501,38 @@ public function storeAlert(Request $request)
     ]);
 }
 
+public function getAuctionHouse()
+{
+    $data = AuctionPlatform::query()
+        ->join('auctions', 'auctions.platform_id', '=', 'auction_platform.id')
+        ->join('vehicles', 'vehicles.auction_id', '=', 'auctions.id')
+        ->select(
+            'auction_platform.id',
+            'auction_platform.name as label',
+            \DB::raw('COUNT(vehicles.id) as vehicle_count')
+        )
+        ->groupBy('auction_platform.id', 'auction_platform.name')
+        ->orderBy('auction_platform.name', 'ASC')
+        ->get();
+
+    return response()->json(['data' => $data]);
+}
+
+public function getAuctionCenter()
+{
+    $data = AuctionCenter::query()
+        ->join('vehicles', 'vehicles.center_id', '=', 'auction_center.id')
+        ->select(
+            'auction_center.id',
+            'auction_center.name as label',
+            \DB::raw('COUNT(vehicles.id) as vehicle_count')
+        )
+        ->groupBy('auction_center.id', 'auction_center.name')
+        ->orderBy('auction_center.name', 'ASC')
+        ->get();
+
+    return response()->json(['data' => $data]);
+}
 
 
 }

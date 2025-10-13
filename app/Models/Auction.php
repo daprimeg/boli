@@ -65,4 +65,6 @@ class Auction extends Model
         'Last_Service',
         'MOT_Expiry',
     ];
+
+
 }

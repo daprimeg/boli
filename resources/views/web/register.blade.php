@@ -415,7 +415,7 @@
                                 <small class="error error-phone text-red-500"></small>
                             </div>
 
-                            <input name="position"
+                            <input name="title"
                                 class="w-full rounded border border-black/20 dark:border-white/20 bg-transparent text-[var(--light-text-primary)] dark:text-[var(--dark-text-primary)] px-4 py-3 placeholder-black/50 dark:placeholder-white/50 focus:outline-none focus:border-[#0080ff] focus:ring-4 focus:ring-[#0080ff]/25"
                                 placeholder="Position" value="{{ old('position', 'Owais Azam') }}">
                         </div>
@@ -666,7 +666,7 @@
         function validateStep() {
             const required = {
                 1: ['companyName', 'companyAddress1', 'businessType', 'townCity', 'country', 'postcode'],
-                2: ['firstName', 'surname', 'title', 'jobTitle', 'phone', 'avatar'],
+                2: ['firstName', 'surname', 'title', 'phone', 'avatar'],
                 3: ['proof_motor_trade', 'proof_address'],
                 4: ['personalEmail', 'password'],
             } [currentStep] || [];
@@ -738,44 +738,83 @@
 
         // AJAX submit
         $(document).ready(function() {
-            $('.register-form').on('submit', function(e) {
-                e.preventDefault();
-                $('.error').text('');
-                $('#submitBtn').addClass('opacity-60 pointer-events-none').html(
-                    '<span class="material-symbols-outlined">hourglass_top</span> Submitting…'
-                );
+    $('.register-form').on('submit', function(e) {
+        e.preventDefault();
 
-                const formData = new FormData(this);
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(r) {
-                        if (r.success && r.redirect_url) {
-                            window.location.href = r.redirect_url;
-                        } else {
-                            alert(r.message || 'Form submitted successfully!');
-                        }
-                    },
-                    error: function(xhr) {
-                        if (xhr?.responseJSON?.errors) {
-                            $.each(xhr.responseJSON.errors, function(k, messages) {
-                                $(`.error-${k}`).text(messages);
-                            });
-                            showInlineError('Please review the highlighted errors.');
-                        } else {
-                            alert(xhr?.responseJSON?.message || 'Something went wrong');
-                        }
-                    },
-                    complete: function() {
-                        $('#submitBtn').removeClass('opacity-60 pointer-events-none').html(
-                            '<span class="material-symbols-outlined">check_circle</span> Submit Application'
-                        );
+        // Reset previous errors
+        $('.error').text('');
+        $('#submitBtn')
+            .addClass('opacity-60 pointer-events-none')
+            .html('<span class="material-symbols-outlined">hourglass_top</span> Submitting…');
+
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+
+            success: function(r) {
+                if (r.success && r.redirect_url) {
+                    toastr.success(r.message || "Registration successful!", "Success", {
+                        closeButton: true,
+                        progressBar: true,
+                        timeOut: 3000,
+                        positionClass: "toast-top-right"
+                    });
+                    setTimeout(() => {
+                        window.location.href = r.redirect_url;
+                    }, 1200);
+                } else {
+                    toastr.info(r.message || "Form submitted successfully!", "Info", {
+                        closeButton: true,
+                        progressBar: true
+                    });
+                }
+            },
+
+            error: function(xhr) {
+                // Laravel Validation Errors
+                if (xhr?.responseJSON?.errors) {
+                    let errorCount = 0;
+
+                    $.each(xhr.responseJSON.errors, function(field, messages) {
+                        const msg = messages[0];
+                        $(`.error-${field}`).text(msg); // inline error
+                        toastr.error(msg, "Validation Error", {
+                            closeButton: true,
+                            progressBar: true,
+                            positionClass: "toast-top-right"
+                        });
+                        errorCount++;
+                    });
+
+                    if (errorCount > 0) {
+                        toastr.warning("Please fix the highlighted errors.", "Form Incomplete", {
+                            closeButton: true,
+                            progressBar: true
+                        });
                     }
-                });
-            });
+
+                } else {
+                    toastr.error(xhr?.responseJSON?.message || "Something went wrong!", "Error", {
+                        closeButton: true,
+                        progressBar: true,
+                        positionClass: "toast-top-right"
+                    });
+                }
+            },
+
+            complete: function() {
+                $('#submitBtn')
+                    .removeClass('opacity-60 pointer-events-none')
+                    .html('<span class="material-symbols-outlined">check_circle</span> Submit Application');
+            }
         });
+    });
+});
+
     </script>
 @endsection
