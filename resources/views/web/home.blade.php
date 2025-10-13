@@ -7,58 +7,54 @@
 
 @section('content')
     <section class="relative overflow-hidden flex flex-col justify-center bg-[#000f21]">
-        <!-- Background Blur Circle -->
 
-        <!-- HERO -->
-        <div class="relative p-4 overflow-hidden ">
-            <div class="container mx-auto px-6 py-20 lg:py-28">
-                <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-10 lg:gap-14 min-h-[70vh]">
-                    <!-- Left: Text -->
-                    <div class="flex-1 max-w-3xl text-center lg:text-left animate-in-left">
-                        <div
-                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10  border border-[#353F4C] mb-5">
-                            <div class="flex -space-x-2">
-                                <img alt="dealer" class="w-6 h-6 rounded-full ring-2 ring-black/5 "
-                                    src="https://i.pravatar.cc/24?img=11" />
-                                <img alt="dealer" class="w-6 h-6 rounded-full ring-2 ring-black/5 "
-                                    src="https://i.pravatar.cc/24?img=22" />
-                                <img alt="dealer" class="w-6 h-6 rounded-full ring-2 ring-black/5 "
-                                    src="https://i.pravatar.cc/24?img=33" />
-                            </div>
-                            <span class="text-xs md:text-sm text-white">3,000+
-                                dealers trust AutoBoli</span>
+        <div class="container mx-auto px-6 py-20 lg:py-28">
+            <div class="flex flex-col-reverse lg:flex-row items-center justify-between gap-10 lg:gap-14 min-h-[70vh]">
+                <!-- Left: Text -->
+                <div class="flex-1 max-w-3xl text-center lg:text-left animate-in-left">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10  border border-[#353F4C] mb-5">
+                        <div class="flex -space-x-2">
+                            <img alt="dealer" class="w-6 h-6 rounded-full ring-2 ring-black/5 "
+                                src="https://i.pravatar.cc/24?img=11" />
+                            <img alt="dealer" class="w-6 h-6 rounded-full ring-2 ring-black/5 "
+                                src="https://i.pravatar.cc/24?img=22" />
+                            <img alt="dealer" class="w-6 h-6 rounded-full ring-2 ring-black/5 "
+                                src="https://i.pravatar.cc/24?img=33" />
                         </div>
-
-                        <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight mb-5 text-white ">
-                            Smarter Vehicle Auction Insights - All in One Place
-                        </h1>
-
-                        <p class="text-[#B2C0CE] text-lg xl max-w-xl mx-auto lg:mx-0">
-                            Stay ahead of the market with real-time UK vehicle auction data,
-                            transparent valuations, and powerful tools designed for dealers,
-                            traders, and smart buyers.
-                        </p>
-
-                        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mt-8">
-                            <a href="#"
-                                class="bttn px-6 py-3 rounded font-semibold text-white transition shadow-lg shadow-orange-500/25 texc">
-                                Explore Auctions
-                            </a>
-                            <a href="#"
-                                class="px-6 py-3 rounded font-semibold border border-gray-500 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md transition">
-                                Start Free Trial
-                            </a>
-                        </div>
-
-                        <div class="mt-6 text-lg text-[#B2C0CE] ">
-                            No card required • Cancel anytime • UK & JP auction coverage
-                        </div>
+                        <span class="text-xs md:text-sm text-white">3,000+
+                            dealers trust AutoBoli</span>
                     </div>
-                    <img src="{{ asset('public/theme/assets/web/images/Reauction.png') }}" alt
-                        class="absolute -right-60 bottom-12 w-auto hidden xl:block xl:h-[550px] 2xl:h-[800px]  object-cover pointer-events-none -rotate-6 rounded-md" />
+
+                    <h1 class="text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight mb-5 text-white ">
+                        Smarter Vehicle Auction Insights - All in One Place
+                    </h1>
+
+                    <p class="text-[#B2C0CE] text-lg xl max-w-xl mx-auto lg:mx-0">
+                        Stay ahead of the market with real-time UK vehicle auction data,
+                        transparent valuations, and powerful tools designed for dealers,
+                        traders, and smart buyers.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mt-8">
+                        <a href="#"
+                            class="bttn px-6 py-3 rounded font-semibold text-white transition shadow-lg shadow-orange-500/25 texc">
+                            Explore Auctions
+                        </a>
+                        <a href="#"
+                            class="px-6 py-3 rounded font-semibold border border-gray-500 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md transition">
+                            Start Free Trial
+                        </a>
+                    </div>
+
+                    <div class="mt-6 text-lg text-[#B2C0CE] ">
+                        No card required • Cancel anytime • UK & JP auction coverage
+                    </div>
                 </div>
+                <img src="{{ asset('public/theme/assets/web/images/Reauction.png') }}" alt
+                    class="absolute -right-60 bottom-12 w-auto hidden xl:block xl:h-[550px] 2xl:h-[800px]  object-cover pointer-events-none -rotate-6 rounded-md" />
             </div>
-    </section>
+        </div>
     </section>
 
     <div class="bg-[#f5f6f7] dark:bg-[#0f1c2c]">
