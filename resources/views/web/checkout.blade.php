@@ -2,507 +2,315 @@
 
 @section('css')
     <style>
-        /* Custom CSS for dark theme and specific colors */
-        body {
-            color: red
+        /* page/card entrance */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
-        .card {
-            background-color: #000f21;
-            /* Darker card background */
-            border: none;
-            color: #ffffff;
-            border-radius: 0.5rem;
-            /* Slightly rounded corners */
+        .animate-page {
+            animation: fadeSlideUp .6s ease-out both;
         }
 
-        .nav-tabs {
-            border-bottom: 1px solid #0f1c2c;
+        .animate-card {
+            animation: fadeSlideUp .5s .05s ease-out both;
         }
 
-        .nav-tabs .nav-link {
-            color: #e0e0e0;
-            border: none;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 0.75rem;
-            margin-bottom: -1px;
-            /* Overlap border */
-            transition: all 0.3s ease;
+        .animate-aside {
+            animation: fadeSlideUp .6s .12s ease-out both;
         }
 
-        .nav-tabs .nav-link:hover {
-            color: #007bff;
-        }
-
-        .nav-tabs .nav-link.active {
-            color: #007bff;
-            /* Blue active tab color */
-            background-color: transparent;
-            border-color: #007bff;
-            /* Blue active tab underline */
-            font-weight: 600;
-        }
-
-
-
-        .total-price {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #007bff;
-        }
-
-        /* Accordion specific styles */
-        .accordion-item {
-            background-color: #000f21 !important;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            /* border: none; */
-            border: 1px solid var(--items-border-colur)
-        }
-
-        .accordion-header {
-            background-color: #0f1c2c;
-            border: 1px solid var(--items-border-colur);
-            border-radius: 4px;
-            border-bottom: none
-        }
-
-
-
-        .sign-input {
-            display: flex;
-            justify-content: center;
-            margin: auto;
-            width: 100%;
-            color: var(--white-text) !important;
-            background-color: var(--items-background) !important;
-            outline: none !important;
-            border: 1px solid var(--items-border-colur) !important;
-            border-radius: 8px;
-            padding: 14px 8px;
-        }
-
-
-
-        .card-content {
-            padding: 1.5rem;
-            /* p-6 */
-        }
-
-        .tabs-list {
-            display: flex;
-            justify-content: center;
-            width: 90%;
-            /* background-color: #334155;  */
-            color: #94a3b8;
-            border-radius: 0.375rem;
-            overflow: hidden;
-        }
-
-        .tabs-trigger {
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            /* font-medium */
-            text-align: center;
-            cursor: pointer;
-            background-color: transparent;
-            border: none;
-            color: inherit;
-            transition: background-color 0.2s, color 0.2s;
+        /* custom phone select (pure CSS; Tailwind handles colors via utility classes) */
+        .csw {
             position: relative;
-            outline: none;
         }
 
-
-
-        .tabs-trigger.active {
-            color: #fff;
-            box-shadow: none;
-        }
-
-        .tabs-trigger.active::after {
-            content: '';
+        .csw .list {
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 2rem);
-            /* w-[calc(100%-2rem)] */
-            height: 2px;
-            background-color: #3b82f6;
-            /* blue-500 */
+            inset-inline-start: 0;
+            top: 100%;
+            min-width: 220px;
+            display: none;
+            z-index: 50;
         }
 
-        .tabs-trigger[disabled] {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-            /* Prevents all mouse events */
-        }
-
-        /* Accordion Styling */
-
-
-        .accordion-trigger {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            padding: 1rem 0;
-            /* py-4 */
-            font-size: 1.125rem;
-            /* text-lg */
-            font-weight: 600;
-            /* font-semibold */
-            color: #fff;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            outline: none;
-        }
-
-        .accordion-trigger[disabled] {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .accordion-content {
-
-            padding: 20px;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-        }
-
-        .accordion-content.open {
+        .csw.open .list {
             display: block;
         }
 
-        .codration-costome-btn {
-            border: none;
-            background-color: transparent;
-            color: white;
-            font-size: 16px;
-        }
-
-        .button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-
-        .custom-select-selected {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 6px 8px;
-            border-radius: 0.25rem;
-
-        }
-
-        .custom-select-selected img {
+        .flag {
             width: 20px;
-            height: 15px;
-            margin-right: 5px;
+            height: 14px;
+            border-radius: 2px;
         }
 
-        .custom-select-options {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            border: 1px solid #ced4da;
-            z-index: 1000;
-            display: none;
-        }
+        @media (prefers-reduced-motion: reduce) {
 
-        .custom-select-option {
-            display: flex;
-            align-items: center;
-            padding: 6px 8px;
-            cursor: pointer;
-        }
-
-        .custom-select-option:hover {
-            background-color: var(--items-background);
-        }
-
-        .custom-select-option img {
-            width: 20px;
-            height: 15px;
-            margin-right: 5px;
-        }
-
-
-        .plan-option {
-            cursor: pointer;
-            transition: .5;
-            border: 1px solid var(--items-border-colur)
-        }
-
-        .actives {
-            background-color: #007bff;
-            color: white;
-            border: 1px solid var(--text-color);
-        }
-
-
-
-        #card-element {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background-color: #f8f9fa;
-            margin-bottom: 15px;
-        }
-
-        .selectedPlan {
-            background: linear-gradient(170deg, #0080ff, #08437e);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-top: .7rem;
+            .animate-page,
+            .animate-card,
+            .animate-aside {
+                animation: none;
+            }
         }
     </style>
 @endsection
 
 @section('content')
-    <section style="background-color: #0f1c2c;">
-        <div class="py-5 container">
+    <section class="min-h-screen bg-[#0f1c2c] dark:bg-gray-100 transition-colors animate-page">
+        <div class="max-w-7xl mx-auto px-6 py-8 md:py-12">
             <form class="register-form" enctype="multipart/form-data" action="{{ url('/checkout') }}" method="post">
                 @csrf
 
-
-                <div class="text-center mb-5 mt-5">
-                    <h1 class="text-white mb-3">Complete your order</h1>
-                    <p class="text-muted-custom mx-auto" style="max-width: 600px;">AUTOBOLI LTD is exclusively designed for
-                        use by independent dealers, motor dealers, traders, and individuals engaged in the motor business.
-                        By using our platform, you confirm that you meet this criterion.</p>
+                <!-- header -->
+                <div class="text-center mb-8 md:mb-10 py-12">
+                    <h1 class="text-2xl md:text-5xl font-bold text-white dark:text-gray-900 mb-3">Complete your order</h1>
+                    <p class="max-w-2xl mx-auto text-white/70 dark:text-gray-600">
+                        AUTOBOLI LTD is exclusively designed for use by independent dealers, motor dealers, traders, and
+                        individuals
+                        engaged in the motor business. By using our platform, you confirm that you meet this criterion.
+                    </p>
                 </div>
 
-                <div class="row">
-                    <div class="col-12 col-lg-8 mb-4">
-                        <div class="card-content">
-                            <div class="accordion" role="group">
+                <!-- grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                                <!-- User Information Accordion Item -->
-                                <div class="accordion-item" id="item-2">
-                                    <h2 class="accordion-header d-flex px-3" role="heading" aria-level="2">
-                                        <button type="button" class="accordion-trigger" aria-expanded="true"
-                                            data-target-tab="userinfo">
-                                            Billing Info
-                                        </button>
-                                    </h2>
-                                    <div id="content-userinfo" class="accordion-content" role="region" aria-hidden="false">
-                                        <div class="mb-5 ">
-                                            <div class="row g-3 mb-4">
-                                                <div class="col-md-12">
-                                                    <div class="mb-2">
-                                                        <span class="mb-2 text-white form-label fw-bold "
-                                                            style="font-size: 16px">User Details
-                                                            <div class="border-bottom border-primary"
-                                                                style="width: 100px; height: 3px; margin-bottom:5px"></div>
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="first_name" class="form-label">First Name</label>
-                                                    <input name="first_name" class="sign-input" value="Owais"
-                                                        placeholder="First Name" />
-                                                    <small class="error error-first_name text-danger"></small>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="last_name" class="form-label">Last Name</label>
-                                                    <input name="last_name" class="sign-input" value="Azam"
-                                                        placeholder="Last Name" />
-                                                    <small class="error error-last_name text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label for="" class="form-label">Phone No</label>
-                                                    <div
-                                                        class=" position-relative sign-input d-flex align-items-center p-0">
-                                                        <div class="custom-select-wrapper " id="customSelect">
-                                                            <div class="custom-select-selected" id="selectedOption">
-                                                                <img src="https://flagcdn.com/w40/gb.png" alt="GB">
-                                                                <span>+44</span>
-                                                            </div>
-
-                                                            <div class="custom-select-options" id="optionList">
-                                                                <div class="custom-select-option" data-code="+44"
-                                                                    data-flag="gb">
-                                                                    <img src="https://flagcdn.com/w40/gb.png"
-                                                                        alt="GB">
-                                                                    <span>+44 (GB)</span>
-                                                                </div>
-                                                                <div class="custom-select-option" data-code="+1"
-                                                                    data-flag="us">
-                                                                    <img src="https://flagcdn.com/w40/us.png"
-                                                                        alt="US">
-                                                                    <span>+1 (US)</span>
-                                                                </div>
-                                                                <div class="custom-select-option" data-code="+92"
-                                                                    data-flag="pk">
-                                                                    <img src="https://flagcdn.com/w40/pk.png"
-                                                                        alt="PK">
-                                                                    <span>+92 (PK)</span>
-                                                                </div>
-                                                                <div class="custom-select-option" data-code="+61"
-                                                                    data-flag="au">
-                                                                    <img src="https://flagcdn.com/w40/au.png"
-                                                                        alt="AU">
-                                                                    <span>+61 (AU)</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <input name="phone" type="tel" value="03112239342"
-                                                            class="sign-input"
-                                                            style="border: none !important ; border-left: 1px solid var(--text-color) !important; border-radius: 0;"
-                                                            placeholder="Phone Number" />
-                                                    </div>
-                                                    <small class="error error-phone text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label for="" class="form-label">Country</label>
-                                                    <input name="country" class="sign-input" value="Pakistan"
-                                                        placeholder="Country" />
-                                                    <small class="error error-country text-danger"></small>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="State" class="form-label">Province / State</label>
-                                                    <input name="state" class="sign-input" value="Sindh"
-                                                        placeholder="State" />
-                                                    <small class="error error-state text-danger"></small>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="City"class="form-label">City</label>
-                                                    <input name="city" value="karachi" class="sign-input"
-                                                        placeholder="City" />
-                                                    <small class="error error-city text-danger"></small>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="zip_code" class="form-label">Zip Code</label>
-                                                    <input name="zip_code" value="123" class="sign-input"
-                                                        placeholder="Zip Code" />
-                                                    <small class="error error-zip_code text-danger"></small>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label for="address" class="form-label">Address</label>
-                                                    <input name="address" class="sign-input" value="Address"
-                                                        placeholder="Address" />
-                                                    <small class="error error-address text-danger"></small>
-                                                </div>
-                                                <div class="col-md-12 payment_div">
-                                                    <div class="mb-2">
-                                                        <span class="mb-2 text-white form-label fw-bold "
-                                                            style="font-size: 16px">Payment Info
-                                                            <div class="border-bottom border-primary"
-                                                                style="width: 100px; height: 3px; margin-bottom:5px"></div>
-                                                        </span>
-                                                    </div>
-                                                    <div class="mb-5">
-                                                        <div class="pt-3 payment-card ">
-                                                            <div class="form-group">
-                                                                <label class="form-label text-white">Card Info</label>
-                                                                <div id="card-element"></div>
-                                                                <div id="card-errors" style="color: red;"></div>
-                                                            </div>
-                                                        </div>
-                                                        <small class="error error-payment_method text-danger"></small>
-                                                    </div>
-                                                </div>
-                                                {{-- row --}}
-
-                                                <input type="hidden" name="plan_id" value="{{ request()->id }}" />
-
-                                            </div>
-                                        </div>
-                                        <div class="mt-4 text-center">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </div>
+                    <!-- left: form -->
+                    <div class="lg:col-span-8">
+                        <div
+                            class="animate-card rounded-2xl bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 shadow-2xl p-5 md:p-7">
+                            <!-- accordion (single open) -->
+                            <div class="rounded-xl overflow-hidden bg-transparent">
+                                <div class="border-b border-white/10 dark:border-gray-200">
+                                    <button type="button"
+                                        class="w-full text-left px-4 md:px-6 py-4 font-semibold text-white dark:text-gray-900 text-xl capitalize">
+                                        Billing Info
+                                    </button>
                                 </div>
 
+                                <div class="px-4 md:px-6 py-5">
+                                    <!-- User Details -->
+                                    <div class="mb-6">
+                                        <div class="mb-4">
+                                            <span
+                                                class="text-white dark:text-gray-900 font-semibold text-base inline-flex items-center">
+                                                User Details
+                                            </span>
+                                            <div class="h-0.5 w-20 bg-[#0080ff] mt-2"></div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-sm text-white/80 dark:text-gray-700 mb-1">First
+                                                    Name</label>
+                                                <input name="first_name" value="Owais" placeholder="First Name"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-first_name text-danger text-red-500"></small>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm text-white/80 dark:text-gray-700 mb-1">Last
+                                                    Name</label>
+                                                <input name="last_name" value="Azam" placeholder="Last Name"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-last_name text-danger text-red-500"></small>
+                                            </div>
+
+                                            <!-- Phone -->
+                                            <div>
+                                                <label class="block text-sm text-white/80 dark:text-gray-700 mb-1">Phone
+                                                    No</label>
+                                                <div
+                                                    class="flex rounded-lg overflow-hidden border border-white/10 dark:border-gray-300">
+                                                    <!-- custom select -->
+                                                    <div id="customSelect"
+                                                        class="csw bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 flex items-center gap-2 px-3 cursor-pointer">
+                                                        <div id="selectedOption" class="flex items-center gap-2">
+                                                            <img class="flag" src="https://flagcdn.com/w40/gb.png"
+                                                                alt="GB">
+                                                            <span>+44</span>
+                                                        </div>
+                                                        <!-- list -->
+                                                        <div id="optionList"
+                                                            class="list mt-2 rounded-lg overflow-hidden border border-white/10 dark:border-gray-300 shadow-2xl
+                                      bg-[#0b1624] dark:bg-white text-white dark:text-gray-900">
+                                                            <div class="custom-select-option flex items-center gap-2 px-3 py-2 hover:bg-white/10 dark:hover:bg-gray-100"
+                                                                data-code="+44" data-flag="gb">
+                                                                <img class="flag" src="https://flagcdn.com/w40/gb.png"
+                                                                    alt="GB"><span>+44 (GB)</span>
+                                                            </div>
+                                                            <div class="custom-select-option flex items-center gap-2 px-3 py-2 hover:bg-white/10 dark:hover:bg-gray-100"
+                                                                data-code="+1" data-flag="us">
+                                                                <img class="flag" src="https://flagcdn.com/w40/us.png"
+                                                                    alt="US"><span>+1 (US)</span>
+                                                            </div>
+                                                            <div class="custom-select-option flex items-center gap-2 px-3 py-2 hover:bg-white/10 dark:hover:bg-gray-100"
+                                                                data-code="+92" data-flag="pk">
+                                                                <img class="flag" src="https://flagcdn.com/w40/pk.png"
+                                                                    alt="PK"><span>+92 (PK)</span>
+                                                            </div>
+                                                            <div class="custom-select-option flex items-center gap-2 px-3 py-2 hover:bg-white/10 dark:hover:bg-gray-100"
+                                                                data-code="+61" data-flag="au">
+                                                                <img class="flag" src="https://flagcdn.com/w40/au.png"
+                                                                    alt="AU"><span>+61 (AU)</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input name="phone" type="tel" value="03112239342"
+                                                        placeholder="Phone Number"
+                                                        class="sign-input flex-1 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none" />
+                                                </div>
+                                                <small class="error error-phone text-danger text-red-500"></small>
+                                            </div>
+
+                                            <div>
+                                                <label
+                                                    class="block text-sm text-white/80 dark:text-gray-700 mb-1">Country</label>
+                                                <input name="country" value="Pakistan" placeholder="Country"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-country text-danger text-red-500"></small>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm text-white/80 dark:text-gray-700 mb-1">Province
+                                                    / State</label>
+                                                <input name="state" value="Sindh" placeholder="State"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-state text-danger text-red-500"></small>
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-sm text-white/80 dark:text-gray-700 mb-1">City</label>
+                                                <input name="city" value="karachi" placeholder="City"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-city text-danger text-red-500"></small>
+                                            </div>
+                                            <div>
+                                                <label class="block text-sm text-white/80 dark:text-gray-700 mb-1">Zip
+                                                    Code</label>
+                                                <input name="zip_code" value="123" placeholder="Zip Code"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-zip_code text-danger text-red-500"></small>
+                                            </div>
+
+                                            <div class="md:col-span-2">
+                                                <label
+                                                    class="block text-sm text-white/80 dark:text-gray-700 mb-1">Address</label>
+                                                <input name="address" value="Address" placeholder="Address"
+                                                    class="sign-input w-full rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none focus:ring-4 focus:ring-[#0080ff]/30 focus:border-[#0080ff]" />
+                                                <small class="error error-address text-danger text-red-500"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment Info -->
+                                    <div class="payment_div">
+                                        <div class="mb-4">
+                                            <span
+                                                class="text-white dark:text-gray-900 font-semibold text-base inline-flex items-center">
+                                                Payment Info
+                                            </span>
+                                            <div class="h-0.5 w-20 bg-[#0080ff] mt-2"></div>
+                                        </div>
+
+                                        <div class="space-y-3">
+                                            <label class="block text-sm text-white/80 dark:text-gray-700">Card Info</label>
+                                            <div id="card-element"
+                                                class="rounded-lg border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-100 px-3.5 py-3 text-white dark:text-gray-900">
+                                            </div>
+                                            <div id="card-errors" class="text-red-500 text-sm"></div>
+                                            <small class="error error-payment_method text-danger text-red-500"></small>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="plan_id" value="{{ request()->id }}" />
+
+                                    <div class="mt-6">
+                                        <button type="submit"
+                                            class="w-full md:w-auto inline-flex items-center justify-center rounded-lg bg-[#0080ff] hover:bg-[#006fe0] text-white font-semibold px-5 py-3 shadow-lg shadow-[#0080ff]/30 transition">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- right: summary -->
+                    <div class="lg:col-span-4">
+                        <aside
+                            class="animate-aside rounded-2xl bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 shadow-2xl p-5 md:p-6 sticky top-24">
+                            <h5 class="text-white dark:text-gray-900 text-lg font-semibold">Order Summary</h5>
 
+                            <div class="mt-6">
+                                <h6 class="text-white/90 dark:text-gray-800 font-semibold mb-3">Your Plan</h6>
 
-                    <!-- Order Summary Card -->
-                    <div class="col-12 col-lg-4"
-                        style="background-color: #000f21 !important; padding: 25px 30px; border-radius: 18px;">
-                        <div class="" style="background-color: #000f21">
-                            <div class="">
-                                <h5 class=" mb-0 mt-3">Order Summary</h5>
-                            </div>
-                            <div class="">
-                                <h6 class="mb-3 text-white" style="background-color: #000f21 !important">Your Plan</h6>
-                                <div class="list-group mb-4">
+                                <div class="space-y-3">
                                     @foreach ($plans as $item)
                                         <label data-plan="{{ $item->id }}" data-price="{{ $item->price }}"
-                                            class="plan-option active d-flex justify-content-between align-items-center"
-                                            style="background-color: #0f1c2c;  border-radius : 0.5rem; padding: 1rem; margin-top: .7rem;">
-                                            <div class="d-flex align-items-center">
-                                                <i class="fa-brands fa-kickstarter" style="margin-right: 10px;"></i>
-                                                <div>
-                                                    {{ $item->plan_name }}
-                                                    <div class="text-muted-custom small m-0 p-0">{{ $item->short_desc }}
-                                                    </div>
+                                            class="plan-option flex items-center justify-between gap-3 rounded-xl border border-white/10 dark:border-gray-300 bg-[#0f1c2c] dark:bg-gray-50 px-4 py-3 cursor-pointer hover:shadow-lg hover:border-[#0080ff] transition">
+                                            <div class="flex items-center gap-3 text-white dark:text-gray-900">
+                                                <i class="fa-brands fa-kickstarter"></i>
+                                                <div class="leading-tight">
+                                                    <div class="font-medium">{{ $item->plan_name }}</div>
+                                                    <div class="text-xs text-white/60 dark:text-gray-500 m-0 p-0">
+                                                        {{ $item->short_desc }}</div>
                                                 </div>
                                             </div>
-                                            <div class="text-end">
+                                            <div class="text-right text-white dark:text-gray-900">
                                                 £{{ $item->price }}
-                                                <div class="text-muted-custom small">Per Month</div>
+                                                <div class="text-xs text-white/60 dark:text-gray-500">Per Month</div>
                                             </div>
                                         </label>
                                     @endforeach
-
                                 </div>
-                                <small class="error error-plan_id text-danger"></small>
-                                <div style="border-top: 2px dashed grey; margin-bottom: 25px;"></div>
-                                <h6 class="mb-3 text-white">Billing</h6>
-                                <ul class="list-group list-group-flush">
-                                    <li class=" d-flex justify-content-between align-items-center pb-1">
-                                        Base price
+
+                                <small class="error error-plan_id text-danger text-red-500"></small>
+
+                                <div class="my-6 h-px bg-white/10 dark:bg-gray-200"></div>
+
+                                <h6 class="text-white/90 dark:text-gray-800 font-semibold mb-3">Billing</h6>
+
+                                <ul class="space-y-2 text-white dark:text-gray-900">
+                                    <li class="flex items-center justify-between">
+                                        <span>Base price</span>
                                         <span class="base-price">£0.00</span>
                                     </li>
-                                    <li class=" d-flex justify-content-between align-items-center pb-1">
-                                        Discount
+                                    <li class="flex items-center justify-between">
+                                        <span>Discount</span>
                                         <span>£0.00</span>
                                     </li>
-                                    <li class=" d-flex justify-content-between align-items-center pb-1">
-                                        GST
+                                    <li class="flex items-center justify-between">
+                                        <span>GST</span>
                                         <span>£0.00</span>
                                     </li>
                                     <li
-                                        class=" d-flex justify-content-between align-items-center pt-3 border-top border-secondary">
+                                        class="flex items-center justify-between pt-3 border-t border-white/10 dark:border-gray-200 font-semibold">
                                         <span class="total-price">Total</span>
                                         <span class="base-price total-price">£0.00</span>
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </aside>
                     </div>
-                    {{-- Order --}}
-                </div>
 
+                </div>
             </form>
         </div>
     </section>
 @endsection
+
 @section('js')
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // // active class
+        // keep your existing selectors / behavior
         document.querySelectorAll('.plan-option').forEach(option => {
             option.addEventListener('click', () => {
-                // Remove 'active' class from all
                 document.querySelectorAll('.plan-option').forEach(o => o.classList.remove('actives'));
-
-                // Add 'active' to clicked one
                 option.classList.add('actives');
             });
         });
@@ -510,29 +318,17 @@
 
     <script>
         $(document).ready(function() {
-
-
-
-
-
-
-
-
-
             let stripe = Stripe("{{ env('STRIPE_PUBLISHABLE_KEY') }}");
             let elements = stripe.elements();
             let card = elements.create('card');
             card.mount('#card-element');
 
             async function checkpayment() {
-
                 $('#card-errors').text('');
-
                 let response = await stripe.createPaymentMethod({
                     type: 'card',
-                    card: card,
+                    card: card
                 });
-
                 if (response.error) {
                     $('input[name=payment_method]').val('');
                     $('#card-errors').text(response.error.message);
@@ -543,26 +339,21 @@
                 }
             }
 
-
-
-            //Plans JS
-
             function planCalculation(id) {
                 let element = $(`.plan-option[data-plan='${id}']`);
                 let price = element.data('price');
                 $(".plan-option").removeClass("selectedPlan");
                 element.addClass("selectedPlan");
                 $(".base-price").text('£' + price);
-                $("input[name=plan_id]").val(id);
-                $("input[name=plan_id]").trigger('change');
+                $("input[name=plan_id]").val(id).trigger('change');
             }
 
-            $('.plan-option').click(function(e) {
+            $('.plan-option').click(function() {
                 let id = $(this).data('plan');
                 planCalculation(id);
             });
 
-            $("input[name=plan_id]").change(function(e) {
+            $("input[name=plan_id]").change(function() {
                 if ($(this).val() == 2) {
                     $(".payment_div").hide();
                 } else {
@@ -570,112 +361,73 @@
                 }
             });
 
-
             let planId = $("input[name=plan_id]").val();
             if (planId) {
                 planCalculation(planId);
             }
 
-
-
-
-
             $('.register-form').on('submit', async function(e) {
-
                 e.preventDefault();
-
                 $(`.error`).text('');
                 $('button[type=submit]').prop('disabled', true);
 
+                // Optional: payment check (left as you had it)
                 // if($('select[name=plan_id]').val() != 2){
-                // let res = await checkpayment();
-                // if(!res){
+                //   let res = await checkpayment();
+                //   if(!res){
                 //     alert('Please Enter Card Details');
                 //     $('button[type=submit]').prop('disabled', false);
                 //     return false;
-
+                //   }
                 // }
-                // }
 
-
-
-                let form = $(this)[0];
-                let formData = new FormData(form);
-
+                let formData = new FormData(this);
                 $.ajax({
                     url: $(this).attr('action'),
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response) {
-
+                    success: function() {
                         alert("Form submitted successfully!");
                         window.location.href = "{{ url('/account-setting/billing') }}";
                         $('button[type=submit]').prop('disabled', false);
-
                     },
                     error: function(xhr) {
-
                         if (xhr?.responseJSON?.errors) {
                             $.each(xhr.responseJSON.errors, function(key, messages) {
                                 $(`.error-${key}`).text(messages);
                             });
-                            // let firstKey = Object.keys(xhr.responseJSON.errors)[0];
-                            // $(".messages").html(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        //     ${xhr.responseJSON.errors[firstKey][0]}
-                        //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        // </div>`);
                         } else {
-
                             alert(xhr?.responseJSON?.message);
-
-                            // $(".messages").html(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        //     ${xhr?.responseJSON?.message}
-                        //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        // </div>`);
                         }
-
                         $('button[type=submit]').prop('disabled', false);
                     }
                 });
-
             });
-
         });
 
-
-
+        // custom select (unchanged behavior, Tailwind-styled)
+        const cs = document.getElementById("customSelect");
         const selected = document.getElementById("selectedOption");
         const options = document.getElementById("optionList");
 
         selected.addEventListener("click", () => {
-            options.style.display = options.style.display === "block" ? "none" : "block";
+            cs.classList.toggle('open');
         });
 
-        const optionItems = options.querySelectorAll(".custom-select-option");
-
-        optionItems.forEach((item) => {
+        options.querySelectorAll(".custom-select-option").forEach((item) => {
             item.addEventListener("click", () => {
                 const flag = item.getAttribute("data-flag");
                 const code = item.getAttribute("data-code");
                 selected.innerHTML =
-                    `<img src="https://flagcdn.com/w40/${flag}.png" alt="${flag}"> <span>${code}</span>`;
-                options.style.display = "none";
+                    `<img class="flag" src="https://flagcdn.com/w40/${flag}.png" alt="${flag}"> <span>${code}</span>`;
+                cs.classList.remove('open');
             });
         });
 
         document.addEventListener("click", (e) => {
-            if (!document.getElementById("customSelect").contains(e.target)) {
-                options.style.display = "none";
-            }
-        });
-
-        document.querySelectorAll('.fileName').forEach(function(input) {
-            input.addEventListener('change', function() {
-                const fileName = this.closest('.d-flex').querySelector('.fileName');
-                fileName.textContent = this.files.length > 0 ? this.files[0].name : 'No file chosen.';
-            });
+            if (!cs.contains(e.target)) cs.classList.remove('open');
         });
     </script>
 @endsection
