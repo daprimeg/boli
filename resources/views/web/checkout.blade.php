@@ -41,9 +41,30 @@
             z-index: 50;
         }
 
+        /* let the phone list render above neighbors */
+        .csw .list {
+            z-index: 9999;
+        }
+
+        /* small entrance animation (matches your style) */
+        @keyframes phonePop {
+            from {
+                opacity: 0;
+                transform: translateY(-6px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         .csw.open .list {
             display: block;
+            animation: phonePop .18s ease-out both;
         }
+
+
 
         .flag {
             width: 20px;
@@ -101,6 +122,25 @@
                 transform: translateY(0) scale(1);
             }
         }
+
+        .plan-dd .menu {
+            /* you already have positioning; these help the animation look crisp */
+            transform-origin: top center;
+            will-change: opacity, transform;
+        }
+
+        /* when opened, show and animate */
+        .plan-dd.open .menu {
+            display: block;
+            animation: popSlide .22s ease-out both;
+        }
+
+        /* respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .plan-dd.open .menu {
+                animation: none;
+            }
+        }
     </style>
 @endsection
 
@@ -120,15 +160,14 @@
 
                     <!-- left: form -->
                     <div class="lg:col-span-8">
-                        <div
-                            class="animate-card rounded bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 shadow-2xl p-5 md:p-7">
+                        <div class="animate-card rounded bg-[#0b1624] dark:bg-white    p-5 md:p-7">
                             <!-- accordion (single open) -->
-                            <div class="rounded overflow-hidden border border-white/10 dark:border-gray-200 bg-transparent">
+                            <div class="rounded overflow-hidden bg-transparent">
                                 <div class="border-b border-white/10 dark:border-gray-200">
-                                    <button type="button"
-                                        class="w-full text-left px-4 md:px-6 py-4 font-semibold text-white dark:text-gray-900">
+                                    <div
+                                        class="text-lg w-full text-left px-4 md:px-6 py-4 font-semibold text-white dark:text-gray-900">
                                         Billing Info
-                                    </button>
+                                    </div>
                                 </div>
 
                                 <div class="px-4 md:px-6 py-5">
@@ -162,8 +201,9 @@
                                             <div>
                                                 <label class="block text-sm text-white/80 dark:text-gray-700 mb-1">Phone
                                                     No</label>
-                                                <div
-                                                    class="flex rounded overflow-hidden border border-white/10 dark:border-gray-300">
+
+                                                <!-- removed overflow-hidden from this wrapper -->
+                                                <div class="flex rounded border border-white/10 dark:border-gray-300">
                                                     <!-- custom select -->
                                                     <div id="customSelect"
                                                         class="csw bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 flex items-center gap-2 px-3 cursor-pointer">
@@ -172,10 +212,11 @@
                                                                 alt="GB">
                                                             <span>+44</span>
                                                         </div>
+
                                                         <!-- list -->
                                                         <div id="optionList"
                                                             class="list mt-2 rounded overflow-hidden border border-white/10 dark:border-gray-300 shadow-2xl
-                                      bg-[#0b1624] dark:bg-white text-white dark:text-gray-900">
+                  bg-[#0b1624] dark:bg-white text-white dark:text-gray-900">
                                                             <div class="custom-select-option flex items-center gap-2 px-3 py-2 hover:bg-white/10 dark:hover:bg-gray-100"
                                                                 data-code="+44" data-flag="gb">
                                                                 <img class="flag" src="https://flagcdn.com/w40/gb.png"
@@ -198,12 +239,18 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <input name="phone" type="tel" value="03112239342"
                                                         placeholder="Phone Number"
                                                         class="sign-input flex-1 bg-[#0f1c2c] dark:bg-gray-100 text-white dark:text-gray-900 px-3.5 py-3 focus:outline-none" />
                                                 </div>
+
+                                                <!-- add this hidden field so backend knows which code was chosen -->
+                                                <input type="hidden" name="phone_code" id="phone_code" value="+44">
+
                                                 <small class="error error-phone text-danger text-red-500"></small>
                                             </div>
+
 
                                             <div>
                                                 <label
@@ -280,7 +327,7 @@
                     <!-- right: summary -->
                     <div class="lg:col-span-4">
                         <aside
-                            class="animate-aside rounded bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200 shadow-2xl p-5 md:p-6 sticky top-24">
+                            class="animate-aside rounded bg-[#0b1624] dark:bg-white border border-white/10 dark:border-gray-200  p-5 md:p-6 sticky top-24">
                             <h5 class="text-white dark:text-gray-900 text-lg font-semibold">Order Summary</h5>
 
                             <div class="mt-6">
@@ -299,7 +346,7 @@
                                         </div>
                                         <div class="text-right text-white ">
                                             <span class="plan-price">£0.00</span>
-                                            <div class="text-xs text-white/60 dark:text-gray-500">Per Month</div>
+                                            <div class="text-xs text-white/60">Per Month</div>
                                         </div>
                                     </div>
                                 </div>
@@ -318,25 +365,37 @@
                                     </button>
 
                                     <div
-                                        class="menu mt-2 rounded overflow-hidden border border-white/10 dark:border-gray-300 shadow-2xl
+                                        class="menu mt-2 rounded overflow-hidden border border-white/10 dark:border-gray-300 
                                                 bg-[#0b1624] dark:bg-white">
                                         <div class="max-h-80 overflow-auto divide-y divide-white/10 dark:divide-gray-200">
                                             @foreach ($plans as $item)
                                                 <label data-plan="{{ $item->id }}" data-price="{{ $item->price }}"
-                                                    class="plan-option flex items-center justify-between gap-3 px-4 py-3 cursor-pointer
-                                                        bg-[#0f1c2c] dark:bg-gray-50 text-white dark:text-gray-900
-                                                        hover:bg-[#0080ff] hover:text-white transition">
+                                                    class="plan-option group flex items-center justify-between gap-3 px-4 py-3 cursor-pointer
+        bg-[#0f1c2c] dark:bg-gray-50 text-white dark:text-gray-900
+        hover:bg-[#0080ff] dark:hover:bg-[#0080ff]
+        transition">
+
                                                     <div class="flex items-center gap-3">
-                                                        <i class="{{ $item->icon ?? '' }}"></i>
+                                                        <i
+                                                            class="{{ $item->icon ?? '' }} group-hover:text-white dark:group-hover:text-white"></i>
                                                         <div class="leading-tight">
-                                                            <div class="font-medium">{{ $item->plan_name }}</div>
-                                                            <div class="text-xs text-white/60 dark:text-gray-500">
-                                                                {{ $item->short_desc }}</div>
+                                                            <div
+                                                                class="font-medium group-hover:text-white dark:group-hover:text-white">
+                                                                {{ $item->plan_name }}
+                                                            </div>
+                                                            <div
+                                                                class="text-xs text-white/60 dark:text-gray-500 group-hover:text-white/80 dark:group-hover:text-white/80">
+                                                                {{ $item->short_desc }}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="text-right">
+
+                                                    <div
+                                                        class="text-right group-hover:text-white dark:group-hover:text-white">
                                                         £{{ $item->price }}
-                                                        <div class="text-xs text-white/60 dark:text-gray-500">Per Month
+                                                        <div
+                                                            class="text-xs text-white/60 dark:text-gray-500 group-hover:text-white/80 dark:group-hover:text-white/80">
+                                                            Per Month
                                                         </div>
                                                     </div>
                                                 </label>
@@ -391,6 +450,39 @@
             });
         });
     </script>
+
+    <script>
+        // custom select (phone)
+        const cs = document.getElementById("customSelect");
+        const selected = document.getElementById("selectedOption");
+        const options = document.getElementById("optionList");
+
+        selected.addEventListener("click", () => {
+            cs.classList.toggle('open');
+        });
+
+        options.querySelectorAll(".custom-select-option").forEach((item) => {
+            item.addEventListener("click", () => {
+                const flag = item.getAttribute("data-flag");
+                const code = item.getAttribute("data-code");
+
+                // update visible selection
+                selected.innerHTML =
+                    `<img class="flag" src="https://flagcdn.com/w40/${flag}.png" alt="${flag}"> <span>${code}</span>`;
+
+                // NEW: persist code for backend
+                document.getElementById('phone_code').value = code; // <— add this
+
+                cs.classList.remove('open');
+            });
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!cs.contains(e.target)) cs.classList.remove('open');
+        });
+    </script>
+
+
 
     <script>
         $(document).ready(function() {
