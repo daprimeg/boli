@@ -201,6 +201,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $id = $request->input('plan_id');
 
         if (Auth::check()) {
             return redirect('/dashboard')->with('message', 'You are already logged in.');
@@ -208,9 +209,8 @@ class AuthController extends Controller
 
         $plans = Plan::where('status', 1)->orderBy('sort_by')->get();
 
-        return view('web.register', compact('plans'));
+        return view('web.register', compact('plans', 'id'));
     }
-
 
 
     public function register_submit(Request $request)
@@ -237,10 +237,10 @@ class AuthController extends Controller
             'firstName' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'title' => 'required|string|max:255',
-            'jobTitle' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'personalEmail' => 'required|string|email|max:255|unique:users',
             'avatar' => 'required|file|mimes:jpg,png,pdf|max:4096',
+            'proof_motor_trade' => 'required|file|mimes:jpg,png,pdf|max:4096',
         ]);
 
         if ($validator->fails()) {
@@ -269,10 +269,10 @@ class AuthController extends Controller
             'firstName',
             'surname',
             'title',
-            'jobTitle',
             'phone',
             'personalEmail'
         ]));
+        $user->jobTitle = $request->input('title');
         $user->user_type = 0;
         $user->email_verification_token_status = 0;
         $user->password = Hash::make($request->password);
@@ -283,6 +283,12 @@ class AuthController extends Controller
             $fileName = time() . '__' . $request->file('avatar')->getClientOriginalName();
             $filePath = public_path('uploads/avatar');
             $request->file('avatar')->move($filePath, $fileName);
+            $user->avatar = $fileName;
+        }
+        if ($request->file('proof_motor_trade')) {
+            $fileName = time() . '__' . $request->file('proof_motor_trade')->getClientOriginalName();
+            $filePath = public_path('uploads/avatar');
+            $request->file('proof_motor_trade')->move($filePath, $fileName);
             $user->avatar = $fileName;
         }
 
@@ -304,7 +310,6 @@ class AuthController extends Controller
             'message' => 'Please verify your email'
         ]);
     }
-
 
     public function show($email)
     {
