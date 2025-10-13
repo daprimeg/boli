@@ -25,7 +25,7 @@
 
                     <!-- Panel -->
                     <div
-                        class="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(800px,92vw)] rounded-xl border border-white/10 bg-[#0f1c2c] text-white shadow-2xl opacity-0 translate-y-2 pointer-events-none
+                        class="absolute left-1/2 -translate-x-1/2 top-10 mt-3 w-[min(800px,92vw)] rounded border border-white/10 bg-[#0f1c2c] text-white shadow-2xl opacity-0 translate-y-2 pointer-events-none
                             group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition duration-200 z-50">
                         <div class="p-5 md:p-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -119,7 +119,7 @@
 
                     <!-- Panel -->
                     <div
-                        class="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(800px,92vw)] rounded-xl border border-white/10 bg-[#0f1c2c] text-white shadow-2xl opacity-0 translate-y-2 pointer-events-none
+                        class="absolute left-1/2 -translate-x-1/2 top-10  mt-3 w-[min(800px,92vw)] rounded border border-white/10 bg-[#0f1c2c] text-white shadow-2xl opacity-0 translate-y-2 pointer-events-none
                             group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition duration-200 z-50">
                         <div class="p-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
