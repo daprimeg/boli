@@ -29,6 +29,26 @@ class AuctionFinderDataController extends Controller
 {
 
 
+
+    public function getPreviousAuctionDate($reg, $vehicleId)
+    {
+                if (!$reg || !$vehicleId) {
+                    return NULL;
+                }
+                
+                
+                $previousRecord = Vehicle::join('auctions', 'auctions.id', '=', 'vehicles.auction_id')
+                ->where('vehicles.reg', $reg)
+                ->wherenot('vehicles.id', $vehicleId)
+                ->orderByDesc('vehicles.id')
+                ->select('auctions.auction_date')
+                ->first();
+                
+                return $previousRecord ? date('Y-m-d', strtotime($previousRecord->auction_date)) : null;
+        }
+
+
+
     public function auctionList(Request $request)
     {
 
@@ -173,6 +193,8 @@ class AuctionFinderDataController extends Controller
             ->map(function ($item) {
                 
                 $images = explode(',',$item->images);
+                $previous = $this->getPreviousAuctionDate($item->reg,$item->id);
+              
                 return [
                     'id' => $item->id,
                     'make_name' => $item->make_name,
@@ -182,6 +204,9 @@ class AuctionFinderDataController extends Controller
                     'cc' => $item->cc,
                     'mileage' => $item->mileage,
                     'transmission' => $item->transmission,
+                    'color' => $item->color->name??'',
+                    'grade' => $item->grade,
+                    'previousdate' => $previous  ?? '',
                     'auction_name' => $item->name,
                     'platefrom_image' => $item->platefrom_image,
                     'auction_date' => date('d-M-Y',strtotime($item->auction_date)),
@@ -191,9 +216,11 @@ class AuctionFinderDataController extends Controller
                     'cap_average' => $item->cap_average ?? '',
                     'cap_below' => $item->cap_below ?? '',
                     'autotrader_retail_value' => $item->autotrader_retail_value ?? '',
+                    'autotrader_trade_value' => $item->autotrader_trade_value ?? '',
                     'auto_boli' => 0,
                     'image1' => isset($images[0]) ? $images[0] : '',
                     'image2' => isset($images[1]) ? $images[1] : '',
+                    'image3' => isset($images[2]) ? $images[2] : '',
                     'inspection_report' => $item->inspection_report,
                 ];
 

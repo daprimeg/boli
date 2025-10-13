@@ -182,29 +182,33 @@
 
     auctions.showHeadings = function(){  
 
-            if(auctions.filters.display_type == 'auction'){
-                $('table thead').html(`<tr>
+    if (auctions.filters.display_type == 'auction') {
+            $('table thead').html(`
+                <tr>
                     <th>Vehicle</th>
-                    <th>Year</th>
-                    <th>CC</th>
+                    <th>Year / CC</th>
                     <th>Mileage</th>
                     <th>Transmission</th>
-                    <th>Auction</th>
-                    <th>Auction Time</th>
-                    <th>Last Bid</th>
-                </tr>`);
-            }else{
-                $('table thead').html(`<tr>
+                    <th>Grade</th>
+                    <th>Date Time</th>
+                    <th>Auction House</th>
+                </tr>
+            `);
+        } else if (auctions.filters.display_type == 'car') {
+            $('table thead').html(`
+                <tr>
                     <th>Vehicle</th>
-                    <th>Clean</th>
-                    <th>Average</th>
-                    <th>Cap Below</th>
+                    <th>Grade</th>
+                    <th>CAP</th>
                     <th>Autotrader</th>
-                    <th>Auction</th>
-                    <th>Last Bid</th>
+                    <th>Retail</th>
+ 
+                    <th>Date Time</th>
                     <th>Autoboli</th>
-                </tr>`);
-            }
+                </tr>
+            `);
+        }
+
 
     }
 
@@ -234,6 +238,7 @@
 
                                     let image1 = element.image1 ? `<span><img class="lightbox-img" src="${element.image1}" /> </span>` : '';
                                     let image2 = element.image2 ? `<span><img class="lightbox-img" src="${element.image2}" /> </span>` : '';
+                                    let image3 = element.image2 ? `<span><img class="lightbox-img" src="${element.image3}" /> </span>` : '';
                                     // let platformIcon = element.platefrom_image ? `<img src="https://localhost/autoboli/public/uploads/platforms/${element.platefrom_image}" class="platform-icon" />` : '';
 
 
@@ -248,21 +253,41 @@
                                                     ${element.make_name} ${element.model_name} ${element.variant_name}
                                                     </a>
                                                     <div class="extra">
-                                                    ${image1} ${image2}
+                                                    ${image1} ${image2} ${image3}
                                                     </div>
                                                 </td>
 
-                                            <td>${element.year}</td>
-                                            <td>${element.cc}</td>
+                                            <td>${element.year} / ${element.cc}
+                                            <div class="extra">
+                                                Color
+                                                    <span class="color-box" style="background-color: ${element.color};" title="${element.color}"></span>
+                                                </div>
+                                            </td>
+                                         
                                             <td>${element.mileage}</td>
                                             <td>${element.transmission}</td>
-                                           <td><span class="auction-badge"> ${element.auction_name}</span></td>
-                                            <td>${element.auction_date} </br> ${element.auction_time}</td>
-                                            <td>${element.last_bid}
-                                                    </br>
-                                                   <a class="btn btn-primary report-link" target="_blank" href="${element.inspection_report}">View Report</a>
-                                              
+                                           <td>
+                                            <div class="grade-box" style="background-color: ${getGradeColor(element.grade)}">
+                                                ${element.grade}
+                                            </div>
                                             </td>
+                                           <td> ${element.auction_date} </br> ${element.auction_time}
+
+                                               ${element.previousdate 
+                                                    ? `<div class="extra">
+                                                        <span class="prev-icon">⏮️</span> ${element.previousdate}
+                                                    </div>` 
+                                                    : ''
+                                                }
+
+                                           
+                                           </td>
+                                            <td> <span class="auction-badge"> ${element.auction_name}</span>
+                                            <div class="extra">
+                                                <a class="btn btn-primary report-link mt-2" target="_blank" href="${element.inspection_report}">View Report</a>
+                                            </div>
+                                            </td>
+                                          
                                         </tr>`);
 
                                 }else{
@@ -270,20 +295,43 @@
                                     $(`.table tbody`).append(`
                                     <tr>
                                    
-                                        <td>${element.make_name} ${element.model_name} ${element.variant_name}
-                                           <div class="extra">${image1} ${image2}</div>
+                                        <td> <a href="${baseUrl}/${element.id}" target="_blank">
+                                                    ${element.make_name} ${element.model_name} ${element.variant_name}
+                                                    </a>
+                                                    <div class="extra">
+                                                    ${image1} ${image2} ${image3}
+                                                    </div>
                                         </td>
-                                        <td>${element.cap_clean}</td>
-                                        <td>${element.cap_average}</td>
-                                        <td>${element.cap_below}</td>
-                                        <td>${element.autotrader_retail_value}</td>
-                                        <td>${element.auction_name}</td>
-                                        <td>${element.last_bid}</td>
-                                        <td>${element.auto_boli}
-                                            <div class="extra">
-                                                <a class="btn btn-primary report-link" target="_blank" href="${element.inspection_report}">View Report</a>
+                                         <td>
+                                            <div class="grade-box" style="background-color: ${getGradeColor(element.grade)}">
+                                                ${element.grade}
+                                               
                                             </div>
-                                        </td>
+                                              <div class="extra">
+                                                ${element.auction_name}
+                                                    </div>
+                                            </td>
+                                        <td>${element.cap_clean}</td>
+                                        <td>${element.autotrader_trade_value}</td>
+                                        <td>${element.autotrader_retail_value}</td>
+                                      
+                                      
+                                      <td> ${element.auction_date} </br> ${element.auction_time}
+
+                                               ${element.previousdate 
+                                                    ? `<div class="extra">
+                                                        <span class="prev-icon">⏮️</span> ${element.previousdate}
+                                                    </div>` 
+                                                    : ''
+                                                }
+
+                                           
+                                           </td>
+                                          <td> <span class="auction-badge"> ${element.auto_boli}</span>
+                                            <div class="extra">
+                                                <a class="btn btn-primary report-link mt-2" target="_blank" href="${element.inspection_report}">View Report</a>
+                                            </div>
+                                            </td>
                                     </tr>`);
 
                                 }
@@ -1079,17 +1127,43 @@
     });
 
 
-    $('.display_type').click(function (e) { 
+    // $('.display_type').click(function (e) { 
 
-        const url = new URL(window.location.href);
-        url.searchParams.set('display_type', $(this).data('id'));
-        history.pushState({}, '', url);
-        $('.display_type').removeClass('active');
-        $(this).addClass('active');
+    //     const url = new URL(window.location.href);
+    //     url.searchParams.set('display_type', $(this).data('id'));
+    //     history.pushState({}, '', url);
+    //     $('.display_type').removeClass('active');
+    //     $(this).addClass('active');
 
-        auctions.showHeadings();
-        auctions.onLoad();
-    });
+    //     auctions.showHeadings();
+    //     auctions.onLoad();
+    // });
+
+// ✅ Click pe handle karna
+$('.display_type').click(function (e) { 
+    const type = $(this).data('id');
+    const url = new URL(window.location.href);
+    url.searchParams.set('display_type', type);
+    history.pushState({}, '', url);
+    $('.display_type').removeClass('active');
+    $(this).addClass('active');
+    auctions.filters.display_type = type;
+    auctions.showHeadings();
+    auctions.onLoad();
+});
+
+
+$(document).ready(function() {
+    const url = new URL(window.location.href);
+    const currentType = url.searchParams.get('display_type') || 'auction'; 
+    $('.display_type').removeClass('active');
+    $(`.display_type[data-id="${currentType}"]`).addClass('active');
+    auctions.filters = auctions.filters || {};
+    auctions.filters.display_type = currentType;
+    auctions.showHeadings();
+    auctions.onLoad();
+});
+
 
     $('.pagination').on('click', 'li', function() {
         const url = new URL(window.location.href);
@@ -1488,5 +1562,17 @@
 
     
 });
+
+function getGradeColor(grade) {
+  switch (parseInt(grade)) {
+    case 1: return '#0080ff'; // bright blue
+    case 2: return '#1477d4ff';
+    case 3: return '#4227ddff';
+    case 4: return '#862bdbff';
+    case 5: return '#ff3333'; // red
+    default: return '#cccccc'; // fallback gray
+  }
+}
+
 
 

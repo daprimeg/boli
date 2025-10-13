@@ -127,6 +127,43 @@
       .lightbox-next { right: 20px; }
 
 
+      .color-box {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      vertical-align: middle;
+      cursor: pointer;
+      margin-left: 5px;
+      transition: transform 0.2s ease;
+      }
+
+      .color-box:hover {
+      transform: scale(1.2);
+      }
+   .prev-icon {
+      margin-right: 4px;
+      color: #555;
+      font-size: 14px;
+      vertical-align: middle;
+   }
+
+   tr:hover {
+   cursor: pointer;
+   }
+
+   .grade-box {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  line-height: 25px;
+  font-size: 14px;
+}
 
 
 </style>

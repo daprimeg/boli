@@ -20,6 +20,7 @@ class FuelType
             "Diesel", 
             "Electric",
             "Hybrid",
+            "PHEV",
             "Other"
         ];
 
