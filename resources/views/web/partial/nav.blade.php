@@ -16,17 +16,22 @@
                 <a href="{{ url('/pricing') }}"
                     class="flex items-center justify-center h-full  border-0 hover:border-b hover:border-b-[#0080ff] text-gray-500  hover:text-white {{ Request::is('/pricing') ? 'active' : '' }}">Pricing</a>
                 <!-- Explore (mega dropdown) -->
-                <div class="relative group">
-                    <a href="#"
-                        class="flex items-center justify-center h-full border-0 hover:border-b hover:border-b-[#0080ff] text-gray-500 hover:text-white">
+                <div x-data="{ open: false }" @click.away="open = false" class="relative group h-full">
+                    <a href="#" @click.prevent="open = !open"
+                        class="flex items-center justify-center h-full  border-0 hover:border-b hover:border-b-[#0080ff] text-gray-500  hover:text-white">
                         Explore
-                        <span class="ml-1 material-symbols-outlined text-xs">expand_more</span>
+                        <span class="ml-1 material-symbols-outlined text-xs transition-transform duration-200"
+                            :class="{ 'rotate-180': open }">expand_more</span>
                     </a>
 
                     <!-- Panel -->
-                    <div
-                        class="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(800px,92vw)] rounded-xl border border-white/10 bg-[#0f1c2c] text-white shadow-2xl opacity-0 translate-y-2 pointer-events-none
-                            group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition duration-200 z-50">
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-2"
+                        class="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(800px,92vw)] rounded-xl border border-white/10 bg-[#0f1c2c] text-white shadow-2xl z-50">
                         <div class="p-5 md:p-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <!-- card -->
@@ -110,17 +115,23 @@
                 </div>
 
                 <!-- Resources (mega dropdown) -->
-                <div class="relative group">
-                    <a href="#"
+                <div x-data="{ open: false }" @click.away="open = false" class="relative group h-full">
+                    <a href="#" @click.prevent="open = !open"
                         class="flex items-center justify-center h-full border-0 hover:border-b hover:border-b-[#0080ff] text-gray-500 hover:text-white">
                         Resources
-                        <span class="ml-1 material-symbols-outlined text-xs">expand_more</span>
+                        <span class="ml-1 material-symbols-outlined text-xs transition-transform duration-200"
+                            :class="{ 'rotate-180': open }">expand_more</span>
                     </a>
 
                     <!-- Panel -->
-                    <div
-                        class="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(800px,92vw)] rounded-xl border border-white/10 bg-[#0f1c2c] text-white shadow-2xl opacity-0 translate-y-2 pointer-events-none
-                            group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition duration-200 z-50">
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-2"
+                        class="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(800px,92vw)] rounded-xl border border-white/10 bg-[#0f1c2c] text-white shadow-2xl z-50"
+                        @click.stop>
                         <div class="p-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                                 <!-- Learn -->
@@ -165,7 +176,8 @@
                         <!-- footer bar w/ links -->
                         <div class="px-6 pb-6">
                             <div class="flex flex-wrap items-center gap-4 border-t border-white/10 pt-4">
-                                <a href="#" class="inline-flex items-center gap-2 text-white/80 hover:text-white">
+                                <a href="#"
+                                    class="inline-flex items-center gap-2 text-white/80 hover:text-white">
                                     <span class="w-3 h-3 rounded-sm bg-[#0080ff]"></span> Download
                                 </a>
                                 <a href="#"

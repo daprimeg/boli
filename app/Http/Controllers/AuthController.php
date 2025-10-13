@@ -201,6 +201,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $id = $request->input('plan_id');
 
         if (Auth::check()) {
             return redirect('/dashboard')->with('message', 'You are already logged in.');
@@ -208,9 +209,8 @@ class AuthController extends Controller
 
         $plans = Plan::where('status', 1)->orderBy('sort_by')->get();
 
-        return view('web.register', compact('plans'));
+        return view('web.register', compact('plans', 'id'));
     }
-
 
 
     public function register_submit(Request $request)
@@ -310,7 +310,6 @@ class AuthController extends Controller
             'message' => 'Please verify your email'
         ]);
     }
-
 
     public function show($email)
     {

@@ -437,6 +437,7 @@
                                 .pdf</small>
                         </div>
                     </div>
+                    <input type="hidden" name="id" value="{{ $id }}">
 
                     {{-- STEP 3 --}}
                     <div class="step-pane hidden space-y-6" data-step="3">
@@ -738,83 +739,86 @@
 
         // AJAX submit
         $(document).ready(function() {
-    $('.register-form').on('submit', function(e) {
-        e.preventDefault();
+            $('.register-form').on('submit', function(e) {
+                e.preventDefault();
 
-        // Reset previous errors
-        $('.error').text('');
-        $('#submitBtn')
-            .addClass('opacity-60 pointer-events-none')
-            .html('<span class="material-symbols-outlined">hourglass_top</span> Submitting…');
-
-        const formData = new FormData(this);
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-
-            success: function(r) {
-                if (r.success && r.redirect_url) {
-                    toastr.success(r.message || "Registration successful!", "Success", {
-                        closeButton: true,
-                        progressBar: true,
-                        timeOut: 3000,
-                        positionClass: "toast-top-right"
-                    });
-                    setTimeout(() => {
-                        window.location.href = r.redirect_url;
-                    }, 1200);
-                } else {
-                    toastr.info(r.message || "Form submitted successfully!", "Info", {
-                        closeButton: true,
-                        progressBar: true
-                    });
-                }
-            },
-
-            error: function(xhr) {
-                // Laravel Validation Errors
-                if (xhr?.responseJSON?.errors) {
-                    let errorCount = 0;
-
-                    $.each(xhr.responseJSON.errors, function(field, messages) {
-                        const msg = messages[0];
-                        $(`.error-${field}`).text(msg); // inline error
-                        toastr.error(msg, "Validation Error", {
-                            closeButton: true,
-                            progressBar: true,
-                            positionClass: "toast-top-right"
-                        });
-                        errorCount++;
-                    });
-
-                    if (errorCount > 0) {
-                        toastr.warning("Please fix the highlighted errors.", "Form Incomplete", {
-                            closeButton: true,
-                            progressBar: true
-                        });
-                    }
-
-                } else {
-                    toastr.error(xhr?.responseJSON?.message || "Something went wrong!", "Error", {
-                        closeButton: true,
-                        progressBar: true,
-                        positionClass: "toast-top-right"
-                    });
-                }
-            },
-
-            complete: function() {
+                // Reset previous errors
+                $('.error').text('');
                 $('#submitBtn')
-                    .removeClass('opacity-60 pointer-events-none')
-                    .html('<span class="material-symbols-outlined">check_circle</span> Submit Application');
-            }
-        });
-    });
-});
+                    .addClass('opacity-60 pointer-events-none')
+                    .html('<span class="material-symbols-outlined">hourglass_top</span> Submitting…');
 
+                const formData = new FormData(this);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+
+                    success: function(r) {
+                        if (r.success && r.redirect_url) {
+                            toastr.success(r.message || "Registration successful!", "Success", {
+                                closeButton: true,
+                                progressBar: true,
+                                timeOut: 3000,
+                                positionClass: "toast-top-right"
+                            });
+                            setTimeout(() => {
+                                window.location.href = r.redirect_url;
+                            }, 1200);
+                        } else {
+                            toastr.info(r.message || "Form submitted successfully!", "Info", {
+                                closeButton: true,
+                                progressBar: true
+                            });
+                        }
+                    },
+
+                    error: function(xhr) {
+                        // Laravel Validation Errors
+                        if (xhr?.responseJSON?.errors) {
+                            let errorCount = 0;
+
+                            $.each(xhr.responseJSON.errors, function(field, messages) {
+                                const msg = messages[0];
+                                $(`.error-${field}`).text(msg); // inline error
+                                toastr.error(msg, "Validation Error", {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+                                errorCount++;
+                            });
+
+                            if (errorCount > 0) {
+                                toastr.warning("Please fix the highlighted errors.",
+                                    "Form Incomplete", {
+                                        closeButton: true,
+                                        progressBar: true
+                                    });
+                            }
+
+                        } else {
+                            toastr.error(xhr?.responseJSON?.message || "Something went wrong!",
+                                "Error", {
+                                    closeButton: true,
+                                    progressBar: true,
+                                    positionClass: "toast-top-right"
+                                });
+                        }
+                    },
+
+                    complete: function() {
+                        $('#submitBtn')
+                            .removeClass('opacity-60 pointer-events-none')
+                            .html(
+                                '<span class="material-symbols-outlined">check_circle</span> Submit Application'
+                            );
+                    }
+                });
+            });
+        });
     </script>
 @endsection

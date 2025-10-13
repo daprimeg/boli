@@ -36,9 +36,9 @@
                 </div>
 
                 <!-- Right: Image -->
-                <div class="relative flex justify-center lg:justify-end flex-1">
+                <div class="relative flex justify-center">
                     <img src="{{ asset('public/theme/assets/web/images/Reauction.png') }}" alt="Reauction Illustration"
-                        class="w-full max-w-lg lg:max-w-xl xl:max-w-2xl object-cover rounded-xl transform lg:-rotate-3 shadow-2xl" />
+                        class="w-full max-w-4xl  object-cover rounded-xl transform" />
                 </div>
 
             </div>
